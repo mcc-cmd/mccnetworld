@@ -1086,6 +1086,8 @@ function render(){
 
 } else if (f.type === 'select') {
   const sel = document.createElement('select');
+  if (f.fontSize) sel.style.fontSize = f.fontSize + 'px';
+
 
   // ✅ select용 "placeholder 옵션" 처리
   const phText = (f.placeholder || '').trim();
@@ -1130,12 +1132,12 @@ function render(){
         }
 
         scheduleSave();
-        fitSelectText(sel, 16, 9);
+        fitSelectText(sel, (f.fontSize ?? 16), 5);   // ✅ 여기
         evaluateAffBanner();
         evaluateExtraDataAndBar();
       };
 
-      requestAnimationFrame(() => fitSelectText(sel, 16, 9));
+      requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5)); // ✅ 여기
       ctrl = sel;
 
     } else if (f.type === 'checkbox') {
@@ -1745,6 +1747,7 @@ function createPrintDOM(page, pageIdx){
     } else if (f.type === 'select') {
       // ===== select + 인쇄 전용 div(.print-value) =====
       ctrl = document.createElement('select');
+      if (f.fontSize) ctrl.style.fontSize = f.fontSize + 'px';
         // ✅ 인쇄용도 placeholder 옵션 추가
   const phText = (f.placeholder || '').trim();
   if (phText) {

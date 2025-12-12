@@ -58,7 +58,7 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "",
+          "placeholder": "개통 요금제 선택",
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
