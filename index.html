@@ -129,9 +129,18 @@ function buildBrandUrl(route, doc, age){
   // 외부 링크거나 carrier/brand 가 없으면 그냥 종료
   if (!route || !route.carrier || !route.brand) return '#';
 
-  // http-server 루트가 public 이므로 /brands 로 시작
-  const base = `/brands/${route.carrier}/${route.brand}/index.html`;
-  const abs  = new URL(base, location.href).href;
+  // 🔹 index.html 이 있는 디렉터리를 기준으로 경로 계산
+  //  - 로컬:          /        → baseDir = '/'
+  //  - GitHub Pages: /mccnetworld/ → baseDir = '/mccnetworld/'
+  let baseDir = location.pathname;
+  if (!baseDir.endsWith('/')) {
+    // 마지막 파일 이름(index.html 등)을 지우고 디렉터리까지만 남김
+    baseDir = baseDir.replace(/\/[^/]*$/, '/');
+  }
+
+  const base = `${baseDir}brands/${route.carrier}/${route.brand}/index.html`;
+  // 같은 도메인 안이므로 origin 기준으로 절대 URL 생성
+  const abs  = new URL(base, location.origin).href;
 
   const qs = new URLSearchParams();
   qs.set('mode','fill');
@@ -140,6 +149,7 @@ function buildBrandUrl(route, doc, age){
 
   return `${abs}?${qs.toString()}`;
 }
+
 
 /* ---------------- 렌더/바인딩 ---------------- */
 function card({theme, mark, name, cap, tag, tagClass, carrier, doc, age}){
