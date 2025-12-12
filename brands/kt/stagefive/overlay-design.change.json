@@ -1,0 +1,26 @@
+{
+  "pages": [
+    {
+      "bg": "/brands/uplus/umobile/images/change-1.jpg",
+      "fields": [
+        { "id": "title", "label": "", "type": "text", "x": 30, "y": 8, "w": 40, "value": "UMOBILE 변경 신청서" },
+
+        { "id": "applyYear",  "label": "년",  "type": "text",   "x": 40, "y": 14, "w": 6,  "autoDate": "year"  },
+        { "id": "applyMonth", "label": "월",  "type": "text",   "x": 47, "y": 14, "w": 4,  "autoDate": "month" },
+        { "id": "applyDay",   "label": "일",  "type": "text",   "x": 52, "y": 14, "w": 4,  "autoDate": "day"   },
+
+        { "id": "custName",   "label": "성명",   "type": "text",   "x": 30, "y": 22, "w": 24 },
+        { "id": "custPhone",  "label": "연락처", "type": "text",   "x": 30, "y": 28, "w": 24, "mask": "tel" },
+
+        { "id": "chgType",    "label": "변경 구분", "type": "select", "x": 30, "y": 36, "w": 30,
+          "options": ["요금제 변경","USIM 변경","자동이체 변경","기기 등록","부가서비스 변경/해지","명의 변경"]
+        },
+
+        { "id": "agree",      "label": "동의", "type": "checkbox", "x": 30, "y": 44, "w": 6, "checkSize": 18 }
+      ]
+    },
+    { "bg": "/brands/uplus/umobile/images/change-2.jpg", "fields": [] },
+    { "bg": "/brands/uplus/umobile/images/change-3.jpg", "fields": [] },
+    { "bg": "/brands/uplus/umobile/images/change-4.jpg", "fields": [] }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "pages": [
+    { "bg": "images/teen-1.jpg", "fields": [] },
+    { "bg": "images/teen-2.jpg", "fields": [] },
+    { "bg": "images/teen-3.jpg", "fields": [] },
+    { "bg": "images/teen-4.jpg", "fields": [] },
+    { "bg": "images/teen-5.jpg", "fields": [] }
+  ]
+}

@@ -1,0 +1,1464 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MCCNETWORLD 프리티SK </title>
+
+<link rel="icon" type="image/png" sizes="16x16"  href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32"  href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="theme-color" content="#0c1117"/>
+
+<style>
+  :root{
+    --bg:#0c1117;--fg:#eaf1ff;--card:#121a24;--line:#243347;
+    --pink:#e6007e;--vio:#6a35ff;--danger:#ff3b3b;
+    --zoom:1;
+    --stage-w:210mm;
+    --stage-h:297mm;
+    --phc:#c05;--phbg:#ffe08a66;
+  }
+
+  *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,"Noto Sans KR",sans-serif}
+  .wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;min-height:100vh;padding:12px}
+  html.fill .wrap{grid-template-columns:1fr}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:visible}
+  .hd{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
+  .hd strong{font-weight:800}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;border:1px solid #ffffff1f;background:linear-gradient(90deg,var(--pink),var(--vio));color:#fff;cursor:pointer}
+  .btn--ghost{background:#182234;border-color:#2b3a54;color:#d6e4ff}
+  .stack{padding:12px;overflow:auto}
+
+  /* 화면 캔버스 */
+  .paper{position:relative;width:min(1480px,100%);margin:auto;border:1px solid #223049;border-radius:10px;background:#0f1624;height:calc((var(--stage-h)) * var(--zoom));overflow:hidden;}
+  .stage{width:var(--stage-w);height:var(--stage-h);transform-origin:top left;transform:scale(var(--zoom));position:relative;}
+  .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
+  .overlay{position:absolute;inset:0}
+
+  /* 필드 */
+  .field{position:absolute;transform:none;cursor:move;z-index:2;--fs:14px;}
+  .field.checkbox{transform:translate(-50%,-50%)}
+  .label{position:absolute;top:-16px;left:0;font-size:12px;font-weight:800;text-shadow:0 1px 2px #0009}
+  .field input,.field textarea,.field select{
+    width:100%;background:transparent;border:none;color:var(--fgc,#fff);
+    height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
+  }
+  .field textarea{
+    white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
+    overflow:hidden;resize:none !important;scrollbar-width:none;min-height:5px;max-height:none !important;
+  }
+  .field textarea::-webkit-scrollbar{display:none}
+
+  /* 입력 잠금(시각적 안내만) */
+  .field [data-locked="1"]{caret-color:transparent}
+  .field [data-locked="1"]::placeholder{color:var(--phc);font-weight:900;background:var(--phbg);padding:0 .25em;border-radius:6px;}
+
+  /* 체크/라디오 */
+  .field.checkbox input,.field.radio input[type="checkbox"]{
+    appearance:none;-webkit-appearance:none;background:transparent;
+    border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000);
+    position:relative;vertical-align:middle;display:inline-block;box-sizing:border-box;
+  }
+  .field.checkbox input{width:var(--cksize,18px);height:var(--cksize,18px);border-radius:2px;}
+  .field.checkbox input:checked::after{
+    content:"";position:absolute;left:3px;top:0px;width:calc(var(--cksize,18px) - 6px);height:calc(var(--cksize,18px) - 6px);
+    border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg) translateY(-2px);
+  }
+  .field.checkbox .label{top:0;left:24px}
+  .field.radio{white-space:nowrap}
+  .field.radio .radio-item{display:inline-flex;align-items:center;gap:6px;margin-right:var(--rgap,12px)}
+  .field.radio input[type="checkbox"]{width:var(--rsize,18px);height:var(--rsize,18px);border-radius:2px;}
+  .field.radio input[type="checkbox"]:checked::after{content:"";position:absolute;inset:1px;background:#000;}
+  .field.radio .radio-item span{display:none}
+
+  .sel{outline:3px solid #00d2ff66;border-radius:8px}
+
+  /* 우측 기본도구 */
+  .group{border:2px solid #2b3a54;border-radius:12px;padding:10px;margin:10px 0 14px;background:#0f1624}
+  .group h4{margin:0 0 8px;font-size:12px;color:#9fb0cc;font-weight:800;letter-spacing:.4px}
+  .row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+  .row input,.row select,.row textarea{width:100%;background:#0f1624;border:1px solid #2b3a54;border-radius:10px;color:#dfe9ff;outline:none;padding:8px 10px;font-weight:700}
+  .hint{color:#9fb0cc;font-size:12px}
+  .stack .paper{margin-bottom:56px}
+  .stack{padding-bottom:140px}
+  .pager{display:flex;align-items:center;gap:8px;justify-content:center;margin:6px 0 18px;flex-wrap:wrap}
+  #pageInfo{min-width:84px;text-align:center;font-weight:800}
+
+  .toast{position:fixed;left:0;right:0;bottom:16px;display:none;justify-content:center;z-index:9999}
+  .toast__card{background:#172131;border:1px solid #2b3a54;border-radius:10px;padding:10px 12px;color:#fff;max-width:680px;width:calc(100% - 32px)}
+  .invalid{outline:3px solid var(--danger)!important;background:rgba(255,59,59,.2);border-radius:8px}
+  html.fill .builder{display:none}
+
+  /* 인쇄 공통 */
+  @page{size:A4 portrait;margin:0}
+  #printAll{display:none}
+  .print-value{display:none;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui}
+
+  /* 인쇄 */
+  @media print{
+    body{background:#fff}
+    .wrap,.builder,.pager,.hint,.hd,#affPopup{display:none !important}
+    #printAll{display:block}
+    .pageWrap{width:210mm;height:297mm;position:relative;overflow:visible;padding:1mm;box-sizing:border-box;page-break-after:always;}
+    .pageWrap:last-child{page-break-after:auto}
+    #printAll .stage{transform:scale(1)}
+    #printAll .paper{border:none;height:auto}
+    #printAll .stage img{width:100%;height:100%;object-fit:fill}
+    #printAll .overlay{position:absolute;inset:0;overflow:visible !important}
+    #printAll,#printAll *{font-family:system-ui,"Noto Sans KR",sans-serif !important;letter-spacing:0 !important}
+    #printAll .field input,#printAll .field textarea,#printAll .field select{color:#000 !important;background:transparent !important;border-bottom:none !important}
+    #printAll .label{color:#000 !important;text-shadow:none !important}
+    #printAll .field select{display:none !important}
+    #printAll .field .print-value{display:block !important;color:#000 !important}
+    #printAll textarea{overflow:visible!important;height:auto!important;resize:none!important;max-height:none!important}
+    .field.checkbox input,.field.radio input[type="checkbox"]{
+      appearance:none !important;-webkit-appearance:none !important;background:transparent !important;
+      border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;position:relative !important;vertical-align:middle;
+    }
+    .field.checkbox input{width:var(--cksize,18px) !important;height:var(--cksize,18px) !important;border-radius:2px !important}
+    .field.checkbox input:checked::after{
+      content:"";position:absolute;left:3px;top:0px;width:calc(var(--cksize,18px) - 6px);height:calc(var(--cksize,18px) - 6px);
+      border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg) translateY(-2px);
+    }
+    .field.radio input[type="checkbox"]{width:var(--rsize,18px) !important;height:var(--rsize,18px) !important;border-radius:2px !important}
+    .field.radio input[type="checkbox"]:checked::after{content:"";position:absolute;inset:1px;background:#000}
+    .field.checkbox .label{top:0;left:24px}
+  }
+
+  /* 텍스트 박스 보조 */
+  .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
+  #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
+  .field.hasBG input[type="text"],.field.hasBG textarea{background:var(--bgc,transparent) !important}
+  #printAll .field.hasBG input[type="text"],#printAll .field.hasBG textarea{background:var(--bgc,transparent) !important}
+
+  .affBanner{display:none;position:sticky;top:0;z-index:50;margin:6px 0 10px}
+  .affBanner__card{background:#ffe08a;color:#2a2100;border:1px solid #cfa442;border-radius:10px;padding:10px 12px;font-weight:800}
+  #affPopup{position:fixed;left:50%;transform:translateX(-50%);top:10px;z-index:99999;display:none}
+  #affPopup .card b{font-weight:900}
+
+  /* extraData 상단 표시 바 */
+  .extraBar{display:none;margin:6px 0 0}
+  .extraBar__card{background:#0f2036;border:1px solid #2b3a54;border-radius:10px;padding:8px 10px;font-weight:800;color:#cfe0ff}
+  .extraBar__label{opacity:.85;margin-right:8px}
+
+  /* ===== 환경 분리용 추가 ===== */
+  /* 개발(스테이징) 배지 */
+  html.is-staging .env-badge{
+    position:fixed;z-index:9999;top:10px;left:10px;
+    padding:6px 10px;border-radius:6px;font-weight:700;
+    background:#f59e0b;color:#111827;box-shadow:0 2px 6px rgba(0,0,0,.2);
+    user-select:none;pointer-events:none;
+  }
+  /* 운영에서는 디자이너 패널/버튼 전부 숨김 */
+  html.is-prod .builder{display:none !important;}
+  html.is-prod .hd .builder{display:none !important;}
+</style>
+
+<!-- 환경 자동 판별(운영/스테이징) + 운영에서 작성 모드 강제 -->
+<script>
+(function(){
+  const host = location.hostname;
+  // ⬇ 로컬에서도 스테이징으로 취급
+  const IS_LOCAL   = /^(localhost|127\.0\.0\.1)$/i.test(host);
+  const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
+  document.documentElement.classList.toggle('is-staging', IS_STAGING);
+  document.documentElement.classList.toggle('is-prod', !IS_STAGING);
+
+  const fav = document.querySelector('link[rel="icon"][sizes="32x32"]') || document.querySelector('link[rel="icon"]');
+  if (IS_STAGING) {
+    document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/,'');
+    if (fav) fav.href = '/favicon-32x32.png?v=stg';
+    const b = document.createElement('div');
+    b.className = 'env-badge';
+    b.textContent = 'STAGING (개발/테스트)';
+    window.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(b));
+  } else {
+    document.title = document.title.replace(/^STAGING ·\s*/,'');
+    if (fav) fav.href = '/favicon-32x32.png?v=prod';
+    const url = new URL(location.href);
+    if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
+  }
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <!-- ===== 왼쪽: 서류 화면 ===== -->
+  <section class="panel">
+    <!-- ✅ 헤더: 한 번만, 오른쪽에 뒤로가기 + 빌더 버튼 -->
+    <div class="hd">
+      <strong>MCC 미디어로그 서류</strong>
+
+      <div style="display:flex; gap:8px; align-items:center">
+        <!-- 메인(서류 선택 화면)으로 돌아가기 -->
+        <a href="/index.html" class="btn btn--ghost" id="backToHub">
+          ← 서류 선택 화면
+        </a>
+
+        <!-- 기존 빌더 버튼 -->
+        <div class="builder">
+          <button class="btn--ghost btn" id="enableWrapAll">
+            모든 텍스트 자동 줄바꿈 켜기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div id="affBanner" class="affBanner"><div class="affBanner__card">제휴 요금제 진행 시 <b> C-1 성함·동의 체크</b>가 필요합니다.</div></div>
+
+      <!-- extraData 표시 바 -->
+      <div id="extraBar" class="extraBar">
+        <div class="extraBar__card"><span class="extraBar__label">추가 데이터</span><span id="extraBarText"></span></div>
+      </div>
+
+      <div class="paper" id="paper">
+        <div class="stage" id="stage">
+          <img id="bg" src="images/adult-1.jpg" alt="">
+          <div class="overlay" id="overlay"></div>
+        </div>
+      </div>
+
+      <div class="pager">
+        <button class="btn--ghost btn" id="prev">◀ 이전</button>
+        <div id="pageInfo">1 / 7</div>
+        <button class="btn--ghost btn" id="next">다음 ▶</button>
+        <button class="btn" id="btnPdf">PDF 생성(전체)</button>
+      </div>
+      <p class="hint" style="text-align:center">필드를 클릭해 드래그로 이동. 입력은 컨트롤을 클릭 후 타이핑.</p>
+    </div>
+  </section>
+
+  <!-- ===== 오른쪽: 빌더 패널 ===== -->
+  <section class="panel builder">
+    <div class="hd">
+      <strong>기본 도구</strong>
+      <div>
+        <button class="btn--ghost btn" id="reload">설계 다시읽기</button>
+        <button class="btn--ghost btn" id="resetValues">값 초기화</button>
+        <button class="btn" id="saveJson">설계 저장(JSON)</button>
+
+        <!-- 요금표 관리 -->
+        <button class="btn--ghost btn" id="bulkPlansBtn">요금 일괄 입력</button>
+        <button class="btn--ghost btn" id="savePlans">요금표 저장(plans.json)</button>
+        <label class="btn--ghost btn" style="cursor:pointer">
+          <input type="file" id="loadPlansFile" accept="application/json" hidden>요금표 불러오기(plans.json)
+        </label>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="group">
+        <h4>새 필드</h4>
+        <div class="row"><div>새 필드 타입</div>
+          <select id="newType">
+            <option value="text">텍스트박스</option>
+            <option value="textarea">텍스트영역</option>
+            <option value="select">드롭다운</option>
+            <option value="radio">라디오(단일선택)</option>
+            <option value="checkbox">체크박스</option>
+          </select>
+        </div>
+        <div class="row"><div>새 필드 ID</div><input id="newId" placeholder="예: applyYear / applyMonth / applyDay 등"></div>
+        <div class="row"><div>라벨</div><input id="newLabel" placeholder="예: 성명"></div>
+        <div class="row"><div>옵션(콤마)</div><input id="newOpts" placeholder="라디오·드롭다운: 예) 남, 여"></div>
+        <div class="row"><div>필수</div><label><input type="checkbox" id="newReq"> 필수값</label></div>
+        <div class="row"><button class="btn" id="addField">필드 추가</button></div>
+      </div>
+
+      <div id="propBox" class="group">
+        <h4>선택한 필드 속성</h4>
+        <div class="row"><div>선택된 항목</div><div id="selInfo" class="hint">없음</div></div>
+
+        <div class="row"><div>라벨(선택)</div><input id="p_label" type="text" placeholder="라벨"></div>
+        <div class="row"><div>필드 ID</div><input id="p_id" type="text" placeholder="예: plan / baseFee / applyYear 등"></div>
+
+        <div class="row" id="row_opts"><div>옵션(콤마)</div><input id="p_options" type="text" placeholder="예: 남, 여 / 또는 옵션 목록"></div>
+        <div class="row" id="row_req"><div>필수</div><label><input type="checkbox" id="p_required"> 반드시 작성</label></div>
+
+        <div class="row"><div>X(%)</div><input id="p_x" type="number" step="0.1"></div>
+        <div class="row"><div>Y(%)</div><input id="p_y" type="number" step="0.1"></div>
+        <div class="row"><div>폭(%)</div><input id="p_w" type="number" step="0.1"></div>
+
+        <div class="row"><div>라디오 크기(px)</div><input id="p_radioSize" type="number" min="10" max="32" step="1" placeholder="18"></div>
+        <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="60" step="1" placeholder="12"></div>
+
+        <div class="row"><div>텍스트 색상</div><input id="p_color" type="color" value="#000000"></div>
+        <div class="row"><div>입력 높이(px)</div><input id="p_height" type="number" min="5" max="60" step="1" placeholder="auto"></div>
+        <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="5" max="32" step="1" placeholder="14"></div>
+        <div class="row"><div>정렬</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn--ghost btn" id="alignLeft">좌</button>
+            <button class="btn--ghost btn" id="alignCX">가운데</button>
+            <button class="btn--ghost btn" id="alignRight">우</button>
+            <button class="btn--ghost btn" id="alignTop">상</button>
+            <button class="btn--ghost btn" id="alignCY">중앙</button>
+            <button class="btn--ghost btn" id="alignBottom">하</button>
+          </div>
+        </div>
+
+        <div class="row"><div>입력 잠금</div>
+          <label><input type="checkbox" id="p_locked"> 화면에서 타이핑 금지</label>
+        </div>
+        <div class="row"><div>placeholder 잠금</div>
+          <label><input type="checkbox" id="p_lockOnPh"> placeholder만 표시(값 없으면 읽기전용)</label>
+        </div>
+
+        <div class="group" style="margin:8px 0 0;padding-top:8px">
+          <h4>입력 제한(마스크)</h4>
+          <div class="row"><div>패턴 선택</div>
+            <select id="p_mask">
+              <option value="">없음</option>
+              <option value="number">숫자만</option>
+              <option value="tel">전화번호(숫자-)</option>
+              <option value="alpha">영문</option>
+              <option value="alnum">영문+숫자</option>
+              <option value="hangul">한글만</option>
+              <option value="custom">사용자정의(정규식)</option>
+            </select>
+          </div>
+          <div class="row"><div>허용 패턴(정규식)</div><input id="p_maskRe" type="text" placeholder="예: [0-9-], [A-Za-z], [가-힣0-9 ]"></div>
+        </div>
+
+        <div class="group" style="margin-top:8px">
+          <h4>콘텐츠 설정</h4>
+          <div class="row"><div>최대 글자 수</div><input id="p_maxlen" type="number" min="1" max="500" step="1"></div>
+          <div class="row"><div>안내 문구(placeholder)</div><input id="p_placeholder" type="text" placeholder="예: 판매점 이름을 입력하세요"></div>
+          <div class="row"><div>자동 줄바꿈</div><label><input id="p_wrap" type="checkbox" checked> 사용</label></div>
+          <div class="row"><div>자동 날짜</div>
+            <select id="p_autoDate">
+              <option value="">없음</option>
+              <option value="year">년(YYYY)</option>
+              <option value="month">월(MM)</option>
+              <option value="day">일(DD)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="group" style="margin-top:8px">
+          <h4>테두리/배경</h4>
+          <div class="row"><div>테두리 색상</div><input id="p_borderColor" type="color" value="#ff3b3b"></div>
+          <div class="row"><div>테두리 굵기(px)</div><input id="p_borderWidth" type="number" min="1" max="8" step="1" placeholder="2"></div>
+          <div class="row"><div>테두리 투명</div><label><input type="checkbox" id="p_borderTransparent"> 사용</label></div>
+          <div class="row"><div>배경 색상</div><input id="p_bgColor" type="color" value="#000000"></div>
+          <div class="row"><div>배경 투명</div><label><input type="checkbox" id="p_bgTransparent"> 사용</label></div>
+        </div>
+
+        <div class="row" style="margin-top:8px">
+          <button class="btn--ghost btn" id="applyProp">적용</button>
+          <button class="btn--ghost btn" id="delField" style="margin-left:8px">삭제</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="printAll"></div>
+
+<div class="toast" id="toast"><div class="toast__card">
+  <b>작성되지 않은 필수 항목이 있습니다</b>
+  <ul id="missList" style="margin:8px 0 0 18px;padding:0"></ul>
+  <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="btn--ghost btn" id="tClose">확인</button></div>
+</div></div>
+
+<div id="affPopup"><div class="card">⚠️ <b>제휴 요금제</b>입니다. <b> C-1 성함·동의 체크</b>가 모두 완료되어야 진행됩니다.</div></div>
+
+<script>
+/* ===== 모드/상태 ===== */
+const FILL  = new URLSearchParams(location.search).get('mode')==='fill';
+const FRESH = new URLSearchParams(location.search).get('fresh')==='1';
+if(FILL) document.documentElement.classList.add('fill');
+
+let selected=-1;
+let pages=[{bg:'images/adult-1.jpg',fields:[]}], pageIndex=0;
+
+const paper   = document.getElementById('paper');
+const stage   = document.getElementById('stage');
+const overlay = document.getElementById('overlay');
+const bg      = document.getElementById('bg');
+const pageInfo= document.getElementById('pageInfo');
+const affBanner=document.getElementById('affBanner');
+const affPopup = document.getElementById('affPopup');
+
+/* extraData 바 노드 */
+const extraBar = document.getElementById('extraBar');
+const extraBarText = document.getElementById('extraBarText');
+
+/* ★ 누적/재귀 방지 상태 변수 */
+let LAST_EXTRA_TXT = '';
+let __MIRRORING__ = false;
+
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const num=(v,d)=>{const n=parseFloat(v);return isNaN(n)?d:n;};
+const cur=()=>pages[pageIndex];
+
+/* ===== 화면 줌 ===== */
+function applyZoom(){
+  stage.style.transform='scale(1)';
+  const stageRect = stage.getBoundingClientRect();
+  const targetW = paper.clientWidth;
+  let z = targetW / Math.max(stageRect.width,1);
+  z = Math.max(0.4, Math.min(2, z));
+  document.documentElement.style.setProperty('--zoom', z);
+  stage.style.transform = '';
+  paper.style.height = (stage.offsetHeight * z) + 'px';
+}
+window.addEventListener('resize', applyZoom);
+
+/* ===== 자동 저장 (값만) ===== */
+const AUTOSAVE_KEY='overlay_autosave_v4';
+let saveTimer=null;
+const collectValuesOnly=()=>({pageIndex,values:pages.map(pg=>({fields:(pg.fields||[]).map(f=>({id:f.id||'',value:f.type==='checkbox'?!!f.value:(f.value??'')}))}))});
+function applyValuesOnly(s){
+  if(!s||!s.values) return;
+  s.values.forEach((pgSnap,i)=>{ const pg=pages[i]; if(!pg) return;
+    (pg.fields||[]).forEach((f,j)=>{ const sv=pgSnap.fields?.[j]; if(!sv) return; f.value=(f.type==='checkbox')?!!sv.value:sv.value; });
+  });
+  if(Number.isInteger(s.pageIndex)) pageIndex=clamp(s.pageIndex,0,pages.length-1);
+}
+function scheduleSave(){ if(saveTimer) clearTimeout(saveTimer); saveTimer=setTimeout(()=>{ try{localStorage.setItem(AUTOSAVE_KEY,JSON.stringify(collectValuesOnly()));}catch(_){} },250); }
+function tryLoadAutosave(){ try{const raw=localStorage.getItem(AUTOSAVE_KEY); if(!raw) return; applyValuesOnly(JSON.parse(raw));}catch(_){} }
+const clearAutosave=()=>{ try{localStorage.removeItem(AUTOSAVE_KEY);}catch(_){} };
+
+/* ===== 드롭다운 글자 자동 축소 ===== */
+function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
+  try {
+    const text = (sel.options[sel.selectedIndex] || {}).text || sel.value || '';
+    const style = getComputedStyle(sel);
+    const padL = parseFloat(style.paddingLeft) || 0;
+    const padR = parseFloat(style.paddingRight) || 0;
+    const ARROW_W = (typeof arrowPx === 'number') ? arrowPx : 17;
+    const inner = sel.clientWidth - padL - padR - ARROW_W;
+    if (inner <= 0 || !text) return;
+    let meas = document.getElementById('__measure_span__');
+    if (!meas) {
+      meas = document.createElement('span');
+      meas.id = '__measure_span__';
+      meas.style.position = 'fixed';
+      meas.style.visibility = 'hidden';
+      meas.style.whiteSpace = 'nowrap';
+      meas.style.left = '-9999px';
+      document.body.appendChild(meas);
+    }
+    meas.style.fontFamily = style.fontFamily;
+    meas.style.fontWeight = style.fontWeight;
+    meas.style.fontStyle = style.fontStyle;
+    meas.style.letterSpacing = style.letterSpacing;
+    meas.style.textTransform = style.textTransform;
+
+    for (let px = maxPx; px >= minPx; px -= 0.5) {
+      meas.style.fontSize = px + 'px';
+      meas.textContent = text;
+      if (meas.getBoundingClientRect().width <= inner) {
+        sel.style.fontSize = px + 'px';
+        return;
+      }
+    }
+    sel.style.fontSize = minPx + 'px';
+  } catch (_) {}
+}
+const refitAllSelects=()=>overlay.querySelectorAll('select').forEach(fitSelectText);
+
+/* ===== textarea 자동 높이 ===== */
+function autosizeTA(el){ try{ el.style.height='auto'; el.style.height=Math.max(el.scrollHeight,5)+'px'; }catch(_){} }
+function autosizeAllTextareas(root){ (root||document).querySelectorAll('textarea').forEach(autosizeTA); }
+
+/* ===== 설계 로드 ===== */
+function seed7(){
+  // 필요에 따라 adult/teen 배경을 다르게 쓰고 싶으면 여기서 분기하세요.
+  pages = [...Array(7)].map((_,i)=>({ bg:`images/page${i+1}.jpg`, fields:[] }));
+}
+
+/* 쿼리파라미터에서 문서종류/연령대 읽기 */
+const QS  = new URLSearchParams(location.search);
+const DOC = (QS.get('doc') || 'join').toLowerCase();   // join | change | cancel
+const AGE = (QS.get('age') || 'adult').toLowerCase();  // adult | teen
+
+function designFileOf(doc, age){
+  if (doc === 'change') return 'overlay-design.change.json';
+  if (doc === 'cancel') return 'overlay-design.cancel.json';
+  return (age === 'teen') ? 'overlay-design.teen.json' : 'overlay-design.adult.json';
+}
+function buildDesignUrl(){
+  // v에 Date.now()를 붙여 캐시 제거
+  return `./${designFileOf(DOC, AGE)}?v=${Date.now()}`;
+}
+
+async function loadDesign(){
+  try{
+    const url = buildDesignUrl();
+    const r = await fetch(url, { cache: 'no-store' });
+    if (r.ok) {
+      const j = await r.json();
+      if (Array.isArray(j.pages) && j.pages.length) {
+        pages = j.pages;
+      } else {
+        seed7();
+      }
+    } else {
+      seed7();
+    }
+  } catch (err) {
+    console.error('[loadDesign] fetch 실패:', err);
+    seed7();
+  }
+  pageIndex = 0;
+}
+/* ===== 유틸 ===== */
+const PLAN_LABEL_RE = /(요금제|요금.?상품)/i;
+const PLAN_ID_RE    = /^(plan|planselect|plan_name)$/i;
+
+const findFieldsAllPages=id=>{const a=[]; pages.forEach(pg=>(pg.fields||[]).forEach(f=>{if(f.id===id)a.push(f);})); return a;};
+const getFieldById=id=>(cur().fields||[]).find(x=>x.id===id);
+const setFieldValue=(id,v)=>findFieldsAllPages(id).forEach(f=>{f.value=(f.type==='checkbox')?!!v:v;});
+
+/* 모든 페이지에서 ID로 찾기 */
+function getFieldsByIdAll(id){
+  id=String(id||'').toLowerCase();
+  const out=[];
+  pages.forEach((pg,pi)=>(pg.fields||[]).forEach((f,idx)=>{
+    if(String(f.id||'').toLowerCase()===id) out.push({f,pi,idx});
+  }));
+  return out;
+}
+function getFirstFieldById(id){
+  const a=getFieldsByIdAll(id);
+  return a.length ? a[0].f : null;
+}
+
+/* ===== 자필(잠금) 키 입력 방지 ===== */
+function blockTyping(el){
+  const prevent = e=>{ if(e.key !== 'Tab') e.preventDefault(); };
+  el.addEventListener('keydown', prevent);
+  el.addEventListener('beforeinput', e=>e.preventDefault());
+  el.addEventListener('paste', e=>e.preventDefault());
+}
+
+/* ===== 자동 날짜 입력 ===== */
+function fillAutoDates(){
+  const now = new Date();
+  const yyyy = String(now.getFullYear());
+  const mm   = String(now.getMonth()+1).padStart(2,'0');
+  const dd   = String(now.getDate()).padStart(2,'0');
+  pages.forEach(pg=>{
+    (pg.fields||[]).forEach(f=>{
+      if(!f || !f.autoDate) return;
+      if(f.value && String(f.value).trim()) return;
+      if(f.autoDate==='year')  f.value = yyyy;
+      if(f.autoDate==='month') f.value = mm;
+      if(f.autoDate==='day')   f.value = dd;
+    });
+  });
+}
+
+/* ======== 요금제 자동 매칭(plans.json) ======== */
+let PLANS = [];
+let PLANS_MAP = new Map(); // name -> { baseFee, discountFee, totalFee, extraDataGb, bundleAnyone }
+
+function parseMoney(v){
+  if(v==null || v==='') return null;
+  const n = Number(String(v).replace(/[^\d.-]/g,''));
+  return isFinite(n) ? n : null;
+}
+function moneyToString(n){ return (n==null) ? '' : String(n); }
+
+function normalizePlans(json){
+  const names = [];
+  const map = new Map();
+
+  if(Array.isArray(json)){
+    json.forEach(item=>{
+      if(item && typeof item==='object'){
+        const name = String(item.name ?? item.plan ?? '').trim();
+        if(!name) return;
+        const base = parseMoney(item.baseFee ?? item.base ?? item.base_fee);
+        const disc = parseMoney(item.discountFee ?? item.discount ?? item.discount_fee);
+        let total  = parseMoney(item.totalFee ?? item.total ?? item.total_fee);
+        if(total==null && base!=null && disc!=null) total = base - disc;
+
+        const extra = parseMoney(item.extraDataGb);
+        const bundleAnyone = !!item.bundleAnyone;
+
+        names.push(name);
+        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+      }else{
+        const name = String(item).trim();
+        if(!name) return;
+        names.push(name);
+        map.set(name,{baseFee:null, discountFee:null, totalFee:null, extraDataGb:null, bundleAnyone:false});
+      }
+    });
+  }else if(json && typeof json==='object'){
+    Object.entries(json).forEach(([k,v])=>{
+      const name = String(k).trim();
+      let base=null, disc=null, total=null, extra=null, bundleAnyone=false;
+      if(v && typeof v==='object'){
+        base = parseMoney(v.baseFee ?? v.base);
+        disc = parseMoney(v.discountFee ?? v.discount);
+        total= parseMoney(v.totalFee ?? v.total);
+        if(total==null && base!=null && disc!=null) total = base - disc;
+        extra = parseMoney(v.extraDataGb);
+        bundleAnyone = !!v.bundleAnyone;
+      }
+      names.push(name);
+      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+    });
+  }
+
+  const uniq = Array.from(new Set(names));
+  return {names:uniq, map};
+}
+
+function getPlanSelectTargets(){
+  const targets=[];
+  pages.forEach((pg,pi)=> (pg.fields||[]).forEach((f,idx)=>{
+    if(f.type!=='select') return;
+    const byId    = PLAN_ID_RE.test(String(f.id||''));
+    const byLabel = PLAN_LABEL_RE.test(String(f.label||''));
+    if(byId||byLabel) targets.push({f,pi,idx});
+  }));
+  return targets;
+}
+
+function applyPlansToDesign(){
+  const list = Array.isArray(PLANS)?[...PLANS]:[];
+  const targets = getPlanSelectTargets();
+  targets.forEach(({f})=>{
+    f.options = list;
+    if(f.value && !list.includes(f.value)) f.value='';
+  });
+  render(); scheduleSave(); refitAllSelects();
+}
+
+function getFeeFieldsAll(){
+  const base = getFieldsByIdAll('basefee').map(x=>x.f);
+  const disc = getFieldsByIdAll('discountfee').map(x=>x.f);
+  const tot  = getFieldsByIdAll('totalfee').map(x=>x.f);
+  return {base, disc, tot};
+}
+function updateFeesFromPlan(planName, doRender=true){
+  const info = PLANS_MAP.get(planName);
+  if(!info) return;
+
+  const {base, disc, tot} = getFeeFieldsAll();
+
+  const baseVal = moneyToString(info.baseFee);
+  const discVal = moneyToString(info.discountFee);
+  let   totVal  = moneyToString(info.totalFee);
+  if(!totVal && info.baseFee!=null && info.discountFee!=null){
+    totVal = moneyToString(info.baseFee - info.discountFee);
+  }
+
+  base.forEach(f=>{ f.value = baseVal; });
+  disc.forEach(f=>{ f.value = discVal; });
+  tot.forEach(f=>{ f.value = totVal; });
+
+  if(doRender){ render(); scheduleSave(); }
+}
+
+async function loadPlansJson(){
+  const tryUrls = [
+    './plans.json?v=2',          // 브랜드 전용
+    '/public/plans.json?v=2',    // 공용 위치(있다면)
+    '/plans.json?v=2'            // 최후 공용
+  ];
+  for (const url of tryUrls){
+    try{
+      const r = await fetch(url,{cache:'no-store'});
+      if (!r.ok) continue;
+      const json = await r.json();
+      const root = (json && typeof json === 'object' && json.plans) ? json.plans : json;
+      const {names,map} = normalizePlans(root);
+      PLANS = names; PLANS_MAP = map;
+      applyPlansToDesign();
+      syncFeesFromExistingPlan();
+      mirrorPlanNameIntoBoxes(getSelectedPlanName());
+      return;
+    }catch(_){}
+  }
+}
+function syncFeesFromExistingPlan(){
+  const tars = getPlanSelectTargets();
+  tars.forEach(({f})=>{
+    if(f.value) updateFeesFromPlan(f.value,false);
+  });
+  render(); scheduleSave();
+}
+
+/* ===== 제휴/추가데이터 인식 ===== */
+function getSelectedPlanName(){
+  const tars = getPlanSelectTargets();
+  const sel = tars.find(t => t.f.value)?.f;
+  return sel ? sel.value : '';
+}
+function isAffiliatePlan(planName){
+  const name = String(planName || '');
+  const AFF_RE = /(밀리의\s*서재|밀리의서재|지니\s*뮤직|지니뮤직|cu\s*20%?\s*할인|메가박스\s*free|제휴)/i;
+  if (AFF_RE.test(name)) return true;
+  const info = PLANS_MAP.get(planName);
+  return !!(info && info.bundleAnyone);
+}
+
+/* ===== 렌더 ===== */
+function render(){
+  const p=cur();
+  bg.src=p.bg||'';
+  overlay.innerHTML='';
+
+  (p.fields||[]).forEach((f,i)=>{
+    // 안전 클램프
+    if (Number.isFinite(f.fontSize)) f.fontSize = clamp(f.fontSize,5,32);
+    if (Number.isFinite(f.inputHeight)) f.inputHeight = clamp(f.inputHeight,5,60);
+
+    const w=document.createElement('div');
+    w.className='field '+(f.type==='radio'?'radio ':'')+(f.type==='checkbox'?'checkbox ':'')+(i===selected?' sel':'');
+
+    const _w=(f.w??24);
+    w.style.left  = `${f.x}%`;
+    w.style.top   = `${f.y}%`;
+    w.style.width = `${_w}%`;
+    if (f.fontSize) w.style.setProperty('--fs', f.fontSize + 'px');
+    w.dataset.i=i; if(f.id) w.dataset.id=f.id;
+
+    if(f.type==='radio'){ w.style.setProperty('--rsize',(f.radioSize??18)+'px'); w.style.setProperty('--rgap',(f.radioGap??12)+'px'); }
+    if(f.color) w.style.setProperty('--fgc',f.color);
+    if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
+
+    if(f.type==='checkbox' || f.type==='radio'){
+      const tickColor = f.borderTransparent ? 'transparent' : '#000';
+      const tickWidth = Number.isFinite(Number(f.borderWidth)) ? Math.max(1, Math.min(8, Number(f.borderWidth))) : 1.6;
+      w.style.setProperty('--tick-bdc', tickColor);
+      w.style.setProperty('--tick-bdw', tickWidth + 'px');
+    }
+
+    const lab=document.createElement('div'); lab.className='label'; lab.textContent=f.label||''; w.appendChild(lab);
+
+    let ctrl;
+    const treatAsTextarea = (f.type==='textarea') || (f.type==='text');
+    const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
+
+    if (treatAsTextarea){
+      ctrl = document.createElement('textarea');
+      ctrl.value = f.value ?? '';
+      if (f.placeholder) ctrl.placeholder = f.placeholder;
+      if (f.maxLength) ctrl.maxLength = f.maxLength;
+
+      if (f.locked || lockByPlaceholder){ ctrl.readOnly = true; ctrl.dataset.locked="1"; blockTyping(ctrl); }
+
+      const onInput = ()=>{
+        if (f.locked || lockByPlaceholder) return;
+        let v = ctrl.value;
+        v = applyMask(v, f.mask, f.maskRe);
+        if (f.maxLength) v = v.slice(0, f.maxLength);
+        if (v !== ctrl.value) {
+          try{ const pos = ctrl.selectionStart; ctrl.value = v; ctrl.setSelectionRange(pos-1,pos-1);}catch(_){}
+        }
+        f.value = v; autosizeTA(ctrl); scheduleSave();
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
+      ctrl.addEventListener('input', onInput);
+      requestAnimationFrame(()=>autosizeTA(ctrl));
+
+    } else if(f.type==='select'){
+      ctrl=document.createElement('select');
+      (f.options||[]).forEach(o=>{const op=document.createElement('option'); op.value=op.textContent=o; ctrl.appendChild(op);});
+      ctrl.value=f.value??'';
+      if (f.locked || lockByPlaceholder){ ctrl.disabled = true; ctrl.dataset.locked="1"; }
+      ctrl.onchange=()=>{
+        f.value=ctrl.value;
+        const isPlan = PLAN_ID_RE.test(String(f.id||'')) || PLAN_LABEL_RE.test(String(f.label||''));
+        if(isPlan){
+          updateFeesFromPlan(f.value);
+          mirrorPlanNameIntoBoxes(f.value); // ★ 요금제명 미러링
+        }
+        scheduleSave(); fitSelectText(ctrl,16,9); evaluateAffBanner(); evaluateExtraDataAndBar();
+      };
+      requestAnimationFrame(()=>fitSelectText(ctrl,16,9));
+
+    } else if(f.type==='checkbox'){
+      ctrl=document.createElement('input');
+      ctrl.type='checkbox';
+      ctrl.checked=!!f.value;
+      if (f.locked || lockByPlaceholder){ ctrl.disabled = true; ctrl.dataset.locked="1"; }
+      w.style.setProperty('--cksize', (f.checkSize ?? 18) + 'px');
+      ctrl.onchange=()=>{f.value=ctrl.checked; scheduleSave(); evaluateAffBanner(); evaluateExtraDataAndBar();};
+      lab.style.top='0'; lab.style.left='24px';
+    } 
+    else if(f.type==='radio'){
+      ctrl=document.createElement('div');
+      const opts = (f.options && f.options.length)
+        ? f.options
+        : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+      opts.forEach(o=>{
+        const it=document.createElement('label'); it.className='radio-item';
+        const cb=document.createElement('input'); cb.type='checkbox'; cb.value=o; cb.checked=(f.value===o);
+        if (f.locked || lockByPlaceholder) cb.disabled = true;
+        cb.onchange=()=>{ if(!cb.checked) return; ctrl.querySelectorAll('input[type="checkbox"]').forEach(x=>{if(x!==cb) x.checked=false;}); f.value=o; scheduleSave(); evaluateAffBanner(); evaluateExtraDataAndBar(); };
+        const s=document.createElement('span'); s.textContent=o;
+        it.appendChild(cb); it.appendChild(s); ctrl.appendChild(it);
+      });
+    } 
+    else {
+      ctrl=document.createElement('input'); ctrl.type='text'; ctrl.value=f.value??'';
+      if (f.placeholder) ctrl.placeholder = f.placeholder;
+      if (f.maxLength) ctrl.maxLength = f.maxLength;
+      if (f.locked || lockByPlaceholder){ ctrl.readOnly = true; ctrl.dataset.locked="1"; blockTyping(ctrl); }
+      ctrl.oninput=()=>{ if(f.locked || lockByPlaceholder) return; f.value=ctrl.value; scheduleSave(); evaluateAffBanner(); evaluateExtraDataAndBar(); };
+    }
+
+    if(f.color) ctrl.style.color=f.color;
+
+    if((f.type==='text'||f.type==='textarea')&&(f.borderColor||f.borderTransparent)){
+      w.classList.add('hasBorder');
+      w.style.setProperty('--bdc',f.borderTransparent?'transparent':(f.borderColor||'#ff3b3b'));
+      w.style.setProperty('--bdw',(f.borderWidth??2)+'px');
+    }else{
+      w.classList.remove('hasBorder'); w.style.removeProperty('--bdc'); w.style.removeProperty('--bdw');
+    }
+    if((f.type==='text'||f.type==='textarea')&&(f.bgColor||f.bgTransparent)){
+      w.classList.add('hasBG');
+      w.style.setProperty('--bgc',f.bgTransparent?'transparent':(f.bgColor||'transparent'));
+    }else{
+      w.classList.remove('hasBG'); w.style.removeProperty('--bgc');
+    }
+
+    ctrl.addEventListener('mousedown',e=>e.stopPropagation());
+    w.appendChild(ctrl); overlay.appendChild(w);
+
+    if(!FILL){ w.addEventListener('mousedown',e=>startDrag(e,i,w)); w.addEventListener('click',()=>select(i)); }
+  });
+
+  if(!FILL) updatePanel();
+  pageInfo.textContent = `${pageIndex+1} / ${pages.length}`;
+  requestAnimationFrame(refitAllSelects);
+  requestAnimationFrame(()=>autosizeAllTextareas(overlay));
+  requestAnimationFrame(applyZoom);
+
+  requestAnimationFrame(()=>{
+    evaluateAffBanner();
+    evaluateExtraDataAndBar();
+    forceMirrorPlan(); // ★ 렌더마다 요금제명 강제 동기화
+  });
+}
+
+/* ===== 입력 마스크 ===== */
+function maskFilterByRegex(value, allowPattern){
+  try{ const re=new RegExp(allowPattern); let out=''; for(const ch of String(value)) if(re.test(ch)) out+=ch; return out; }catch(_){ return value; }
+}
+function applyMask(value, mask, maskRe){
+  if(mask==='custom' && maskRe) return maskFilterByRegex(value, maskRe);
+  switch(mask){
+    case 'number': return String(value).replace(/[^\d]/g,'');
+    case 'tel':    return String(value).replace(/[^\d-]/g,'');
+    case 'alpha':  return String(value).replace(/[^A-Za-z\s]/g,'');
+    case 'alnum':  return String(value).replace(/[^A-Za-z0-9\s]/g,'');
+    case 'hangul': return String(value).replace(/[^\u3131-\u318E\uAC00-\uD7A3\s]/g,'');
+    default:       return value;
+  }
+}
+
+/* ===== 속성 패널 ===== */
+const pLabel=document.getElementById('p_label'),
+      pRadioSize=document.getElementById('p_radioSize'),
+      pRadioGap=document.getElementById('p_radioGap'),
+      pColor=document.getElementById('p_color'),
+      pHeight=document.getElementById('p_height'),
+      pWrap=document.getElementById('p_wrap'),
+      pId=document.getElementById('p_id'),
+      pOptions=document.getElementById('p_options'),
+      pRequired=document.getElementById('p_required'),
+      pBorderColor=document.getElementById('p_borderColor'),
+      pBorderWidth=document.getElementById('p_borderWidth'),
+      pBorderTransparent=document.getElementById('p_borderTransparent'),
+      pBgColor=document.getElementById('p_bgColor'),
+      pBgTransparent=document.getElementById('p_bgTransparent'),
+      pFontSize=document.getElementById('p_fontSize'),
+      pMask=document.getElementById('p_mask'),
+      pMaskRe=document.getElementById('p_maskRe'),
+      pMaxLen=document.getElementById('p_maxlen'),
+      pPlaceholder=document.getElementById('p_placeholder'),
+      pAutoDate=document.getElementById('p_autoDate'),
+      pLocked=document.getElementById('p_locked'),
+      pLockOnPh=document.getElementById('p_lockOnPh');
+
+function updatePanel(){
+  const info=document.getElementById('selInfo'),
+        px=document.getElementById('p_x'),
+        py=document.getElementById('p_y'),
+        pw=document.getElementById('p_w'),
+        rowOpts=document.getElementById('row_opts'),
+        rowReq=document.getElementById('row_req');
+  if(selected<0){
+    info.textContent='없음'; px.value=py.value=pw.value='';
+    pLabel.value=''; pRadioSize.value=''; pRadioGap.value='';
+    pColor.value='#000000'; pHeight.value=''; pWrap.checked=true; pId.value='';
+    pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=false;
+    pBgColor.value='#000000'; pBgTransparent.checked=false;
+    pFontSize.value=''; pMask.value=''; pMaskRe.value=''; pMaxLen.value=''; pPlaceholder.value='';
+    pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
+    if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
+    return;
+  }
+  const f=cur().fields[selected];
+  info.textContent=(f.label||f.id||('필드'+(selected+1)));
+  px.value=f.x; py.value=f.y; pw.value=f.w ?? 24;
+  pLabel.value=f.label || ''; pRadioSize.value=(f.radioSize ?? 18); pRadioGap.value=(f.radioGap ?? 12);
+  pColor.value=(f.color || '#000000'); pHeight.value=(f.inputHeight ?? ''); pWrap.checked=true; pId.value=f.id || '';
+  pBorderColor.value=f.borderTransparent?'#000000':(f.borderColor||'#ff3b3b');
+  pBorderWidth.value=(f.borderWidth ?? 2); pBorderTransparent.checked=!!f.borderTransparent;
+  pBgColor.value=f.bgTransparent?'#000000':(f.bgColor||'#000000'); pBgTransparent.checked=!!f.bgTransparent;
+  if(rowReq) rowReq.style.display=''; if(pRequired) pRequired.checked=!!f.required;
+  if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
+  if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
+  pFontSize.value = (f.fontSize ?? 14);
+  pMask.value = f.mask || ''; pMaskRe.value = f.maskRe || '';
+  pMaxLen.value = f.maxLength || '';
+  pPlaceholder.value = f.placeholder || '';
+  pAutoDate.value = f.autoDate || '';
+  pLocked.checked = !!f.locked;
+  pLockOnPh.checked = !!f.lockOnPh;
+}
+const select=i=>{selected=i; render();};
+
+/* ===== 드래그 ===== */
+function startDrag(e,i,el){
+  let drag=true; const sx=e.clientX, sy=e.clientY; const r=stage.getBoundingClientRect();
+  const f=cur().fields[i]; let lx=(f.x/100)*r.width, ly=(f.y/100)*r.height;
+  e.preventDefault(); document.body.style.userSelect='none'; paper.style.cursor='grabbing';
+  function mv(ev){
+    if(!drag) return;
+    const dx=(ev.clientX-sx), dy=(ev.clientY-sy);
+    f.x=clamp(((lx+dx)/r.width)*100,0,100);
+    f.y=clamp(((ly+dy)/r.height)*100,0,100);
+    el.style.left=`${f.x}%`; el.style.top =`${f.y}%`;
+    updatePanel();
+  }
+  function up(){ drag=false; window.removeEventListener('mousemove',mv); window.removeEventListener('mouseup',up); document.body.style.userSelect=''; paper.style.cursor=''; scheduleSave(); }
+  window.addEventListener('mousemove',mv); window.addEventListener('mouseup',up);
+}
+
+/* ===== 필드 추가/적용/삭제 ===== */
+document.getElementById('addField').onclick=()=>{
+  const t=document.getElementById('newType').value,
+        id=document.getElementById('newId').value.trim(),
+        label=document.getElementById('newLabel').value.trim(),
+        opts=document.getElementById('newOpts').value.split(',').map(s=>s.trim()).filter(Boolean),
+        req=document.getElementById('newReq').checked;
+  const base={id:(id||`${t}_${Date.now()}`),label,type:t,x:50,y:50,w:30,required:req};
+  if(t==='select'||t==='radio') base.options=opts;
+  if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
+  cur().fields.push(base); selected=cur().fields.length-1; render(); scheduleSave();
+};
+document.getElementById('applyProp').onclick=()=>{
+  if(selected<0) return; const f=cur().fields[selected];
+  f.x=clamp(num(document.getElementById('p_x').value,f.x),0,100);
+  f.y=clamp(num(document.getElementById('p_y').value,f.y),0,100);
+  f.w=clamp(num(document.getElementById('p_w').value,f.w??24),2,95);
+  f.label=pLabel.value.trim();
+  f.radioSize=clamp(num(pRadioSize.value,f.radioSize??18),10,32);
+  f.radioGap=clamp(num(pRadioGap.value,f.radioGap??12),0,60);
+  f.color=pColor.value||'#000000';
+  const h=parseInt(pHeight.value,10); f.inputHeight=Number.isFinite(h)?clamp(h,5,60):undefined;
+  f.wrap=true; f.id=(pId.value||'').trim()||f.id; f.required=!!pRequired?.checked;
+
+  f.borderTransparent = !!pBorderTransparent?.checked;
+  f.borderColor       = f.borderTransparent ? 'transparent' : ((pBorderColor?.value||'').trim()||undefined);
+  const bw            = parseInt(pBorderWidth?.value,10);
+  f.borderWidth       = Number.isFinite(bw)?clamp(bw,1,8):undefined;
+  f.bgTransparent     = !!pBgTransparent?.checked;
+  f.bgColor           = f.bgTransparent ? 'transparent' : ((pBgColor?.value||'').trim()||undefined);
+  const fs            = parseInt(pFontSize?.value,10);
+  f.fontSize          = Number.isFinite(fs)?clamp(fs,5,32):undefined;
+  f.mask              = (pMask?.value||'');
+  f.maskRe            = (pMaskRe?.value||'').trim();
+  const ml            = parseInt(pMaxLen?.value,10);
+  f.maxLength         = Number.isFinite(ml)?clamp(ml,1,500):undefined;
+  f.placeholder       = (pPlaceholder?.value||'').trim();
+  f.autoDate          = (pAutoDate?.value||'');
+  f.locked            = !!pLocked?.checked;
+  f.lockOnPh          = !!pLockOnPh?.checked;
+
+  if((PLAN_ID_RE.test(String(f.id||'')) || PLAN_LABEL_RE.test(String(f.label||''))) && f.value){
+    updateFeesFromPlan(f.value,false);
+    mirrorPlanNameIntoBoxes(f.value);
+  }
+  if (f.type==='select' && (PLAN_ID_RE.test(f.id||'') || PLAN_LABEL_RE.test(f.label||''))) {
+    f.options = Array.isArray(PLANS) ? [...PLANS] : [];
+  }
+  fillAutoDates();
+  render(); scheduleSave();
+};
+document.getElementById('delField').onclick=()=>{ if(selected<0) return; cur().fields.splice(selected,1); selected=-1; render(); scheduleSave(); };
+
+/* ===== 정렬 버튼 ===== */
+function alignSelectedX(mode){
+  if(selected<0) return; const f=cur().fields[selected];
+  if(mode==='left')   f.x = 0;
+  if(mode==='center') f.x = clamp(50 - (f.w??24)/2, 0, 100);
+  if(mode==='right')  f.x = clamp(100 - (f.w??24), 0, 100);
+  render(); scheduleSave();
+}
+function alignSelectedY(mode){
+  if(selected<0) return; const f=cur().fields[selected];
+  if(mode==='top')    f.y = 0;
+  if(mode==='middle') f.y = 50;
+  if(mode==='bottom') f.y = 100;
+  render(); scheduleSave();
+}
+document.getElementById('alignLeft').onclick = ()=>alignSelectedX('left');
+document.getElementById('alignCX').onclick   = ()=>alignSelectedX('center');
+document.getElementById('alignRight').onclick= ()=>alignSelectedX('right');
+document.getElementById('alignTop').onclick  = ()=>alignSelectedY('top');
+document.getElementById('alignCY').onclick   = ()=>alignSelectedY('middle');
+document.getElementById('alignBottom').onclick=()=>alignSelectedY('bottom');
+
+/* ===== 페이지 ===== */
+const changePage=d=>{pageIndex=clamp(pageIndex+d,0,pages.length-1); selected=-1; render(); scheduleSave();};
+document.getElementById('prev').onclick=()=>changePage(-1);
+document.getElementById('next').onclick=()=>changePage(1);
+
+/* ===== 저장/초기화 ===== */
+document.getElementById('saveJson').onclick=()=>{ const blob=new Blob([JSON.stringify({pages},null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='overlay-design.json'; a.click(); URL.revokeObjectURL(a.href); };
+document.getElementById('resetValues').onclick=()=>{
+  pages.forEach(pg=>(pg.fields||[]).forEach(f=>delete f.value));
+  selected=-1;
+  affBanner.style.display='none';
+  updateExtraBarDom('');
+  mirrorExtraDataIntoBoxes('');
+  mirrorPlanNameIntoBoxes('');
+  clearAutosave();
+  render();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
+
+/* ===== 필수 검증/토스트 ===== */
+function findMissingAll(){
+  const miss=[]; pages.forEach((pg,pi)=>{ (pg.fields||[]).forEach((f,fi)=>{ if(!f.required) return; const v=(f.type==='checkbox')?!!f.value:(f.value??'').toString().trim(); if(!v) miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)}); }); });
+  return miss;
+}
+function markInvalidForPage(pIdx,list){
+  if(pIdx!==pageIndex) return;
+  overlay.querySelectorAll('.field.invalid').forEach(el=>el.classList.remove('invalid'));
+  list.forEach(m=>{ const el=overlay.querySelector(`.field[data-i="${m.idx}"]`); if(el) el.classList.add('invalid'); });
+}
+function showToast(items){
+  const toast=document.getElementById('toast'), list=document.getElementById('missList');
+  list.innerHTML=items.map(m=>`<li>${m}</li>`).join('');
+  toast.style.display='flex';
+  document.getElementById('tClose').onclick=()=>toast.style.display='none';
+}
+
+/* ===== 이미지/폰트 대기 ===== */
+async function waitForImages(root){
+  const imgs=Array.from(root.querySelectorAll('img'));
+  if(!imgs.length) return;
+  await Promise.all(imgs.map(img=>{
+    if(img.complete && img.naturalWidth>0) return Promise.resolve();
+    return new Promise(res=>{
+      const done=()=>{ img.removeEventListener('load',done); img.removeEventListener('error',done); res(); };
+      img.addEventListener('load',done,{once:true});
+      img.addEventListener('error',done,{once:true});
+    });
+  }));
+}
+
+/* ===== 인쇄 DOM ===== */
+function createPrintDOM(page, pageIdx){
+  const wrap=document.createElement('div'); wrap.className='paper';
+  const st=document.createElement('div'); st.className='stage'; st.style.transform='scale(1)';
+  const img=document.createElement('img'); img.src=page.bg||'';
+  const ov=document.createElement('div'); ov.className='overlay';
+
+  st.appendChild(img); st.appendChild(ov); wrap.appendChild(st);
+
+  (page.fields||[]).forEach(f=>{
+    const w=document.createElement('div');
+    w.className='field '+(f.type==='radio'?'radio ':'')+(f.type==='checkbox'?'checkbox ':'');
+
+    w.style.left=`${f.x}%`; w.style.top=`${f.y}%`; w.style.width=`${(f.w??24)}%`;
+    if(f.fontSize) w.style.setProperty('--fs',f.fontSize+'px');
+    if(f.type==='radio'){ w.style.setProperty('--rsize',(f.radioSize??18)+'px'); w.style.setProperty('--rgap',(f.radioGap??12)+'px'); }
+    if(f.color) w.style.setProperty('--fgc',f.color);
+    if(f.inputHeight) w.style.setProperty('--ih',f.inputHeight+'px');
+
+    if(f.type==='checkbox' || f.type==='radio'){
+      const tickColor = f.borderTransparent ? 'transparent' : '#000';
+      const tickWidth = Number.isFinite(Number(f.borderWidth)) ? Math.max(1, Math.min(8, Number(f.borderWidth))) : 1.6;
+      w.style.setProperty('--tick-bdc', tickColor);
+      w.style.setProperty('--tick-bdw', tickWidth + 'px');
+    }
+
+    const lab=document.createElement('div'); lab.className='label'; lab.textContent=f.label||''; w.appendChild(lab);
+
+    let ctrl;
+    const treatAsTextarea=(f.type==='textarea')||(f.type==='text');
+    const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
+
+    if(treatAsTextarea){
+      ctrl=document.createElement('textarea');
+      ctrl.value=f.value??'';
+      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+      ctrl.spellcheck=false; ctrl.style.overflow='visible'; ctrl.style.resize='none'; ctrl.style.height='auto'; ctrl.style.minHeight='5px';
+      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+    }
+    else if(f.type==='select'){
+      ctrl=document.createElement('select');
+      (f.options||[]).forEach(o=>{const op=document.createElement('option'); op.value=op.textContent=o; ctrl.appendChild(op);});
+      ctrl.value=f.value??'';
+      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+      const pv=document.createElement('div'); pv.className='print-value';
+      const selText=(ctrl.options[ctrl.selectedIndex]||{}).text||ctrl.value||'';
+      pv.textContent=selText; w.appendChild(pv);
+    }
+    else if(f.type==='checkbox'){
+      ctrl=document.createElement('input'); ctrl.type='checkbox'; ctrl.checked=!!f.value; w.style.setProperty('--cksize',(f.checkSize??18)+'px');
+      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+    }
+    else if(f.type==='radio'){
+      ctrl=document.createElement('div');
+      const opts=(f.options&&f.options.length)?f.options:Array.from({length:f.radioCount||2},(_,k)=>String(k+1));
+      opts.forEach(o=>{const it=document.createElement('label'); it.className='radio-item'; const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=(f.value===o); if (f.locked || lockByPlaceholder) cb.disabled = true; const s=document.createElement('span'); s.textContent=o; it.appendChild(cb); it.appendChild(s); ctrl.appendChild(it);});
+    }
+    else{
+      ctrl=document.createElement('input'); ctrl.type='text'; ctrl.value=f.value??'';
+      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+    }
+
+    if(f.color) ctrl.style.color=f.color;
+    if(f.inputHeight && ctrl.tagName!=='TEXTAREA') ctrl.style.height=f.inputHeight+'px';
+
+    if((f.type==='text'||f.type==='textarea')&&(f.borderColor||f.borderTransparent)){ w.classList.add('hasBorder'); w.style.setProperty('--bdc',f.borderTransparent?'transparent':(f.borderColor||'#ff3b3b')); w.style.setProperty('--bdw',(f.borderWidth??2)+'px'); }
+    if((f.type==='text'||f.type==='textarea')&&(f.bgColor||f.bgTransparent)){ w.classList.add('hasBG'); w.style.setProperty('--bgc',f.bgTransparent?'transparent':(f.bgColor||'transparent')); }
+
+    w.appendChild(ctrl); ov.appendChild(w);
+  });
+
+  if (pageIdx === 0) {
+    const extra = computeExtraDataText();
+    if (extra) {
+      const bar=document.createElement('div');
+      bar.style.position='absolute'; bar.style.left='2mm'; bar.style.top='2mm';
+      bar.style.right='2mm'; bar.style.padding='4px 6px';
+      bar.style.border='1px solid #2b3a54'; bar.style.borderRadius='6px';
+      bar.style.background='#eef3ff'; bar.style.color='#000'; bar.style.fontWeight='800';
+      bar.textContent='추가 데이터: ' + extra;
+      ov.appendChild(bar);
+    }
+  }
+
+  return wrap;
+}
+function buildPrintAll(){
+  const container=document.getElementById('printAll');
+  container.innerHTML='';
+  pages.forEach((pg,idx)=>{
+    const pageWrap=document.createElement('div'); pageWrap.className='pageWrap';
+    const printed=createPrintDOM(pg, idx);
+    pageWrap.appendChild(printed);
+    container.appendChild(pageWrap);
+  });
+  requestAnimationFrame(()=>autosizeAllTextareas(container));
+  return container;
+}
+async function printAllNow(){
+  const container=buildPrintAll();
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch{} }
+  await waitForImages(container);
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  setTimeout(()=>window.print(),0);
+}
+
+/* ===== 인쇄 버튼 ===== */
+document.getElementById('btnPdf').onclick=async ()=>{
+  const all=findMissingAll();
+  if(all.length){
+    const first=all[0].page; pageIndex=first; render();
+    const listForPage=all.filter(m=>m.page===first);
+    markInvalidForPage(first,listForPage);
+    showToast(listForPage.map(m=>`p${m.page+1} - ${m.label}`));
+    return;
+  }
+  await printAllNow();
+};
+
+/* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
+function forceWrapForHeaderBox(){
+  const re=/대리점|상담사|연락처/;
+  pages.forEach(pg=>{
+    (pg.fields||[]).forEach(f=>{
+      if(f.type==='text' && re.test(String(f.label||''))){
+        f.wrap = true;
+        if(!f.inputHeight) f.inputHeight = 28;
+      }
+    });
+  });
+}
+
+/* ===== 제휴 배너 표시 로직 ===== */
+const AFF_SEEN_KEY = 'affBanner_seen_once';
+function showAffBanner(show){ if(!affBanner) return; affBanner.style.display = show ? 'block' : 'none'; }
+function oncePopup(){
+  if (!affPopup) return;
+  if (sessionStorage.getItem(AFF_SEEN_KEY)) return;
+  affPopup.style.display='block';
+  setTimeout(()=>{ affPopup.style.display='none'; },3000);
+  sessionStorage.setItem(AFF_SEEN_KEY,'1');
+}
+function evaluateAffBanner(){
+  try{
+    const values=[];
+    pages.forEach(pg=>(pg.fields||[]).forEach(f=>{
+      const v=(f.type==='checkbox')?(f.value?'Y':''):(f.value||'');
+      if(typeof v==='string') values.push(v);
+    }));
+    overlay.querySelectorAll('input,select,textarea').forEach(el=>{
+      let v=''; if(el.type==='checkbox') v=el.checked?'Y':''; else v=el.value||'';
+      if(typeof v==='string') values.push(v);
+    });
+
+    let hit = values.some(s=>/제휴|C-1/i.test(String(s)));
+    const planName = getSelectedPlanName();
+    if (isAffiliatePlan(planName)) hit = true;
+
+    showAffBanner(hit); if(hit) oncePopup();
+  }catch(_){}
+}
+
+/* ===== extraData 수집/표시 ===== */
+function computeExtraDataText(){
+  const pick = [];
+  const SKIP_IDS = new Set(['extradata','extradataecho','extradatabox']);
+
+  pages.forEach(pg=>(pg.fields||[]).forEach(f=>{
+    const fid = String(f.id||'').toLowerCase();
+    if (SKIP_IDS.has(fid)) return;
+
+    const idHit    = fid==='extradata' || /(extra|추가\s*데이터)/i.test(fid);
+    const labelHit = /(extra|추가\s*데이터)/i.test(String(f.label||''));
+    if(!(idHit||labelHit)) return;
+
+    let v = '';
+    if (f.type==='checkbox') v = f.value ? 'Y' : '';
+    else v = (f.value||'').toString().trim();
+    if(v) pick.push(v);
+  }));
+
+  const planName = getSelectedPlanName();
+  const info = PLANS_MAP.get(planName);
+  if (info && info.extraDataGb){
+    const token = info.bundleAnyone
+      ? `아무나 결합 +${info.extraDataGb}GB`
+      : `추가 데이터 +${info.extraDataGb}GB`;
+    pick.push(token);
+  }
+
+  const tokens = pick
+    .flatMap(s => String(s).split('/'))
+    .map(s => s.replace(/\s+/g,' ').trim())
+    .filter(Boolean);
+
+  const uniq = Array.from(new Set(tokens));
+  return uniq.join(' / ');
+}
+function updateExtraBarDom(txt){
+  if(!extraBar || !extraBarText) return;
+  if(txt && txt.trim()){
+    extraBarText.textContent = txt.trim();
+    extraBar.style.display = 'block';
+  }else{
+    extraBarText.textContent = '';
+    extraBar.style.display = 'none';
+  }
+}
+function mirrorExtraDataIntoBoxes(txt){
+  if (__MIRRORING__) return;
+  __MIRRORING__ = true;
+
+  const targets = [];
+  const idMatch = /^(extradata|extradatabox|extradataecho)$/i;
+  const fuzzy   = /(extra|추가\s*데이터)/i;
+
+  pages.forEach(pg => (pg.fields || []).forEach(f => {
+    const id = String(f.id || '');
+    const label = String(f.label || '');
+    const byIdExact  = idMatch.test(id);
+    const byIdFuzzy  = fuzzy.test(id);
+    const byLabel    = fuzzy.test(label);
+    if ((byIdExact || byIdFuzzy || byLabel) && (f.type === 'text' || f.type === 'textarea')) {
+      targets.push(f);
+    }
+  }));
+
+  targets.forEach(f => {
+    f.value = txt || '';
+    const node = overlay.querySelector(
+      `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
+    );
+    if (node) {
+      node.value = txt || '';
+      if (node.tagName === 'TEXTAREA') {
+        try {
+          node.style.height = 'auto';
+          node.style.height = Math.max(node.scrollHeight, 5) + 'px';
+        } catch (_) {}
+      }
+    }
+  });
+
+  __MIRRORING__ = false;
+}
+function evaluateExtraDataAndBar(){
+  const txt = computeExtraDataText();
+  updateExtraBarDom(txt);
+  if (txt === LAST_EXTRA_TXT) return;
+  LAST_EXTRA_TXT = txt;
+  mirrorExtraDataIntoBoxes(txt);
+}
+
+/* ===== 요금제 수동 입력/저장/불러오기 ===== */
+function parsePlansFromText(text){
+  const raw=text.split(/\r?\n|,/).map(s=>s.trim()).filter(Boolean);
+  return Array.from(new Set(raw));
+}
+function openBulkPlansPrompt(){
+  const example=[
+    '예시 입력 (한 줄에 하나 또는 콤마로 구분):',
+    '베이직 5G 9GB','스페셜 15GB','무제한 11GB','','또는: 베이직 5G 9GB, 스페셜 15GB, 무제한 11GB'
+  ].join('\n');
+  const txt=prompt(example, PLANS.length?PLANS.join('\n'):'');
+  if(txt==null) return;
+  const parsed=parsePlansFromText(txt);
+  if(!parsed.length){ alert('유효한 요금제가 없습니다.'); return; }
+  PLANS=parsed;
+  localStorage.setItem('plans_json_v1', JSON.stringify(PLANS));
+  applyPlansToDesign();
+  alert(`요금제 ${PLANS.length}개가 적용되었습니다.`);
+}
+function savePlansToFile(){
+  const list=Array.isArray(PLANS)?PLANS:[];
+  const blob=new Blob([JSON.stringify(list,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='plans.json'; a.click(); URL.revokeObjectURL(a.href);
+}
+function hookLoadPlansFile(){
+  const input=document.getElementById('loadPlansFile'); if(!input) return;
+  input.onchange=async (e)=>{
+    const file=e.target.files && e.target.files[0]; if(!file) return;
+    try{
+      const text=await file.text();
+      const json=JSON.parse(text);
+      const {names,map} = normalizePlans(json);
+      PLANS=names; PLANS_MAP=map;
+      localStorage.setItem('plans_json_v1', JSON.stringify(PLANS));
+      applyPlansToDesign();
+      syncFeesFromExistingPlan();
+      mirrorPlanNameIntoBoxes(getSelectedPlanName());
+      forceMirrorPlan();
+      alert(`불러오기 완료: ${PLANS.length}개`);
+    }catch(err){ alert('plans.json 읽기 실패: '+(err&&err.message?err.message:err)); }
+    finally{ e.target.value=''; }
+  };
+}
+(function initPlansUI(){
+  const bulkBtn=document.getElementById('bulkPlansBtn');
+  const saveBtn=document.getElementById('savePlans');
+  if(bulkBtn) bulkBtn.onclick=openBulkPlansPrompt;
+  if(saveBtn) saveBtn.onclick=savePlansToFile;
+  hookLoadPlansFile();
+  try{ const raw=localStorage.getItem('plans_json_v1'); if(raw){ PLANS=JSON.parse(raw); applyPlansToDesign(); } }catch(_){}
+})();
+
+/* ===== 요금제명 미러링 (앞장 → 다른 페이지 텍스트박스) ===== */
+let __MIRROR_PLAN__ = false;
+function mirrorPlanNameIntoBoxes(planName){
+  if (__MIRROR_PLAN__) return;
+  __MIRROR_PLAN__ = true;
+
+  const targets = [];
+  const idExact = /^(planecho|planname|selectedplan|plan_text)$/i;
+  const fuzzy   = /(선택\s*요금(제|상품)\s*명?|요금제\s*명)/i;
+
+  pages.forEach(pg => (pg.fields || []).forEach(f => {
+    const id = String(f.id || '');
+    const label = String(f.label || '');
+    const byIdExact = idExact.test(id);
+    const byFuzzy   = fuzzy.test(id) || fuzzy.test(label);
+    if ((byIdExact || byFuzzy) && (f.type === 'text' || f.type === 'textarea')) {
+      targets.push(f);
+    }
+  }));
+
+  targets.forEach(f => {
+    f.value = planName || '';
+    const node = overlay.querySelector(
+      `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
+    );
+    if (node) {
+      node.value = planName || '';
+      if (node.tagName === 'TEXTAREA') {
+        try {
+          node.style.height = 'auto';
+          node.style.height = Math.max(node.scrollHeight, 5) + 'px';
+        } catch (_) {}
+      }
+    }
+  });
+
+  __MIRROR_PLAN__ = false;
+}
+
+/* ===== 현재 상태 기준 강제 동기화 ===== */
+function forceMirrorPlan(){
+  let v = getSelectedPlanName();
+  try{
+    const tars = getPlanSelectTargets();
+    const onThisPage = tars.find(t => t.pi === pageIndex);
+    if (onThisPage) {
+      const dom = overlay.querySelector(`.field[data-id="${onThisPage.f.id}"] select`);
+      if (dom && dom.value) v = dom.value;
+    }
+  }catch(_){}
+  mirrorPlanNameIntoBoxes(v || '');
+}
+
+/* ===== 부트 ===== */
+async function boot(){
+  await loadDesign();
+  forceWrapForHeaderBox();
+  if(!FRESH) tryLoadAutosave(); else pages.forEach(pg=>(pg.fields||[]).forEach(f=>delete f.value));
+  await loadPlansJson();
+  fillAutoDates();
+  render();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+  syncFeesFromExistingPlan();
+  mirrorPlanNameIntoBoxes(getSelectedPlanName());
+  forceMirrorPlan(); // ★ 초기 진입 시에도 재동기화
+}
+document.getElementById('reload').onclick=boot;
+window.addEventListener('DOMContentLoaded',()=>{ boot(); applyZoom(); });
+
+/* ===== text → textarea 전환 스위치 ===== */
+function enableWrapAllTextFields(){
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (f.type === 'text') {
+        f.wrap = true;
+        if (!f.inputHeight) f.inputHeight = 28;
+      }
+    });
+  });
+  render(); scheduleSave();
+}
+const wrapBtn = document.getElementById('enableWrapAll');
+if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
+</script>
+</body>
+</html>

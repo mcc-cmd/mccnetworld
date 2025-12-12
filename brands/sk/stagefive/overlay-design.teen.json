@@ -1,0 +1,16 @@
+{
+  "pages": [
+    {
+      "bg": "images/teen-1.jpg",
+      "fields": [
+        { "id": "birth", "label": "생년월일", "type": "text", "x": 12.5, "y": 34.2, "w": 26, "mask": "yyyy-mm-dd", "required": true },
+        { "id": "phone", "label": "연락처",   "type": "text", "x": 12.5, "y": 40.4, "w": 26, "mask": "000-0000-0000", "required": true },
+        { "id": "rrn",   "label": "주민번호", "type": "text", "x": 12.5, "y": 46.3, "w": 26, "mask": "rrn" }
+      ]
+    },
+    { "bg": "images/teen-2.jpg" },
+    { "bg": "images/teen-3.jpg" },
+    { "bg": "images/teen-4.jpg" },
+    { "bg": "images/teen-5.jpg" }
+  ]
+}
