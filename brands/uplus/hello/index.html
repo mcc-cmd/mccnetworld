@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MCCNETWORLD 헬로모바일LG</title>
+<title>MCCNETWORLD 미디어로그</title>
 
 <link rel="icon" type="image/png" sizes="16x16"  href="/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32"  href="/favicon-32x32.png">
@@ -50,11 +50,19 @@
     height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
   }
   .field:focus-within{
-  outline: 3px solid #2563eb;   /* 테두리 색 (파란색) */
-  outline-offset: 2px;          /* 테두리가 박스에서 약간 떨어져 보이게 */
-  border-radius: 8px;           /* 모서리 살짝 둥글게 */
+  outline: 3px solid #e724ee83;   /* 테두리 색 (파란색) */
+  outline-offset: 0px;          /* 테두리가 박스에서 약간 떨어져 보이게 */
+  border-radius: 0px;           /* 모서리 살짝 둥글게 */
   background: rgba(37,99,235,.03); /* 아주 옅은 배경 하이라이트 (원하면 삭제 가능) */
 }
+/* 세로 가운데(텍스트 한 줄용) */
+.field input[type="text"],
+.field select{
+  line-height: var(--ih, 28px);   /* 높이와 동일하게 */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* 리사이즈 손잡이(빌더 모드에서만) – 기본은 숨김, 호버/선택 시만 보이게 */
 .field .resize-handle{
   position:absolute;
@@ -95,12 +103,18 @@ html.fill .field .resize-handle{
   padding-right: 8px;                /* 오른쪽 여유 공간 (텍스트 잘리지 않게) */
 }
 
-  .field input,.field textarea,.field select{
-  width:100%;background:transparent;border:none;color:var(--fgc,#fff);
-  /* --ih 변수로 기본 높이 제어, textarea 는 JS에서 다시 계산 */
-  height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui;
-  text-align:var(--ta,left); /* ★ 텍스트 정렬(좌/가운데/우) */
+.field input,.field textarea,.field select{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--fgc,#fff);
+  height:var(--ih,auto);
+  outline:none;
+  padding:0 6px;              /* ✅ 위아래 0으로 */
+  font:600 var(--fs)/1.2 system-ui;
+  text-align:var(--ta,left);
 }
+
   .field textarea{
     white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
     overflow:hidden;resize:none !important;scrollbar-width:none;min-height:5px;max-height:none !important;
@@ -168,7 +182,13 @@ html.fill .field .resize-handle{
     #printAll .label{color:#000 !important;text-shadow:none !important}
     #printAll .field select{display:none !important}
     #printAll .field .print-value{display:block !important;color:#000 !important}
-    #printAll textarea{overflow:visible!important;height:auto!important;resize:none!important;max-height:none!important}
+  /* 인쇄 시 textarea 기본 동작 */
+  #printAll textarea{
+    height:auto !important;
+    resize:none !important;
+    max-height:none !important;
+  }
+
     .field.checkbox input,.field.radio input[type="checkbox"]{
       appearance:none !important;-webkit-appearance:none !important;background:transparent !important;
       border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;position:relative !important;vertical-align:middle;
@@ -263,14 +283,13 @@ html.fill .field .resize-handle{
   <section class="panel">
     <!-- ✅ 헤더: 한 번만, 오른쪽에 뒤로가기 + 빌더 버튼 -->
     <div class="hd">
-      <strong>MCC 헬로모바일 LG</strong>
+      <strong>MCC 미디어로그 서류</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <!-- 메인(서류 선택 화면)으로 돌아가기 -->
-        <a href="/index.html" class="btn btn--ghost" id="backToHub">
-          서류 선택 화면
-          <!-- 필요 시 텍스트 추가 -->
-        </a>
+<a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">
+  서류 선택 화면
+</a>
 
         <!-- 기존 빌더 버튼 -->
         <div class="builder">
@@ -300,7 +319,7 @@ html.fill .field .resize-handle{
         <button class="btn--ghost btn" id="prev">◀ 이전</button>
         <div id="pageInfo">1 / 7</div>
         <button class="btn--ghost btn" id="next">다음 ▶</button>
-        <button class="btn" id="btnPdf">PDF생성OR인쇄</button>
+        <button class="btn" id="btnPdf">PDF 생성OR인쇄</button>
       </div>
       <p class="hint" style="text-align:center">필드를 클릭해 드래그로 이동. 입력은 컨트롤을 클릭 후 타이핑.</p>
     </div>
@@ -506,14 +525,11 @@ function applyValuesOnly(s){
       const sv = pgSnap.fields?.[j];
       if (!sv) return;
 
-      // 체크박스는 항상 true/false 로
       if (f.type === 'checkbox') {
         f.value = !!sv.value;
         return;
       }
 
-      // 그 외 타입(text, textarea, select 등)은
-      // boolean 이면 버리고(빈칸), null/undefined 도 빈칸으로
       let v = sv.value;
       if (typeof v === 'boolean' || v == null) {
         v = '';
@@ -527,27 +543,12 @@ function applyValuesOnly(s){
   }
 }
 
-// ★ 자동 저장 끄기용 수정 버전
-
-// 1) 값 변경 시 자동 저장: 아무것도 안 하도록 비워둠
-function scheduleSave(){ 
-  // 자동 저장 기능 사용 안 함
-  // (필요하면 나중에 다시 구현)
-}
-
-// 2) 페이지 로딩 시 자동 저장된 값 불러오기: 그냥 패스
-function tryLoadAutosave(){ 
-  // 자동 저장된 값 불러오지 않음
-  return;
-}
-
-// 3) 필요할 때 로컬스토리지에 남아있는 예전 데이터만 지우는 함수
+// 자동 저장 기능 사용 안 함
+function scheduleSave(){ }
+function tryLoadAutosave(){ }
 const clearAutosave = () => { 
-  try {
-    localStorage.removeItem(AUTOSAVE_KEY);
-  } catch(_) {}
+  try { localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {}
 };
-
 
 /* ===== 드롭다운 글자 자동 축소 ===== */
 function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
@@ -628,8 +629,6 @@ function fitPrintValue(el, maxPx = 16, minPx = 8){
     el.style.fontSize = minPx + 'px';
   }catch(_){}
 }
-
-/* 인쇄 컨테이너 내부의 .print-value 전체에 적용 */
 function refitAllPrintValues(root){
   if (!root) return;
   root.querySelectorAll('.print-value').forEach(el=>fitPrintValue(el, 16, 9));
@@ -638,49 +637,34 @@ function refitAllPrintValues(root){
 /* ===== textarea 자동 높이 ===== */
 function autosizeTA(el){
   try{
-    // ★ data-fixed-h 가 있으면(입력 높이 고정) 자동 높이 조절 안 함
     if (el.dataset.fixedH) {
       el.style.height = el.dataset.fixedH + 'px';
       return;
     }
-    // 그 외에는 최소 높이(minH) 기준으로 자동 조절
     const minH = parseFloat(el.dataset.minH || '') || 5;
     el.style.height = 'auto';
     el.style.height = Math.max(el.scrollHeight, minH) + 'px';
   }catch(_){}
 }
-
-/* ★ 모든 textarea에 autosize 적용하는 헬퍼 함수 (화면 + 인쇄에서 둘 다 사용) */
 function autosizeAllTextareas(root){
-  // root가 없으면 document 전체 기준
-  (root || document)
-    .querySelectorAll('textarea')
-    .forEach(autosizeTA);
+  (root || document).querySelectorAll('textarea').forEach(autosizeTA);
 }
-
-
 
 /* ===== 설계 로드 ===== */
 function seed7(){
-  // 필요에 따라 adult/teen 배경을 다르게 쓰고 싶으면 여기서 분기하세요.
   pages = [...Array(7)].map((_,i)=>({ bg:`images/page${i+1}.jpg`, fields:[] }));
 }
-
-/* 쿼리파라미터에서 문서종류/연령대 읽기 */
 const QS  = new URLSearchParams(location.search);
-const DOC = (QS.get('doc') || 'join').toLowerCase();   // join | change | cancel
-const AGE = (QS.get('age') || 'adult').toLowerCase();  // adult | teen
-
+const DOC = (QS.get('doc') || 'join').toLowerCase();
+const AGE = (QS.get('age') || 'adult').toLowerCase();
 function designFileOf(doc, age){
   if (doc === 'change') return 'overlay-design.change.json';
   if (doc === 'cancel') return 'overlay-design.cancel.json';
   return (age === 'teen') ? 'overlay-design.teen.json' : 'overlay-design.adult.json';
 }
 function buildDesignUrl(){
-  // v에 Date.now()를 붙여 캐시 제거
   return `./${designFileOf(DOC, AGE)}?v=${Date.now()}`;
 }
-
 async function loadDesign(){
   try{
     const url = buildDesignUrl();
@@ -699,12 +683,9 @@ async function loadDesign(){
     console.error('[loadDesign] fetch 실패:', err);
     seed7();
   }
-
-  // ★ 여기 추가
   pages.forEach(pg => {
     if (!Array.isArray(pg.fields)) pg.fields = [];
   });
-
   pageIndex = 0;
 }
 
@@ -757,7 +738,7 @@ function fillAutoDates(){
 
 /* ======== 요금제 자동 매칭(plans.json) ======== */
 let PLANS = [];
-let PLANS_MAP = new Map(); // name -> { baseFee, discountFee, totalFee, extraDataGb, bundleAnyone }
+let PLANS_MAP = new Map();
 
 function parseMoney(v){
   if(v==null || v==='') return null;
@@ -846,25 +827,38 @@ function updateFeesFromPlan(planName, doRender=true){
 
   const {base, disc, tot} = getFeeFieldsAll();
 
+  // ■ 월 정액요금
   const baseVal = moneyToString(info.baseFee);
-  const discVal = moneyToString(info.discountFee);
-  let   totVal  = moneyToString(info.totalFee);
-  if(!totVal && info.baseFee!=null && info.discountFee!=null){
-    totVal = moneyToString(info.baseFee - info.discountFee);
+
+  // ■ 월 요금할인 : 항상 " -3300 " 이런 식으로 표시
+  let discVal = '';
+  if (info.discountFee != null) {
+    const n = Math.abs(info.discountFee);      // JSON 값은 양수/음수 상관없이 절댓값만
+    if (n === 0) {
+      discVal = '0';                           // 0이면 그냥 0
+    } else {
+      discVal = '-' + moneyToString(n);        // 앞에 - 붙여서 표시
+    }
   }
 
-  base.forEach(f=>{ f.value = baseVal; });
-  disc.forEach(f=>{ f.value = discVal; });
-  tot.forEach(f=>{ f.value = totVal; });
+  // ■ 월 납부액
+  let totVal = moneyToString(info.totalFee);
+  if (!totVal && info.baseFee != null && info.discountFee != null) {
+    totVal = moneyToString(info.baseFee - Math.abs(info.discountFee));
+  }
 
-  if(doRender){ render(); scheduleSave(); }
+  base.forEach(f => { f.value = baseVal; });
+  disc.forEach(f => { f.value = discVal; });
+  tot.forEach(f => { f.value = totVal; });
+
+  if (doRender) { render(); scheduleSave(); }
 }
 
 async function loadPlansJson(){
   const tryUrls = [
-    './plans.json?v=2',          // 브랜드 전용
-    '/public/plans.json?v=2',    // 공용 위치(있다면)
-    '/plans.json?v=2'            // 최후 공용
+    './plans.json?v=2',
+    '/public/plans.json?v=2',
+    '/plans.json?v=2'
   ];
   for (const url of tryUrls){
     try{
@@ -889,6 +883,83 @@ function syncFeesFromExistingPlan(){
   render(); scheduleSave();
 }
 
+/* ===== 이름 칸 글자 자동 축소 ===== */
+function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
+  try {
+    const cs = getComputedStyle(el);
+    const padL = parseFloat(cs.paddingLeft) || 0;
+    const padR = parseFloat(cs.paddingRight) || 0;
+    const innerW = el.clientWidth - padL - padR;
+    if (innerW <= 0) return;
+
+    const base = parseFloat(el.dataset.baseFs || cs.fontSize || '14') || 14;
+    const max = maxPx || base;
+    const min = minPx;
+
+    el.dataset.baseFs = String(base);
+
+    const text = (el.value || el.textContent || '').trim();
+    if (!text) {
+      el.style.fontSize = base + 'px';
+      return;
+    }
+
+    let span = document.getElementById('__name_measure_span__');
+    if (!span) {
+      span = document.createElement('span');
+      span.id = '__name_measure_span__';
+      span.style.position = 'fixed';
+      span.style.visibility = 'hidden';
+      span.style.whiteSpace = 'nowrap';
+      span.style.left = '-9999px';
+      document.body.appendChild(span);
+    }
+
+    span.style.fontFamily = cs.fontFamily;
+    span.style.fontWeight = cs.fontWeight;
+    span.style.fontStyle  = cs.fontStyle;
+    span.style.letterSpacing = cs.letterSpacing;
+    span.style.textTransform = cs.textTransform;
+
+    for (let px = max; px >= min; px -= 0.5) {
+      span.style.fontSize = px + 'px';
+      span.textContent = text;
+      const w = span.getBoundingClientRect().width;
+      if (w <= innerW) {
+        el.style.fontSize = px + 'px';
+        return;
+      }
+    }
+    el.style.fontSize = min + 'px';
+  } catch (_) {}
+}
+const AUTO_SHRINK_NAME_RE = /(가입자명|성명|이름|예금주 성함)/;
+function isNameField(f){
+  const label = String(f.label || '');
+  const id    = String(f.id || '');
+  const ph    = String(f.placeholder || '');
+  if (AUTO_SHRINK_NAME_RE.test(label)) return true;
+  if (AUTO_SHRINK_NAME_RE.test(ph))    return true;
+    // ✅ ID 가 '이름', '가입자명' 이런 한글이어도 이름칸으로 인식
+  if (AUTO_SHRINK_NAME_RE.test(id))    return true;
+  if (/name|custname/i.test(id))       return true;
+  return false;
+}
+function setupNameAutoShrink(ctrl, f){
+  if (!isNameField(f)) return;
+  ctrl.dataset.autofit = '1';
+  // 줄바꿈 허용 (nowrap/hidden 안 씀)
+
+  const run = () => {
+    const cs = getComputedStyle(ctrl);
+    const baseFs = f.fontSize || parseFloat(cs.fontSize) || 14;
+    autoShrinkTextareaFont(ctrl, 5, baseFs);
+  };
+
+  requestAnimationFrame(run);
+  ctrl.addEventListener('input', run);
+}
+
 /* ===== 제휴/추가데이터 인식 ===== */
 function getSelectedPlanName(){
   const tars = getPlanSelectTargets();
@@ -903,229 +974,314 @@ function isAffiliatePlan(planName){
   return !!(info && info.bundleAnyone);
 }
 
-/* ===== 렌더 ===== */
 function render(){
-  const p=cur();
-  bg.src=p.bg||'';
-  overlay.innerHTML='';
+  const p = cur();
+  bg.src = p.bg || '';
+  overlay.innerHTML = '';
 
-  (p.fields||[]).forEach((f,i)=>{
-    // 안전 클램프
-    if (Number.isFinite(f.fontSize)) f.fontSize = clamp(f.fontSize,5,32);
-    if (Number.isFinite(f.inputHeight)) f.inputHeight = clamp(f.inputHeight,5,60);
+  (p.fields || []).forEach((f, i) => {
+    if (Number.isFinite(f.fontSize))     f.fontSize     = clamp(f.fontSize, 5, 32);
+    if (Number.isFinite(f.inputHeight))  f.inputHeight  = clamp(f.inputHeight, 5, 60);
 
-    const w=document.createElement('div');
-    w.className='field '+(f.type==='radio'?'radio ':'')+(f.type==='checkbox'?'checkbox ':'')+(i===selected?' sel':'');
+    const w = document.createElement('div');
+    w.className = 'field '
+      + (f.type === 'radio'    ? 'radio '    : '')
+      + (f.type === 'checkbox' ? 'checkbox ' : '')
+      + (i === selected        ? ' sel'      : '');
 
-    const _w=(f.w??24);
+    const _w = (f.w ?? 24);
     w.style.left  = `${f.x}%`;
     w.style.top   = `${f.y}%`;
     w.style.width = `${_w}%`;
     if (f.fontSize) w.style.setProperty('--fs', f.fontSize + 'px');
-    w.dataset.i=i; if(f.id) w.dataset.id=f.id;
+    w.dataset.i = i;
+    if (f.id) w.dataset.id = f.id;
 
-    if(f.type==='radio'){ w.style.setProperty('--rsize',(f.radioSize??18)+'px'); w.style.setProperty('--rgap',(f.radioGap??12)+'px'); }
-    if(f.color) w.style.setProperty('--fgc',f.color);
+    if (f.type === 'radio') {
+      w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
+      w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+    }
+    if (f.color) w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
 
-    if(f.type==='checkbox' || f.type==='radio'){
+    if (f.type === 'checkbox' || f.type === 'radio') {
       const tickColor = f.borderTransparent ? 'transparent' : '#000';
-      const tickWidth = Number.isFinite(Number(f.borderWidth)) ? Math.max(1, Math.min(8, Number(f.borderWidth))) : 1.6;
+      const tickWidth = Number.isFinite(Number(f.borderWidth))
+        ? Math.max(1, Math.min(8, Number(f.borderWidth)))
+        : 1.6;
       w.style.setProperty('--tick-bdc', tickColor);
       w.style.setProperty('--tick-bdw', tickWidth + 'px');
     }
 
-    const lab=document.createElement('div'); lab.className='label'; lab.textContent=f.label||''; w.appendChild(lab);
+    const lab = document.createElement('div');
+    lab.className   = 'label';
+    lab.textContent = f.label || '';
+    w.appendChild(lab);
 
     let ctrl;
-    const treatAsTextarea = (f.type==='textarea') || (f.type==='text');
+
+    const isName = isNameField(f);
+
+    // 이름 칸은 text여도 textarea로 취급
+    const treatAsTextarea =
+      (f.type === 'textarea') ||
+      (f.type === 'text' && (f.wrap || isName));
+
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
-    // ★ 텍스트박스/텍스트영역 처리
-    if (treatAsTextarea){
-      // textarea 생성
+    if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
-
-      // ★ 기본 값/placeholder/최대 글자 수 설정
       ctrl.value = f.value ?? '';
       if (f.placeholder) ctrl.placeholder = f.placeholder;
       if (f.maxLength)   ctrl.maxLength  = f.maxLength;
 
-      // ★ "입력 높이(px)" 가 있으면 → 고정 높이로 사용
       if (f.inputHeight){
         const h = f.inputHeight;
-        ctrl.dataset.fixedH = String(h);  // autosizeTA에서 고정 여부 확인
-        ctrl.style.height    = h + 'px';
-        ctrl.style.minHeight = h + 'px';
-      }else{
-        // ★ 입력 높이가 없으면 → 자동 높이. 최소 높이만 기록
-        ctrl.dataset.minH = '5';
+
+        if (isName) {
+          // ★ 이름 칸은 "최소 높이"만 주고 autosize로 늘어나게
+          ctrl.dataset.minH = String(h);
+          ctrl.style.minHeight = h + 'px';
+        } else {
+          // 그 외 textarea는 입력 높이를 고정
+          ctrl.dataset.fixedH = String(h);
+          ctrl.style.height    = h + 'px';
+          ctrl.style.minHeight = h + 'px';
+        }
+      } else {
+        ctrl.dataset.minH = isName ? '24' : '5';
       }
 
-      // ★ 자필/placeholder 잠금 등 잠금 처리
+      // autosize는 이름/일반 둘 다 적용 (이름은 minH 기준으로 계속 늘어남)
+      requestAnimationFrame(() => autosizeTA(ctrl));
+
       if (f.locked || lockByPlaceholder){
         ctrl.readOnly = true;
-        ctrl.dataset.locked="1";
+        ctrl.dataset.locked = '1';
         blockTyping(ctrl);
       }
 
-      // ★ 입력 시 마스크/자동 높이 처리
-      const onInput = ()=>{
+      const onInput = () => {
         if (f.locked || lockByPlaceholder) return;
 
         let v = ctrl.value;
-        v = applyMask(v, f.mask, f.maskRe);   // ← 전화번호면 여기서 010-1234-5678 으로
+        v = applyMask(v, f.mask, f.maskRe);
         if (f.maxLength) v = v.slice(0, f.maxLength);
-
-        if (ctrl.value !== v) {
-          ctrl.value = v;
-        }
+        if (ctrl.value !== v) ctrl.value = v;
 
         f.value = v;
 
-        if (!f.inputHeight) autosizeTA(ctrl);
+        autosizeTA(ctrl);
+
+        if (ctrl.dataset.autofit === '1') {
+          autoShrinkTextareaFont(ctrl, 5, f.fontSize || 14);
+        }
 
         scheduleSave();
         evaluateAffBanner();
         evaluateExtraDataAndBar();
       };
 
-      // ★ 이 줄이 빠져 있었음!!
       ctrl.addEventListener('input', onInput);
 
-      // ★ 최초 렌더 시에도, 입력 높이가 없는 필드만 자동 높이 계산
-      if (!f.inputHeight){
-        requestAnimationFrame(()=>autosizeTA(ctrl));
-      }
-
-
 } else if (f.type === 'select') {
-  // 드롭다운 생성
   const sel = document.createElement('select');
+  if (f.fontSize) sel.style.fontSize = f.fontSize + 'px';
+
+
+  // ✅ select용 "placeholder 옵션" 처리
+  const phText = (f.placeholder || '').trim();
+  if (phText) {
+    const op0 = document.createElement('option');
+    op0.value = '';
+    op0.textContent = phText;     // 예: "유심 선택"
+    op0.disabled = true;
+    op0.hidden = true;            // 열었을 때 목록에서 숨기려면 유지
+    sel.appendChild(op0);
+  }
+
   (f.options || []).forEach(o => {
     const op = document.createElement('option');
     op.value = op.textContent = o;
     sel.appendChild(op);
   });
-  sel.value = f.value ?? '';
 
-  // ★ 입력 높이(px)가 있으면 셀렉트 자체 높이도 맞춰줌
-  if (f.inputHeight) {
-    sel.style.height = f.inputHeight + 'px';
-    // ★ 필요하면 텍스트 세로 중앙 맞추고 싶을 때 주석 해제
-    // sel.style.lineHeight = f.inputHeight + 'px';
-  }
+  // 값이 없으면 placeholder(빈값)로 유지
+  sel.value = (f.value ?? '');
 
-  // 잠금 처리
-  if (f.locked || lockByPlaceholder) {
-    sel.disabled = true;
-    sel.dataset.locked = '1';
-  }
 
-  // 변경 시 요금제 연동 + 기타 처리
-  sel.onchange = () => {
-    f.value = sel.value;
-    const isPlan =
-      PLAN_ID_RE.test(String(f.id || '')) ||
-      PLAN_LABEL_RE.test(String(f.label || ''));
+      if (f.inputHeight) {
+        sel.style.height = f.inputHeight + 'px';
+      }
 
-    if (isPlan) {
-      updateFeesFromPlan(f.value);
-      mirrorPlanNameIntoBoxes(f.value); // ★ 요금제명 미러링
-    }
+      if (f.locked || lockByPlaceholder) {
+        sel.disabled = true;
+        sel.dataset.locked = '1';
+      }
 
-    scheduleSave();
-    fitSelectText(sel, 16, 9);
-    evaluateAffBanner();
-    evaluateExtraDataAndBar();
-  };
+      sel.onchange = () => {
+        if (sel.value === '') return;   // ✅ 추가 (placeholder 상태 방지)
+        f.value = sel.value;
+        const isPlan =
+          PLAN_ID_RE.test(String(f.id || '')) ||
+          PLAN_LABEL_RE.test(String(f.label || ''));
 
-  // ★ 옵션 텍스트 자동 축소 유지
-  requestAnimationFrame(() => fitSelectText(sel, 16, 9));
+        if (isPlan) {
+          updateFeesFromPlan(f.value);
+          mirrorPlanNameIntoBoxes(f.value);
+        }
 
-  ctrl = sel; // ★ 아래 공통 처리용
+        scheduleSave();
+        fitSelectText(sel, (f.fontSize ?? 16), 5);   // ✅ 여기
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
 
-    } else if(f.type==='checkbox'){
-      ctrl=document.createElement('input');
-      ctrl.type='checkbox';
-      ctrl.checked=!!f.value;
-      if (f.locked || lockByPlaceholder){ ctrl.disabled = true; ctrl.dataset.locked="1"; }
+      requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5)); // ✅ 여기
+      ctrl = sel;
+
+    } else if (f.type === 'checkbox') {
+      ctrl = document.createElement('input');
+      ctrl.type    = 'checkbox';
+      ctrl.checked = !!f.value;
+      if (f.locked || lockByPlaceholder){
+        ctrl.disabled = true;
+        ctrl.dataset.locked = '1';
+      }
       w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
-      ctrl.onchange=()=>{f.value=ctrl.checked; scheduleSave(); evaluateAffBanner(); evaluateExtraDataAndBar();};
-      lab.style.top='0'; lab.style.left='24px';
-    } 
-    else if(f.type==='radio'){
-      ctrl=document.createElement('div');
+      ctrl.onchange = () => {
+        f.value = ctrl.checked;
+        scheduleSave();
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
+      lab.style.top  = '0';
+      lab.style.left = '24px';
+
+    } else if (f.type === 'radio') {
+      ctrl = document.createElement('div');
       const opts = (f.options && f.options.length)
         ? f.options
         : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
-      opts.forEach(o=>{
-        const it=document.createElement('label'); it.className='radio-item';
-        const cb=document.createElement('input'); cb.type='checkbox'; cb.value=o; cb.checked=(f.value===o);
+
+      opts.forEach(o => {
+        const it = document.createElement('label');
+        it.className = 'radio-item';
+
+        const cb = document.createElement('input');
+        cb.type  = 'checkbox';
+        cb.value = o;
+        cb.checked = (f.value === o);
         if (f.locked || lockByPlaceholder) cb.disabled = true;
-        cb.onchange=()=>{ if(!cb.checked) return; ctrl.querySelectorAll('input[type="checkbox"]').forEach(x=>{if(x!==cb) x.checked=false;}); f.value=o; scheduleSave(); evaluateAffBanner(); evaluateExtraDataAndBar(); };
-        const s=document.createElement('span'); s.textContent=o;
-        it.appendChild(cb); it.appendChild(s); ctrl.appendChild(it);
+
+        cb.onchange = () => {
+          if (!cb.checked) return;
+          ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
+            if (x !== cb) x.checked = false;
+          });
+          f.value = o;
+          scheduleSave();
+          evaluateAffBanner();
+          evaluateExtraDataAndBar();
+        };
+
+        const s = document.createElement('span');
+        s.textContent = o;
+        it.appendChild(cb);
+        it.appendChild(s);
+        ctrl.appendChild(it);
       });
-    } 
-    else {
-      ctrl=document.createElement('input'); ctrl.type='text'; ctrl.value=f.value??'';
+
+    } else {
+      ctrl = document.createElement('input');
+      ctrl.type  = 'text';
+      ctrl.value = f.value ?? '';
       if (f.placeholder) ctrl.placeholder = f.placeholder;
-      if (f.maxLength) ctrl.maxLength = f.maxLength;
-      if (f.locked || lockByPlaceholder){ ctrl.readOnly = true; ctrl.dataset.locked="1"; blockTyping(ctrl); }
-      ctrl.oninput=()=>{ if(f.locked || lockByPlaceholder) return; f.value=ctrl.value; scheduleSave(); evaluateAffBanner(); evaluateExtraDataAndBar(); };
+      if (f.maxLength)   ctrl.maxLength  = f.maxLength;
+
+      if (f.locked || lockByPlaceholder){
+        ctrl.readOnly = true;
+        ctrl.dataset.locked = '1';
+        blockTyping(ctrl);
+      }
+
+      ctrl.oninput = () => {
+        if (f.locked || lockByPlaceholder) return;
+        let v = ctrl.value;
+        v = applyMask(v, f.mask, f.maskRe);
+        if (f.maxLength) v = v.slice(0, f.maxLength);
+        if (ctrl.value !== v) ctrl.value = v;
+        f.value = v;
+
+        scheduleSave();
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
     }
 
-    if(f.color) ctrl.style.color=f.color;
+    if (f.color) ctrl.style.color = f.color;
+
     if (f.textAlign) {
       ctrl.style.textAlign = f.textAlign;
       w.style.setProperty('--ta', f.textAlign);
     } else {
       w.style.removeProperty('--ta');
-      ctrl.style.textAlign = ''; // 브라우저 기본(좌측)
+      ctrl.style.textAlign = '';
     }
 
-    if((f.type==='text'||f.type==='textarea')&&(f.borderColor||f.borderTransparent)){
+    if ((f.type === 'text' || f.type === 'textarea') && (f.borderColor || f.borderTransparent)) {
       w.classList.add('hasBorder');
-      w.style.setProperty('--bdc',f.borderTransparent?'transparent':(f.borderColor||'#ff3b3b'));
-      w.style.setProperty('--bdw',(f.borderWidth??2)+'px');
-    }else{
-      w.classList.remove('hasBorder'); w.style.removeProperty('--bdc'); w.style.removeProperty('--bdw');
-    }
-    if((f.type==='text'||f.type==='textarea')&&(f.bgColor||f.bgTransparent)){
-      w.classList.add('hasBG');
-      w.style.setProperty('--bgc',f.bgTransparent?'transparent':(f.bgColor||'transparent'));
-    }else{
-      w.classList.remove('hasBG'); w.style.removeProperty('--bgc');
+      w.style.setProperty('--bdc', f.borderTransparent ? 'transparent' : (f.borderColor || '#ff3b3b'));
+      w.style.setProperty('--bdw', (f.borderWidth ?? 2) + 'px');
+    } else {
+      w.classList.remove('hasBorder');
+      w.style.removeProperty('--bdc');
+      w.style.removeProperty('--bdw');
     }
 
-    // 작성 모드일 때만 입력 박스에서 드래그 막기
-if (FILL) {
-  ctrl.addEventListener('mousedown', e => e.stopPropagation());
-}
-    w.appendChild(ctrl); overlay.appendChild(w);
-    
-    // ★ 리사이즈 손잡이 추가 (빌더 모드에서만)
+    if ((f.type === 'text' || f.type === 'textarea') && (f.bgColor || f.bgTransparent)) {
+      w.classList.add('hasBG');
+      w.style.setProperty('--bgc', f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
+    } else {
+      w.classList.remove('hasBG');
+      w.style.removeProperty('--bgc');
+    }
+
+    if (FILL) {
+      ctrl.addEventListener('mousedown', e => e.stopPropagation());
+    }
+
+    w.appendChild(ctrl);
+    overlay.appendChild(w);
+
+    // 이름 칸이면 자동 축소 로직 연결
+    if (isNameField(f)) {
+      setupNameAutoShrink(ctrl, f);
+    }
+
     if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select')) {
       const rh = document.createElement('div');
       rh.className = 'resize-handle';
-      rh.addEventListener('mousedown', (ev)=> startResize(ev, i, w));
+      rh.addEventListener('mousedown', ev => startResize(ev, i, w));
       w.appendChild(rh);
     }
 
-    if(!FILL){ w.addEventListener('mousedown',e=>startDrag(e,i,w)); w.addEventListener('click',()=>select(i)); }
+    if (!FILL) {
+      w.addEventListener('mousedown', e => startDrag(e, i, w));
+      w.addEventListener('click', () => select(i));
+    }
   });
 
-  if(!FILL) updatePanel();
-  pageInfo.textContent = `${pageIndex+1} / ${pages.length}`;
-  requestAnimationFrame(refitAllSelects);
-  requestAnimationFrame(()=>autosizeAllTextareas(overlay));
-  requestAnimationFrame(applyZoom);
+  if (!FILL) updatePanel();
+  pageInfo.textContent = `${pageIndex + 1} / ${pages.length}`;
 
-  requestAnimationFrame(()=>{
+  requestAnimationFrame(refitAllSelects);
+  requestAnimationFrame(() => autosizeAllTextareas(overlay));
+  requestAnimationFrame(applyZoom);
+  requestAnimationFrame(() => {
     evaluateAffBanner();
     evaluateExtraDataAndBar();
-    forceMirrorPlan(); // ★ 렌더마다 요금제명 강제 동기화
+    forceMirrorPlan();
   });
 }
 
@@ -1142,53 +1298,39 @@ function maskFilterByRegex(value, allowPattern){
     return value;
   }
 }
-
 function formatPhone(digits){
-  // 숫자만 들어온 상태에서 하이픈 붙이기
   if (!digits) return '';
-
-  // 02 국번 (서울)
   if (digits.startsWith('02')) {
     if (digits.length <= 2) return digits;
     if (digits.length <= 5) return digits.slice(0,2) + '-' + digits.slice(2);
     if (digits.length <= 9) return digits.slice(0,2) + '-' + digits.slice(2,5) + '-' + digits.slice(5,9);
     return digits.slice(0,2) + '-' + digits.slice(2,6) + '-' + digits.slice(6,10);
   }
-
-  // 그 외 (010, 011, 031 등)
   if (digits.length <= 3) return digits;
   if (digits.length <= 7) return digits.slice(0,3) + '-' + digits.slice(3);
   if (digits.length <= 11) return digits.slice(0,3) + '-' + digits.slice(3,7) + '-' + digits.slice(7,11);
   return digits.slice(0,3) + '-' + digits.slice(3,7) + '-' + digits.slice(7,11);
 }
-
 function applyMask(value, mask, maskRe){
   if(mask==='custom' && maskRe) return maskFilterByRegex(value, maskRe);
 
   switch(mask){
     case 'number':
       return String(value).replace(/[^\d]/g,'');
-
     case 'tel': {
-      // 숫자만 추출 후 하이픈 자동 포맷
       const digits = String(value).replace(/[^\d]/g,'');
       return formatPhone(digits);
     }
-
     case 'alpha':
       return String(value).replace(/[^A-Za-z\s]/g,'');
-
     case 'alnum':
       return String(value).replace(/[^A-Za-z0-9\s]/g,'');
-
     case 'hangul':
       return String(value).replace(/[^\u3131-\u318E\uAC00-\uD7A3\s]/g,'');
-
     default:
       return value;
   }
 }
-
 
 /* ===== 속성 패널 ===== */
 const pLabel=document.getElementById('p_label'),
@@ -1206,7 +1348,7 @@ const pLabel=document.getElementById('p_label'),
       pBgColor=document.getElementById('p_bgColor'),
       pBgTransparent=document.getElementById('p_bgTransparent'),
       pFontSize=document.getElementById('p_fontSize'),
-      pTextAlign=document.getElementById('p_textAlign'),   // ★ 추가
+      pTextAlign=document.getElementById('p_textAlign'),
       pMask=document.getElementById('p_mask'),
       pMaskRe=document.getElementById('p_maskRe'),
       pMaxLen=document.getElementById('p_maxlen'),
@@ -1238,14 +1380,11 @@ function updatePanel(){
   px.value=f.x; py.value=f.y; pw.value=f.w ?? 24;
   pLabel.value = f.label || '';
 
-  // ★ 체크박스면 checkSize, 라디오면 radioSize 기준으로 크기 채우기
   pRadioSize.value = (
     f.type === 'checkbox'
       ? (f.checkSize ?? 18)
       : (f.radioSize ?? 18)
   );
-
-  // 라디오/체크박스 간격
   pRadioGap.value = (f.radioGap ?? 12);
 
   pColor.value=(f.color || '#000000'); pHeight.value=(f.inputHeight ?? ''); pWrap.checked=true; pId.value=f.id || '';
@@ -1256,7 +1395,7 @@ function updatePanel(){
   if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
   if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
   pFontSize.value = (f.fontSize ?? 14);
-  pTextAlign.value = f.textAlign || ''; // ★ 추가
+  pTextAlign.value = f.textAlign || '';
   pMask.value = f.mask || ''; pMaskRe.value = f.maskRe || '';
   pMaxLen.value = f.maxLength || '';
   pPlaceholder.value = f.placeholder || '';
@@ -1268,7 +1407,6 @@ const select=i=>{selected=i; render();};
 
 /* ===== 드래그 ===== */
 function startDrag(e, i, el){
-  // 작성 모드(FILL)에서는 드래그 금지
   if (FILL) return;
 
   e.stopPropagation();
@@ -1277,7 +1415,6 @@ function startDrag(e, i, el){
   const f    = cur().fields[i];
   const rect = stage.getBoundingClientRect();
 
-  // ▶ 마우스를 클릭한 지점과 박스 왼쪽 위의 간격 저장
   const fieldRect = el.getBoundingClientRect();
   const offsetX   = e.clientX - fieldRect.left;
   const offsetY   = e.clientY - fieldRect.top;
@@ -1286,11 +1423,9 @@ function startDrag(e, i, el){
   paper.style.cursor = 'move';
 
   function move(ev){
-    // 스테이지 왼쪽/위에서의 상대 좌표
     const relX = ev.clientX - rect.left - offsetX;
     const relY = ev.clientY - rect.top  - offsetY;
 
-    // px → % 변환
     const nx = clamp((relX / rect.width)  * 100, 0, 100);
     const ny = clamp((relY / rect.height) * 100, 0, 100);
 
@@ -1306,7 +1441,7 @@ function startDrag(e, i, el){
     window.removeEventListener('mouseup', up);
     document.body.style.userSelect = '';
     paper.style.cursor = '';
-    scheduleSave();   // 위치 변경 후 저장
+    scheduleSave();
   }
 
   window.addEventListener('mousemove', move);
@@ -1321,7 +1456,6 @@ function startResize(e, i, el){
   const f = cur().fields[i];
   const r = stage.getBoundingClientRect();
 
-  // 시작 시점 가로/세로
   const startX = e.clientX;
   const startY = e.clientY;
   const startWpx = ((f.w ?? 24) / 100) * r.width;
@@ -1334,14 +1468,12 @@ function startResize(e, i, el){
     const dx = ev.clientX - startX;
     const dy = ev.clientY - startY;
 
-    // 가로는 % 로 저장
-    const newWpx = Math.max(40, startWpx + dx); // 최소 40px
+    const newWpx = Math.max(40, startWpx + dx);
     const newW   = clamp((newWpx / r.width) * 100, 2, 95);
     f.w = newW;
     el.style.width = newW + '%';
 
-    // 세로는 inputHeight(px) 로 저장
-    const newH = clamp(startHpx + dy, 5, 200); // 최소 5, 최대 200px 정도
+    const newH = clamp(startHpx + dy, 5, 200);
     f.inputHeight = newH;
     el.style.setProperty('--ih', newH + 'px');
   }
@@ -1351,7 +1483,7 @@ function startResize(e, i, el){
     window.removeEventListener('mouseup', up);
     document.body.style.userSelect = '';
     paper.style.cursor = '';
-    scheduleSave(); // 자동 저장
+    scheduleSave();
   }
 
   window.addEventListener('mousemove', mv);
@@ -1376,18 +1508,16 @@ document.getElementById('applyProp').onclick=()=>{
   f.y=clamp(num(document.getElementById('p_y').value,f.y),0,100);
   f.w=clamp(num(document.getElementById('p_w').value,f.w??24),2,95);
   f.label=pLabel.value.trim();
-  // ★ 라디오/체크박스 공통 크기 처리
+
   const sizeInput = num(
     pRadioSize.value,
     (f.checkSize ?? f.radioSize ?? 18)
   );
   const safeSize = clamp(sizeInput, 8, 40);
 
-  // 라디오/체크박스 둘 다 같은 크기 사용
   f.radioSize = safeSize;
   f.checkSize = safeSize;
 
-  // 라디오 간격
   f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 60);
 
   f.color=pColor.value||'#000000';
@@ -1402,7 +1532,7 @@ document.getElementById('applyProp').onclick=()=>{
   f.bgColor           = f.bgTransparent ? 'transparent' : ((pBgColor?.value||'').trim()||undefined);
   const fs            = parseInt(pFontSize?.value,10);
   f.fontSize          = Number.isFinite(fs)?clamp(fs,5,32):undefined;
-  f.textAlign         = (pTextAlign?.value || '');  // ★ 추가
+  f.textAlign         = (pTextAlign?.value || '');
   f.mask              = (pMask?.value||'');
   f.maskRe            = (pMaskRe?.value||'').trim();
   const ml            = parseInt(pMaxLen?.value,10);
@@ -1501,125 +1631,253 @@ async function waitForImages(root){
   }));
 }
 
-/* ===== 인쇄 DOM ===== */
 function createPrintDOM(page, pageIdx){
-  const wrap=document.createElement('div'); wrap.className='paper';
-  const st=document.createElement('div'); st.className='stage'; st.style.transform='scale(1)';
-  const img=document.createElement('img'); img.src=page.bg||'';
-  const ov=document.createElement('div'); ov.className='overlay';
+  const wrap = document.createElement('div');
+  wrap.className = 'paper';
 
-  st.appendChild(img); st.appendChild(ov); wrap.appendChild(st);
+  const st = document.createElement('div');
+  st.className = 'stage';
+  st.style.transform = 'scale(1)';
 
-  (page.fields||[]).forEach(f=>{
-    const w=document.createElement('div');
-    w.className='field '+(f.type==='radio'?'radio ':'')+(f.type==='checkbox'?'checkbox ':'');
+  const img = document.createElement('img');
+  img.src = page.bg || '';
 
-    w.style.left=`${f.x}%`; w.style.top=`${f.y}%`; w.style.width=`${(f.w??24)}%`;
-    if(f.fontSize) w.style.setProperty('--fs',f.fontSize+'px');
-    if(f.type==='radio'){ w.style.setProperty('--rsize',(f.radioSize??18)+'px'); w.style.setProperty('--rgap',(f.radioGap??12)+'px'); }
-    if(f.color) w.style.setProperty('--fgc',f.color);
-    if(f.inputHeight) w.style.setProperty('--ih',f.inputHeight+'px');
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
 
-    if(f.type==='checkbox' || f.type==='radio'){
+  st.appendChild(img);
+  st.appendChild(ov);
+  wrap.appendChild(st);
+
+  (page.fields || []).forEach(f => {
+    const w = document.createElement('div');
+    w.className =
+      'field ' +
+      (f.type === 'radio' ? 'radio ' : '') +
+      (f.type === 'checkbox' ? 'checkbox ' : '');
+
+    w.style.left = `${f.x}%`;
+    w.style.top  = `${f.y}%`;
+    w.style.width = `${(f.w ?? 24)}%`;
+
+    if (f.fontSize)    w.style.setProperty('--fs', f.fontSize + 'px');
+    if (f.type === 'radio') {
+      w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
+      w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+    }
+    if (f.color)       w.style.setProperty('--fgc', f.color);
+    if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
+
+    if (f.type === 'checkbox' || f.type === 'radio') {
       const tickColor = f.borderTransparent ? 'transparent' : '#000';
-      const tickWidth = Number.isFinite(Number(f.borderWidth)) ? Math.max(1, Math.min(8, Number(f.borderWidth))) : 1.6;
+      const tickWidth = Number.isFinite(Number(f.borderWidth))
+        ? Math.max(1, Math.min(8, Number(f.borderWidth)))
+        : 1.6;
       w.style.setProperty('--tick-bdc', tickColor);
       w.style.setProperty('--tick-bdw', tickWidth + 'px');
     }
 
-    const lab=document.createElement('div'); lab.className='label'; lab.textContent=f.label||''; w.appendChild(lab);
+    const lab = document.createElement('div');
+    lab.className = 'label';
+    lab.textContent = f.label || '';
+    w.appendChild(lab);
 
     let ctrl;
-    const treatAsTextarea=(f.type==='textarea')||(f.type==='text');
+
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
-    // ★ 자필 서명 칸인지 판별 (placeholder/label 에 자필·싸인·서명 포함 여부)
+
+    // 자필/싸인 칸 여부
     const isHandSign = /(자필|싸인|서명)/.test(
       String(f.placeholder || '') + String(f.label || '')
     );
 
-    if(treatAsTextarea){
-      ctrl=document.createElement('textarea');
+    // 이름 칸 여부
+    const isNameBox = isNameField(f);
 
-      // ★ 자필 서명 칸이면 인쇄 시 값/placeholder 모두 제거
-      if (isHandSign){
+    // textarea 로 처리할지 여부
+    const treatAsTextarea =
+      f.type === 'textarea' ||
+      (f.type === 'text' && (f.wrap || isNameBox));
+
+    if (treatAsTextarea) {
+      // ===== textarea (이름 칸 포함) =====
+      ctrl = document.createElement('textarea');
+
+      if (isHandSign) {
+        // 자필/싸인 칸은 인쇄 시 값 비우기
         ctrl.value = '';
-      }else{
-        ctrl.value=f.value??'';
-        if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+      } else {
+        ctrl.value = f.value ?? '';
+        if (f.placeholder && lockByPlaceholder) {
+          ctrl.placeholder = f.placeholder;
+        }
       }
 
-      ctrl.spellcheck=false; ctrl.style.overflow='visible'; ctrl.style.resize='none';
-      // 입력 높이(px)가 있으면 그대로 최소 높이로 사용
-      if (f.inputHeight){
+      ctrl.spellcheck = false;
+      ctrl.style.resize = 'none';
+
+      // ✅ 이름 칸은 "화면에 보이는 폰트/줄바꿈" 그대로 복사해서 사용
+      if (isNameBox && pageIdx === pageIndex) {
+        const live = overlay.querySelector(
+          `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
+        );
+        if (live) {
+          const cs = getComputedStyle(live);
+          ctrl.style.fontSize   = cs.fontSize;
+          ctrl.style.whiteSpace = cs.whiteSpace;
+          ctrl.style.overflow   = cs.overflow;
+          ctrl.style.lineHeight = cs.lineHeight;
+        }
+      }
+
+      // 높이 설정
+      if (f.inputHeight) {
         ctrl.style.minHeight = f.inputHeight + 'px';
         ctrl.style.height    = f.inputHeight + 'px';
-      }else{
-        ctrl.style.height='auto';
-        ctrl.style.minHeight='5px';
+      } else {
+        ctrl.style.minHeight = '5px';
+        ctrl.style.height    = 'auto';
       }
-      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
-    }
-    else if(f.type==='select'){
-      ctrl=document.createElement('select');
-      (f.options||[]).forEach(o=>{const op=document.createElement('option'); op.value=op.textContent=o; ctrl.appendChild(op);});
-      ctrl.value=f.value??'';
-      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
-      const pv=document.createElement('div'); pv.className='print-value';
-      const selText=(ctrl.options[ctrl.selectedIndex]||{}).text||ctrl.value||'';
-      pv.textContent=selText; w.appendChild(pv);
-    }
-    else if(f.type==='checkbox'){
-      ctrl=document.createElement('input'); ctrl.type='checkbox'; ctrl.checked=!!f.value; w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
-      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
-    }
-    else if(f.type==='radio'){
-      ctrl=document.createElement('div');
-      const opts=(f.options&&f.options.length)?f.options:Array.from({length:f.radioCount||2},(_,k)=>String(k+1));
-      opts.forEach(o=>{const it=document.createElement('label'); it.className='radio-item'; const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=(f.value===o); if (f.locked || lockByPlaceholder) cb.disabled = true; const s=document.createElement('span'); s.textContent=o; it.appendChild(cb); it.appendChild(s); ctrl.appendChild(it);});
-    }
-    else{
-      ctrl=document.createElement('input'); ctrl.type='text';
 
-      // ★ 자필 서명 칸이면 인쇄 시 값/placeholder 모두 제거
-      if (isHandSign){
+      if (f.locked || lockByPlaceholder) {
+        ctrl.readOnly = true;
+      }
+
+
+    } else if (f.type === 'select') {
+      // ===== select + 인쇄 전용 div(.print-value) =====
+      ctrl = document.createElement('select');
+      if (f.fontSize) ctrl.style.fontSize = f.fontSize + 'px';
+        // ✅ 인쇄용도 placeholder 옵션 추가
+  const phText = (f.placeholder || '').trim();
+  if (phText) {
+    const op0 = document.createElement('option');
+    op0.value = '';
+    op0.textContent = phText;
+    op0.disabled = true;
+    op0.hidden = true;
+    ctrl.appendChild(op0);
+  }
+
+      (f.options || []).forEach(o => {
+        const op = document.createElement('option');
+        op.value = op.textContent = o;
+        ctrl.appendChild(op);
+      });
+      ctrl.value = f.value ?? '';
+      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+
+      const pv = document.createElement('div');
+      pv.className   = 'print-value';
+      const selText  = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
+      pv.textContent = selText;
+      w.appendChild(pv);
+
+    } else if (f.type === 'checkbox') {
+      // ===== checkbox =====
+      ctrl = document.createElement('input');
+      ctrl.type = 'checkbox';
+      ctrl.checked = !!f.value;
+      w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
+      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+
+    } else if (f.type === 'radio') {
+      // ===== radio(단일선택) =====
+      ctrl = document.createElement('div');
+      const opts = (f.options && f.options.length)
+        ? f.options
+        : Array.from({ length: f.radioCount || 2 }, (_, k) => String(k + 1));
+
+      opts.forEach(o => {
+        const it = document.createElement('label');
+        it.className = 'radio-item';
+
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = (f.value === o);
+        if (f.locked || lockByPlaceholder) cb.disabled = true;
+
+        const s = document.createElement('span');
+        s.textContent = o;
+
+        it.appendChild(cb);
+        it.appendChild(s);
+        ctrl.appendChild(it);
+      });
+
+    } else {
+      // ===== 일반 input(text) =====
+      ctrl = document.createElement('input');
+      ctrl.type = 'text';
+
+      if (isHandSign) {
         ctrl.value = '';
-      }else{
-        ctrl.value=f.value??'';
-        if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+      } else {
+        ctrl.value = f.value ?? '';
+        if (f.placeholder && lockByPlaceholder) {
+          ctrl.placeholder = f.placeholder;
+        }
       }
 
-      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+      if (f.locked || lockByPlaceholder) {
+        ctrl.readOnly = true;
+      }
+
+      if (f.inputHeight) {
+        ctrl.style.height = f.inputHeight + 'px';
+      }
     }
 
-    if(f.color) ctrl.style.color=f.color;
+    // 공통 스타일 적용
+    if (f.color) ctrl.style.color = f.color;
     if (f.textAlign) {
       ctrl.style.textAlign = f.textAlign;
       w.style.setProperty('--ta', f.textAlign);
     }
-    if(f.inputHeight && ctrl.tagName!=='TEXTAREA') ctrl.style.height=f.inputHeight+'px';
 
-    if((f.type==='text'||f.type==='textarea')&&(f.borderColor||f.borderTransparent)){ w.classList.add('hasBorder'); w.style.setProperty('--bdc',f.borderTransparent?'transparent':(f.borderColor||'#ff3b3b')); w.style.setProperty('--bdw',(f.borderWidth??2)+'px'); }
-    if((f.type==='text'||f.type==='textarea')&&(f.bgColor||f.bgTransparent)){ w.classList.add('hasBG'); w.style.setProperty('--bgc',f.bgTransparent?'transparent':(f.bgColor||'transparent')); }
+    if ((f.type === 'text' || f.type === 'textarea') &&
+        (f.borderColor || f.borderTransparent)) {
+      w.classList.add('hasBorder');
+      w.style.setProperty('--bdc',
+        f.borderTransparent ? 'transparent' : (f.borderColor || '#ff3b3b'));
+      w.style.setProperty('--bdw', (f.borderWidth ?? 2) + 'px');
+    }
 
-    w.appendChild(ctrl); ov.appendChild(w);
+    if ((f.type === 'text' || f.type === 'textarea') &&
+        (f.bgColor || f.bgTransparent)) {
+      w.classList.add('hasBG');
+      w.style.setProperty('--bgc',
+        f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
+    }
+
+    w.appendChild(ctrl);
+    ov.appendChild(w);
   });
-  
 
   return wrap;
 }
+
 function buildPrintAll(){
-  const container=document.getElementById('printAll');
-  container.innerHTML='';
-  pages.forEach((pg,idx)=>{
-    const pageWrap=document.createElement('div'); pageWrap.className='pageWrap';
-    const printed=createPrintDOM(pg, idx);
+  const container = document.getElementById('printAll');
+  container.innerHTML = '';
+
+  pages.forEach((pg, idx) => {
+    const pageWrap = document.createElement('div');
+    pageWrap.className = 'pageWrap';
+    const printed = createPrintDOM(pg, idx);
     pageWrap.appendChild(printed);
     container.appendChild(pageWrap);
   });
-  // ★ textarea 높이 + 인쇄용 요금제 텍스트 자동 축소 한 번에 적용
+
   requestAnimationFrame(()=>{
     autosizeAllTextareas(container);
     refitAllPrintValues(container);
+
+    container.querySelectorAll('textarea[data-autofit="1"]').forEach(el=>{
+      const cs = getComputedStyle(el);
+      const base = parseFloat(cs.fontSize) || 14;
+      autoShrinkTextareaFont(el, 5, base);
+    });
   });
   return container;
 }
@@ -1896,7 +2154,7 @@ async function boot(){
   evaluateExtraDataAndBar();
   syncFeesFromExistingPlan();
   mirrorPlanNameIntoBoxes(getSelectedPlanName());
-  forceMirrorPlan(); // ★ 초기 진입 시에도 재동기화
+  forceMirrorPlan();
 }
 document.getElementById('reload').onclick=boot;
 window.addEventListener('DOMContentLoaded',()=>{ boot(); applyZoom(); });
@@ -1905,7 +2163,7 @@ window.addEventListener('DOMContentLoaded',()=>{ boot(); applyZoom(); });
 function enableWrapAllTextFields(){
   pages.forEach(pg => {
     (pg.fields || []).forEach(f => {
-      if (f.type === 'text') {
+      if (f.type === 'text' && !isNameField(f)) {
         f.wrap = true;
         if (!f.inputHeight) f.inputHeight = 28;
       }
@@ -1913,6 +2171,7 @@ function enableWrapAllTextFields(){
   });
   render(); scheduleSave();
 }
+
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
 </script>

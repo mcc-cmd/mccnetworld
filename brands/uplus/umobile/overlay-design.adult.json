@@ -7,8 +7,8 @@
           "id": "plan",
           "label": "",
           "type": "select",
-          "x": 20.45769622833843,
-          "y": 15.3,
+          "x": 20.55,
+          "y": 15.5,
           "w": 30,
           "required": true,
           "options": [
@@ -55,14 +55,14 @@
           "borderWidth": 2,
           "bgTransparent": false,
           "bgColor": "#000000",
-          "fontSize": 14,
+          "fontSize": 12,
           "mask": "",
           "maskRe": "",
           "placeholder": "개통 요금제 선택",
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "checkSize": 18,
+          "checkSize": 10,
           "textAlign": "center"
         },
         {

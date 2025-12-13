@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>MCCNETWORLD – 미리보기</title>
+
 <style>
   :root{--bg:#f6f8fb;--card:#ffffff;--line:#e5e9f2;--fg:#0b1220}
   *{box-sizing:border-box}
@@ -15,29 +16,97 @@
   .stack{padding:20px}
   .section-title{font-weight:900;margin:0 0 12px 2px;font-size:16px}
   .brand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:6px 0 20px}
-  .brand{position:relative;border-radius:18px;cursor:pointer;isolation:isolate;transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;border:1px solid var(--line);background:linear-gradient(180deg,#fff,#fafcff)}
+
+  /* =========================================================
+     카드(브랜드) 공통 스타일
+  ========================================================= */
+  .brand{
+    position:relative;
+    border-radius:18px;
+    cursor:pointer;
+    isolation:isolate;
+    transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,#fff,#fafcff);
+    overflow:hidden;
+  }
   .brand:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(2,6,23,.08)}
-  .brand .logo{display:flex;align-items:center;gap:14px;padding:22px 22px 12px 22px;min-height:96px}
-  .brand .logo .mark{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;font-weight:900;background:var(--chip-bg);color:var(--chip-fg);border:2px solid var(--chip-bd)}
-  .brand .logo .name{font-size:22px;font-weight:900;letter-spacing:.2px}
-  .brand .cap{padding:0 18px 18px 18px;color:#475467;font-size:12px}
-  .brand .ribbon{position:absolute;right:12px;top:12px;font-size:11px;font-weight:800;padding:5px 10px;border-radius:999px;background:var(--ribbon-bg);color:var(--ribbon-fg);border:1px solid #d0d5dd}
-  .brand .tag{position:absolute;left:12px;top:12px;font-size:11px;font-weight:800;padding:5px 10px;border-radius:999px;border:1px solid #d0d5dd}
-  .tag-change{background:#ecfeff;color:#0e7490;border-color:#a5f3fc}
-  .tag-cancel{background:#fff7ed;color:#9a3412;border-color:#fed7aa}
+
+  /* =========================================================
+     ✅ 로고 영역 (틀/테두리 없음)
+     - 로고 이미지 자체가 “완전 진하게” 보이게
+  ========================================================= */
+  .logo-frame{
+    width: 180px;
+    height: 60px;
+    margin: 18px auto 10px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  .logo-frame img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display:block;
+  }
+
+  /* =========================================================
+     브랜드명(텍스트)
+  ========================================================= */
+  .brand .name{
+    text-align:center;
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:-0.3px;
+    line-height:1.25;
+
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+
+    padding: 0 16px 18px;
+  }
+  .brand.long-name .name{
+    font-size:15px;
+    font-weight:800;
+  }
+
+  .cap{
+    text-align:center;
+    padding:0 18px 18px;
+    color:#475467;
+    font-size:12px;
+  }
+
+  /* 현재 미사용(유지) */
+  .ribbon{display:none;}
+  .tag{display:none;}
+
   .theme-um{--chip-bg:#f3e8ff;--chip-fg:#3b0764;--chip-bd:#8b5cf6;--ribbon-bg:#ede9fe;--ribbon-fg:#5b21b6}
   .theme-mm{--chip-bg:#e0f2fe;--chip-fg:#0b4a6f;--chip-bd:#38bdf8;--ribbon-bg:#e0f2fe;--ribbon-fg:#0c4a6e}
   .theme-s7{--chip-bg:#d1fae5;--chip-fg:#064e3b;--chip-bd:#10b981;--ribbon-bg:#ecfdf5;--ribbon-fg:#065f46}
   .theme-pr{--chip-bg:#dbeafe;--chip-fg:#1e40af;--chip-bd:#60a5fa;--ribbon-bg:#eef2ff;--ribbon-fg:#1d4ed8}
+
   .tabs{display:flex;gap:8px;margin-bottom:12px}
   .tab-btn{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer}
   .tab-btn.active{background:#111827;color:#fff;border-color:#111827}
 </style>
 </head>
+
 <body>
   <div class="wrap">
     <section class="panel">
       <div class="hd"><strong>MCCNETWORLD</strong></div>
+
       <div class="stack">
         <!-- 가입 서류 -->
         <div class="section-title">가입 서류</div>
@@ -75,71 +144,152 @@
   </div>
 
 <script>
-/* ---------------- 공통 브랜드 마스터(2번 방식) ---------------- */
+/* =========================================================
+   ✅ B안 핵심: 가입서류에서 현재 선택된 탭(성인/청소년)
+   - card()가 이 값을 보고 로고를 adult/teen 중 선택합니다.
+========================================================= */
+let JOIN_AGE = 'adult';
+
+/* =========================================================
+   1) 브랜드 마스터
+   - logoAdult: 성인용 로고 이미지
+   - logoTeen : 청소년용 로고 이미지 (없으면 adult 로고를 자동 사용)
+   ※ 변경/해지에서는 기본적으로 logoAdult 사용 (원하면 별도 분리 가능)
+========================================================= */
 const BRANDS = [
-  {carrier:'uplus', theme:'theme-um', mark:'U+',     name:'미디어로그',   cap:'유모바일'},
-  {carrier:'uplus', theme:'theme-pr', mark:'프리-LG', name:'프리티LG',     cap:'프리티LG'},
-  {carrier:'uplus', theme:'theme-um', mark:'HEL',    name:'헬로LG',       cap:'헬로모바일'},
+  {
+    carrier:'uplus', theme:'theme-um', name:'미디어로그', cap:'',
+    logoAdult:'/assets/logos/umobile.png',
+    logoTeen :'/assets/logos/umobile-teen.png'
+  },
+  {
+    carrier:'uplus', theme:'theme-pr', name:'프리티LG', cap:'',
+    logoAdult:'/assets/logos/freet-lg.png',
+    logoTeen :'/assets/logos/freet-lg-teen.png'
+  },
+  {
+    carrier:'uplus', theme:'theme-um', name:'헬로LG', cap:'',
+    logoAdult:'/assets/logos/hello-lg.png',
+    logoTeen :'/assets/logos/hello-lg-teen.png'
+  },
 
-  {carrier:'kt',    theme:'theme-mm', mark:'M',      name:'엠모바일',     cap:'KT엠모바일'},
-  {carrier:'kt',    theme:'theme-mm', mark:'S5',     name:'스테이지파이브', cap:'KT/SKT 공통 스테이지파이브'},
-  {carrier:'kt',    theme:'theme-mm', mark:'스카이',  name:'스카이라이프', cap:'스카이라이프'},
+  {
+    carrier:'kt', theme:'theme-mm', name:'엠모바일', cap:'',
+    logoAdult:'/assets/logos/mmobile.png',
+    logoTeen :'/assets/logos/mmobile-teen.png'
+  },
+  {
+    carrier:'kt', theme:'theme-mm', name:'스테이지파이브(KT)', cap:'',
+    logoAdult:'/assets/logos/stagefive-kt.png',
+    logoTeen :'/assets/logos/stagefive-kt-teen.png'
+  },
+  {
+    carrier:'kt', theme:'theme-mm', name:'스카이라이프', cap:'',
+    logoAdult:'/assets/logos/skylife.png',
+    logoTeen :'/assets/logos/skylife-teen.png'
+  },
 
-  {carrier:'sk',    theme:'theme-pr', mark:'프리-SK', name:'프리티SK',     cap:'프리티SK'},
-  {carrier:'sk',    theme:'theme-s7', mark:'텔링크',  name:'SK텔링크',     cap:'SK텔링크'}
+  {
+    carrier:'sk', theme:'theme-pr', name:'프리티SK', cap:'',
+    logoAdult:'/assets/logos/freet-sk.png',
+    logoTeen :'/assets/logos/freet-sk-teen.png'
+  },
+  {
+    carrier:'sk', theme:'theme-s7', name:'SK텔링크', cap:'',
+    logoAdult:'/assets/logos/telink.png',
+    logoTeen :'/assets/logos/telink-teen.png'
+  },
+  {
+    carrier:'sk', theme:'theme-mm', name:'스테이지파이브(SKT)', cap:'',
+    logoAdult:'/assets/logos/stagefive-skt.png',
+    logoTeen :'/assets/logos/stagefive-skt-teen.png'
+  }
 ];
 
-/* 가입 / 변경 / 해지용 데이터 자동 생성 */
+/* =========================================================
+   2) 가입서류 전용 카드
+   - 이것도 B안 적용 가능(신규/번이/웰컴 등)
+   - logoAdult/logoTeen 둘 다 주면 탭에 따라 자동 전환
+   - logoTeen이 없으면 adult 로고로 대체
+========================================================= */
+const JOIN_ONLY = [
+  {
+    carrier:'kt', theme:'theme-mm', name:'정규KT신규', cap:'',
+    logoAdult:'/assets/logos/kt-regular-new.png',
+    logoTeen :'/assets/logos/kt-regular-new-teen.png'
+  },
+  {
+    carrier:'kt', theme:'theme-mm', name:'정규KT번이', cap:'',
+    logoAdult:'/assets/logos/kt-regular-mnp.png',
+    logoTeen :'/assets/logos/kt-regular-mnp-teen.png'
+  },
+  {
+    carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 신규', cap:'',
+    logoAdult:'/assets/logos/kt-welcome-new.png',
+    logoTeen :'/assets/logos/kt-welcome-new-teen.png'
+  },
+  {
+    carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 번이', cap:'',
+    logoAdult:'/assets/logos/kt-welcome-mnp.png',
+    logoTeen :'/assets/logos/kt-welcome-mnp-teen.png'
+  },
+  {
+    carrier:'kt', theme:'theme-mm', name:'KT 유선 동판', cap:'',
+    logoAdult:'/assets/logos/kt-wire.png',
+    logoTeen :'/assets/logos/kt-wire-teen.png'
+  }
+];
+
+/* =========================================================
+   3) 가입 데이터(탭에 따라 "age"만 바뀌고 목록은 동일)
+   - 기존처럼 adult/teen 배열을 따로 만드는 구조는 유지하되,
+     로고는 logoAdult/logoTeen으로 완전 분리된 이미지 사용
+========================================================= */
 const JOIN_DATA = {
-  adult: BRANDS.map(b => ({...b, doc:'join', age:'adult'})),
-  teen : BRANDS.map(b => ({
-    ...b,
-    name: b.name + '',
-    doc :'join',
-    age :'teen'
-  }))
+  adult: [
+    ...BRANDS.map(b => ({...b, doc:'join', age:'adult'})),
+    ...JOIN_ONLY.map(b => ({...b, doc:'join', age:'adult'})),
+  ],
+  teen : [
+    ...BRANDS.map(b => ({...b, doc:'join', age:'teen'})),
+    ...JOIN_ONLY.map(b => ({...b, doc:'join', age:'teen'})),
+  ]
 };
 
-const CHANGE_CARDS = BRANDS.map(b => ({
-  ...b,
-  doc :'change',
-  tag :'변경'
-}));
+/* 변경/해지는 기존 브랜드만 표시 */
+const CHANGE_CARDS = BRANDS.map(b => ({...b, doc:'change'}));
+const CANCEL_CARDS = BRANDS.map(b => ({...b, doc:'cancel'}));
 
-const CANCEL_CARDS = BRANDS.map(b => ({
-  ...b,
-  doc :'cancel',
-  tag :'해지',
-  tagClass:'tag-cancel'
-}));
-
-/* ---------------- 라우팅 ---------------- */
+/* =========================================================
+   4) 라우팅(클릭 시 이동)
+========================================================= */
 const BRAND_ROUTE = {
   '미디어로그':     { carrier:'uplus', brand:'umobile'   },
   '프리티LG':       { carrier:'uplus', brand:'freeT'     },
   '헬로LG':         { carrier:'uplus', brand:'hello'     },
   '엠모바일':       { carrier:'kt',    brand:'mmobile'   },
   '스카이라이프':   { carrier:'kt',    brand:'skylife'   },
-  '스테이지파이브': { carrier:'kt',    brand:'stagefive' },
+  '스테이지파이브(KT)': { carrier:'kt', brand:'stagefive'   },
+  '스테이지파이브(SKT)':{ carrier:'sk', brand:'stagefive-sk'},
   '프리티SK':       { carrier:'sk',    brand:'freeT-sk'  },
-  'SK텔링크':       { external: 'https://smvno.sk7mobile.com/main.do' }
+
+  '정규KT신규':     { external: 'https://online.kt.com/index.jsp?prdcID=57DA59EE-6F27-48EB-8BCC-3EEC80E914F2' },
+  '정규KT번이':     { external: 'https://online.kt.com/index.jsp?prdcID=05312F26-4C8C-438E-BA6A-C1B8A4650C0C' },
+
+  '웰컴 요금제 신규': { external: 'https://online.kt.com/index.jsp?prdcID=1D78452F-43CB-44C9-B77C-B40DE4908727' },
+  '웰컴 요금제 번이': { external: 'https://online.kt.com/index.jsp?prdcID=584932E0-890C-4659-A3D4-E953DF6882FA' },
+
+  'KT 유선 동판':  { external: 'https://online.kt.com/smart/simple/simpleCustomerInfoPop.do?prdcId=03EEA486-8915-4734-B9AE-B0476ADFC663' },
+  'SK텔링크':      { external: 'https://smvno.sk7mobile.com/main.do' }
 };
 
 function buildBrandUrl(route, doc, age){
-  // 외부 링크거나 carrier/brand 가 없으면 그냥 종료
   if (!route || !route.carrier || !route.brand) return '#';
 
-  // 🔹 index.html 이 있는 디렉터리를 기준으로 경로 계산
-  //  - 로컬:          /        → baseDir = '/'
-  //  - GitHub Pages: /mccnetworld/ → baseDir = '/mccnetworld/'
   let baseDir = location.pathname;
-  if (!baseDir.endsWith('/')) {
-    // 마지막 파일 이름(index.html 등)을 지우고 디렉터리까지만 남김
-    baseDir = baseDir.replace(/\/[^/]*$/, '/');
-  }
+  if (!baseDir.endsWith('/')) baseDir = baseDir.replace(/\/[^/]*$/, '/');
 
   const base = `${baseDir}brands/${route.carrier}/${route.brand}/index.html`;
-  // 같은 도메인 안이므로 origin 기준으로 절대 URL 생성
   const abs  = new URL(base, location.origin).href;
 
   const qs = new URLSearchParams();
@@ -150,22 +300,47 @@ function buildBrandUrl(route, doc, age){
   return `${abs}?${qs.toString()}`;
 }
 
+/* =========================================================
+   5) 카드 HTML 생성
+   ✅ B안 핵심:
+   - 가입서류(doc==='join')면 age에 따라
+     logoAdult / logoTeen 중 선택
+   - teen 로고가 없으면 adult 로고로 자동 대체
+========================================================= */
+function pickLogo(item){
+  // 가입서류: age를 기준으로 로고 선택
+  if (item.doc === 'join'){
+    if (item.age === 'teen') return item.logoTeen || item.logoAdult || '';
+    return item.logoAdult || item.logoTeen || '';
+  }
+  // 변경/해지: 기본은 adult 로고(원하면 별도 분리 가능)
+  return item.logoAdult || item.logoTeen || '';
+}
 
-/* ---------------- 렌더/바인딩 ---------------- */
-function card({theme, mark, name, cap, tag, tagClass, carrier, doc, age}){
-  const tagHtml = tag ? `<span class="tag ${tagClass||'tag-change'}">${tag}</span>` : '';
-  const badge = (carrier==='uplus'?'U+':carrier==='kt'?'KT':carrier==='sk'?'SKT':'MVNO');
+function card(item){
+  const {theme, name, cap, doc, age} = item;
   const dataName = name.replace(/\(청소년\)/,'');
   const docAttr  = doc || 'join';
   const ageAttr  = (docAttr==='join' && age) ? ` data-age="${age}"` : '';
-  return `<div class="brand ${theme}" data-name="${dataName}" data-doc="${docAttr}"${ageAttr}>
-            ${tagHtml}
-            <span class="ribbon">${badge}</span>
-            <div class="logo"><div class="mark">${mark}</div><div class="name">${name}</div></div>
-            <div class="cap">${cap}</div>
-          </div>`;
+
+  const isLong = name.length >= 9;
+  const longCls = isLong ? 'long-name' : '';
+
+  const logo = pickLogo(item);
+  const logoHtml = logo
+    ? `<div class="logo-frame"><img src="${logo}" alt="${name} 로고"></div>`
+    : '';
+
+  return `
+    <div class="brand ${theme} ${longCls}" data-name="${dataName}" data-doc="${docAttr}"${ageAttr}>
+      ${logoHtml}
+      <div class="name">${name}</div>
+      ${cap ? `<div class="cap">${cap}</div>` : ``}
+    </div>
+  `;
 }
 
+/* 클릭 이동 */
 function attachNavigateHandlers(scope){
   scope.querySelectorAll('.brand').forEach(cardEl=>{
     cardEl.addEventListener('click', ()=>{
@@ -174,18 +349,10 @@ function attachNavigateHandlers(scope){
       const age = cardEl.getAttribute('data-age')||'';
 
       const route = BRAND_ROUTE[nm];
-      if (!route) {
-        console.warn('[route] 매핑 없음:', nm);
-        return;
-      }
+      if (!route) return console.warn('[route] 매핑 없음:', nm);
 
-      // ★ SK텔링크처럼 외부 URL 이 있는 경우: 바로 그쪽으로 이동
-      if (route.external) {
-        location.href = route.external;
-        return;
-      }
+      if (route.external) return location.href = route.external;
 
-      // ★ 나머지는 기존 폼 URL
       const url = buildBrandUrl(route, doc, age);
       if (url !== '#') location.href = url;
     });
@@ -194,7 +361,9 @@ function attachNavigateHandlers(scope){
 
 function safeRender(listEl, items){
   try{
-    listEl.innerHTML = (items && items.length ? items.map(card).join('') : '<div style="opacity:.6">자료 없음</div>');
+    listEl.innerHTML = (items && items.length)
+      ? items.map(card).join('')
+      : '<div style="opacity:.6">자료 없음</div>';
     attachNavigateHandlers(listEl);
   }catch(err){
     console.error('[render error]', err);
@@ -202,36 +371,46 @@ function safeRender(listEl, items){
   }
 }
 
+/* 가입 탭(성인/청소년) */
 function wireKindTabs(containerId, listId, dataObj){
   const container = document.getElementById(containerId);
   const list = document.getElementById(listId);
+
   container.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       container.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
-      const kind = btn.dataset.target; // adult | teen
+
+      // ✅ 현재 선택 탭 저장(디버깅/확장용)
+      JOIN_AGE = btn.dataset.target; // adult | teen
+
+      const kind = btn.dataset.target;
       safeRender(list, (dataObj||{})[kind] || []);
     });
   });
+
   container.querySelector('.tab-btn.active').click();
 }
 
+/* 변경/해지 탭 */
 function wireTabs(containerId, listId, data){
   const container = document.getElementById(containerId);
   const list = document.getElementById(listId);
+
   container.querySelectorAll('.tab-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       container.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
-      const target = btn.dataset.target; // uplus | kt | sk
+
+      const target = btn.dataset.target;
       const items = (data||[]).filter(d=>d.carrier===target);
       safeRender(list, items);
     });
   });
+
   container.querySelector('.tab-btn.active').click();
 }
 
-/* DOM 준비 후 실행 */
 window.addEventListener('DOMContentLoaded', ()=>{
   wireKindTabs('joinTabs','joinTabsList',JOIN_DATA);
   wireTabs('changeTabs','changeTabsList',CHANGE_CARDS);

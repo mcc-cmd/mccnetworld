@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MCCNETWORLD 프리티 LG</title>
+<title>MCCNETWORLD 미디어로그</title>
 
 <link rel="icon" type="image/png" sizes="16x16"  href="/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32"  href="/favicon-32x32.png">
@@ -50,11 +50,19 @@
     height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
   }
   .field:focus-within{
-  outline: 3px solid #2563eb;   /* 테두리 색 (파란색) */
-  outline-offset: 2px;          /* 테두리가 박스에서 약간 떨어져 보이게 */
-  border-radius: 8px;           /* 모서리 살짝 둥글게 */
+  outline: 3px solid #e724ee83;   /* 테두리 색 (파란색) */
+  outline-offset: 0px;          /* 테두리가 박스에서 약간 떨어져 보이게 */
+  border-radius: 0px;           /* 모서리 살짝 둥글게 */
   background: rgba(37,99,235,.03); /* 아주 옅은 배경 하이라이트 (원하면 삭제 가능) */
 }
+/* 세로 가운데(텍스트 한 줄용) */
+.field input[type="text"],
+.field select{
+  line-height: var(--ih, 28px);   /* 높이와 동일하게 */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* 리사이즈 손잡이(빌더 모드에서만) – 기본은 숨김, 호버/선택 시만 보이게 */
 .field .resize-handle{
   position:absolute;
@@ -95,12 +103,18 @@ html.fill .field .resize-handle{
   padding-right: 8px;                /* 오른쪽 여유 공간 (텍스트 잘리지 않게) */
 }
 
-  .field input,.field textarea,.field select{
-  width:100%;background:transparent;border:none;color:var(--fgc,#fff);
-  /* --ih 변수로 기본 높이 제어, textarea 는 JS에서 다시 계산 */
-  height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui;
-  text-align:var(--ta,left); /* ★ 텍스트 정렬(좌/가운데/우) */
+.field input,.field textarea,.field select{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--fgc,#fff);
+  height:var(--ih,auto);
+  outline:none;
+  padding:0 6px;              /* ✅ 위아래 0으로 */
+  font:600 var(--fs)/1.2 system-ui;
+  text-align:var(--ta,left);
 }
+
   .field textarea{
     white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
     overflow:hidden;resize:none !important;scrollbar-width:none;min-height:5px;max-height:none !important;
@@ -269,11 +283,11 @@ html.fill .field .resize-handle{
   <section class="panel">
     <!-- ✅ 헤더: 한 번만, 오른쪽에 뒤로가기 + 빌더 버튼 -->
     <div class="hd">
-      <strong>MCC 프리티 LG</strong>
+      <strong>MCC 미디어로그 서류</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <!-- 메인(서류 선택 화면)으로 돌아가기 -->
-<a href="/index.html" class="btn btn--ghost btn-back" id="backToHub">
+<a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">
   서류 선택 화면
 </a>
 
@@ -827,10 +841,9 @@ function updateFeesFromPlan(planName, doRender=true){
     }
   }
 
-  // ■ 월 납부액 : JSON에 final(totalFee) 있으면 그대로 사용
+  // ■ 월 납부액
   let totVal = moneyToString(info.totalFee);
   if (!totVal && info.baseFee != null && info.discountFee != null) {
-    // totalFee 없는 경우만 계산 (JSON discount는 "할인액(양수)"라고 가정하고 base - discount)
     totVal = moneyToString(info.baseFee - Math.abs(info.discountFee));
   }
 
@@ -840,7 +853,6 @@ function updateFeesFromPlan(planName, doRender=true){
 
   if (doRender) { render(); scheduleSave(); }
 }
-
 
 async function loadPlansJson(){
   const tryUrls = [
@@ -921,7 +933,7 @@ function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
     el.style.fontSize = min + 'px';
   } catch (_) {}
 }
-const AUTO_SHRINK_NAME_RE = /(가입자명|성명|이름)/;
+const AUTO_SHRINK_NAME_RE = /(가입자명|성명|이름|예금주 성함)/;
 function isNameField(f){
   const label = String(f.label || '');
   const id    = String(f.id || '');
@@ -1072,14 +1084,31 @@ function render(){
 
       ctrl.addEventListener('input', onInput);
 
-    } else if (f.type === 'select') {
-      const sel = document.createElement('select');
-      (f.options || []).forEach(o => {
-        const op = document.createElement('option');
-        op.value = op.textContent = o;
-        sel.appendChild(op);
-      });
-      sel.value = f.value ?? '';
+} else if (f.type === 'select') {
+  const sel = document.createElement('select');
+  if (f.fontSize) sel.style.fontSize = f.fontSize + 'px';
+
+
+  // ✅ select용 "placeholder 옵션" 처리
+  const phText = (f.placeholder || '').trim();
+  if (phText) {
+    const op0 = document.createElement('option');
+    op0.value = '';
+    op0.textContent = phText;     // 예: "유심 선택"
+    op0.disabled = true;
+    op0.hidden = true;            // 열었을 때 목록에서 숨기려면 유지
+    sel.appendChild(op0);
+  }
+
+  (f.options || []).forEach(o => {
+    const op = document.createElement('option');
+    op.value = op.textContent = o;
+    sel.appendChild(op);
+  });
+
+  // 값이 없으면 placeholder(빈값)로 유지
+  sel.value = (f.value ?? '');
+
 
       if (f.inputHeight) {
         sel.style.height = f.inputHeight + 'px';
@@ -1091,6 +1120,7 @@ function render(){
       }
 
       sel.onchange = () => {
+        if (sel.value === '') return;   // ✅ 추가 (placeholder 상태 방지)
         f.value = sel.value;
         const isPlan =
           PLAN_ID_RE.test(String(f.id || '')) ||
@@ -1102,12 +1132,12 @@ function render(){
         }
 
         scheduleSave();
-        fitSelectText(sel, 16, 9);
+        fitSelectText(sel, (f.fontSize ?? 16), 5);   // ✅ 여기
         evaluateAffBanner();
         evaluateExtraDataAndBar();
       };
 
-      requestAnimationFrame(() => fitSelectText(sel, 16, 9));
+      requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5)); // ✅ 여기
       ctrl = sel;
 
     } else if (f.type === 'checkbox') {
@@ -1717,6 +1747,18 @@ function createPrintDOM(page, pageIdx){
     } else if (f.type === 'select') {
       // ===== select + 인쇄 전용 div(.print-value) =====
       ctrl = document.createElement('select');
+      if (f.fontSize) ctrl.style.fontSize = f.fontSize + 'px';
+        // ✅ 인쇄용도 placeholder 옵션 추가
+  const phText = (f.placeholder || '').trim();
+  if (phText) {
+    const op0 = document.createElement('option');
+    op0.value = '';
+    op0.textContent = phText;
+    op0.disabled = true;
+    op0.hidden = true;
+    ctrl.appendChild(op0);
+  }
+
       (f.options || []).forEach(o => {
         const op = document.createElement('option');
         op.value = op.textContent = o;
