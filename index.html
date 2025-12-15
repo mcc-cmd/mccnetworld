@@ -6,245 +6,467 @@
 <title>MCCNETWORLD – 미리보기</title>
 
 <style>
-  :root{--bg:#f6f8fb;--card:#ffffff;--line:#e5e9f2;--fg:#0b1220}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,"Noto Sans KR",sans-serif}
-  .wrap{max-width:1200px;margin:0 auto;padding:18px}
-  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(16,24,40,.04)}
-  .hd{display:flex;align-items:center;justify-content:center;padding:14px 16px;border-bottom:1px solid var(--line)}
-  .hd strong{font-weight:900;letter-spacing:.2px}
-  .stack{padding:20px}
-  .section-title{font-weight:900;margin:0 0 12px 2px;font-size:16px}
-  .brand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin:6px 0 20px}
+/* =========================================================
+  [1] 기본 테마/레이아웃
+  - 전체 배경/카드/테두리/글자색
+========================================================= */
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --line:#e5e9f2;
+  --fg:#0b1220;
+}
 
-  /* =========================================================
-     카드(브랜드) 공통 스타일
-  ========================================================= */
-  .brand{
-    position:relative;
-    border-radius:18px;
-    cursor:pointer;
-    isolation:isolate;
-    transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;
-    border:1px solid var(--line);
-    background:linear-gradient(180deg,#fff,#fafcff);
-    overflow:hidden;
-  }
-  .brand:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(2,6,23,.08)}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font:15px/1.6 system-ui,"Noto Sans KR",sans-serif;
+}
 
-  /* =========================================================
-     ✅ 로고 영역 (틀/테두리 없음)
-     - 로고 이미지 자체가 “완전 진하게” 보이게
-  ========================================================= */
-  .logo-frame{
-    width: 180px;
-    height: 60px;
-    margin: 18px auto 10px;
+.wrap{max-width:1200px;margin:0 auto;padding:18px}
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 30px rgba(16,24,40,.04);
+}
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+/* =========================================================
+  [2] 상단 헤더(제목 + 우측 구비서류 버튼 3개)
+========================================================= */
+.hd{
+  position:relative;                /* 우측 버튼 배치용 */
+  display:flex;
+  align-items:center;
+  justify-content:center;           /* 제목은 가운데 */
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+}
+.hd strong{font-weight:900;letter-spacing:.2px}
 
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
-  }
-  .logo-frame img{
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display:block;
-  }
+.hd-actions{
+  position:absolute;                /* 우측에 붙이기 */
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  gap:8px;
+}
+.hd-btn{
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#fff;
+  cursor:pointer;
+  font-weight:800;
+  font-size:12px;
+}
+.hd-btn:hover{box-shadow:0 6px 18px rgba(2,6,23,.08)}
 
-  /* =========================================================
-     브랜드명(텍스트)
-  ========================================================= */
-  .brand .name{
-    text-align:center;
-    font-size:20px;
-    font-weight:900;
-    letter-spacing:-0.3px;
-    line-height:1.25;
+/* =========================================================
+  [3] 섹션/탭/그리드
+========================================================= */
+.stack{padding:20px}
+.section-title{font-weight:900;margin:0 0 12px 2px;font-size:16px}
 
-    display:-webkit-box;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab-btn{
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  cursor:pointer
+}
+.tab-btn.active{
+  background:#111827;
+  color:#fff;
+  border-color:#111827
+}
 
-    padding: 0 16px 18px;
-  }
-  .brand.long-name .name{
-    font-size:15px;
-    font-weight:800;
-  }
+.brand-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  margin:6px 0 20px;
+}
 
-  .cap{
-    text-align:center;
-    padding:0 18px 18px;
-    color:#475467;
-    font-size:12px;
-  }
+/* =========================================================
+  [4] 카드(브랜드) 디자인
+  - 로고(틀/테두리 없음) + 브랜드명
+========================================================= */
+.brand{
+  position:relative;
+  border-radius:18px;
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .15s ease, border-color .15s ease;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,#fff,#fafcff);
+  overflow:hidden;
+}
+.brand:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(2,6,23,.08)}
 
-  /* 현재 미사용(유지) */
-  .ribbon{display:none;}
-  .tag{display:none;}
+/* 로고 영역 (틀 없음) */
+.logo-frame{
+  width:180px;
+  height:60px;
+  margin:18px auto 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  padding:0;
+}
+.logo-frame img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+}
 
-  .theme-um{--chip-bg:#f3e8ff;--chip-fg:#3b0764;--chip-bd:#8b5cf6;--ribbon-bg:#ede9fe;--ribbon-fg:#5b21b6}
-  .theme-mm{--chip-bg:#e0f2fe;--chip-fg:#0b4a6f;--chip-bd:#38bdf8;--ribbon-bg:#e0f2fe;--ribbon-fg:#0c4a6e}
-  .theme-s7{--chip-bg:#d1fae5;--chip-fg:#064e3b;--chip-bd:#10b981;--ribbon-bg:#ecfdf5;--ribbon-fg:#065f46}
-  .theme-pr{--chip-bg:#dbeafe;--chip-fg:#1e40af;--chip-bd:#60a5fa;--ribbon-bg:#eef2ff;--ribbon-fg:#1d4ed8}
+/* 브랜드명(텍스트) */
+.brand .name{ display:none; 
 
-  .tabs{display:flex;gap:8px;margin-bottom:12px}
-  .tab-btn{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer}
-  .tab-btn.active{background:#111827;color:#fff;border-color:#111827}
+  /* 긴 이름이면 2줄까지만 보이게 */
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+
+  padding:0 16px 18px;
+}
+
+/* 이름이 길면 자동으로 폰트 축소 */
+.brand.long-name .name{
+  font-size:15px;
+  font-weight:800;
+}
+
+/* (필요시) 설명 */
+.cap{
+  text-align:center;
+  padding:0 18px 18px;
+  color:#475467;
+  font-size:12px;
+}
+
+/* =========================================================
+  [5] 테마(색상) - 카드 분위기용
+========================================================= */
+.theme-um{--chip-bg:#f3e8ff;--chip-fg:#3b0764;--chip-bd:#8b5cf6}
+.theme-mm{--chip-bg:#e0f2fe;--chip-fg:#0b4a6f;--chip-bd:#38bdf8}
+.theme-s7{--chip-bg:#d1fae5;--chip-fg:#064e3b;--chip-bd:#10b981}
+.theme-pr{--chip-bg:#dbeafe;--chip-fg:#1e40af;--chip-bd:#60a5fa}
+
+/* =========================================================
+  [6] 구비서류 모달(팝업)
+========================================================= */
+.modal{position:fixed;inset:0;display:none;z-index:9999}
+.modal.open{display:block}
+.modal-backdrop{position:absolute;inset:0;background:rgba(2,6,23,.45)}
+.modal-panel{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(920px, calc(100vw - 28px));
+  max-height:calc(100vh - 28px);
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(2,6,23,.25);
+}
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+}
+.modal-x{
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#fff;
+  cursor:pointer;
+  font-weight:800;
+}
+.modal-body{
+  padding:12px;
+  overflow:auto;
+  max-height:calc(100vh - 140px);
+}
+.modal-body img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:12px;
+}
+/* =========================
+   구비서류 모달(확대 지원)
+========================= */
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:9999;
+}
+.modal[aria-hidden="false"]{ display:block; }
+
+.modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+}
+
+.modal-panel{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(1200px, 96vw);     /* ✅ 크게 */
+  height:min(760px, 92vh);     /* ✅ 크게 */
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  display:flex;
+  flex-direction:column;
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 14px;
+  border-bottom:1px solid var(--line);
+}
+
+.modal-body{
+  flex:1;
+  overflow:auto;               /* ✅ 스크롤 */
+  background:#0b1220;          /* 이미지 여백 대비 */
+  padding:12px;
+}
+
+/* ✅ 이미지 기본: 화면에 맞추되, 클릭하면 확대 */
+#docsImg{
+  width:100%;
+  height:auto;
+  display:block;
+  transform-origin: top left;
+  cursor: zoom-in;
+}
+
+/* 확대 상태 */
+#docsImg.zoom{
+  transform: scale(2.5);       /* ✅ 확대 배율 (1.5~2.5 추천) */
+  cursor: zoom-out;
+}
+.brand .name{ display:none; }
+
 </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <section class="panel">
-      <div class="hd"><strong>MCCNETWORLD</strong></div>
+<div class="wrap">
+  <section class="panel">
 
-      <div class="stack">
-        <!-- 가입 서류 -->
-        <div class="section-title">가입 서류</div>
-        <div id="joinTabs">
-          <div class="tabs">
-            <button class="tab-btn active" data-target="adult">성인</button>
-            <button class="tab-btn" data-target="teen">청소년</button>
-          </div>
-          <div class="brand-grid" id="joinTabsList"></div>
-        </div>
+    <!-- =====================================================
+      상단 헤더: 제목 + 우측(SK/KT/LG 구비서류 버튼)
+    ====================================================== -->
+    <div class="hd">
+      <strong>MCCNETWORLD</strong>
 
-        <!-- 변경 서류 -->
-        <div class="section-title" style="margin-top:8px">변경 서류</div>
-        <div id="changeTabs">
-          <div class="tabs">
-            <button class="tab-btn active" data-target="uplus">LG U+</button>
-            <button class="tab-btn" data-target="kt">KT</button>
-            <button class="tab-btn" data-target="sk">SKT</button>
-          </div>
-          <div class="brand-grid" id="changeTabsList"></div>
-        </div>
-
-        <!-- 해지 서류 -->
-        <div class="section-title" style="margin-top:16px">해지 서류</div>
-        <div id="cancelTabs">
-          <div class="tabs">
-            <button class="tab-btn active" data-target="uplus">LG U+</button>
-            <button class="tab-btn" data-target="kt">KT</button>
-            <button class="tab-btn" data-target="sk">SKT</button>
-          </div>
-          <div class="brand-grid" id="cancelTabsList"></div>
-        </div>
+      <div class="hd-actions">
+        <button class="hd-btn" type="button" data-docs="sk">SK 구비서류</button>
+        <button class="hd-btn" type="button" data-docs="kt">KT 구비서류</button>
+        <button class="hd-btn" type="button" data-docs="lg">LG 구비서류</button>
       </div>
-    </section>
+    </div>
+
+    <div class="stack">
+
+      <!-- =====================================================
+        가입 서류
+      ====================================================== -->
+      <div class="section-title">가입 서류</div>
+      <div id="joinTabs">
+        <div class="tabs">
+          <button class="tab-btn active" data-target="adult">성인</button>
+          <button class="tab-btn" data-target="teen">청소년</button>
+        </div>
+        <div class="brand-grid" id="joinTabsList"></div>
+      </div>
+
+      <!-- =====================================================
+        변경 서류
+      ====================================================== -->
+      <div class="section-title" style="margin-top:8px">변경 서류</div>
+      <div id="changeTabs">
+        <div class="tabs">
+          <button class="tab-btn active" data-target="uplus">LG U+</button>
+          <button class="tab-btn" data-target="kt">KT</button>
+          <button class="tab-btn" data-target="sk">SKT</button>
+        </div>
+        <div class="brand-grid" id="changeTabsList"></div>
+      </div>
+
+      <!-- =====================================================
+        해지 서류
+      ====================================================== -->
+      <div class="section-title" style="margin-top:16px">해지 서류</div>
+      <div id="cancelTabs">
+        <div class="tabs">
+          <button class="tab-btn active" data-target="uplus">LG U+</button>
+          <button class="tab-btn" data-target="kt">KT</button>
+          <button class="tab-btn" data-target="sk">SKT</button>
+        </div>
+        <div class="brand-grid" id="cancelTabsList"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =======================================================
+    구비서류 모달(팝업)
+    - 버튼(SK/KT/LG)을 누르면 아래 img src가 바뀝니다.
+  ======================================================== -->
+  <div class="modal" id="docsModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="구비서류 안내">
+      <div class="modal-head">
+        <strong id="docsTitle">구비서류</strong>
+        <button class="modal-x" id="btnDocsClose" type="button">닫기</button>
+      </div>
+      <div class="modal-body">
+        <img id="docsImg" src="" alt="구비서류 이미지" />
+      </div>
+    </div>
   </div>
+
+</div>
 
 <script>
 /* =========================================================
-   ✅ B안 핵심: 가입서류에서 현재 선택된 탭(성인/청소년)
-   - card()가 이 값을 보고 로고를 adult/teen 중 선택합니다.
+  [A] GitHub Pages에서 경로 깨짐 방지 핵심
+  - 로고/구비서류 이미지 경로는 "/assets/..."가 아니라
+    "./assets/..." (상대경로)로 통일하세요.
+========================================================= */
+
+/* =========================================================
+  [B] B안 핵심: 가입서류에서 성인/청소년 탭에 따라
+      로고 이미지를 따로 보여줌
 ========================================================= */
 let JOIN_AGE = 'adult';
 
 /* =========================================================
-   1) 브랜드 마스터
-   - logoAdult: 성인용 로고 이미지
-   - logoTeen : 청소년용 로고 이미지 (없으면 adult 로고를 자동 사용)
-   ※ 변경/해지에서는 기본적으로 logoAdult 사용 (원하면 별도 분리 가능)
+  [1] 브랜드 마스터(기본 브랜드들)
+  - logoAdult: 성인 로고
+  - logoTeen : 청소년 로고(없으면 성인 로고로 대체됨)
+  - carrier  : uplus / kt / sk  (변경/해지 탭 필터용)
 ========================================================= */
 const BRANDS = [
-  {
+//미디어로그  
+{
     carrier:'uplus', theme:'theme-um', name:'미디어로그', cap:'',
-    logoAdult:'/assets/logos/umobile.png',
-    logoTeen :'/assets/logos/umobile-teen.png'
+    logoAdult:'./assets/logos/ME.png',
+    logoTeen :'./assets/logos/METEEN.png'
   },
+  //프리티LG
   {
     carrier:'uplus', theme:'theme-pr', name:'프리티LG', cap:'',
-    logoAdult:'/assets/logos/freet-lg.png',
-    logoTeen :'/assets/logos/freet-lg-teen.png'
+    logoAdult:'./assets/logos/FREE LG.png',
+    logoTeen :'./assets/logos/FREE LG TEEN.png'
   },
+  //헬로
   {
     carrier:'uplus', theme:'theme-um', name:'헬로LG', cap:'',
-    logoAdult:'/assets/logos/hello-lg.png',
-    logoTeen :'/assets/logos/hello-lg-teen.png'
+    logoAdult:'./assets/logos/HELLO.png',
+    logoTeen :'./assets/logos/HELLO TEEN.png'
   },
-
+  //엠모바일
   {
     carrier:'kt', theme:'theme-mm', name:'엠모바일', cap:'',
-    logoAdult:'/assets/logos/mmobile.png',
-    logoTeen :'/assets/logos/mmobile-teen.png'
+    logoAdult:'./assets/logos/MO.png',
+    logoTeen :'./assets/logos/MOTEEN.png'
   },
+  //스테이지파이브KT
   {
     carrier:'kt', theme:'theme-mm', name:'스테이지파이브(KT)', cap:'',
-    logoAdult:'/assets/logos/stagefive-kt.png',
-    logoTeen :'/assets/logos/stagefive-kt-teen.png'
+    logoAdult:'./assets/logos/STAGE KT.png',
+    logoTeen :'./assets/logos/STAGE KT TEEN.png'
   },
+  //스카이라이프
   {
     carrier:'kt', theme:'theme-mm', name:'스카이라이프', cap:'',
-    logoAdult:'/assets/logos/skylife.png',
-    logoTeen :'/assets/logos/skylife-teen.png'
+    logoAdult:'./assets/logos/SKY.png',
+    logoTeen :'./assets/logos/SKYTEEN.png'
   },
-
+  //프리티SK
   {
     carrier:'sk', theme:'theme-pr', name:'프리티SK', cap:'',
-    logoAdult:'/assets/logos/freet-sk.png',
-    logoTeen :'/assets/logos/freet-sk-teen.png'
+    logoAdult:'./assets/logos/FREE SK.png',
+    logoTeen :'./assets/logos/FREE SK TEEN.png'
   },
+  //텔링크SK
   {
     carrier:'sk', theme:'theme-s7', name:'SK텔링크', cap:'',
-    logoAdult:'/assets/logos/telink.png',
-    logoTeen :'/assets/logos/telink-teen.png'
+    logoAdult:'./assets/logos/7M.png',
+    logoTeen :'./assets/logos/7M TEEN.png'
   },
+  //스테이지파이브SK
   {
-    carrier:'sk', theme:'theme-mm', name:'스테이지파이브(SKT)', cap:'',
-    logoAdult:'/assets/logos/stagefive-skt.png',
-    logoTeen :'/assets/logos/stagefive-skt-teen.png'
-  }
+    carrier:'sk', theme:'theme-mm', name:'스테이지파이브(SK)', cap:'',
+    logoAdult:'./assets/logos/STAGE SK.png',
+    logoTeen :'./assets/logos/STAGE SK TEEN.png'
+  },
 ];
 
 /* =========================================================
-   2) 가입서류 전용 카드
-   - 이것도 B안 적용 가능(신규/번이/웰컴 등)
-   - logoAdult/logoTeen 둘 다 주면 탭에 따라 자동 전환
-   - logoTeen이 없으면 adult 로고로 대체
+  [2] 가입서류 전용 카드(정규KT/웰컴/유선 등)
+  - 이것도 성인/청소년 로고를 따로 줄 수 있음
 ========================================================= */
 const JOIN_ONLY = [
+  //정규KT신규
   {
     carrier:'kt', theme:'theme-mm', name:'정규KT신규', cap:'',
-    logoAdult:'/assets/logos/kt-regular-new.png',
-    logoTeen :'/assets/logos/kt-regular-new-teen.png'
+    logoAdult:'./assets/logos/KT010.png',
+    logoTeen :'./assets/logos/KT010TEEN.png'
   },
+  //정규KT번이
   {
     carrier:'kt', theme:'theme-mm', name:'정규KT번이', cap:'',
-    logoAdult:'/assets/logos/kt-regular-mnp.png',
-    logoTeen :'/assets/logos/kt-regular-mnp-teen.png'
+    logoAdult:'./assets/logos/KTMNP.png',
+    logoTeen :'./assets/logos/KTMNPTEEN.png'
   },
+  //웰컴신규
   {
     carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 신규', cap:'',
-    logoAdult:'/assets/logos/kt-welcome-new.png',
-    logoTeen :'/assets/logos/kt-welcome-new-teen.png'
+    logoAdult:'./assets/logos/WELCOME010.png',
+    logoTeen :'./assets/logos/WELCOME010TEEN.png'
   },
+  //웰컴번이
   {
     carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 번이', cap:'',
-    logoAdult:'/assets/logos/kt-welcome-mnp.png',
-    logoTeen :'/assets/logos/kt-welcome-mnp-teen.png'
+    logoAdult:'./assets/logos/WELCOMEMNP.png',
+    logoTeen :'./assets/logos/WELCOMEMNPTEEN.png'
   },
+  //KT유선동판
   {
     carrier:'kt', theme:'theme-mm', name:'KT 유선 동판', cap:'',
-    logoAdult:'/assets/logos/kt-wire.png',
-    logoTeen :'/assets/logos/kt-wire-teen.png'
-  }
+    logoAdult:'./assets/logos/KTINTERNET.png',
+    logoTeen :'./assets/logos/KTINTERNET.png'
+  },
 ];
 
-/* =========================================================
-   3) 가입 데이터(탭에 따라 "age"만 바뀌고 목록은 동일)
-   - 기존처럼 adult/teen 배열을 따로 만드는 구조는 유지하되,
-     로고는 logoAdult/logoTeen으로 완전 분리된 이미지 사용
-========================================================= */
+/* 가입 탭 데이터(성인/청소년) */
 const JOIN_DATA = {
   adult: [
     ...BRANDS.map(b => ({...b, doc:'join', age:'adult'})),
@@ -256,12 +478,14 @@ const JOIN_DATA = {
   ]
 };
 
-/* 변경/해지는 기존 브랜드만 표시 */
+/* 변경/해지는 기본 브랜드만 */
 const CHANGE_CARDS = BRANDS.map(b => ({...b, doc:'change'}));
 const CANCEL_CARDS = BRANDS.map(b => ({...b, doc:'cancel'}));
 
 /* =========================================================
-   4) 라우팅(클릭 시 이동)
+  [3] 클릭 시 이동(라우팅)
+  - external: 외부 사이트로 바로 이동
+  - carrier/brand: 내부 brands/.../index.html 이동
 ========================================================= */
 const BRAND_ROUTE = {
   '미디어로그':     { carrier:'uplus', brand:'umobile'   },
@@ -273,16 +497,16 @@ const BRAND_ROUTE = {
   '스테이지파이브(SKT)':{ carrier:'sk', brand:'stagefive-sk'},
   '프리티SK':       { carrier:'sk',    brand:'freeT-sk'  },
 
+  /* 가입서류 전용 외부 링크 */
   '정규KT신규':     { external: 'https://online.kt.com/index.jsp?prdcID=57DA59EE-6F27-48EB-8BCC-3EEC80E914F2' },
   '정규KT번이':     { external: 'https://online.kt.com/index.jsp?prdcID=05312F26-4C8C-438E-BA6A-C1B8A4650C0C' },
-
   '웰컴 요금제 신규': { external: 'https://online.kt.com/index.jsp?prdcID=1D78452F-43CB-44C9-B77C-B40DE4908727' },
   '웰컴 요금제 번이': { external: 'https://online.kt.com/index.jsp?prdcID=584932E0-890C-4659-A3D4-E953DF6882FA' },
-
   'KT 유선 동판':  { external: 'https://online.kt.com/smart/simple/simpleCustomerInfoPop.do?prdcId=03EEA486-8915-4734-B9AE-B0476ADFC663' },
   'SK텔링크':      { external: 'https://smvno.sk7mobile.com/main.do' }
 };
 
+/* 내부 폼 링크 생성 */
 function buildBrandUrl(route, doc, age){
   if (!route || !route.carrier || !route.brand) return '#';
 
@@ -301,29 +525,27 @@ function buildBrandUrl(route, doc, age){
 }
 
 /* =========================================================
-   5) 카드 HTML 생성
-   ✅ B안 핵심:
-   - 가입서류(doc==='join')면 age에 따라
-     logoAdult / logoTeen 중 선택
-   - teen 로고가 없으면 adult 로고로 자동 대체
+  [4] B안 로고 선택 함수
+  - 가입서류(join)면 age에 따라 adult/teen 로고 선택
 ========================================================= */
 function pickLogo(item){
-  // 가입서류: age를 기준으로 로고 선택
   if (item.doc === 'join'){
     if (item.age === 'teen') return item.logoTeen || item.logoAdult || '';
     return item.logoAdult || item.logoTeen || '';
   }
-  // 변경/해지: 기본은 adult 로고(원하면 별도 분리 가능)
+  /* 변경/해지에서는 기본 adult 로고 사용 */
   return item.logoAdult || item.logoTeen || '';
 }
 
+/* 카드 HTML 생성 */
 function card(item){
   const {theme, name, cap, doc, age} = item;
+
   const dataName = name.replace(/\(청소년\)/,'');
   const docAttr  = doc || 'join';
   const ageAttr  = (docAttr==='join' && age) ? ` data-age="${age}"` : '';
 
-  const isLong = name.length >= 9;
+  const isLong  = name.length >= 9;
   const longCls = isLong ? 'long-name' : '';
 
   const logo = pickLogo(item);
@@ -340,7 +562,7 @@ function card(item){
   `;
 }
 
-/* 클릭 이동 */
+/* 카드 클릭 시 이동 */
 function attachNavigateHandlers(scope){
   scope.querySelectorAll('.brand').forEach(cardEl=>{
     cardEl.addEventListener('click', ()=>{
@@ -359,11 +581,13 @@ function attachNavigateHandlers(scope){
   });
 }
 
+/* 안전 렌더 */
 function safeRender(listEl, items){
   try{
     listEl.innerHTML = (items && items.length)
       ? items.map(card).join('')
       : '<div style="opacity:.6">자료 없음</div>';
+
     attachNavigateHandlers(listEl);
   }catch(err){
     console.error('[render error]', err);
@@ -381,18 +605,15 @@ function wireKindTabs(containerId, listId, dataObj){
       container.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
 
-      // ✅ 현재 선택 탭 저장(디버깅/확장용)
-      JOIN_AGE = btn.dataset.target; // adult | teen
-
-      const kind = btn.dataset.target;
-      safeRender(list, (dataObj||{})[kind] || []);
+      JOIN_AGE = btn.dataset.target;              // adult | teen
+      safeRender(list, (dataObj||{})[JOIN_AGE] || []);
     });
   });
 
   container.querySelector('.tab-btn.active').click();
 }
 
-/* 변경/해지 탭 */
+/* 변경/해지 탭(uplus/kt/sk) */
 function wireTabs(containerId, listId, data){
   const container = document.getElementById(containerId);
   const list = document.getElementById(listId);
@@ -402,7 +623,7 @@ function wireTabs(containerId, listId, data){
       container.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
 
-      const target = btn.dataset.target;
+      const target = btn.dataset.target;          // uplus | kt | sk
       const items = (data||[]).filter(d=>d.carrier===target);
       safeRender(list, items);
     });
@@ -411,6 +632,57 @@ function wireTabs(containerId, listId, data){
   container.querySelector('.tab-btn.active').click();
 }
 
+/* =========================================================
+  [5] 구비서류 모달(JS)
+  - 상단 버튼(SK/KT/LG)을 누르면 이미지가 바뀌고 모달이 열림
+========================================================= */
+(function(){
+  const modal = document.getElementById('docsModal');
+  const imgEl = document.getElementById('docsImg');
+  const titleEl = document.getElementById('docsTitle');
+  const closeBtn = document.getElementById('btnDocsClose');
+
+  const DOCS = {
+    sk: { title:'SK 구비서류', src:'./assets/docs/required_sk.png' },
+    kt: { title:'KT 구비서류', src:'./assets/docs/required_kt.png' },
+    lg: { title:'LG 구비서류', src:'./assets/docs/required_lg.png' },
+  };
+
+  function openModal(key){
+    const d = DOCS[key];
+    if (!d) return;
+
+    titleEl.textContent = d.title;
+    imgEl.src = d.src;
+    imgEl.alt = d.title;
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    imgEl.src = '';
+  }
+
+  document.querySelectorAll('[data-docs]').forEach(btn=>{
+    btn.addEventListener('click', ()=> openModal(btn.dataset.docs));
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+
+  modal?.addEventListener('click', (e)=>{
+    const t = e.target;
+    if (t && t.dataset && t.dataset.close === '1') closeModal();
+  });
+
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+  });
+})();
+
+/* DOM 준비 후 실행 */
 window.addEventListener('DOMContentLoaded', ()=>{
   wireKindTabs('joinTabs','joinTabsList',JOIN_DATA);
   wireTabs('changeTabs','changeTabsList',CHANGE_CARDS);
