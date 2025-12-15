@@ -607,9 +607,9 @@ function renderJoinGrouped(listEl, items){
 
   // ✅ (2) 기존 carrier 묶음은 normalItems로만 처리
   const groups = [
-    { key:'uplus', title:'LG', sub:'U+ 계열' },
-    { key:'kt',    title:'KT', sub:'KT 계열' },
-    { key:'sk',    title:'SK', sub:'SKT 계열' },
+    { key:'uplus', title:'LG', sub:'' },
+    { key:'kt',    title:'KT', sub:'' },
+    { key:'sk',    title:'SK', sub:'' },
   ];
 
   const by = {
@@ -641,7 +641,7 @@ function renderJoinGrouped(listEl, items){
       <div class="group-head">
         <span class="group-dot"></span>
         <span class="group-title">KT 별도 링크</span>
-        <span class="group-sub">KT 온라인/동판 등</span>
+        <span class="group-sub"></span>
       </div>
       <div class="brand-grid">
         ${specialItems.map(card).join('')}
