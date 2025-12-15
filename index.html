@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MCCNETWORLD – 미리보기</title>
+<title>MCCNETWORLD</title>
 
 <style>
 /* =========================================================
@@ -92,6 +92,51 @@ body{
   gap:18px;
   margin:6px 0 20px;
 }
+/* =========================================================
+  [3-1] 가입서류: 통신사별 "큰 구역" 묶음(버튼 대신 섹션)
+========================================================= */
+.group-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  margin:6px 0 20px;
+}
+
+/* 섹션 카드(큰 틀) */
+.group{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:18px;
+  padding:14px 14px 16px;
+  box-shadow:0 10px 30px rgba(16,24,40,.03);
+}
+
+/* 섹션 헤더(라인+라벨) */
+.group-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+.group-dot{
+  width:10px;height:10px;border-radius:999px;
+  background:var(--g-accent);
+  box-shadow:0 0 0 4px rgba(0,0,0,.03);
+}
+.group-title{
+  font-weight:900;
+  letter-spacing:-0.2px;
+}
+.group-sub{
+  margin-left:auto;
+  font-size:12px;
+  color:#64748b;
+}
+
+/* 통신사별 포인트 컬러 */
+.group[data-carrier="sk"]{ --g-accent:#2563eb; }
+.group[data-carrier="kt"]{ --g-accent:#0ea5e9; }
+.group[data-carrier="uplus"]{ --g-accent:#8b5cf6; }
 
 /* =========================================================
   [4] 카드(브랜드) 디자인
@@ -128,19 +173,6 @@ body{
   object-fit:contain;
   display:block;
 }
-
-/* 브랜드명(텍스트) */
-.brand .name{ display:none; 
-
-  /* 긴 이름이면 2줄까지만 보이게 */
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-
-  padding:0 16px 18px;
-}
-
 /* 이름이 길면 자동으로 폰트 축소 */
 .brand.long-name .name{
   font-size:15px;
@@ -162,52 +194,6 @@ body{
 .theme-mm{--chip-bg:#e0f2fe;--chip-fg:#0b4a6f;--chip-bd:#38bdf8}
 .theme-s7{--chip-bg:#d1fae5;--chip-fg:#064e3b;--chip-bd:#10b981}
 .theme-pr{--chip-bg:#dbeafe;--chip-fg:#1e40af;--chip-bd:#60a5fa}
-
-/* =========================================================
-  [6] 구비서류 모달(팝업)
-========================================================= */
-.modal{position:fixed;inset:0;display:none;z-index:9999}
-.modal.open{display:block}
-.modal-backdrop{position:absolute;inset:0;background:rgba(2,6,23,.45)}
-.modal-panel{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:min(920px, calc(100vw - 28px));
-  max-height:calc(100vh - 28px);
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 20px 60px rgba(2,6,23,.25);
-}
-.modal-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 14px;
-  border-bottom:1px solid var(--line);
-}
-.modal-x{
-  padding:8px 10px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:#fff;
-  cursor:pointer;
-  font-weight:800;
-}
-.modal-body{
-  padding:12px;
-  overflow:auto;
-  max-height:calc(100vh - 140px);
-}
-.modal-body img{
-  width:100%;
-  height:auto;
-  display:block;
-  border-radius:12px;
-}
 /* =========================
    구비서류 모달(확대 지원)
 ========================= */
@@ -269,6 +255,7 @@ body{
   transform: scale(2.5);       /* ✅ 확대 배율 (1.5~2.5 추천) */
   cursor: zoom-out;
 }
+/* 브랜드명(텍스트) */
 .brand .name{ display:none; }
 
 </style>
@@ -302,7 +289,7 @@ body{
           <button class="tab-btn active" data-target="adult">성인</button>
           <button class="tab-btn" data-target="teen">청소년</button>
         </div>
-        <div class="brand-grid" id="joinTabsList"></div>
+        <div class="group-wrap" id="joinTabsList"></div>
       </div>
 
       <!-- =====================================================
@@ -379,17 +366,17 @@ const BRANDS = [
     logoAdult:'./assets/logos/ME.png',
     logoTeen :'./assets/logos/METEEN.png'
   },
-  //프리티LG
-  {
-    carrier:'uplus', theme:'theme-pr', name:'프리티LG', cap:'',
-    logoAdult:'./assets/logos/FREE LG.png',
-    logoTeen :'./assets/logos/FREE LG TEEN.png'
-  },
   //헬로
   {
     carrier:'uplus', theme:'theme-um', name:'헬로LG', cap:'',
     logoAdult:'./assets/logos/HELLO.png',
     logoTeen :'./assets/logos/HELLO TEEN.png'
+  },
+    //프리티LG
+  {
+    carrier:'uplus', theme:'theme-pr', name:'프리티LG', cap:'',
+    logoAdult:'./assets/logos/FREE LG.png',
+    logoTeen :'./assets/logos/FREE LG TEEN.png'
   },
   //엠모바일
   {
@@ -409,13 +396,7 @@ const BRANDS = [
     logoAdult:'./assets/logos/SKY.png',
     logoTeen :'./assets/logos/SKYTEEN.png'
   },
-  //프리티SK
-  {
-    carrier:'sk', theme:'theme-pr', name:'프리티SK', cap:'',
-    logoAdult:'./assets/logos/FREE SK.png',
-    logoTeen :'./assets/logos/FREE SK TEEN.png'
-  },
-  //텔링크SK
+    //텔링크SK
   {
     carrier:'sk', theme:'theme-s7', name:'SK텔링크', cap:'',
     logoAdult:'./assets/logos/7M.png',
@@ -427,6 +408,12 @@ const BRANDS = [
     logoAdult:'./assets/logos/STAGE SK.png',
     logoTeen :'./assets/logos/STAGE SK TEEN.png'
   },
+    //프리티SK
+  {
+    carrier:'sk', theme:'theme-pr', name:'프리티SK', cap:'',
+    logoAdult:'./assets/logos/FREE SK.png',
+    logoTeen :'./assets/logos/FREE SK TEEN.png'
+  }
 ];
 
 /* =========================================================
@@ -434,37 +421,18 @@ const BRANDS = [
   - 이것도 성인/청소년 로고를 따로 줄 수 있음
 ========================================================= */
 const JOIN_ONLY = [
-  //정규KT신규
-  {
-    carrier:'kt', theme:'theme-mm', name:'정규KT신규', cap:'',
-    logoAdult:'./assets/logos/KT010.png',
-    logoTeen :'./assets/logos/KT010TEEN.png'
-  },
-  //정규KT번이
-  {
-    carrier:'kt', theme:'theme-mm', name:'정규KT번이', cap:'',
-    logoAdult:'./assets/logos/KTMNP.png',
-    logoTeen :'./assets/logos/KTMNPTEEN.png'
-  },
-  //웰컴신규
-  {
-    carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 신규', cap:'',
-    logoAdult:'./assets/logos/WELCOME010.png',
-    logoTeen :'./assets/logos/WELCOME010TEEN.png'
-  },
-  //웰컴번이
-  {
-    carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 번이', cap:'',
-    logoAdult:'./assets/logos/WELCOMEMNP.png',
-    logoTeen :'./assets/logos/WELCOMEMNPTEEN.png'
-  },
-  //KT유선동판
-  {
-    carrier:'kt', theme:'theme-mm', name:'KT 유선 동판', cap:'',
-    logoAdult:'./assets/logos/KTINTERNET.png',
-    logoTeen :'./assets/logos/KTINTERNET.png'
-  },
+  { carrier:'kt', theme:'theme-mm', name:'정규KT신규', cap:'', special:true,
+    logoAdult:'./assets/logos/KT010.png', logoTeen:'./assets/logos/KT010TEEN.png' },
+  { carrier:'kt', theme:'theme-mm', name:'정규KT번이', cap:'', special:true,
+    logoAdult:'./assets/logos/KTMNP.png', logoTeen:'./assets/logos/KTMNPTEEN.png' },
+  { carrier:'kt', theme:'theme-mm', name:'KT 유선 동판', cap:'', special:true,
+    logoAdult:'./assets/logos/KTINTERNET.png', logoTeen:'./assets/logos/KTINTERNET.png' },
+  { carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 신규', cap:'', special:true,
+    logoAdult:'./assets/logos/WELCOME010.png', logoTeen:'./assets/logos/WELCOME010TEEN.png' },
+  { carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 번이', cap:'', special:true,
+    logoAdult:'./assets/logos/WELCOMEMNP.png', logoTeen:'./assets/logos/WELCOMEMNPTEEN.png' }
 ];
+
 
 /* 가입 탭 데이터(성인/청소년) */
 const JOIN_DATA = {
@@ -594,6 +562,100 @@ function safeRender(listEl, items){
     listEl.innerHTML = '<div style="color:#b91c1c;font-weight:800">렌더 오류 – 콘솔을 확인하세요.</div>';
   }
 }
+/* =========================================================
+  [JOIN] 가입서류: 통신사별 섹션으로 묶어서 렌더링
+========================================================= */
+function renderJoinGrouped(listEl, items){
+  const groups = [
+    { key:'uplus', title:'LG', sub:'' },
+    { key:'kt',    title:'KT', sub:'' },
+    { key:'sk',    title:'SK', sub:'' },
+  ];
+
+  const by = {
+    uplus: items.filter(x => x.carrier === 'uplus'),
+    kt:    items.filter(x => x.carrier === 'kt'),
+    sk:    items.filter(x => x.carrier === 'sk'),
+  };
+
+  listEl.innerHTML = groups.map(g => {
+    const arr = by[g.key] || [];
+    if (!arr.length) return '';
+
+    return `
+      <section class="group" data-carrier="${g.key}">
+        <div class="group-head">
+          <span class="group-dot"></span>
+          <span class="group-title">${g.title}</span>
+          <span class="group-sub">${g.sub}</span>
+        </div>
+        <div class="brand-grid">
+          ${arr.map(card).join('')}
+        </div>
+      </section>
+    `;
+  }).join('');
+
+  // 섹션 안에 들어간 .brand들도 클릭되게 연결
+  attachNavigateHandlers(listEl);
+}
+function renderJoinGrouped(listEl, items){
+
+  // ✅ (1) "별도 링크 카드" 먼저 분리
+  const specialItems = items.filter(x => x.special === true);
+  const normalItems  = items.filter(x => !x.special);
+
+  // ✅ (2) 기존 carrier 묶음은 normalItems로만 처리
+  const groups = [
+    { key:'uplus', title:'LG', sub:'U+ 계열' },
+    { key:'kt',    title:'KT', sub:'KT 계열' },
+    { key:'sk',    title:'SK', sub:'SKT 계열' },
+  ];
+
+  const by = {
+    uplus: normalItems.filter(x => x.carrier === 'uplus'),
+    kt:    normalItems.filter(x => x.carrier === 'kt'),
+    sk:    normalItems.filter(x => x.carrier === 'sk'),
+  };
+
+  const normalHTML = groups.map(g => {
+    const arr = by[g.key] || [];
+    if (!arr.length) return '';
+    return `
+      <section class="group" data-carrier="${g.key}">
+        <div class="group-head">
+          <span class="group-dot"></span>
+          <span class="group-title">${g.title}</span>
+          <span class="group-sub">${g.sub}</span>
+        </div>
+        <div class="brand-grid">
+          ${arr.map(card).join('')}
+        </div>
+      </section>
+    `;
+  }).join('');
+
+  // ✅ (3) 별도 링크 섹션 추가
+  const specialHTML = specialItems.length ? `
+    <section class="group" data-carrier="kt">
+      <div class="group-head">
+        <span class="group-dot"></span>
+        <span class="group-title">KT 별도 링크</span>
+        <span class="group-sub">KT 온라인/동판 등</span>
+      </div>
+      <div class="brand-grid">
+        ${specialItems.map(card).join('')}
+      </div>
+    </section>
+  ` : '';
+
+  // ✅ (4) 합쳐서 출력
+  listEl.innerHTML = normalHTML + specialHTML;
+
+  attachNavigateHandlers(listEl);
+}
+
+
 
 /* 가입 탭(성인/청소년) */
 function wireKindTabs(containerId, listId, dataObj){
@@ -606,7 +668,7 @@ function wireKindTabs(containerId, listId, dataObj){
       btn.classList.add('active');
 
       JOIN_AGE = btn.dataset.target;              // adult | teen
-      safeRender(list, (dataObj||{})[JOIN_AGE] || []);
+      renderJoinGrouped(list, (dataObj||{})[JOIN_AGE] || []);
     });
   });
 
@@ -641,7 +703,9 @@ function wireTabs(containerId, listId, data){
   const imgEl = document.getElementById('docsImg');
   const titleEl = document.getElementById('docsTitle');
   const closeBtn = document.getElementById('btnDocsClose');
-
+imgEl.addEventListener('click', ()=>{
+  imgEl.classList.toggle('zoom');
+});
   const DOCS = {
     sk: { title:'SK 구비서류', src:'./assets/docs/required_sk.png' },
     kt: { title:'KT 구비서류', src:'./assets/docs/required_kt.png' },
@@ -663,6 +727,7 @@ function wireTabs(containerId, listId, data){
   function closeModal(){
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
+    imgEl.classList.remove('zoom');
     imgEl.src = '';
   }
 
