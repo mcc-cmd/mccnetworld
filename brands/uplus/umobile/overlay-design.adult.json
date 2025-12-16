@@ -395,7 +395,9 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "inputHeight": 10,
+          "checkSize": 12
         },
         {
           "id": "유효기간",

@@ -257,6 +257,34 @@ body{
 }
 /* 브랜드명(텍스트) */
 .brand .name{ display:none; }
+/* =========================================================
+  [3-2] 통신사 섹션(.group) 배경 워터마크(MCC 로고)
+========================================================= */
+.group{
+  position: relative;   /* ✅ 워터마크 절대배치 기준 */
+  overflow: hidden;     /* ✅ 밖으로 삐져나오면 잘라줌 */
+}
+
+/* 워터마크 */
+.group::after{
+  content:"";
+  position:absolute;
+  inset:0;              /* 섹션 전체 */
+  background-image:url("./assets/brand/mcc-watermark.png");
+  background-repeat:no-repeat;
+  background-position:right 18px bottom 14px;  /* 우하단 */
+  background-size:180px auto;                  /* 크기 */
+  opacity:0.10;         /* ✅ 연하게 (0.03~0.10 추천) */
+  pointer-events:none;  /* ✅ 클릭 방해 없음 */
+  z-index:0;
+}
+
+/* 섹션 안의 실제 내용이 워터마크 위로 오게 */
+.group > *{
+  position:relative;
+  z-index:1;
+}
+
 
 </style>
 </head>
