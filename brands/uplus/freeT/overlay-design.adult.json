@@ -28,7 +28,8 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22
+          "inputHeight": 22,
+          "value": false
         },
         {
           "id": "신규/번이",
@@ -56,7 +57,8 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 15,
-          "inputHeight": 10
+          "inputHeight": 10,
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -83,7 +85,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -111,7 +114,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "inputHeight": 22,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "외국인",
@@ -138,7 +142,8 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22
+          "inputHeight": 22,
+          "value": false
         },
         {
           "id": "totalFee",
@@ -165,7 +170,8 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22
+          "inputHeight": 22,
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -193,7 +199,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "inputHeight": 22,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "비상 연락처",
@@ -220,14 +227,15 @@
           "locked": false,
           "lockOnPh": false,
           "inputHeight": 22,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
           "label": "",
           "type": "text",
-          "x": 70.7454121968881,
-          "y": 55.74950040605725,
+          "x": 68.00542061517496,
+          "y": 55.604687486459156,
           "w": 20,
           "required": false,
           "radioSize": 18,
@@ -247,7 +255,8 @@
           "locked": true,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22
+          "inputHeight": 22,
+          "value": ""
         },
         {
           "id": "유효기간",
@@ -275,7 +284,8 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "유심",
@@ -312,7 +322,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": "center"
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "유심번호",
@@ -340,7 +351,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "신규",
@@ -368,7 +380,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "번호이동",
@@ -396,7 +409,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -424,7 +438,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -452,7 +467,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "SK",
@@ -479,7 +495,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "KT",
@@ -506,14 +523,15 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "LG",
           "label": "",
           "type": "checkbox",
-          "x": 75.9661358840586,
-          "y": 59.982976470183225,
+          "x": 75.96121704844384,
+          "y": 60.03669802027824,
           "w": 5,
           "required": false,
           "radioSize": 15,
@@ -533,7 +551,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "알뜰",
@@ -560,7 +579,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "알뜰",
@@ -588,7 +608,8 @@
           "placeholder": "MVNO 선택시 기존 통신사 필수 작성",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "plan",
@@ -624,7 +645,8 @@
           "placeholder": "요금제 선택",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -711,7 +733,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "15"
+          "value": "17"
         },
         {
           "id": "이름",
@@ -739,7 +761,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "생년월일",
@@ -767,7 +790,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "주소",
@@ -795,7 +819,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "planecho",
@@ -852,7 +877,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "계좌",
@@ -879,7 +905,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "카드",
@@ -906,7 +933,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "예금주 생년월일",
@@ -934,7 +962,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "은행명",
@@ -962,7 +991,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "계좌/카드번호",
@@ -990,7 +1020,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "SK",
@@ -1017,68 +1048,15 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
-        },
-        {
-          "id": "KT",
-          "label": "",
-          "type": "checkbox",
-          "x": 50,
-          "y": 50,
-          "w": 5,
-          "required": false,
-          "radioSize": 18,
-          "checkSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": false,
-          "bgColor": "#000000",
-          "fontSize": 14,
-          "textAlign": "",
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false
-        },
-        {
-          "id": "LG",
-          "label": "",
-          "type": "checkbox",
-          "x": 50,
-          "y": 50,
-          "w": 5,
-          "required": false,
-          "radioSize": 18,
-          "checkSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": false,
-          "bgColor": "#000000",
-          "fontSize": 14,
-          "textAlign": "",
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "MVNO",
           "label": "",
           "type": "checkbox",
-          "x": 80.18649691779459,
-          "y": 59.98274466293401,
+          "x": 80.86555279776242,
+          "y": 60.0312269751064,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -1098,14 +1076,15 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "KT",
           "label": "",
           "type": "checkbox",
-          "x": 72.52935459477158,
-          "y": 60.06355168359633,
+          "x": 72.64096645022504,
+          "y": 60.06376875178848,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -1125,7 +1104,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "eSIM",
@@ -1153,7 +1133,8 @@
           "placeholder": "eSIM 개통시 필수 입력 내용 입니다.",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "eSIM",
@@ -1181,7 +1162,8 @@
           "placeholder": "eSIM 개통시 필수 입력 내용 입니다.",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "eSIM",
@@ -1209,7 +1191,8 @@
           "placeholder": "eSIM 개통시 필수 입력 내용 입니다 .",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "통장주",
@@ -1237,7 +1220,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "가입자 동일",
@@ -1262,6 +1246,36 @@
           "mask": "",
           "maskRe": "",
           "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false,
+          "value": false
+        },
+        {
+          "id": "통신사",
+          "label": "",
+          "type": "text",
+          "x": 82.86004056795132,
+          "y": 58.747934242764025,
+          "w": 10,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 22,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 10,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "통신사명",
           "autoDate": "",
           "locked": false,
           "lockOnPh": false
