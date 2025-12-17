@@ -7,8 +7,8 @@
           "id": "plan",
           "label": "",
           "type": "select",
-          "x": 20.45633402229813,
-          "y": 15.299063903142843,
+          "x": 20.454366502123477,
+          "y": 15.29906439875358,
           "w": 30,
           "required": true,
           "options": [
@@ -63,7 +63,8 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "textAlign": "center"
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "신규/번이",
@@ -92,7 +93,8 @@
           "lockOnPh": false,
           "checkSize": 15,
           "inputHeight": 10,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -119,7 +121,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -147,7 +150,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "inputHeight": 22,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -175,7 +179,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "inputHeight": 22,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -203,7 +208,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "inputHeight": 22,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "이름",
@@ -232,7 +238,8 @@
           "inputHeight": 40,
           "checkSize": 18,
           "textAlign": "",
-          "maxLength": 50
+          "maxLength": 50,
+          "value": ""
         },
         {
           "id": "명의자 생년월일",
@@ -259,7 +266,8 @@
           "locked": false,
           "lockOnPh": false,
           "inputHeight": 10,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "명의자 주소",
@@ -286,7 +294,8 @@
           "locked": false,
           "lockOnPh": false,
           "inputHeight": 10,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "비상 연락처",
@@ -313,7 +322,8 @@
           "locked": false,
           "lockOnPh": false,
           "inputHeight": 10,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "예금주 성함",
@@ -340,7 +350,8 @@
           "locked": false,
           "lockOnPh": false,
           "inputHeight": 10,
-          "checkSize": 12
+          "checkSize": 12,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -368,7 +379,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "inputHeight": 22,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "예금주 생년월일",
@@ -395,7 +407,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "유효기간",
@@ -422,14 +435,15 @@
           "placeholder": "카드 등록시 유효기간 필수.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "은행/계좌,카드번호",
           "label": "",
           "type": "text",
-          "x": 43.15849486887116,
-          "y": 50.7,
+          "x": 44.98059812472268,
+          "y": 50.841967590928995,
           "w": 30,
           "required": true,
           "radioSize": 10,
@@ -449,7 +463,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "카드 유효기간/년",
@@ -476,7 +491,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "카드 유효기간/월",
@@ -503,7 +519,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "유심",
@@ -540,7 +557,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": "center"
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "유심번호",
@@ -567,7 +585,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "신규",
@@ -594,7 +613,8 @@
           "placeholder": "신규 개통시 희망 번호 입력 해주세요.",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "번호이동",
@@ -620,8 +640,10 @@
           "maskRe": "",
           "placeholder": "번호이동시 번호이동 번호 필수 기재 입니다",
           "autoDate": "",
+          "mirrorTo": ["번호이동 번호"],
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -649,7 +671,8 @@
           "placeholder": "예금주 자필 성함싸인",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -677,35 +700,8 @@
           "placeholder": "법대 자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
-        },
-        {
-          "id": "자필 성함싸인",
-          "label": "",
-          "type": "text",
-          "x": 28.905359179019385,
-          "y": 90.63386086180316,
-          "w": 30,
-          "required": false,
-          "radioSize": 18,
-          "checkSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "inputHeight": 33,
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 20,
-          "textAlign": "",
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "자필 성함싸인 입니다",
-          "autoDate": "",
-          "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "SK",
@@ -732,7 +728,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "KT",
@@ -759,7 +756,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "LG",
@@ -786,7 +784,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "알뜰",
@@ -813,7 +812,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "알뜰",
@@ -841,7 +841,8 @@
           "placeholder": "MVNO 선택시 기존 통신사 필수 작성",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "동의 합니다 자필 기재",
@@ -869,7 +870,8 @@
           "placeholder": "★동의 합니다 자필 기재 입니다★",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -956,7 +958,124 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "15"
+          "value": "17"
+        },
+        {
+          "id": "판매자성함",
+          "label": "",
+          "type": "text",
+          "x": 53.85266781820487,
+          "y": 29.561114069366024,
+          "w": 10,
+          "required": true,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 22,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 10,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "판매자 성함",
+          "mirrorTo": ["판매자","판매자명"],
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "판매점명",
+          "label": "",
+          "type": "text",
+          "x": 30.729136747472424,
+          "y": 90.29979314197047,
+          "w": 20,
+          "required": true,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 22,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 10,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "판매점명",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "판매점 연락처",
+          "label": "",
+          "type": "text",
+          "x": 45.535624970287145,
+          "y": 91.94970279969576,
+          "w": 15,
+          "required": true,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 22,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 10,
+          "textAlign": "",
+          "mask": "tel",
+          "maskRe": "",
+          "placeholder": "판매점 연락처",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "판매자",
+          "label": "",
+          "type": "text",
+          "x": 28.295263944242837,
+          "y": 92.02054626941685,
+          "w": 15,
+          "required": true,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 20,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 8,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -997,7 +1116,8 @@
           "placeholder": "법대 자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 관계",
@@ -1029,7 +1149,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
@@ -1090,7 +1211,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -1117,7 +1239,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -1144,7 +1267,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -1171,7 +1295,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -1255,7 +1380,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "15"
+          "value": "17"
         },
         {
           "id": "자필 성함싸인",
@@ -1283,7 +1408,8 @@
           "placeholder": "법대 자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "번호이동 번호",
@@ -1311,7 +1437,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "판매자명",
@@ -1339,7 +1466,8 @@
           "placeholder": "판매자 성함",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     }
