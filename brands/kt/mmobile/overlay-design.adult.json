@@ -4,24 +4,40 @@
       "bg": "images/adult-1.jpg",
       "fields": [
         {
-          "id": "text_1760600577497",
+          "id": "연락처",
           "label": "",
           "type": "text",
-          "x": 28,
-          "y": 34.6,
+          "x": 18.877746383219666,
+          "y": 34.752171087749915,
           "w": 18,
           "required": false,
           "radioSize": 18,
           "color": "#000000",
-          "wrap": false,
-          "value": ""
+          "wrap": true,
+          "value": "",
+          "checkSize": 18,
+          "radioGap": 12,
+          "inputHeight": 24,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 12,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         },
         {
           "id": "plan",
           "label": "",
           "type": "select",
-          "x": 7,
-          "y": 25.8,
+          "x": 6.7814275056091375,
+          "y": 25.49155452769306,
           "w": 20,
           "required": true,
           "options": [
@@ -73,12 +89,21 @@
           "radioGap": 12,
           "color": "#000000",
           "wrap": true,
-          "value": "M 스페셜 7GB(밀리의서재)",
           "borderTransparent": true,
           "bgTransparent": true,
           "borderColor": "transparent",
           "borderWidth": 2,
-          "bgColor": "transparent"
+          "bgColor": "transparent",
+          "value": "",
+          "checkSize": 18,
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "요금제 선택",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         },
         {
           "id": "baseFee",
@@ -92,7 +117,6 @@
           "radioGap": 12,
           "color": "#000000",
           "wrap": true,
-          "value": "31000",
           "borderTransparent": true,
           "borderColor": "transparent",
           "borderWidth": 2,
@@ -101,7 +125,8 @@
           "fontSize": 16,
           "mask": "",
           "maskRe": "",
-          "placeholder": ""
+          "placeholder": "",
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -115,7 +140,6 @@
           "radioGap": 12,
           "color": "#000000",
           "wrap": true,
-          "value": "13100",
           "borderTransparent": true,
           "borderColor": "transparent",
           "borderWidth": 2,
@@ -124,7 +148,8 @@
           "fontSize": 16,
           "mask": "",
           "maskRe": "",
-          "placeholder": ""
+          "placeholder": "",
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -138,7 +163,6 @@
           "radioGap": 12,
           "color": "#000000",
           "wrap": true,
-          "value": "17900",
           "borderTransparent": true,
           "borderColor": "transparent",
           "borderWidth": 2,
@@ -147,7 +171,8 @@
           "fontSize": 16,
           "mask": "",
           "maskRe": "",
-          "placeholder": ""
+          "placeholder": "",
+          "value": ""
         },
         {
           "id": "코드",
@@ -167,11 +192,11 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": "",
           "fontSize": 14,
           "mask": "custom",
           "maskRe": "",
-          "placeholder": "판매점이름"
+          "placeholder": "판매점이름",
+          "value": ""
         },
         {
           "id": "상담사",
@@ -191,12 +216,12 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": "",
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
           "placeholder": "상담사성함",
-          "lockInput": false
+          "lockInput": false,
+          "value": ""
         },
         {
           "id": "연락처",
@@ -216,12 +241,12 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": "",
           "fontSize": 14,
           "mask": "number",
           "maskRe": "",
           "placeholder": "판매점 연락처",
-          "lockInput": false
+          "lockInput": false,
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -240,18 +265,18 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": "17900",
           "fontSize": 18,
           "mask": "",
           "maskRe": "",
-          "placeholder": ""
+          "placeholder": "",
+          "value": ""
         },
         {
           "id": "이름",
           "label": "",
           "type": "textarea",
-          "x": 18.91891891891892,
-          "y": 33.27871544703309,
+          "x": 18.373513817139997,
+          "y": 32.43215432781842,
           "w": 18,
           "required": true,
           "radioSize": 18,
@@ -264,19 +289,19 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": "",
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
           "placeholder": "고객 성함",
-          "lockInput": false
+          "lockInput": false,
+          "value": ""
         },
         {
           "id": "주민번호",
           "label": "",
           "type": "textarea",
-          "x": 53.58108108108108,
-          "y": 33.32649054575585,
+          "x": 53.2552613497557,
+          "y": 32.328351274069675,
           "w": 17,
           "required": true,
           "radioSize": 15,
@@ -288,12 +313,18 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": "",
-          "fontSize": 14,
+          "fontSize": 12,
           "mask": "number",
           "maskRe": "",
           "placeholder": "생년월일",
-          "lockInput": false
+          "lockInput": false,
+          "value": "",
+          "checkSize": 15,
+          "inputHeight": 24,
+          "textAlign": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         },
         {
           "id": "남",
@@ -312,14 +343,14 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": false,
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
           "placeholder": "",
           "lockInput": false,
           "autoDate": "",
-          "locked": false
+          "locked": false,
+          "value": false
         },
         {
           "id": "여",
@@ -338,21 +369,21 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "value": false,
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
           "placeholder": "",
           "lockInput": false,
           "autoDate": "",
-          "locked": false
+          "locked": false,
+          "value": false
         },
         {
           "id": "text_1761296387352",
           "label": "",
           "type": "text",
-          "x": 29.52273702273703,
-          "y": 52.98673612928448,
+          "x": 28.327655274497825,
+          "y": 50.91363837083419,
           "w": 30,
           "required": false,
           "radioSize": 18,
@@ -368,10 +399,10 @@
           "mask": "hangul",
           "maskRe": "",
           "placeholder": "예금주성함 자필 성함싸인 필수",
-          "value": "",
           "align": "left",
           "locked": true,
-          "lockInput": true
+          "lockInput": true,
+          "value": ""
         },
         {
           "id": "checkbox_1761542532315",
@@ -407,7 +438,7 @@
           "radioSize": 15,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 18,
+          "inputHeight": 22,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -418,7 +449,12 @@
           "mask": "hangul",
           "maskRe": "",
           "placeholder": "은행/카드사명",
-          "value": ""
+          "value": "",
+          "checkSize": 15,
+          "textAlign": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         },
         {
           "id": "카드/계좌",
@@ -448,14 +484,14 @@
           "id": "text_1761545998838",
           "label": "",
           "type": "text",
-          "x": 73.18339263552708,
-          "y": 47.71652590904271,
+          "x": 73.18292839389929,
+          "y": 47.71648744673258,
           "w": 23,
           "required": false,
           "radioSize": 18,
           "radioGap": 12,
           "color": "#ff0000",
-          "inputHeight": 10,
+          "inputHeight": 22,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -467,17 +503,19 @@
           "maskRe": "",
           "placeholder": "카드 납부시 유효 기간 필수 입력",
           "lockInput": true,
-          "value": "",
           "autoDate": "",
-          "locked": false,
-          "lockOnPh": false
+          "locked": true,
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
           "id": "유효기간/년",
           "label": "",
           "type": "text",
-          "x": 83.67935646554187,
-          "y": 46.41,
+          "x": 83.56926966697205,
+          "y": 44.49015846026048,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -495,17 +533,17 @@
           "maskRe": "",
           "placeholder": "",
           "lockInput": false,
-          "value": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "유효기간/월",
           "label": "",
           "type": "text",
-          "x": 86.67820327411751,
-          "y": 46.41,
+          "x": 87.32955220209013,
+          "y": 44.41338740294909,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -523,17 +561,17 @@
           "maskRe": "",
           "placeholder": "",
           "lockInput": false,
-          "value": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "text_1761546544355",
           "label": "",
           "type": "text",
-          "x": 18.28142798621915,
-          "y": 38.41952425300235,
+          "x": 18.389544657853214,
+          "y": 37.4957430111348,
           "w": 75,
           "required": false,
           "radioSize": 18,
@@ -545,12 +583,18 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 14,
+          "fontSize": 12,
           "mask": "hangul",
           "maskRe": "",
           "placeholder": "고객 주소",
           "lockInput": false,
-          "value": ""
+          "value": "",
+          "checkSize": 18,
+          "inputHeight": 24,
+          "textAlign": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         },
         {
           "id": "text_1761553468807",
@@ -575,15 +619,15 @@
           "placeholder": "",
           "autoDate": "year",
           "locked": false,
-          "value": "2025",
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "2025"
         },
         {
           "id": "bundleAny",
           "label": "",
           "type": "checkbox",
-          "x": 25.54786448392166,
-          "y": 56.768869626766225,
+          "x": 25.979670587761266,
+          "y": 54.68327346840242,
           "w": 5,
           "required": true,
           "radioSize": 18,
@@ -601,7 +645,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "value": true
+          "value": false
         },
         {
           "id": "extraData",
@@ -627,8 +671,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": true,
-          "value": "아무나 결합 +5GB",
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "카드",
@@ -659,8 +703,8 @@
           "id": "부가서비스",
           "label": "",
           "type": "select",
-          "x": 22,
-          "y": 57.5,
+          "x": 54.68163174474925,
+          "y": 53.73742067990368,
           "w": 30,
           "required": true,
           "options": [
@@ -682,8 +726,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "value": "캐치콜플러스  880원",
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "월",
@@ -709,7 +753,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "10"
+          "value": "12"
         },
         {
           "id": "일",
@@ -735,14 +779,14 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "28"
+          "value": "18"
         },
         {
           "id": "예금주 생년월일",
           "label": "",
           "type": "text",
-          "x": 69.3771639938734,
-          "y": 53.09900055201344,
+          "x": 70.13558419856135,
+          "y": 50.48759742577048,
           "w": 25,
           "required": false,
           "radioSize": 18,
@@ -817,38 +861,11 @@
           "value": ""
         },
         {
-          "id": "유심비",
-          "label": "",
-          "type": "radio",
-          "x": 29.5,
-          "y": 69.8,
-          "w": 20,
-          "required": true,
-          "options": [],
-          "radioSize": 10,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": false,
-          "borderColor": "#000000",
-          "borderWidth": 2,
-          "bgTransparent": false,
-          "bgColor": "#000000",
-          "fontSize": 14,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
-          "value": ""
-        },
-        {
           "id": "번호이동",
           "label": "",
           "type": "text",
-          "x": 24.971163174580205,
-          "y": 71.7745565101998,
+          "x": 25.730513283794785,
+          "y": 72.08086301464348,
           "w": 30,
           "required": false,
           "radioSize": 18,
@@ -998,6 +1015,206 @@
           "locked": true,
           "lockOnPh": true,
           "value": ""
+        },
+        {
+          "id": "가입비 일시납",
+          "label": "",
+          "type": "checkbox",
+          "x": 65.6232421742459,
+          "y": 70.66158714414665,
+          "w": 5,
+          "required": false,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "가입비 분납",
+          "label": "",
+          "type": "checkbox",
+          "x": 73.63501268152824,
+          "y": 70.61286957317091,
+          "w": 5,
+          "required": false,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "유심 번호",
+          "label": "",
+          "type": "text",
+          "x": 63.463626492942446,
+          "y": 65.12320480178973,
+          "w": 30,
+          "required": true,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 24,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 12,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "유심번호 입력",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "IMEI 1",
+          "label": "",
+          "type": "text",
+          "x": 25.460205740830276,
+          "y": 66.81097788633686,
+          "w": 24.67969598262758,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 18,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 6,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "eSIM 개통시 필수 입력 값입니다",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "IMEI 2",
+          "label": "",
+          "type": "text",
+          "x": 25.4614549402823,
+          "y": 67.96373392231129,
+          "w": 25.00542888165038,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 18,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 6,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "eSIM 개통시 필수 입력 값입니다",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "EID",
+          "label": "",
+          "type": "text",
+          "x": 63.57220412595005,
+          "y": 67.7334207503771,
+          "w": 30,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 18,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 6,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "eSIM 개통시 필수 입력 값입니다",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "eSIM",
+          "label": "",
+          "type": "checkbox",
+          "x": 88.97533437457587,
+          "y": 63.71629926767609,
+          "w": 5,
+          "required": false,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1082,8 +1299,7 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true,
-          "value": ""
+          "locked": true
         },
         {
           "id": "성함,싸인 자필기재",
@@ -1192,7 +1408,6 @@
           "placeholder": "미결합 요금제 상관없이 필수 첨부 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "value": "",
           "lockOnPh": false
         }
       ]
@@ -1223,8 +1438,7 @@
           "placeholder": "미성년자 가입시 필수 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
@@ -1254,8 +1468,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": "31000"
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -1280,8 +1493,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": "13100"
+          "lockOnPh": false
         },
         {
           "id": "totalFee",
@@ -1291,7 +1503,6 @@
           "y": 28.14389084369458,
           "w": 10,
           "required": false,
-          "value": "17900",
           "radioSize": 18,
           "radioGap": 12,
           "color": "#000000",
@@ -1317,7 +1528,6 @@
           "y": 32.13997050286982,
           "w": 10,
           "required": false,
-          "value": "17900",
           "radioSize": 18,
           "radioGap": 12,
           "color": "#000000",
@@ -1358,8 +1568,7 @@
           "placeholder": "0원",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "planEcho",
@@ -1385,7 +1594,7 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "M 스페셜 7GB(밀리의서재)"
+          "value": ""
         },
         {
           "id": "가입자",
@@ -1410,8 +1619,7 @@
           "placeholder": "가입자기준으로 성함 작성",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "상담사",
@@ -1436,8 +1644,7 @@
           "placeholder": "상담사 성함",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "번호이동 번호",
@@ -1462,8 +1669,7 @@
           "placeholder": "번호이동 하신 번호 작성 해주세요",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "성함,싸인 자필기재",

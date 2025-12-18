@@ -1846,7 +1846,7 @@ function computeExtraDataText(){
   const planName = getSelectedPlanName();
   const info = PLANS_MAP.get(planName);
   if (info && info.extraDataGb){
-    const token = info.bundleAnyone ? `아무나 결합 +${info.extraDataGb}GB` : `추가 데이터 +${info.extraDataGb}GB`;
+    const token = info.bundleAnyone ? `아무나 결합 +${info.extraDataGb}GB` : ` +${info.extraDataGb}GB`;
     pick.push(token);
   }
 
