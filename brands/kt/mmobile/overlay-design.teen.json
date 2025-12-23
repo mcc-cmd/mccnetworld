@@ -660,13 +660,13 @@
           "value": "2025"
         },
         {
-          "id": "bundleAny",
+          "id": "결합",
           "label": "",
           "type": "checkbox",
           "x": 25.979670587761266,
           "y": 54.68327346840242,
           "w": 5,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "radioGap": 12,
           "color": "#000000",
@@ -682,14 +682,17 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "value": false
+          "value": false,
+          "checkSize": 18,
+          "textAlign": "",
+          "lockOnPh": false
         },
         {
           "id": "extraData",
           "label": "",
           "type": "text",
-          "x": 60.05422652220752,
-          "y": 53.620253914274315,
+          "x": 60.05393990334251,
+          "y": 53.53843152780363,
           "w": 30,
           "required": false,
           "radioSize": 18,
@@ -702,14 +705,16 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 12,
+          "fontSize": 10,
           "mask": "",
           "maskRe": "",
           "placeholder": "",
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": ""
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
           "id": "카드",
@@ -816,7 +821,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "18"
+          "value": "23"
         },
         {
           "id": "예금주 생년월일",
@@ -868,33 +873,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": true,
-          "value": ""
-        },
-        {
-          "id": "가입비",
-          "label": "",
-          "type": "radio",
-          "x": 63.3,
-          "y": 69.8,
-          "w": 15,
-          "required": true,
-          "options": [],
-          "radioSize": 10,
-          "radioGap": 34,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 14,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
           "value": ""
         },
         {
@@ -1345,8 +1323,7 @@
           "placeholder": "법대 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1371,8 +1348,7 @@
           "placeholder": "법대 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
@@ -1402,8 +1378,7 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true,
-          "value": ""
+          "locked": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1428,8 +1403,7 @@
           "placeholder": "법대 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1454,8 +1428,7 @@
           "placeholder": "법대 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1480,8 +1453,7 @@
           "placeholder": "법대 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
@@ -1515,8 +1487,7 @@
           "placeholder": "미결합 요금제 상관없이 필수 첨부 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     },
@@ -1531,7 +1502,6 @@
           "y": 77.4065739716127,
           "w": 20,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1560,8 +1530,10 @@
           "y": 77.25303185698992,
           "w": 10,
           "required": true,
-          "options": ["부","모"],
-          "value": "",
+          "options": [
+            "부",
+            "모"
+          ],
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1590,7 +1562,6 @@
           "y": 79.24798288545219,
           "w": 17.17698154180239,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1619,7 +1590,6 @@
           "y": 81.0148136652482,
           "w": 30,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1647,7 +1617,6 @@
           "y": 79.24907934708615,
           "w": 20,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1676,7 +1645,6 @@
           "y": 81.55007437196177,
           "w": 22.942453854505974,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1705,7 +1673,6 @@
           "y": 92.68303037254955,
           "w": 25,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,

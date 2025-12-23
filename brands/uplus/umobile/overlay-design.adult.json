@@ -789,32 +789,33 @@
           "lockOnPh": false,
           "value": false
         },
-{
-  "id": "mvnoCheck",
-  "label": "",
-  "type": "checkbox",
-  "x": 81.63224349882732,
-  "y": 73.2069699889975,
-  "w": 5,
-  "checkSize": 20,
-  "borderTransparent": true,
-  "borderColor": "transparent",
-  "bgTransparent": true,
-  "bgColor": "transparent"
-},
-{
-  "id": "mvnoHint",
-  "label": "",
-  "type": "text",
-  "x": 72.80501710376282,
-  "y": 70.47817591051191,
-  "w": 22,
-  "inputHeight": 23,
-  "fontSize": 10,
-  "placeholder": "MVNO 선택시 기존 통신사 필수 작성",
-  "locked": true
-},
-
+        {
+          "id": "mvnoCheck",
+          "label": "",
+          "type": "checkbox",
+          "x": 81.63224349882732,
+          "y": 73.2069699889975,
+          "w": 5,
+          "checkSize": 20,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "value": false
+        },
+        {
+          "id": "mvnoHint",
+          "label": "",
+          "type": "text",
+          "x": 72.80501710376282,
+          "y": 70.47817591051191,
+          "w": 22,
+          "inputHeight": 23,
+          "fontSize": 10,
+          "placeholder": "MVNO 선택시 기존 통신사 필수 작성",
+          "locked": true,
+          "value": ""
+        },
         {
           "id": "text_1765783977667",
           "label": "",
@@ -899,7 +900,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "17"
+          "value": "23"
         },
         {
           "id": "판매자 성함",
@@ -999,7 +1000,7 @@
           "x": 28.19411643378391,
           "y": 91.51819052490258,
           "w": 15.375253549695742,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1017,9 +1018,6 @@
           "maskRe": "",
           "placeholder": "",
           "autoDate": "",
-          "mirrorTo": [
-            "판매자 성함"
-          ],
           "locked": false,
           "lockOnPh": false,
           "value": ""
@@ -1293,7 +1291,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "17"
+          "value": "23"
         },
         {
           "id": "자필 성함싸인",
@@ -1331,7 +1329,7 @@
           "x": 12.341834379057312,
           "y": 85.95524265632169,
           "w": 13.485714740114766,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1360,10 +1358,10 @@
           "id": "개통번호",
           "label": "",
           "type": "text",
-          "x": 75.71068110277056,
-          "y": 81.59268941093634,
+          "x": 75.70871187945635,
+          "y": 81.59268104842387,
           "w": 18.68571507493617,
-          "required": true,
+          "required": false,
           "inputHeight": 29,
           "radioSize": 18,
           "checkSize": 18,

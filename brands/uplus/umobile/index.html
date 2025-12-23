@@ -123,23 +123,11 @@
     border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000);
     position:relative;vertical-align:middle;display:inline-block;box-sizing:border-box;
   }
-.field.checkbox input{
-  width:var(--cksize,16px);
-  height:var(--cksize,16px);
-  border-radius:3px;
-  display:inline-grid;
-  place-items:center;
-}
-
-.field.checkbox input:checked::after{
-  content:"";
-  width:calc(var(--cksize,16px) * 0.45);
-  height:calc(var(--cksize,16px) * 0.75);
-  border-right:2px solid #000;
-  border-bottom:2px solid #000;
-  transform:rotate(45deg);
-  margin-top:-1px; /* 살짝 위로 */
-}
+  .field.checkbox input{width:var(--cksize,18px);height:var(--cksize,18px);border-radius:2px;}
+  .field.checkbox input:checked::after{
+    content:"";position:absolute;left:3px;top:0px;width:calc(var(--cksize,18px) - 6px);height:calc(var(--cksize,18px) - 6px);
+    border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg) translateY(-2px);
+  }
   .field.checkbox .label{top:0;left:24px}
   .field.radio{white-space:nowrap}
   .field.radio .radio-item{display:inline-flex;align-items:center;gap:6px;margin-right:var(--rgap,12px)}
