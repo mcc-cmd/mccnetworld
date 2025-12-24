@@ -239,7 +239,7 @@
           "maskRe": "",
           "placeholder": "상담사성함",
           "mirrorTo": [
-            "상담사"
+            "개통상담사"
           ],
           "lockInput": false,
           "value": ""
@@ -320,6 +320,9 @@
           "mask": "",
           "maskRe": "",
           "placeholder": "고객 성함",
+          "mirrorTo": [
+            "가입자"
+          ],
           "lockInput": false,
           "value": ""
         },
@@ -796,7 +799,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "예금주 생년월일",
@@ -820,16 +823,18 @@
           "maskRe": "",
           "placeholder": "예금주 생년월일 자필기재",
           "autoDate": "",
-          "locked": false,
-          "lockOnPh": true,
-          "value": ""
+          "locked": true,
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
           "id": "성함싸인",
           "label": "",
           "type": "text",
-          "x": 71.2595173491564,
-          "y": 91.91806009828727,
+          "x": 71.37265247321952,
+          "y": 91.91687148609616,
           "w": 25,
           "required": false,
           "radioSize": 18,
@@ -844,18 +849,20 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
           "id": "번호이동",
           "label": "",
           "type": "text",
-          "x": 25.730513283794785,
-          "y": 72.08086301464348,
+          "x": 25.84544572061057,
+          "y": 72.08000462445291,
           "w": 30,
           "required": false,
           "radioSize": 18,
@@ -1276,11 +1283,11 @@
       "bg": "images/adult-2.jpg",
       "fields": [
         {
-          "id": "법대 성함,싸인 자필기재",
+          "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 65.80161587595627,
-          "y": 10.528519284881252,
+          "x": 67.41149920524366,
+          "y": 10.446049141963353,
           "w": 25,
           "required": false,
           "radioSize": 18,
@@ -1295,14 +1302,16 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
-          "id": "법대 성함,싸인 자필기재",
+          "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
           "x": 71.68396923123927,
@@ -1321,11 +1330,13 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         }
       ]
     },
@@ -1359,7 +1370,7 @@
           "value": ""
         },
         {
-          "id": "법대 성함,싸인 자필기재",
+          "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
           "x": 73.76009394486857,
@@ -1378,14 +1389,16 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
-          "id": "법대 성함,싸인 자필기재",
+          "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
           "x": 73.76009394486857,
@@ -1404,18 +1417,20 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         },
         {
-          "id": "법대 성함,싸인 자필기재",
+          "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 73.76009394486857,
-          "y": 66.1474239289122,
+          "x": 73.75974499246612,
+          "y": 66.14606974143786,
           "w": 25,
           "required": false,
           "radioSize": 18,
@@ -1430,11 +1445,13 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": false,
+          "value": "",
+          "checkSize": 18,
+          "textAlign": ""
         }
       ]
     },
@@ -1609,8 +1626,8 @@
           "id": "가입자",
           "label": "",
           "type": "text",
-          "x": 65.91695613782458,
-          "y": 88.16663837742887,
+          "x": 65.91660856387097,
+          "y": 88.16553237126968,
           "w": 25,
           "required": false,
           "radioSize": 18,
@@ -1625,18 +1642,20 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "가입자기준으로 성함 작성",
+          "placeholder": "",
           "autoDate": "",
           "locked": true,
           "lockOnPh": true,
+          "checkSize": 18,
+          "textAlign": "",
           "value": ""
         },
         {
-          "id": "상담사",
+          "id": "개통상담사",
           "label": "",
           "type": "text",
-          "x": 25.086503436448492,
-          "y": 84.73319930373631,
+          "x": 25.199726823797413,
+          "y": 84.73294877008027,
           "w": 19.03365906623236,
           "required": false,
           "radioSize": 18,
@@ -1653,8 +1672,8 @@
           "maskRe": "",
           "placeholder": "상담사 성함",
           "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
+          "locked": true,
+          "lockOnPh": true,
           "checkSize": 18,
           "inputHeight": 24,
           "textAlign": "",
@@ -1687,11 +1706,11 @@
           "value": ""
         },
         {
-          "id": "법대 성함,싸인 자필기재",
+          "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 70.29988608881975,
-          "y": 91.91806009828727,
+          "x": 70.29884116792203,
+          "y": 91.83550654147537,
           "w": 25,
           "required": false,
           "radioSize": 18,
@@ -1706,10 +1725,12 @@
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 성함,싸인 자필기재",
+          "placeholder": "성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
+          "lockOnPh": false,
+          "checkSize": 18,
+          "textAlign": "",
           "value": ""
         }
       ]

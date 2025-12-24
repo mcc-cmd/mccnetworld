@@ -67,36 +67,6 @@
           "value": ""
         },
         {
-          "id": "신규/번이",
-          "label": "",
-          "type": "radio",
-          "x": 73.25298109926692,
-          "y": 9.12459971303975,
-          "w": 15,
-          "required": false,
-          "options": [],
-          "radioSize": 15,
-          "radioGap": 18,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 18,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
-          "checkSize": 15,
-          "inputHeight": 10,
-          "textAlign": "",
-          "value": ""
-        },
-        {
           "id": "baseFee",
           "label": "",
           "type": "text",
@@ -245,8 +215,8 @@
           "id": "명의자 생년월일",
           "label": "",
           "type": "text",
-          "x": 67.90193842645382,
-          "y": 41.5,
+          "x": 67.90101657592517,
+          "y": 41.499977950417836,
           "w": 25,
           "required": true,
           "radioSize": 10,
@@ -266,8 +236,9 @@
           "locked": false,
           "lockOnPh": false,
           "inputHeight": 10,
-          "checkSize": 18,
-          "value": ""
+          "checkSize": 10,
+          "value": "",
+          "textAlign": ""
         },
         {
           "id": "명의자 주소",
@@ -900,7 +871,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "판매자 성함",
@@ -1050,6 +1021,37 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "신규/번이",
+          "label": "",
+          "type": "radio",
+          "x": 57.93584454002638,
+          "y": 8.336594420184387,
+          "w": 16.99654866935291,
+          "required": true,
+          "options": [],
+          "radioSize": 20,
+          "radioGap": 5,
+          "value": "",
+          "radioStyle": "tick",
+          "checkSize": 20,
+          "color": "#000000",
+          "inputHeight": 17,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1122,8 +1124,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -1150,8 +1151,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "baseFee",
@@ -1178,8 +1178,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "baseFee",
@@ -1206,8 +1205,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "년",
@@ -1291,7 +1289,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "자필 성함싸인",
@@ -1319,8 +1317,7 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "판매직원명",
@@ -1346,13 +1343,9 @@
           "mask": "",
           "maskRe": "",
           "placeholder": "판매자  입력",
-          "mirrorTo": [
-            "판매자 성함"
-          ],
-          "autoDate": "",
+            "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "개통번호",
@@ -1380,8 +1373,7 @@
           "placeholder": "개통번호 입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     }
