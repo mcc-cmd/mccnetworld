@@ -323,7 +323,28 @@
   #printAll .field.radio .radio-item span{display:inline !important;color:#000 !important}
   #printAll .field select{display:none !important}
   #printAll .field .print-value{display:block !important;color:#000 !important}
+  #printAll .field .print-value{
+    position:absolute !important;
+    inset:0 !important;                 /* field 영역을 꽉 채움 */
+    padding:0 6px !important;           /* 화면과 동일 */
+    height:var(--ih, 28px) !important;
+    line-height:var(--ih, 28px) !important;
+    font:600 var(--fs,14px)/1.2 system-ui !important;
+    color:#000 !important;
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    text-align:var(--ta, left) !important;
+  }
+  /* label이 select 영역에 영향을 주는 경우 방지(필요시) */
+  #printAll .field .label{ display:none !important; }
+  @media print{
+  /* ✅ select 숨기는 필드가 높이 0으로 접히지 않게 */
+  #printAll .field{ min-height: var(--ih, 28px) !important; }
 
+  /* ✅ textarea는 자동 높이 유지 */
+  #printAll .field textarea{ min-height: 5px !important; }
+}
 
   #printAll textarea{
     height:auto !important;
@@ -2038,6 +2059,9 @@ if (f.type === 'radio') {
 
       ctrl.value = f.value ?? '';
       if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+        // ✅ 여기 추가
+  w.style.height = (f.inputHeight ?? 28) + 'px';
+  w.style.setProperty('--ih', (f.inputHeight ?? 28) + 'px');
 
       const pv = document.createElement('div');
       pv.className = 'print-value';
