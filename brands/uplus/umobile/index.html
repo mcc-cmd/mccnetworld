@@ -131,7 +131,6 @@
   border-radius:999px;
   background:#000;
 }
-
 .field.radio.rd-solid input[type="checkbox"]:checked::after{
   content:"";
   position:absolute;
@@ -139,7 +138,6 @@
   border-radius:999px;
   background:#000;
 }
-
 /* ✓ 체크 표시 (동그라미 안에 체크) */
 .field.radio.rd-tick input[type="checkbox"]:checked::after{
   content:"";
@@ -168,7 +166,6 @@
   border-bottom:2px solid #000;
   transform:rotate(45deg) translateY(-2px);
 }
-
 /* ✅ PRINT: checkbox solid */
 .field.checkbox.ck-solid input:checked::after{
   content:"";
@@ -178,7 +175,6 @@
   border:none;
   transform:none;
 }
-
 /* ✅ PRINT: checkbox dot */
 .field.checkbox.ck-dot input:checked::after{
   content:"";
@@ -196,40 +192,17 @@
   .field.checkbox .label{top:0;left:24px}
   /* ===== radio 개선 ===== */
   .field.radio{
-    white-space: normal;            /* ✅ nowrap 제거 */
+    white-space: normal;
   }
 
   .field.radio > div{
     display:flex;
-    flex-wrap:wrap;                 /* ✅ 폭 줄이면 자동 줄바꿈 */
+    flex-wrap:wrap;
     gap: var(--rgap,12px);
     align-items:center;
-    max-width:100%;   /* ✅ field 폭 제한 */
+    max-width:100%;
   }
 
-.field.radio .radio-item{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-
-  padding:2px 6px;          /* ✅ 내부 여백 축소 */
-  border-radius:8px;
-  background:transparent;
-  border:1px solid rgba(0,0,0,.25);
-
-  flex:0 1 auto;            /* ✅ 줄어들 수 있게 */
-  max-width:100%;           /* ✅ field 폭 초과 금지 */
-}
-
-.field.radio .radio-item span{
-  display:inline;
-  font-weight:700;
-  color:#000;
-
-  white-space:normal;       /* ✅ 줄바꿈 허용 */
-  word-break:keep-all;
-}
-/* ===== radio-item(겉 테두리) / 텍스트 표시 제어 ===== */
 .field.radio .radio-item{
   display:inline-flex;
   align-items:center;
@@ -237,45 +210,25 @@
 
   padding:2px 6px;
   border-radius:8px;
+  background:transparent;
 
-  /* ✅ 기존 고정 border 제거 → 변수로 */
   border: var(--rbw,1px) solid var(--rbc, rgba(0,0,0,.25));
-  background: var(--rbg, transparent);
 
   flex:0 1 auto;
   max-width:100%;
 }
 
+.field.radio .radio-item span{
+  display:inline;
+  font-weight:700;
+  color:#000;
+
+  white-space:normal;
+  word-break:keep-all;
+}
 .field.radio.noText .radio-item span{
-  display:none !important; /* ✅ 1,2 표기 숨김 */
+  display:none !important;
 }
-
-
-  /* ===== 체크 스타일 변형(tick/solid/dot) ===== */
-.field.checkbox.ck-solid input:checked::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  background:#000;
-  border:none;
-  transform:none;
-}
-
-.field.checkbox.ck-dot input:checked::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:calc(var(--cksize,18px) * 0.45);
-  height:calc(var(--cksize,18px) * 0.45);
-  background:#000;
-  border-radius:999px;
-  transform:translate(-50%,-50%);
-  border:none;
-}
-
-/* tick은 기존 스타일 그대로 사용 */
-
 
   .sel{outline:3px solid #00d2ff66;border-radius:8px}
 
@@ -300,11 +253,11 @@
   #printAll{display:none}
   .print-value{display:none;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui}
 
-    /* ✅ PRINT: radio (원형 유지) */
+  /* ✅ PRINT: radio (원형 유지) */
   .field.radio input[type="checkbox"]{
     width:var(--rsize,18px) !important;
     height:var(--rsize,18px) !important;
-    border-radius:999px !important; /* ← 원형 */
+    border-radius:999px !important;
   }
 
 @media print{
@@ -325,8 +278,8 @@
   #printAll .field .print-value{display:block !important;color:#000 !important}
   #printAll .field .print-value{
     position:absolute !important;
-    inset:0 !important;                 /* field 영역을 꽉 채움 */
-    padding:0 6px !important;           /* 화면과 동일 */
+    inset:0 !important;
+    padding:0 6px !important;
     height:var(--ih, 28px) !important;
     line-height:var(--ih, 28px) !important;
     font:600 var(--fs,14px)/1.2 system-ui !important;
@@ -336,15 +289,9 @@
     overflow-wrap:anywhere;
     text-align:var(--ta, left) !important;
   }
-  /* label이 select 영역에 영향을 주는 경우 방지(필요시) */
   #printAll .field .label{ display:none !important; }
-  @media print{
-  /* ✅ select 숨기는 필드가 높이 0으로 접히지 않게 */
   #printAll .field{ min-height: var(--ih, 28px) !important; }
-
-  /* ✅ textarea는 자동 높이 유지 */
   #printAll .field textarea{ min-height: 5px !important; }
-}
 
   #printAll textarea{
     height:auto !important;
@@ -367,7 +314,6 @@
     border-radius:2px !important
   }
 
-  /* ✅ PRINT: checkbox tick 기본 */
   .field.checkbox.ck-tick input:checked::after,
   .field.checkbox:not(.ck-solid):not(.ck-dot) input:checked::after{
     content:"";
@@ -381,7 +327,6 @@
     transform:rotate(45deg) translateY(-2px);
   }
 
-  /* ✅ PRINT: checkbox solid */
   .field.checkbox.ck-solid input:checked::after{
     content:"";
     position:absolute;
@@ -391,7 +336,6 @@
     transform:none;
   }
 
-  /* ✅ PRINT: checkbox dot */
   .field.checkbox.ck-dot input:checked::after{
     content:"";
     position:absolute;
@@ -407,41 +351,36 @@
 
   .env-badge{display:none !important;}
 
+  .field.radio.rd-dot input[type="checkbox"]:checked::after{
+    content:"";
+    position:absolute;
+    inset:3px;
+    border-radius:999px;
+    background:#000;
+  }
 
-/* PRINT: radio dot */
-.field.radio.rd-dot input[type="checkbox"]:checked::after{
-  content:"";
-  position:absolute;
-  inset:3px;
-  border-radius:999px;
-  background:#000;
-}
+  .field.radio.rd-solid input[type="checkbox"]:checked::after{
+    content:"";
+    position:absolute;
+    inset:2px;
+    border-radius:999px;
+    background:#000;
+  }
 
-/* PRINT: radio solid */
-.field.radio.rd-solid input[type="checkbox"]:checked::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-radius:999px;
-  background:#000;
-}
-
-/* PRINT: radio tick */
-.field.radio.rd-tick input[type="checkbox"]:checked::after{
-  content:"";
-  position:absolute;
-  left:5px;
-  top:2px;
-  width:calc(var(--rsize,18px) - 10px);
-  height:calc(var(--rsize,18px) - 10px);
-  border-right:2px solid #000;
-  border-bottom:2px solid #000;
-  transform:rotate(45deg);
-}
+  .field.radio.rd-tick input[type="checkbox"]:checked::after{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:2px;
+    width:calc(var(--rsize,18px) - 10px);
+    height:calc(var(--rsize,18px) - 10px);
+    border-right:2px solid #000;
+    border-bottom:2px solid #000;
+    transform:rotate(45deg);
+  }
 
   .field.checkbox .label{top:0;left:24px}
 }
-
 
   .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
   #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
@@ -478,56 +417,53 @@
     margin-right: 4px;
     font-size: 14px;
   }
-  /* 계약서 이미지가 로드되기 전에는 숨김 */
-#paperImg { visibility: hidden; }
-#paperImg.ready { visibility: visible; }
 
+  /* ✅ 계약서(bg) 이미지가 로드되기 전에는 숨김 */
+  #bg { visibility: hidden; }
+  #bg.ready { visibility: visible; }
+
+  /* (선택) 로딩 중 표시를 위해 paper 전체를 숨기고 싶으면 */
+  #paper { visibility: hidden; }
+  #paper.ready { visibility: visible; }
 </style>
 
 <script>
+/* ✅ HEAD: 환경 뱃지/타이틀/파비콘/모드만 담당 (배경 변경은 render/createPrintDOM에서만) */
 (function(){
   const host = location.hostname;
   const IS_LOCAL   = /^(localhost|127\.0\.0\.1)$/i.test(host);
   const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
+
   document.documentElement.classList.toggle('is-staging', IS_STAGING);
   document.documentElement.classList.toggle('is-prod', !IS_STAGING);
 
-  const fav = document.querySelector('link[rel="icon"][sizes="32x32"]') || document.querySelector('link[rel="icon"]');
-  if (IS_STAGING) {
-    document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/,'');
-    if (fav) fav.href = '/favicon-32x32.png?v=stg';
-    const b = document.createElement('div');
-    b.className = 'env-badge';
-    b.textContent = 'STAGING (개발/테스트)';
-    window.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(b));
-    setPaperImageSafely('./cancel-1.jpg');
-  } else {
-    document.title = document.title.replace(/^STAGING ·\s*/,'');
-    if (fav) fav.href = '/favicon-32x32.png?v=prod';
-    const url = new URL(location.href);
-    if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
-  }
-  const imgEl = document.getElementById('paperImg'); // 계약서 이미지 id
+  const fav =
+    document.querySelector('link[rel="icon"][sizes="32x32"]') ||
+    document.querySelector('link[rel="icon"]');
 
-function setPaperImageSafely(src){
-  imgEl.classList.remove('ready');     // 숨김 상태
-  imgEl.removeAttribute('src');        // ✅ 빈 src로 깨짐 방지 (중요)
+  window.addEventListener('DOMContentLoaded', () => {
+    if (IS_STAGING) {
+      document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/, '');
+      if (fav) fav.href = '/favicon-32x32.png?v=stg';
 
-  const pre = new Image();
-  pre.onload = () => {
-    imgEl.src = src;                  // 로드 성공한 것만 세팅
-    imgEl.classList.add('ready');     // 표시
-  };
-  pre.onerror = () => {
-    // 로드 실패 시도 표시(선택)
-    imgEl.classList.add('ready');
-    imgEl.alt = '이미지 로드 실패(경로 확인 필요)';
-  };
-  pre.src = src;                      // 프리로드 시작
-}
+      const b = document.createElement('div');
+      b.className = 'env-badge';
+      b.textContent = 'STAGING (개발/테스트)';
+      document.body.appendChild(b);
+    } else {
+      document.title = document.title.replace(/^STAGING ·\s*/, '');
+      if (fav) fav.href = '/favicon-32x32.png?v=prod';
 
+      const url = new URL(location.href);
+      if (!url.searchParams.has('mode')) {
+        url.searchParams.set('mode','fill');
+        history.replaceState(null,'',url.toString());
+      }
+    }
+  });
 })();
 </script>
+
 </head>
 
 <body>
@@ -620,11 +556,11 @@ function setPaperImageSafely(src){
         <div class="row"><div>라디오 크기(px)</div><input id="p_radioSize" type="number" min="10" max="32" step="1" placeholder="18"></div>
         <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="60" step="1" placeholder="12"></div>
         <div class="row" id="row_checkStyle">
-        <div>체크 스타일</div>
-        <select id="p_checkStyle">
-        <option value="tick">✓ 체크</option>
-        <option value="solid">■ 꽉찬</option>
-        <option value="dot">● 점</option>
+          <div>체크 스타일</div>
+          <select id="p_checkStyle">
+            <option value="tick">✓ 체크</option>
+            <option value="solid">■ 꽉찬</option>
+            <option value="dot">● 점</option>
           </select>
         </div>
 
@@ -725,19 +661,25 @@ function setPaperImageSafely(src){
 const valuesById = Object.create(null);
 const elById = Object.create(null);
 
+/* ✅ STAGING 판정(한 번만) + 배경 결정(한 함수로 통일) */
+const __HOST__ = location.hostname;
+const __IS_LOCAL__ = /^(localhost|127\.0\.0\.1)$/i.test(__HOST__);
+const __IS_STAGING__ = __HOST__.startsWith('staging.') || __IS_LOCAL__;
+
+function resolveBg(srcFromDesign){
+  return __IS_STAGING__ ? './cancel-1.jpg' : (srcFromDesign || '');
+}
+
 function setValueById(id, value) {
   if (!id) return;
 
-  // 1) 전역 값 저장
   valuesById[id] = (value ?? "");
 
-  // 2) ✅ 설계 데이터(pages의 모든 동일 id 필드)도 같이 갱신
   try {
     const key = String(id).toLowerCase();
     pages.forEach(pg => {
       (pg.fields || []).forEach(f => {
         if (String(f.id || '').toLowerCase() === key) {
-          // checkbox는 boolean, 나머지는 string로
           if (f.type === 'checkbox') f.value = !!value;
           else f.value = (value ?? "");
         }
@@ -745,14 +687,12 @@ function setValueById(id, value) {
     });
   } catch (_) {}
 
-  // 3) 현재 화면에 떠 있는 컨트롤이 있으면 그것도 갱신
   const el = elById[id];
   if (!el) return;
 
   if (el.type === 'checkbox') {
     el.checked = !!value;
   } else {
-    // radio 더미(객체)일 수도 있으니 안전 처리
     if (typeof el === 'object' && el.type === 'radio') {
       el.value = (value ?? "");
     } else {
@@ -760,7 +700,6 @@ function setValueById(id, value) {
     }
   }
 }
-
 
 function applyMirror(sourceField, value) {
   const targets = sourceField.mirrorTo || [];
@@ -810,7 +749,9 @@ window.addEventListener('resize', applyZoom);
 const AUTOSAVE_KEY=null;
 function scheduleSave(){ }
 function tryLoadAutosave(){ }
-const clearAutosave = () => { try { localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {} };
+const clearAutosave = () => {
+  try { if (AUTOSAVE_KEY) localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {}
+};
 
 /* ===== 드롭다운 글자 자동 축소 ===== */
 function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
@@ -904,7 +845,6 @@ async function loadDesign(){
 const PLAN_LABEL_RE = /(요금제|요금.?상품)/i;
 const PLAN_ID_RE    = /^(plan|planselect|plan_name)$/i;
 
-const findFieldsAllPages=id=>{const a=[]; pages.forEach(pg=>(pg.fields||[]).forEach(f=>{if(f.id===id)a.push(f);})); return a;};
 const getFieldsByIdAll=id=>{
   id=String(id||'').toLowerCase();
   const out=[];
@@ -1162,13 +1102,39 @@ function isAffiliatePlan(planName){
 }
 
 /* =========================
-   ✅ render() 오류 수정 완성본
+   ✅ render()
+   - 배경 로딩을 여기서만 처리 (STAGING/PROD 동일 로직)
 ========================= */
 function render(){
   Object.keys(elById).forEach(k => delete elById[k]);
-
   const p = cur();
-  bg.src = p.bg || '';
+
+  // ✅ 배경 로더(가독성/안정성 위해 "먼저 선언 후 호출")
+  function setBgSafely(src){
+    bg.classList.remove('ready');
+    paper.classList.remove('ready');
+
+    // 깜빡임/레이아웃 흔들림 방지: removeAttribute 대신 안전 초기화
+    bg.src = '';
+
+    const pre = new Image();
+    pre.onload = () => {
+      bg.src = src || '';
+      bg.classList.add('ready');
+      paper.classList.add('ready');
+    };
+    pre.onerror = () => {
+      bg.src = src || '';
+      bg.classList.add('ready');
+      paper.classList.add('ready');
+      bg.alt = '이미지 로드 실패(경로 확인 필요)';
+    };
+    pre.src = src || '';
+  }
+
+  // ✅ STAGING이면 cancel-1.jpg, 아니면 설계(bg)
+  setBgSafely(resolveBg(p.bg || ''));
+
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
@@ -1196,30 +1162,20 @@ function render(){
       const rs = (f.radioStyle || 'dot'); // dot/solid/tick
       w.classList.remove('rd-dot','rd-solid','rd-tick');
       w.classList.add('rd-' + rs);
+
+      if (f.radioShowText === false) w.classList.add('noText');
+      else w.classList.remove('noText');
+
+      const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
+                      : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
+
+      const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
+        ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
+        : 1;
+
+      w.style.setProperty('--rbc', outerColor);
+      w.style.setProperty('--rbw', outerWidth + 'px');
     }
-    if (f.type === 'radio') {
-  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
-
-  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
-  w.classList.remove('rd-dot','rd-solid','rd-tick');
-  w.classList.add('rd-' + rs);
-
-  /* ✅ (추가) 1,2 표기 숨김 옵션 */
-  if (f.radioShowText === false) w.classList.add('noText');
-  else w.classList.remove('noText');
-
-  /* ✅ (추가) 겉 테두리(.radio-item) 제어 */
-  const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
-                    : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
-
-  const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
-    ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
-    : 1;
-
-  w.style.setProperty('--rbc', outerColor);
-  w.style.setProperty('--rbw', outerWidth + 'px');
-}
 
     if (f.color) w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
@@ -1247,7 +1203,6 @@ function render(){
 
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
-    /* ===== textarea (text+wrap 포함) ===== */
     if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
       ctrl.spellcheck = false;
@@ -1291,15 +1246,12 @@ function render(){
       };
     }
 
-    /* ===== ✅ select (오류났던 부분 전면 복구) ===== */
     else if (f.type === 'select') {
       const sel = document.createElement('select');
 
-      // 전역 값 우선 적용
       const init = (f.id ? (valuesById[f.id] ?? f.value ?? "") : (f.value ?? ""));
       f.value = init;
 
-      // placeholder 옵션
       const phText = (f.placeholder || '').trim();
       if (phText) {
         const op0 = document.createElement('option');
@@ -1327,7 +1279,7 @@ function render(){
       }
 
       sel.onchange = () => {
-        if (sel.value === '') return; // placeholder 상태 방지
+        if (sel.value === '') return;
 
         f.value = sel.value;
         setValueById(f.id, sel.value);
@@ -1352,53 +1304,52 @@ function render(){
       ctrl = sel;
     }
 
-/* ===== checkbox ===== */
-else if (f.type === 'checkbox') {
-  ctrl = document.createElement('input');
-  ctrl.type = 'checkbox';
+    else if (f.type === 'checkbox') {
+      ctrl = document.createElement('input');
+      ctrl.type = 'checkbox';
 
-  const init = (f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
-  ctrl.checked = !!init;
-  f.value = !!init;
-  if (f.id) elById[f.id] = ctrl;
+      const init = (f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
+      ctrl.checked = !!init;
+      f.value = !!init;
+      if (f.id) elById[f.id] = ctrl;
 
-  if (f.locked || lockByPlaceholder){
-    ctrl.disabled = true;
-    ctrl.dataset.locked = '1';
-  }
+      if (f.locked || lockByPlaceholder){
+        ctrl.disabled = true;
+        ctrl.dataset.locked = '1';
+      }
 
-  w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
+      w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
 
-  // ✅ 체크 스타일 클래스 적용 (tick/solid/dot)
-  const style = (f.checkStyle || 'tick');
-  w.classList.remove('ck-tick','ck-solid','ck-dot');
-  w.classList.add('ck-' + style);
+      const style = (f.checkStyle || 'tick');
+      w.classList.remove('ck-tick','ck-solid','ck-dot');
+      w.classList.add('ck-' + style);
 
-  ctrl.onchange = () => {
-    f.value = ctrl.checked;
-    setValueById(f.id, ctrl.checked);
-    applyMirror(f, ctrl.checked);
+      ctrl.onchange = () => {
+        f.value = ctrl.checked;
+        setValueById(f.id, ctrl.checked);
+        applyMirror(f, ctrl.checked);
 
-    scheduleSave();
-    evaluateAffBanner();
-    evaluateExtraDataAndBar();
-  };
+        scheduleSave();
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
 
-  lab.style.top  = '0';
-  lab.style.left = '24px';
-}
+      lab.style.top  = '0';
+      lab.style.left = '24px';
+    }
 
-
-    /* ===== radio ===== */
     else if (f.type === 'radio') {
       ctrl = document.createElement('div');
-      const opts = (f.options && f.options.length)
+
+      const opts = (Array.isArray(f.options) && f.options.length)
         ? f.options
         : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
       const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
       f.value = init;
-if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/저장용)
+
+      if (f.id) elById[f.id] = { type:'radio', value:init };
+
       opts.forEach(o => {
         const it = document.createElement('label');
         it.className = 'radio-item';
@@ -1422,21 +1373,20 @@ if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/�
           evaluateExtraDataAndBar();
         };
 
-        const s = document.createElement('span');
-const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+        const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
 
-if (!hideText) {
-  s.textContent = o;
-  it.appendChild(s);
-  } else {
-  // span을 아예 붙이지 않음(=무조건 숨김)
-}
-it.appendChild(cb);
-ctrl.appendChild(it);
+        it.appendChild(cb);
+
+        if (!hideText) {
+          const s = document.createElement('span');
+          s.textContent = o;
+          it.appendChild(s);
+        }
+
+        ctrl.appendChild(it);
       });
     }
 
-    /* ===== 일반 input(text) ===== */
     else {
       ctrl = document.createElement('input');
       ctrl.type = 'text';
@@ -1509,12 +1459,12 @@ ctrl.appendChild(it);
 
     if (isNameField(f)) setupNameAutoShrink(ctrl, f);
 
-if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
-  const rh = document.createElement('div');
-  rh.className = 'resize-handle';
-  rh.addEventListener('mousedown', ev => startResize(ev, i, w));
-  w.appendChild(rh);
-}
+    if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+      const rh = document.createElement('div');
+      rh.className = 'resize-handle';
+      rh.addEventListener('mousedown', ev => startResize(ev, i, w));
+      w.appendChild(rh);
+    }
 
     if (!FILL) {
       w.addEventListener('mousedown', e => startDrag(e, i, w));
@@ -1611,7 +1561,7 @@ function updatePanel(){
     pFontSize.value=''; pMask.value=''; pMaskRe.value=''; pMaxLen.value=''; pPlaceholder.value='';
     pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
     if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
-    if (pCheckStyle) pCheckStyle.value = 'tick';  // ✅ 추가
+    if (pCheckStyle) pCheckStyle.value = 'tick';
     return;
   }
 
@@ -1745,23 +1695,16 @@ document.getElementById('applyProp').onclick = () => {
   if (selected < 0) return;
 
   const f = cur().fields[selected];
-  const style = (pCheckStyle?.value || 'tick'); // tick / solid / dot
+  const style = (pCheckStyle?.value || 'tick');
 
-  // ✅ 스타일
-  if (f.type === 'checkbox') {
-    f.checkStyle = style;
-  }
-  if (f.type === 'radio') {
-    f.radioStyle = style;
-  }
+  if (f.type === 'checkbox') f.checkStyle = style;
+  if (f.type === 'radio')    f.radioStyle = style;
 
-  // ✅ 위치 / 크기
   f.x = clamp(num(document.getElementById('p_x').value, f.x), 0, 100);
   f.y = clamp(num(document.getElementById('p_y').value, f.y), 0, 100);
   f.w = clamp(num(document.getElementById('p_w').value, f.w ?? 24), 2, 95);
   f.label = pLabel.value.trim();
 
-  // ✅ 라디오 / 체크 크기
   const sizeInput = num(pRadioSize.value, (f.checkSize ?? f.radioSize ?? 18));
   const safeSize = clamp(sizeInput, 8, 40);
   f.radioSize = safeSize;
@@ -1769,12 +1712,10 @@ document.getElementById('applyProp').onclick = () => {
 
   f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 60);
 
-  // ✅ 색상 / 높이
   f.color = pColor.value || '#000000';
   const h = parseInt(pHeight.value, 10);
   f.inputHeight = Number.isFinite(h) ? clamp(h, 5, 60) : undefined;
 
-  // ✅ 기타 속성
   f.wrap = true;
   f.id = (pId.value || '').trim() || f.id;
   f.required = !!pRequired?.checked;
@@ -1807,7 +1748,6 @@ document.getElementById('applyProp').onclick = () => {
   f.locked = !!pLocked?.checked;
   f.lockOnPh = !!pLockOnPh?.checked;
 
-  // ✅ 요금제 연동
   if (
     (PLAN_ID_RE.test(String(f.id || '')) ||
      PLAN_LABEL_RE.test(String(f.label || ''))) &&
@@ -1828,7 +1768,7 @@ document.getElementById('applyProp').onclick = () => {
   render();
   scheduleSave();
 };
-/* ✅ 선택된 필드 삭제(여기 바깥에 있어야 정상) */
+
 document.getElementById('delField').onclick = () => {
   if (selected < 0) {
     alert('삭제할 필드를 먼저 클릭해서 선택해주세요.');
@@ -1847,7 +1787,6 @@ document.getElementById('delField').onclick = () => {
   render();
   scheduleSave();
 };
-
 
 /* ===== 정렬 버튼 ===== */
 function alignSelectedX(mode){
@@ -1950,7 +1889,7 @@ function createPrintDOM(page, pageIdx){
   st.style.transform = 'scale(1)';
 
   const img = document.createElement('img');
-  img.src = page.bg || '';
+  img.src = resolveBg(page.bg || '');
 
   const ov = document.createElement('div');
   ov.className = 'overlay';
@@ -1970,39 +1909,27 @@ function createPrintDOM(page, pageIdx){
     w.style.top  = `${f.y}%`;
     w.style.width = `${(f.w ?? 24)}%`;
 
-    if (f.fontSize)    
-    w.style.setProperty('--fs', f.fontSize + 'px');
-if (f.type === 'radio') {
-  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
-  w.classList.remove('rd-dot','rd-solid','rd-tick');
-  w.classList.add('rd-' + rs);
+    if (f.fontSize) w.style.setProperty('--fs', f.fontSize + 'px');
 
-  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
-}
-if (f.type === 'radio') {
-  const rs = (f.radioStyle || 'dot');
-  w.classList.remove('rd-dot','rd-solid','rd-tick');
-  w.classList.add('rd-' + rs);
+    if (f.type === 'radio') {
+      const rs = (f.radioStyle || 'dot');
+      w.classList.remove('rd-dot','rd-solid','rd-tick');
+      w.classList.add('rd-' + rs);
 
-  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+      w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
+      w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
 
-  // ✅ 1,2 표기 숨김
-  if (f.radioShowText === false) w.classList.add('noText');
+      if (f.radioShowText === false) w.classList.add('noText');
 
-  // ✅ 겉 테두리 제어
-  const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
-                    : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
-  const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
-    ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
-    : 1;
+      const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
+                        : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
+      const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
+        ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
+        : 1;
 
-  w.style.setProperty('--rbc', outerColor);
-  w.style.setProperty('--rbw', outerWidth + 'px');
-}
-
-
+      w.style.setProperty('--rbc', outerColor);
+      w.style.setProperty('--rbw', outerWidth + 'px');
+    }
 
     if (f.color)       w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
@@ -2083,9 +2010,9 @@ if (f.type === 'radio') {
 
       ctrl.value = f.value ?? '';
       if (f.locked || lockByPlaceholder) ctrl.disabled = true;
-        // ✅ 여기 추가
-  w.style.height = (f.inputHeight ?? 28) + 'px';
-  w.style.setProperty('--ih', (f.inputHeight ?? 28) + 'px');
+
+      w.style.height = (f.inputHeight ?? 28) + 'px';
+      w.style.setProperty('--ih', (f.inputHeight ?? 28) + 'px');
 
       const pv = document.createElement('div');
       pv.className = 'print-value';
@@ -2098,8 +2025,8 @@ if (f.type === 'radio') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
       const style = (f.checkStyle || 'tick');
-w.classList.remove('ck-tick','ck-solid','ck-dot');
-w.classList.add('ck-' + style);
+      w.classList.remove('ck-tick','ck-solid','ck-dot');
+      w.classList.add('ck-' + style);
 
       ctrl.checked = !!f.value;
       w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
@@ -2108,7 +2035,9 @@ w.classList.add('ck-' + style);
 
     else if (f.type === 'radio') {
       ctrl = document.createElement('div');
-const opts = Array.isArray(f.options) ? f.options : [];
+      const opts = (Array.isArray(f.options) && f.options.length)
+        ? f.options
+        : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
       opts.forEach(o => {
         const it = document.createElement('label');
@@ -2119,18 +2048,17 @@ const opts = Array.isArray(f.options) ? f.options : [];
         cb.checked = (f.value === o);
         if (f.locked || lockByPlaceholder) cb.disabled = true;
 
-const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+        const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
 
-it.appendChild(cb);
+        it.appendChild(cb);
 
-if (!hideText) {
-  const s = document.createElement('span');
-  s.textContent = o;
-  it.appendChild(s);
-}
+        if (!hideText) {
+          const s = document.createElement('span');
+          s.textContent = o;
+          it.appendChild(s);
+        }
 
-ctrl.appendChild(it);
-
+        ctrl.appendChild(it);
       });
     }
 

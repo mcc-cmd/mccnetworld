@@ -338,13 +338,11 @@
   }
   /* label이 select 영역에 영향을 주는 경우 방지(필요시) */
   #printAll .field .label{ display:none !important; }
-  @media print{
   /* ✅ select 숨기는 필드가 높이 0으로 접히지 않게 */
   #printAll .field{ min-height: var(--ih, 28px) !important; }
-
   /* ✅ textarea는 자동 높이 유지 */
   #printAll .field textarea{ min-height: 5px !important; }
-}
+
 
   #printAll textarea{
     height:auto !important;
@@ -478,6 +476,15 @@
     margin-right: 4px;
     font-size: 14px;
   }
+/* ✅ 계약서(bg) 이미지가 로드되기 전에는 숨김 */
+#bg { visibility: hidden; }
+#bg.ready { visibility: visible; }
+
+/* (선택) 로딩 중 표시를 위해 paper 전체를 숨기고 싶으면 */
+#paper { visibility: hidden; }
+#paper.ready { visibility: visible; }
+
+
 </style>
 
 <script>
@@ -485,25 +492,70 @@
   const host = location.hostname;
   const IS_LOCAL   = /^(localhost|127\.0\.0\.1)$/i.test(host);
   const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
+
   document.documentElement.classList.toggle('is-staging', IS_STAGING);
   document.documentElement.classList.toggle('is-prod', !IS_STAGING);
 
-  const fav = document.querySelector('link[rel="icon"][sizes="32x32"]') || document.querySelector('link[rel="icon"]');
-  if (IS_STAGING) {
-    document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/,'');
-    if (fav) fav.href = '/favicon-32x32.png?v=stg';
-    const b = document.createElement('div');
-    b.className = 'env-badge';
-    b.textContent = 'STAGING (개발/테스트)';
-    window.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(b));
-  } else {
-    document.title = document.title.replace(/^STAGING ·\s*/,'');
-    if (fav) fav.href = '/favicon-32x32.png?v=prod';
-    const url = new URL(location.href);
-    if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
+  const fav =
+    document.querySelector('link[rel="icon"][sizes="32x32"]') ||
+    document.querySelector('link[rel="icon"]');
+
+  // ✅ DOM 생성 이후에만 요소 접근 (bg/paper가 body에 있으므로)
+  window.addEventListener('DOMContentLoaded', () => {
+    if (IS_STAGING) {
+      document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/, '');
+      if (fav) fav.href = '/favicon-32x32.png?v=stg';
+
+      const b = document.createElement('div');
+      b.className = 'env-badge';
+      b.textContent = 'STAGING (개발/테스트)';
+      document.body.appendChild(b);
+
+      // ✅ STAGING에서만 계약서 배경을 강제로 바꾸고 싶으면 여기서 처리
+      // (현재 HTML의 이미지 id는 paperImg가 아니라 bg 입니다)
+      setPaperImageSafely('./cancel-1.jpg');
+    } else {
+      document.title = document.title.replace(/^STAGING ·\s*/, '');
+      if (fav) fav.href = '/favicon-32x32.png?v=prod';
+
+      const url = new URL(location.href);
+      if (!url.searchParams.has('mode')) {
+        url.searchParams.set('mode','fill');
+        history.replaceState(null,'',url.toString());
+      }
+    }
+  });
+
+  // ✅ 실제 존재하는 요소 id로 안전 로딩
+  function setPaperImageSafely(src){
+    const imgEl = document.getElementById('bg');     // ✅ 존재함
+    const paper = document.getElementById('paper');  // ✅ 존재함
+    if (!imgEl) return;
+
+    imgEl.classList.remove('ready');
+    if (paper) paper.classList.remove('ready');
+
+    // 깨짐 방지
+    imgEl.removeAttribute('src');
+
+    const pre = new Image();
+    pre.onload = () => {
+      imgEl.src = src;
+      imgEl.classList.add('ready');
+      if (paper) paper.classList.add('ready');
+    };
+    pre.onerror = () => {
+      // 실패해도 화면은 열어둠
+      imgEl.src = src;
+      imgEl.classList.add('ready');
+      if (paper) paper.classList.add('ready');
+      imgEl.alt = '이미지 로드 실패(경로 확인 필요)';
+    };
+    pre.src = src;
   }
 })();
 </script>
+
 </head>
 
 <body>
@@ -786,7 +838,9 @@ window.addEventListener('resize', applyZoom);
 const AUTOSAVE_KEY=null;
 function scheduleSave(){ }
 function tryLoadAutosave(){ }
-const clearAutosave = () => { try { localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {} };
+const clearAutosave = () => {
+  try { if (AUTOSAVE_KEY) localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {}
+};
 
 /* ===== 드롭다운 글자 자동 축소 ===== */
 function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
@@ -1142,10 +1196,35 @@ function isAffiliatePlan(planName){
 ========================= */
 function render(){
   Object.keys(elById).forEach(k => delete elById[k]);
-
   const p = cur();
-  bg.src = p.bg || '';
+  const host = location.hostname;
+const IS_LOCAL = /^(localhost|127\.0\.0\.1)$/i.test(host);
+const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
+
+// ✅ STAGING이면 cancel-1.jpg 강제, 아니면 설계(bg) 사용
+setBgSafely(IS_STAGING ? './cancel-1.jpg' : (p.bg || ''));
+
   overlay.innerHTML = '';
+function setBgSafely(src){
+  // 숨김
+  bg.classList.remove('ready');
+  paper.classList.remove('ready');
+
+  // 프리로드
+  const pre = new Image();
+  pre.onload = () => {
+    bg.src = src || '';
+    bg.classList.add('ready');
+    paper.classList.add('ready');
+  };
+  pre.onerror = () => {
+    // 실패해도 화면은 열어둠(계속 숨기면 더 깨져보임)
+    bg.src = src || '';
+    bg.classList.add('ready');
+    paper.classList.add('ready');
+  };
+  pre.src = src || '';
+}
 
   (p.fields || []).forEach((f, i) => {
     if (Number.isFinite(f.fontSize))     f.fontSize     = clamp(f.fontSize, 5, 32);
@@ -1364,53 +1443,56 @@ else if (f.type === 'checkbox') {
   lab.style.left = '24px';
 }
 
+/* ===== radio ===== */
+else if (f.type === 'radio') {
+  ctrl = document.createElement('div');
 
-    /* ===== radio ===== */
-    else if (f.type === 'radio') {
-      ctrl = document.createElement('div');
-      const opts = (f.options && f.options.length)
-        ? f.options
-        : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+  const opts = (Array.isArray(f.options) && f.options.length)
+    ? f.options
+    : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
-      const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
-      f.value = init;
-if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/저장용)
-      opts.forEach(o => {
-        const it = document.createElement('label');
-        it.className = 'radio-item';
+  const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
+  f.value = init;
 
-        const cb = document.createElement('input');
-        cb.type  = 'checkbox';
-        cb.value = o;
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+  if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/저장용)
 
-        cb.onchange = () => {
-          if (!cb.checked) return;
-          ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
-            if (x !== cb) x.checked = false;
-          });
-          f.value = o;
-          setValueById(f.id, o);
-          applyMirror(f, o);
-          scheduleSave();
-          evaluateAffBanner();
-          evaluateExtraDataAndBar();
-        };
+  opts.forEach(o => {
+    const it = document.createElement('label');
+    it.className = 'radio-item';
 
-        const s = document.createElement('span');
-const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+    const cb = document.createElement('input');
+    cb.type  = 'checkbox';
+    cb.value = o;
+    cb.checked = (f.value === o);
+    if (f.locked || lockByPlaceholder) cb.disabled = true;
 
-if (!hideText) {
-  s.textContent = o;
-  it.appendChild(s);
-  } else {
-  // span을 아예 붙이지 않음(=무조건 숨김)
-}
-it.appendChild(cb);
-ctrl.appendChild(it);
+    cb.onchange = () => {
+      if (!cb.checked) return;
+      ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
+        if (x !== cb) x.checked = false;
       });
+      f.value = o;
+      setValueById(f.id, o);
+      applyMirror(f, o);
+      scheduleSave();
+      evaluateAffBanner();
+      evaluateExtraDataAndBar();
+    };
+
+    const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+
+    it.appendChild(cb);
+
+    if (!hideText) {
+      const s = document.createElement('span');
+      s.textContent = o;              // ✅ 이게 핵심(현재 코드에 없음)
+      it.appendChild(s);
     }
+
+    ctrl.appendChild(it);
+  });
+}
+
 
     /* ===== 일반 input(text) ===== */
     else {
@@ -1925,8 +2007,15 @@ function createPrintDOM(page, pageIdx){
   st.className = 'stage';
   st.style.transform = 'scale(1)';
 
-  const img = document.createElement('img');
-  img.src = page.bg || '';
+const img = document.createElement('img');
+
+const host = location.hostname;
+const IS_LOCAL   = /^(localhost|127\.0\.0\.1)$/i.test(host);
+const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
+
+img.src = IS_STAGING ? './cancel-1.jpg' : (page.bg || '');
+
+
 
   const ov = document.createElement('div');
   ov.className = 'overlay';
@@ -2084,7 +2173,10 @@ w.classList.add('ck-' + style);
 
     else if (f.type === 'radio') {
       ctrl = document.createElement('div');
-const opts = Array.isArray(f.options) ? f.options : [];
+const opts = (Array.isArray(f.options) && f.options.length)
+  ? f.options
+  : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+
 
       opts.forEach(o => {
         const it = document.createElement('label');
