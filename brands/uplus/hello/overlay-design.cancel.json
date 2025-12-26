@@ -1,6 +1,5 @@
 {
   "pages": [
-    {
-      "bg": "/brands/uplus/hello/images/cancel-1.jpg" }
-  ]
-}
+    { "bg": "images/cancel-1.jpg", "fields": [] }
+    ]
+  }
