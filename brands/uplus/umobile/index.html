@@ -478,6 +478,10 @@
     margin-right: 4px;
     font-size: 14px;
   }
+  /* 계약서 이미지가 로드되기 전에는 숨김 */
+#paperImg { visibility: hidden; }
+#paperImg.ready { visibility: visible; }
+
 </style>
 
 <script>
@@ -496,12 +500,32 @@
     b.className = 'env-badge';
     b.textContent = 'STAGING (개발/테스트)';
     window.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(b));
+    setPaperImageSafely('./cancel-1.jpg');
   } else {
     document.title = document.title.replace(/^STAGING ·\s*/,'');
     if (fav) fav.href = '/favicon-32x32.png?v=prod';
     const url = new URL(location.href);
     if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
   }
+  const imgEl = document.getElementById('paperImg'); // 계약서 이미지 id
+
+function setPaperImageSafely(src){
+  imgEl.classList.remove('ready');     // 숨김 상태
+  imgEl.removeAttribute('src');        // ✅ 빈 src로 깨짐 방지 (중요)
+
+  const pre = new Image();
+  pre.onload = () => {
+    imgEl.src = src;                  // 로드 성공한 것만 세팅
+    imgEl.classList.add('ready');     // 표시
+  };
+  pre.onerror = () => {
+    // 로드 실패 시도 표시(선택)
+    imgEl.classList.add('ready');
+    imgEl.alt = '이미지 로드 실패(경로 확인 필요)';
+  };
+  pre.src = src;                      // 프리로드 시작
+}
+
 })();
 </script>
 </head>

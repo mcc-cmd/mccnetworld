@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "bg": "images/teen-1.jpg",
+      "bg": "images/adult-1.jpg",
       "fields": [
         {
           "id": "신규",
@@ -1284,11 +1284,11 @@
       ]
     },
     {
-      "bg": "images/teen-2.jpg?v=20251205",
+      "bg": "images/adult-2.jpg?v=20251205",
       "fields": []
     },
     {
-      "bg": "images/teen-3.jpg?v=20251205",
+      "bg": "images/adult-3.jpg?v=20251205",
       "fields": []
     }
   ]
