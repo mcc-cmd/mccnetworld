@@ -480,7 +480,7 @@ const BRAND_ROUTE = {
   '엠모바일':       { carrier:'kt',    brand:'mmobile'   },
   '스카이라이프':   { carrier:'kt',    brand:'skylife'   },
   '스테이지파이브(KT)': { carrier:'kt', brand:'stagefive'   },
-  '스테이지파이브(SKT)':{ carrier:'sk', brand:'stagefive-sk'},
+  '스테이지파이브(SK)':{ carrier:'sk', brand:'stagefive-sk'},
   '프리티SK':       { carrier:'sk',    brand:'freeT-sk'  },
 
   '정규KT신규':     { external: 'https://online.kt.com/itg/online/index.do?prdcId=709A7E09-98C1-44D7-9FEF-3FF6B87A0F6C' },
@@ -488,17 +488,19 @@ const BRAND_ROUTE = {
   '웰컴 요금제 신규': { external: 'https://online.kt.com/itg/online/index.do?prdcId=3CD28EA5-9336-4B9C-830F-0C3C99098F59' },
   '웰컴 요금제 번이': { external: 'https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF' },
   'KT 유선 동판':  { external: 'https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=3E9818A3-37F5-4FA0-B575-C624AF106F89' },
-  'SK텔링크':      { external: 'https://smvno.sk7mobile.com/main.do' }
+  'SK텔링크': {
+  carrier: 'sk',
+  brand: '7mobile',                  // ✅ 로컬 폴더명(광섭님 실제 폴더명과 동일해야 함)
+  externalJoin: 'https://smvno.sk7mobile.com/main.do'   // ✅ 가입만 외부로 보냄
+}
 };
 
 function buildBrandUrl(route, doc, age){
   if (!route || !route.carrier || !route.brand) return '#';
 
-  let baseDir = location.pathname;
-  if (!baseDir.endsWith('/')) baseDir = baseDir.replace(/\/[^/]*$/, '/');
-
-  const base = `${baseDir}brands/${route.carrier}/${route.brand}/index.html`;
-  const abs  = new URL(base, location.origin).href;
+  // ✅ file:// 로 열어도 동작하도록 location.href 기준으로 URL 생성
+  const base = `brands/${route.carrier}/${route.brand}/index.html`;
+  const abs  = new URL(base, location.href).href;
 
   const qs = new URLSearchParams();
   qs.set('mode','fill');
@@ -507,6 +509,7 @@ function buildBrandUrl(route, doc, age){
 
   return `${abs}?${qs.toString()}`;
 }
+
 
 function pickLogo(item){
   if (item.doc === 'join'){
@@ -560,8 +563,11 @@ function attachNavigateHandlers(scope){
       const route = BRAND_ROUTE[nm];
       if (!route) return console.warn('[route] 매핑 없음:', nm);
 
-      if (route.external) return location.href = route.external;
+      // ✅ SK텔링크는 join만 외부로, change/cancel은 로컬로
+if (route.externalJoin && doc === 'join') return location.href = route.externalJoin;
 
+// 기존 external 처리(다른 브랜드용)도 남겨두고 싶으면 아래처럼
+if (route.external) return location.href = route.external;
       const url = buildBrandUrl(route, doc, age);
       if (url !== '#') location.href = url;
     });

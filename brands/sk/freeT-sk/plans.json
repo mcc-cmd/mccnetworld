@@ -22,7 +22,7 @@
   },
   "freeT데이터안심100분15G+": {
     "base": 41800,
-    "discount": -11000,
+    "discount": 11000,
     "final": 30800,
     "extraDataGb": 0,
     "bundleAnyone": false
@@ -50,7 +50,7 @@
   },
   "5G더빠른200G": {
     "base": 70000,
-    "discount": -11000,
+    "discount": 11000,
     "final": 59000,
     "extraDataGb": 0,
     "bundleAnyone": false
