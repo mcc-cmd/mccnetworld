@@ -436,6 +436,7 @@
           "mask": "",
           "maskRe": "",
           "placeholder": "",
+          "mirrorTo": ["예금주 성함"],
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,

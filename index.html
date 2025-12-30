@@ -546,31 +546,44 @@ function card(item){
 /* 카드 클릭 시 이동 */
 function attachNavigateHandlers(scope){
   scope.querySelectorAll('.brand').forEach(cardEl=>{
-    cardEl.addEventListener('click', ()=>{
-      /* ✅ 단말개통(업데이트 예정) 카드는 라우팅하지 않음 */
-      if (cardEl.classList.contains('device-comingsoon')) return;
+cardEl.addEventListener('click', (e)=>{
+  e.preventDefault();
+  e.stopPropagation();
 
-      const nm  = cardEl.getAttribute('data-name')||'';
-      const doc = cardEl.getAttribute('data-doc')||'join';
-      const age = cardEl.getAttribute('data-age')||'';
+  if (cardEl.classList.contains('device-comingsoon')) return;
 
-      /* ✅ [NEW] 미운영 회사는 이동 차단 + 팝업 */
-      if (UNAVAILABLE_BRANDS.has(nm)) {
-        alert('미운영 회사입니다. (현재 서류 제공/접수 불가)');
-        return;
-      }
+  const nm = (cardEl.getAttribute('data-name') || '')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-      const route = BRAND_ROUTE[nm];
-      if (!route) return console.warn('[route] 매핑 없음:', nm);
+  const doc = cardEl.getAttribute('data-doc') || 'join';
+  const age = cardEl.getAttribute('data-age') || '';
 
-      // ✅ SK텔링크는 join만 외부로, change/cancel은 로컬로
-if (route.externalJoin && doc === 'join') return location.href = route.externalJoin;
+  if (UNAVAILABLE_BRANDS.has(nm)) {
+    alert('미운영 회사입니다. (현재 서류 제공/접수 불가)');
+    return;
+  }
 
-// 기존 external 처리(다른 브랜드용)도 남겨두고 싶으면 아래처럼
-if (route.external) return location.href = route.external;
-      const url = buildBrandUrl(route, doc, age);
-      if (url !== '#') location.href = url;
-    });
+  const route = BRAND_ROUTE[nm];
+  if (!route) {
+    console.warn('[route] 매핑 없음:', nm);
+    return;
+  }
+
+  if (route.externalJoin && doc === 'join') {
+    location.href = route.externalJoin;
+    return;
+  }
+
+  if (route.external) {
+    location.href = route.external;
+    return;
+  }
+
+  const url = buildBrandUrl(route, doc, age);
+  if (url !== '#') location.href = url;
+});
+
   });
 }
 

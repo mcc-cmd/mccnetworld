@@ -12,10 +12,10 @@
           "w": 20.21864280438051,
           "required": true,
           "options": [
-            "Z mini + 밀리의서재",
-            "핀다이렉트Z Mini(10GB)",
-            "Z + 밀리의서재",
-            "핀다이렉트Z Max(100GB)"
+            "LTE 핀다이렉트 11GB+",
+            "LTE 핀다이렉트Z 100GB+",
+            "LTE 핀다이렉트 10GB+",
+            "LTE 핀다이렉트 7GB+"
           ],
           "radioSize": 24,
           "checkSize": 24,
@@ -686,7 +686,6 @@
           "y": 45.38646349893677,
           "w": 10,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -705,7 +704,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 생년월일",
@@ -715,7 +715,6 @@
           "y": 45.24231234152633,
           "w": 8.287461773700306,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -734,7 +733,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 관계",
@@ -745,7 +745,6 @@
           "w": 10,
           "required": true,
           "options": [],
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -764,7 +763,8 @@
           "placeholder": "법대 선택",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 연락처",
@@ -774,7 +774,6 @@
           "y": 45.38646349893677,
           "w": 20,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -793,7 +792,8 @@
           "placeholder": "법정 대리인 연락처",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 성함 ,싸인 자필기재",
@@ -803,7 +803,6 @@
           "y": 47.1883529665673,
           "w": 15.015290519877677,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -822,7 +821,8 @@
           "placeholder": "법대 성함 ,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 성함 ,싸인 자필기재",
@@ -832,7 +832,6 @@
           "y": 89.7129444026477,
           "w": 15.096839959225283,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -851,6 +850,36 @@
           "placeholder": "법대 성함 ,싸인 자필기재",
           "autoDate": "",
           "locked": true,
+          "lockOnPh": false,
+          "value": ""
+        },
+        {
+          "id": "text_1767059765510",
+          "label": "",
+          "type": "text",
+          "x": 37.45547120436683,
+          "y": 57.48388642359552,
+          "w": 18.95282010847681,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 28,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 16,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "카드납부만 가능",
+          "autoDate": "",
+          "locked": true,
           "lockOnPh": false
         }
       ]
@@ -866,7 +895,6 @@
           "y": 28.6649292393255,
           "w": 21.02956167176351,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -895,7 +923,6 @@
           "y": 81.06387495802116,
           "w": 20,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -924,7 +951,6 @@
           "y": 68.01819521237617,
           "w": 20.91743119266055,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -953,7 +979,6 @@
           "y": 91.65898502768866,
           "w": 21.02956167176351,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
