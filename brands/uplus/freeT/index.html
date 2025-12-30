@@ -510,7 +510,7 @@
 <div class="wrap">
   <section class="panel">
     <div class="hd">
-      <strong>MCC 프리티 LG 서류</strong>
+      <strong>MCC 프리티 서류</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
@@ -594,7 +594,7 @@
         <div class="row"><div>폭(%)</div><input id="p_w" type="number" step="0.1"></div>
 
         <div class="row"><div>라디오 크기(px)</div><input id="p_radioSize" type="number" min="10" max="32" step="1" placeholder="18"></div>
-        <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="60" step="1" placeholder="12"></div>
+        <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="200" step="1" placeholder="12"></div>
         <div class="row" id="row_checkStyle">
         <div>체크 스타일</div>
         <select id="p_checkStyle">
@@ -1743,7 +1743,7 @@ document.getElementById('applyProp').onclick = () => {
   f.radioSize = safeSize;
   f.checkSize = safeSize;
 
-  f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 60);
+  f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 200);
 
   // ✅ 색상 / 높이
   f.color = pColor.value || '#000000';
