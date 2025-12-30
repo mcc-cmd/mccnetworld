@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>MCCNETWORLD 7mobile</title>
 
-<link rel="icon" type="image/png" sizes="16x16"  href="/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32"  href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="shortcut icon" href="/favicon.ico">
+<!-- ✅ GitHub Pages/폴더 배포 호환: 절대경로(/...) 금지 → 상대경로로 변경 -->
+<link rel="icon" type="image/png" sizes="16x16"  href="../../../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32"  href="../../../favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="../../../android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="../../../android-chrome-512x512.png">
+<link rel="apple-touch-icon" href="../../../apple-touch-icon.png">
+<link rel="shortcut icon" href="../../../favicon.ico">
 <meta name="theme-color" content="#0c1117"/>
 
 <style>
@@ -238,8 +239,8 @@ if (FILL) document.documentElement.classList.add('fill');
       <strong>MCC 7mobile 서류 (해지/변경)</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
-        <!-- ✅ 메인 퍼블릭 선택화면으로 복귀 (중요: ./index.html 금지) -->
-        <a href="/index.html" class="btn btn--ghost btn-back">서류 선택 화면</a>
+        <!-- ✅ 404 방지: 절대경로(/index.html) 금지 → JS로 정확한 상대경로 계산 -->
+        <a href="#" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
 
         <div class="builder">
           <button class="btn--ghost btn" id="enableWrapAll">모든 텍스트 자동 줄바꿈 켜기</button>
@@ -301,6 +302,16 @@ if (FILL) document.documentElement.classList.add('fill');
 <div id="printAll"></div>
 
 <script>
+/* =========================
+   ✅ 404 방지: “서류 선택 화면” 링크를 현재 위치 기준으로 계산
+   - brands/sk/7mobile/index.html  → ../../../index.html
+========================= */
+(function(){
+  const a = document.getElementById('backToHub');
+  if(!a) return;
+  a.href = new URL('../../../index.html', location.href).href;
+})();
+
 /* =========================
    ✅ 핵심 동작 로직 (cancel/change 전용)
 ========================= */
