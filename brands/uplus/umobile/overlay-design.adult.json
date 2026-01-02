@@ -73,8 +73,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 25.312267169725356,
-          "y": 18.57660462964177,
+          "x": 23.937344870441905,
+          "y": 20.756738710715698,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -101,8 +101,8 @@
           "id": "discountFee",
           "label": "",
           "type": "text",
-          "x": 23.87102581814831,
-          "y": 20.953878445999713,
+          "x": 23.983548480500243,
+          "y": 23.29552869463025,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -130,8 +130,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 24.21543671767322,
-          "y": 23.3473203525877,
+          "x": 23.86978244490915,
+          "y": 18.254569340107892,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1122,7 +1122,6 @@
           "y": 56.867901334548854,
           "w": 13.428572584502469,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1141,7 +1140,8 @@
           "placeholder": "랜덤결합시 필수 체크",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
@@ -1182,7 +1182,8 @@
           "placeholder": "랜덤결합시 필수 체크 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "랜덤결합체크박스",
@@ -1210,7 +1211,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "자필 성함싸인",
@@ -1238,7 +1240,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
@@ -1278,8 +1281,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 31.413911060433296,
-          "y": 25.5,
+          "x": 82.61388583887516,
+          "y": 25.418560046905952,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1299,7 +1302,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -1326,14 +1330,15 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 85,
-          "y": 25.5,
+          "x": 32.31170254522164,
+          "y": 25.578716661802005,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1353,14 +1358,15 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 85,
-          "y": 32.424242722474034,
+          "x": 85.11310092682052,
+          "y": 32.42299091917295,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1380,7 +1386,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -1492,7 +1499,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "판매직원명",
@@ -1520,7 +1528,8 @@
           "placeholder": "판매자  입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "개통번호",
@@ -1548,7 +1557,8 @@
           "placeholder": "개통번호 입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     }

@@ -73,8 +73,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 25.312267169725356,
-          "y": 18.57660462964177,
+          "x": 23.365701843910305,
+          "y": 20.756297290528366,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -101,8 +101,8 @@
           "id": "discountFee",
           "label": "",
           "type": "text",
-          "x": 23.87102581814831,
-          "y": 20.953878445999713,
+          "x": 23.9842756707397,
+          "y": 23.458235189267658,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -130,8 +130,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 24.21543671767322,
-          "y": 23.3473203525877,
+          "x": 24.214503751778476,
+          "y": 18.174351701706883,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1093,7 +1093,6 @@
           "y": 57.073691919090784,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -1112,7 +1111,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "랜덤결합체크필수",
@@ -1122,7 +1122,6 @@
           "y": 56.46262828188511,
           "w": 12,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1141,7 +1140,8 @@
           "placeholder": "랜덤결합 필수 체크",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
@@ -1226,7 +1226,6 @@
           "y": 58.726462809782035,
           "w": 17.885715130739737,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1245,7 +1244,8 @@
           "placeholder": "랜덤결합 체크 필수",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "랜덤결합",
@@ -1255,7 +1255,6 @@
           "y": 60.95242891088175,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -1274,7 +1273,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         }
       ]
     },
@@ -1314,8 +1314,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 31.413911060433296,
-          "y": 25.5,
+          "x": 85.1267797763128,
+          "y": 25.417243184447646,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1342,8 +1342,8 @@
           "id": "discountFee",
           "label": "",
           "type": "text",
-          "x": 55.4435575826682,
-          "y": 25.5,
+          "x": 55.443341556686555,
+          "y": 25.49936706756826,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1370,8 +1370,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 85,
-          "y": 25.5,
+          "x": 34.36843021983606,
+          "y": 25.336288201711373,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -1398,8 +1398,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 85,
-          "y": 32.424242722474034,
+          "x": 85.11278703175313,
+          "y": 32.17939849076712,
           "w": 10,
           "required": false,
           "radioSize": 18,
