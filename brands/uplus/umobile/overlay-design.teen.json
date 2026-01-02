@@ -1367,7 +1367,7 @@
           "value": ""
         },
         {
-          "id": "totalFee",
+          "id": "baseFee",
           "label": "",
           "type": "text",
           "x": 85,
