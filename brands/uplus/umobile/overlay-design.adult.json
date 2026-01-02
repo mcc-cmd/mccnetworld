@@ -1329,7 +1329,7 @@
           "lockOnPh": false
         },
         {
-          "id": "baseFee",
+          "id": "totalFee",
           "label": "",
           "type": "text",
           "x": 85,
@@ -1356,7 +1356,7 @@
           "lockOnPh": false
         },
         {
-          "id": "baseFee",
+          "id": "totalFee",
           "label": "",
           "type": "text",
           "x": 85,
