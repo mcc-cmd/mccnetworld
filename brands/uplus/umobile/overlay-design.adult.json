@@ -817,7 +817,7 @@
           "autoDate": "year",
           "locked": false,
           "lockOnPh": false,
-          "value": "2025"
+          "value": "2026"
         },
         {
           "id": "월",
@@ -845,7 +845,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "12"
+          "value": "01"
         },
         {
           "id": "일",
@@ -874,7 +874,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "30"
+          "value": "02"
         },
         {
           "id": "판매자 성함",
@@ -1064,7 +1064,6 @@
           "y": 8.990056631670074,
           "w": 12.393557047884919,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1083,6 +1082,36 @@
           "placeholder": "가입 유형 체크 필수",
           "autoDate": "",
           "locked": true,
+          "lockOnPh": false,
+          "value": ""
+        },
+        {
+          "id": "랜덤결합",
+          "label": "",
+          "type": "checkbox",
+          "x": 68.27229225221176,
+          "y": 57.396920001740035,
+          "w": 3,
+          "required": false,
+          "value": false,
+          "checkStyle": "tick",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
           "lockOnPh": false
         }
       ]
@@ -1097,7 +1126,95 @@
     },
     {
       "bg": "images/adult-4.jpg",
-      "fields": []
+      "fields": [
+        {
+          "id": "랜덤결합시 필수 성함 싸인 입니다",
+          "label": "",
+          "type": "text",
+          "x": 60.28220143120805,
+          "y": 58.239588673325684,
+          "w": 27.257143048469374,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 30,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "랜덤결합시 필수 체크 입니다",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": false
+        },
+        {
+          "id": "랜덤결합",
+          "label": "",
+          "type": "checkbox",
+          "x": 92.50086199073229,
+          "y": 60.871621890219444,
+          "w": 3,
+          "required": false,
+          "value": false,
+          "checkStyle": "tick",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "자필 성함싸인",
+          "label": "",
+          "type": "text",
+          "x": 61.42754175310115,
+          "y": 74.80569867050158,
+          "w": 19.142857900191274,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 24,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 12,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함싸인 입니다",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": false
+        }
+      ]
     },
     {
       "bg": "images/adult-5.jpg",
@@ -1156,7 +1273,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -1183,7 +1301,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -1210,7 +1329,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -1237,7 +1357,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -1265,7 +1386,7 @@
           "autoDate": "year",
           "locked": false,
           "lockOnPh": false,
-          "value": "2025"
+          "value": "2026"
         },
         {
           "id": "월",
@@ -1293,7 +1414,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "12"
+          "value": "01"
         },
         {
           "id": "일",
@@ -1321,7 +1442,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "30"
+          "value": "02"
         },
         {
           "id": "자필 성함싸인",
@@ -1349,7 +1470,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "판매직원명",
@@ -1377,7 +1499,8 @@
           "placeholder": "판매자  입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "개통번호",
@@ -1405,7 +1528,8 @@
           "placeholder": "개통번호 입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     }
