@@ -2571,6 +2571,16 @@ function enableWrapAllTextFields(){
 }
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
+// ✅ Ctrl+P 포함, 어떤 경로로 인쇄해도 출력 DOM을 먼저 생성
+window.addEventListener('beforeprint', () => {
+  try { buildPrintAll(); } catch (e) { console.error(e); }
+});
+
+// (선택) 인쇄 끝난 후 #printAll을 비워서 메모리/중복 방지
+window.addEventListener('afterprint', () => {
+  try { document.getElementById('printAll').innerHTML = ''; } catch (e) {}
+});
+
 </script>
 </body>
 </html>
