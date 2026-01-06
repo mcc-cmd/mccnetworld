@@ -1,0 +1,15 @@
+{
+  "effectiveFrom": "2025-12-15",
+  "effectiveTo": "2025-12-31",
+  "memo": "KT 단말 공시 최신",
+
+  "aprPercent": 5.9,
+  "defaultInstallmentMonths": 24,
+
+  "subsidyMap": {
+    "omd_sm_a165n|lte_2gb_120m": 220000,
+    "omd_sm_a165n|lte_4gb_200m": 220000,
+    "sm_a245n|lte_2gb_120m": 396000,
+    "sm_a245n|lte_4gb_200m": 396000
+  }
+}

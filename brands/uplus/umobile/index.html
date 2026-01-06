@@ -308,43 +308,74 @@
   }
 
 @media print{
-  body{background:#fff}
+  body{background:#fff !important; color:#000 !important;}
+
   .wrap,.builder,.pager,.hint,.hd,#affPopup{display:none !important}
   #printAll{display:block}
-  .pageWrap{width:210mm;height:297mm;position:relative;overflow:visible;padding:0;box-sizing:border-box;page-break-after:always;}
+
+  .pageWrap{
+    width:210mm;height:297mm;position:relative;overflow:visible;
+    padding:0;box-sizing:border-box;page-break-after:always;
+    background:#fff !important;
+  }
   .pageWrap:last-child{page-break-after:auto}
+
   #printAll .stage{transform:scale(1)}
-  #printAll .paper{border:none;height:auto}
+  #printAll .paper{
+    border:none;height:auto;
+    background:#fff !important;
+  }
   #printAll .stage img{width:100%;height:100%;object-fit:fill}
+
   #printAll .overlay{position:absolute;inset:0;overflow:visible !important}
-  #printAll,#printAll *{font-family:system-ui,"Noto Sans KR",sans-serif !important;letter-spacing:0 !important}
-  #printAll .field input,#printAll .field textarea,#printAll .field select{color:#000 !important;background:transparent !important;border-bottom:none !important}
+
+  #printAll,#printAll *{
+    font-family:system-ui,"Noto Sans KR",sans-serif !important;
+    letter-spacing:0 !important;
+    box-shadow:none !important;
+    text-shadow:none !important;
+    background-image:none !important;
+  }
+
+  #printAll .field input,
+  #printAll .field textarea,
+  #printAll .field select{
+    color:#000 !important;
+    background:transparent !important;
+    border-bottom:none !important;
+  }
+
   #printAll .label{color:#000 !important;text-shadow:none !important}
+
   #printAll .field.radio .radio-item span{display:inline !important;color:#000 !important}
+
+  /* select는 실제 컨트롤 숨기고, print-value로 텍스트 찍기 */
   #printAll .field select{display:none !important}
-  #printAll .field .print-value{display:block !important;color:#000 !important}
+
+  #printAll .field{min-height:var(--ih, 28px) !important;}
+
   #printAll .field .print-value{
+    display:block !important;
+    color:#000 !important;
     position:absolute !important;
-    inset:0 !important;                 /* field 영역을 꽉 채움 */
-    padding:0 6px !important;           /* 화면과 동일 */
+    inset:0 !important;
+    padding:0 6px !important;
     height:var(--ih, 28px) !important;
     line-height:var(--ih, 28px) !important;
     font:600 var(--fs,14px)/1.2 system-ui !important;
-    color:#000 !important;
     white-space:pre-wrap;
     word-break:break-word;
     overflow-wrap:anywhere;
     text-align:var(--ta, left) !important;
   }
-  /* label이 select 영역에 영향을 주는 경우 방지(필요시) */
-  #printAll .field .label{ display:none !important; }
-  @media print{
-  /* ✅ select 숨기는 필드가 높이 0으로 접히지 않게 */
-  #printAll .field{ min-height: var(--ih, 28px) !important; }
 
-  /* ✅ textarea는 자동 높이 유지 */
-  #printAll .field textarea{ min-height: 5px !important; }
+  /* textarea는 자동 높이 유지 */
+  #printAll .field textarea{min-height:5px !important; height:auto !important; resize:none !important; max-height:none !important;}
+
+  /* label이 select 위에 겹쳐 문제면 숨김(원하실 때만 유지) */
+  /* #printAll .field .label{display:none !important;} */
 }
+
 
   #printAll textarea{
     height:auto !important;
@@ -440,8 +471,6 @@
 }
 
   .field.checkbox .label{top:0;left:24px}
-}
-
 
   .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
   #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
@@ -1129,13 +1158,7 @@ function getSelectedPlanName(){
   const sel = tars.find(t => t.f.value)?.f;
   return sel ? sel.value : '';
 }
-function isAffiliatePlan(planName){
-  const name = String(planName || '');
-  const AFF_RE = /(밀리의\s*서재|밀리의서재|지니\s*뮤직|지니뮤직|cu\s*20%?\s*할인|메가박스\s*free|제휴)/i;
-  if (AFF_RE.test(name)) return true;
-  const info = PLANS_MAP.get(planName);
-  return !!(info && info.bundleAnyone);
-}
+
 
 /* =========================
    ✅ render() 오류 수정 완성본

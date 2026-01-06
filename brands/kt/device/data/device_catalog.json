@@ -1,0 +1,8 @@
+{
+  "devices": [
+    { "id": "omd_sm_a165n", "name": "OMD-SM-A165N (갤럭시A16)", "msrp": 319000 },
+    { "id": "sm_a245n",     "name": "SM-A245N (갤럭시A24)",     "msrp": 396000 },
+    { "id": "sm_a226l",     "name": "SM-A226L (갤럭시 버디)",   "msrp": 299200 },
+    { "id": "at_m140l",     "name": "AT-M140L (스타일폴더 2)",  "msrp": 237600 }
+  ]
+}
