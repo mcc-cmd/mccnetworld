@@ -507,6 +507,22 @@
     margin-right: 4px;
     font-size: 14px;
   }
+  /* ✅✅ PRINT 강제 보정(맨 아래에 추가) */
+@media print{
+  html, body { background:#fff !important; color:#000 !important; }
+
+  /* 화면 UI는 숨김 */
+  .wrap, .builder, .pager, .hint, .hd, #affPopup { display:none !important; }
+
+  /* 인쇄 전용 컨테이너만 노출 */
+  #printAll { display:block !important; }
+
+  /* 검정 배경 방지 */
+  #printAll, #printAll * { background:transparent !important; }
+  #printAll .pageWrap { background:#fff !important; }
+  #printAll .paper { background:#fff !important; border:none !important; }
+}
+
 </style>
 
 <script>
@@ -1233,7 +1249,7 @@ function render(){
   Object.keys(elById).forEach(k => delete elById[k]);
 
   const p = cur();
-  bg.src = p.bg || '';
+  bg.src = p.bg ? new URL(p.bg, location.href).href : '';
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
@@ -2035,7 +2051,7 @@ function createPrintDOM(page, pageIdx){
   st.style.transform = 'scale(1)';
 
   const img = document.createElement('img');
-  img.src = page.bg || '';
+  img.src = page.bg ? new URL(page.bg, location.href).href : '';
 
   const ov = document.createElement('div');
   ov.className = 'overlay';
