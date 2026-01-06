@@ -347,7 +347,7 @@
 
   #printAll .label{color:#000 !important;text-shadow:none !important}
 
-  #printAll .field.radio .radio-item span{display:inline !important;color:#000 !important}
+  #printAll .field.radio.noText .radio-item span{display:none !important;}
 
   /* select는 실제 컨트롤 숨기고, print-value로 텍스트 찍기 */
   #printAll .field select{display:none !important}
@@ -729,6 +729,71 @@
 ========================= */
 const valuesById = Object.create(null);
 const elById = Object.create(null);
+/* ✅ 조건부 필수(라디오 선택값에 따라 required 켜기/끄기) */
+const CONDITIONAL_REQUIRED = [
+  {
+    sourceId: '신규/번이',          // ← 라디오 필드 ID
+    whenValue: '신규',         // ← 라디오 옵션 텍스트(정확히 일치)
+    requiredOn: ['희망번호'],       // ← 희망번호 입력 필드 ID
+  },
+  {
+    sourceId: '신규/번이',          // ← 라디오 필드 ID
+    whenValue: '번이',         // ← 라디오 옵션 텍스트(정확히 일치)
+    requiredOn: ['번호이동'], // ← 번호이동 번호/이전통신사 ID
+  },
+];
+
+/* 특정 id의 required를 전체 페이지에 적용 */
+function setRequiredById(id, isRequired){
+  const key = String(id || '').toLowerCase();
+  pages.forEach(pg => (pg.fields || []).forEach(f => {
+    if (String(f.id || '').toLowerCase() === key) {
+      f.required = !!isRequired;
+    }
+  }));
+}
+
+/* 현재 값 기준으로 조건부 required를 모두 재계산 */
+function applyConditionalRequired(){
+  // 1) 먼저 “해당 규칙에 등장하는 모든 타겟”을 required=false로 초기화
+  const allTargets = new Set();
+  CONDITIONAL_REQUIRED.forEach(r => (r.requiredOn || []).forEach(t => allTargets.add(t)));
+  allTargets.forEach(tid => setRequiredById(tid, false));
+
+  // 2) 라디오 선택값에 따라 required=true 적용
+  CONDITIONAL_REQUIRED.forEach(rule => {
+    const curVal = (valuesById[rule.sourceId] ?? '').toString().trim();
+    if (curVal === String(rule.whenValue)) {
+      (rule.requiredOn || []).forEach(tid => setRequiredById(tid, true));
+    }
+  });
+}
+
+/* ✅ 특정 필드 클릭/입력 시 체크박스 자동 토글 매핑 */
+const AUTO_CHECK_MAP = {
+  // key: "텍스트필드 id", value: "체크박스 id"
+  '랜덤결합시 필수 체크 입니다': '랜덤결합',
+};
+
+function autoToggleByFieldId(sourceId){
+  const targetId = AUTO_CHECK_MAP[String(sourceId || '')];
+  if(!targetId) return;
+
+  const cur = !!valuesById[targetId];
+  const next = !cur;
+  setValueById(targetId, next);
+
+  // 설계(pages)에도 동일하게 반영(동일 id 전체)
+  try{
+    const key = String(targetId).toLowerCase();
+    pages.forEach(pg => (pg.fields||[]).forEach(f=>{
+      if(String(f.id||'').toLowerCase() === key && f.type === 'checkbox'){
+        f.value = next;
+      }
+    }));
+  }catch(_){}
+}
+
 
 function setValueById(id, value) {
   if (!id) return;
@@ -736,13 +801,12 @@ function setValueById(id, value) {
   // 1) 전역 값 저장
   valuesById[id] = (value ?? "");
 
-  // 2) ✅ 설계 데이터(pages의 모든 동일 id 필드)도 같이 갱신
+  // 2) 설계 데이터(pages의 모든 동일 id 필드)도 같이 갱신
   try {
     const key = String(id).toLowerCase();
     pages.forEach(pg => {
       (pg.fields || []).forEach(f => {
         if (String(f.id || '').toLowerCase() === key) {
-          // checkbox는 boolean, 나머지는 string로
           if (f.type === 'checkbox') f.value = !!value;
           else f.value = (value ?? "");
         }
@@ -750,14 +814,16 @@ function setValueById(id, value) {
     });
   } catch (_) {}
 
-  // 3) 현재 화면에 떠 있는 컨트롤이 있으면 그것도 갱신
+  // ✅✅✅ 여기! (반드시 if문/루프 밖)
+  try { applyConditionalRequired(); } catch(_) {}
+
+  // 3) 현재 화면 DOM 반영
   const el = elById[id];
   if (!el) return;
 
   if (el.type === 'checkbox') {
     el.checked = !!value;
   } else {
-    // radio 더미(객체)일 수도 있으니 안전 처리
     if (typeof el === 'object' && el.type === 'radio') {
       el.value = (value ?? "");
     } else {
@@ -1171,8 +1237,8 @@ function render(){
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
-    if (Number.isFinite(f.fontSize))     f.fontSize     = clamp(f.fontSize, 5, 32);
-    if (Number.isFinite(f.inputHeight))  f.inputHeight  = clamp(f.inputHeight, 5, 60);
+    if (Number.isFinite(f.fontSize))    f.fontSize    = clamp(f.fontSize, 5, 32);
+    if (Number.isFinite(f.inputHeight)) f.inputHeight = clamp(f.inputHeight, 5, 60);
 
     const w = document.createElement('div');
     w.className = 'field '
@@ -1188,6 +1254,7 @@ function render(){
     w.dataset.i = i;
     if (f.id) w.dataset.id = f.id;
 
+    // radio 스타일/옵션
     if (f.type === 'radio') {
       w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
       w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
@@ -1195,34 +1262,28 @@ function render(){
       const rs = (f.radioStyle || 'dot'); // dot/solid/tick
       w.classList.remove('rd-dot','rd-solid','rd-tick');
       w.classList.add('rd-' + rs);
+
+      // 1,2 텍스트 숨김 옵션
+      if (f.radioShowText === false) w.classList.add('noText');
+      else w.classList.remove('noText');
+
+      // radio-item(겉 테두리) 제어
+      const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent)
+        ? 'transparent'
+        : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
+
+      const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
+        ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
+        : 1;
+
+      w.style.setProperty('--rbc', outerColor);
+      w.style.setProperty('--rbw', outerWidth + 'px');
     }
-    if (f.type === 'radio') {
-  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
-
-  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
-  w.classList.remove('rd-dot','rd-solid','rd-tick');
-  w.classList.add('rd-' + rs);
-
-  /* ✅ (추가) 1,2 표기 숨김 옵션 */
-  if (f.radioShowText === false) w.classList.add('noText');
-  else w.classList.remove('noText');
-
-  /* ✅ (추가) 겉 테두리(.radio-item) 제어 */
-  const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
-                    : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
-
-  const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
-    ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
-    : 1;
-
-  w.style.setProperty('--rbc', outerColor);
-  w.style.setProperty('--rbw', outerWidth + 'px');
-}
 
     if (f.color) w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
 
+    // checkbox/radio 테두리(체크/원) 공통
     if (f.type === 'checkbox' || f.type === 'radio') {
       const tickColor = f.borderTransparent ? 'transparent' : '#000';
       const tickWidth = Number.isFinite(Number(f.borderWidth))
@@ -1232,6 +1293,7 @@ function render(){
       w.style.setProperty('--tick-bdw', tickWidth + 'px');
     }
 
+    // 라벨
     const lab = document.createElement('div');
     lab.className   = 'label';
     lab.textContent = f.label || '';
@@ -1290,15 +1352,13 @@ function render(){
       };
     }
 
-    /* ===== ✅ select (오류났던 부분 전면 복구) ===== */
+    /* ===== select ===== */
     else if (f.type === 'select') {
       const sel = document.createElement('select');
 
-      // 전역 값 우선 적용
       const init = (f.id ? (valuesById[f.id] ?? f.value ?? "") : (f.value ?? ""));
       f.value = init;
 
-      // placeholder 옵션
       const phText = (f.placeholder || '').trim();
       if (phText) {
         const op0 = document.createElement('option');
@@ -1326,7 +1386,7 @@ function render(){
       }
 
       sel.onchange = () => {
-        if (sel.value === '') return; // placeholder 상태 방지
+        if (sel.value === '') return;
 
         f.value = sel.value;
         setValueById(f.id, sel.value);
@@ -1351,53 +1411,54 @@ function render(){
       ctrl = sel;
     }
 
-/* ===== checkbox ===== */
-else if (f.type === 'checkbox') {
-  ctrl = document.createElement('input');
-  ctrl.type = 'checkbox';
+    /* ===== checkbox ===== */
+    else if (f.type === 'checkbox') {
+      ctrl = document.createElement('input');
+      ctrl.type = 'checkbox';
 
-  const init = (f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
-  ctrl.checked = !!init;
-  f.value = !!init;
-  if (f.id) elById[f.id] = ctrl;
+      const init = (f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
+      ctrl.checked = !!init;
+      f.value = !!init;
+      if (f.id) elById[f.id] = ctrl;
 
-  if (f.locked || lockByPlaceholder){
-    ctrl.disabled = true;
-    ctrl.dataset.locked = '1';
-  }
+      if (f.locked || lockByPlaceholder){
+        ctrl.disabled = true;
+        ctrl.dataset.locked = '1';
+      }
 
-  w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
+      w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
 
-  // ✅ 체크 스타일 클래스 적용 (tick/solid/dot)
-  const style = (f.checkStyle || 'tick');
-  w.classList.remove('ck-tick','ck-solid','ck-dot');
-  w.classList.add('ck-' + style);
+      const style = (f.checkStyle || 'tick');
+      w.classList.remove('ck-tick','ck-solid','ck-dot');
+      w.classList.add('ck-' + style);
 
-  ctrl.onchange = () => {
-    f.value = ctrl.checked;
-    setValueById(f.id, ctrl.checked);
-    applyMirror(f, ctrl.checked);
+      ctrl.onchange = () => {
+        f.value = ctrl.checked;
+        setValueById(f.id, ctrl.checked);
+        applyMirror(f, ctrl.checked);
 
-    scheduleSave();
-    evaluateAffBanner();
-    evaluateExtraDataAndBar();
-  };
+        scheduleSave();
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
 
-  lab.style.top  = '0';
-  lab.style.left = '24px';
-}
+      lab.style.top  = '0';
+      lab.style.left = '24px';
+    }
 
-
-    /* ===== radio ===== */
+    /* ===== radio (단일선택) ===== */
     else if (f.type === 'radio') {
       ctrl = document.createElement('div');
-      const opts = (f.options && f.options.length)
+
+      const opts = (Array.isArray(f.options) && f.options.length)
         ? f.options
         : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
       const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
       f.value = init;
-if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/저장용)
+
+      if (f.id) elById[f.id] = { type:'radio', value:init }; // 저장/미러용 더미
+
       opts.forEach(o => {
         const it = document.createElement('label');
         it.className = 'radio-item';
@@ -1410,28 +1471,33 @@ if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/�
 
         cb.onchange = () => {
           if (!cb.checked) return;
+
+          // 단일선택 유지
           ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
             if (x !== cb) x.checked = false;
           });
+
           f.value = o;
-          setValueById(f.id, o);
+          setValueById(f.id, o);          // ✅ 여기서 applyConditionalRequired()는 setValueById가 처리
           applyMirror(f, o);
+
           scheduleSave();
           evaluateAffBanner();
           evaluateExtraDataAndBar();
         };
 
-        const s = document.createElement('span');
-const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+        // 텍스트 표시(원하면 숨김)
+        const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+        if (!hideText) {
+          const s = document.createElement('span');
+          s.textContent = o;
+          it.appendChild(cb);
+          it.appendChild(s);
+        } else {
+          it.appendChild(cb);
+        }
 
-if (!hideText) {
-  s.textContent = o;
-  it.appendChild(s);
-  } else {
-  // span을 아예 붙이지 않음(=무조건 숨김)
-}
-it.appendChild(cb);
-ctrl.appendChild(it);
+        ctrl.appendChild(it);
       });
     }
 
@@ -1456,6 +1522,7 @@ ctrl.appendChild(it);
 
       ctrl.oninput = () => {
         if (f.locked || lockByPlaceholder) return;
+
         let v = ctrl.value;
         v = applyMask(v, f.mask, f.maskRe);
         if (f.maxLength) v = v.slice(0, f.maxLength);
@@ -1471,6 +1538,7 @@ ctrl.appendChild(it);
       };
     }
 
+    // 색상/정렬
     if (f.color) ctrl.style.color = f.color;
 
     if (f.textAlign) {
@@ -1481,6 +1549,7 @@ ctrl.appendChild(it);
       ctrl.style.textAlign = '';
     }
 
+    // 테두리/배경 (text/textarea)
     if ((f.type === 'text' || f.type === 'textarea') && (f.borderColor || f.borderTransparent)) {
       w.classList.add('hasBorder');
       w.style.setProperty('--bdc', f.borderTransparent ? 'transparent' : (f.borderColor || '#ff3b3b'));
@@ -1499,27 +1568,44 @@ ctrl.appendChild(it);
       w.style.removeProperty('--bgc');
     }
 
+    /* =========================
+       ✅ 여기부터 “append/이벤트”는 단 한 번만!
+    ========================= */
+
+    // FILL 모드: 클릭 시 드래그로 안 새게
     if (FILL) {
       ctrl.addEventListener('mousedown', e => e.stopPropagation());
+      ctrl.addEventListener('pointerdown', e => e.stopPropagation());
     }
 
+    // ✅ 자동 토글(필드 클릭 시 체크박스 토글) - 원하신 “다시 누르면 해제” 포함
+    if (FILL && f.id && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+      const fire = () => autoToggleByFieldId(f.id);  // ✅ 토글 함수
+      ctrl.addEventListener('pointerdown', fire);
+      // focus/input은 원치 않으시면 유지하지 않는 것이 안전합니다.
+    }
+
+    // DOM 붙이기(중복 append 제거)
     w.appendChild(ctrl);
     overlay.appendChild(w);
 
+    // 이름칸 자동축소
     if (isNameField(f)) setupNameAutoShrink(ctrl, f);
 
-if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
-  const rh = document.createElement('div');
-  rh.className = 'resize-handle';
-  rh.addEventListener('mousedown', ev => startResize(ev, i, w));
-  w.appendChild(rh);
-}
+    // 편집모드 리사이즈 핸들
+    if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+      const rh = document.createElement('div');
+      rh.className = 'resize-handle';
+      rh.addEventListener('mousedown', ev => startResize(ev, i, w));
+      w.appendChild(rh);
+    }
 
+    // 편집모드 드래그/선택
     if (!FILL) {
       w.addEventListener('mousedown', e => startDrag(e, i, w));
       w.addEventListener('click', () => select(i));
     }
-  });
+  }); // ✅✅✅ forEach 정상 닫힘
 
   if (!FILL) updatePanel();
   pageInfo.textContent = `${pageIndex + 1} / ${pages.length}`;
@@ -2445,6 +2531,7 @@ async function boot(){
   await loadPlansJson();
   fillAutoDates();
   render();
+  applyConditionalRequired();
   evaluateAffBanner();
   evaluateExtraDataAndBar();
   syncFeesFromExistingPlan();

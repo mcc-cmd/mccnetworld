@@ -269,8 +269,8 @@
           "lockOnPh": false,
           "inputHeight": 26,
           "checkSize": 18,
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "비상 연락처",
@@ -298,8 +298,8 @@
           "lockOnPh": false,
           "inputHeight": 28,
           "checkSize": 18,
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "예금주 성함",
@@ -327,8 +327,8 @@
           "lockOnPh": false,
           "inputHeight": 27,
           "checkSize": 10,
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -385,8 +385,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "유효기간",
@@ -442,8 +442,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "카드 유효기간/년",
@@ -568,7 +568,7 @@
           "value": ""
         },
         {
-          "id": "신규",
+          "id": "희망번호",
           "label": "",
           "type": "text",
           "x": 21.15137443140524,
@@ -624,8 +624,8 @@
           "mirrorTo": [
             "개통번호"
           ],
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -880,7 +880,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "05"
+          "value": "06"
         },
         {
           "id": "판매자 성함",
@@ -1039,10 +1039,11 @@
           "y": 8.336594420184387,
           "w": 16.99654866935291,
           "required": true,
-          "options": [],
+          "options": ["신규","번이"],
           "radioSize": 20,
           "radioGap": 5,
           "radioStyle": "tick",
+          "radioShowText": false,
           "checkSize": 20,
           "color": "#000000",
           "inputHeight": 17,
@@ -1095,8 +1096,8 @@
           "id": "랜덤결합",
           "label": "",
           "type": "checkbox",
-          "x": 67.71484593227916,
-          "y": 57.3,
+          "x": 67.9147413563936,
+          "y": 57.38711011623605,
           "w": 3,
           "required": false,
           "checkStyle": "tick",
@@ -1124,8 +1125,8 @@
           "id": "랜덤결합시 필수 체크 입니다",
           "label": "",
           "type": "text",
-          "x": 52.857142657844406,
-          "y": 56.867901334548854,
+          "x": 52.970807549469335,
+          "y": 56.8672503014234,
           "w": 13.428572584502469,
           "required": false,
           "radioSize": 18,
@@ -1148,6 +1149,35 @@
           "locked": true,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "extraData",
+          "label": "",
+          "type": "text",
+          "x": 80.17142646683688,
+          "y": 56.948708355211174,
+          "w": 17.20000089285708,
+          "required": false,
+          "value": "",
+          "inputHeight": 24,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#CC0033",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 12,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1188,14 +1218,15 @@
           "placeholder": "랜덤결합시 필수 체크 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "랜덤결합",
           "label": "",
           "type": "checkbox",
-          "x": 92.50086199073229,
-          "y": 60.871621890219444,
+          "x": 91.3431297891232,
+          "y": 61.07632741955228,
           "w": 3,
           "required": false,
           "checkStyle": "tick",
@@ -1216,7 +1247,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "자필 성함싸인",
@@ -1244,7 +1276,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
@@ -1470,7 +1503,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "05"
+          "value": "06"
         },
         {
           "id": "자필 성함싸인",
