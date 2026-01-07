@@ -44,10 +44,23 @@
   .field{position:absolute;transform:none;cursor:move;z-index:2;--fs:14px;}
   .field.checkbox{transform:translate(-50%,-50%)}
   .label{position:absolute;top:-16px;left:0;font-size:12px;font-weight:800;text-shadow:0 1px 2px #0009}
-  .field input,.field textarea,.field select{
-    width:100%;background:transparent;border:none;color:var(--fgc,#fff);
-    height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
-  }
+
+/* ✅ 텍스트/셀렉트/텍스트에어리어만 */
+.field input:not([type="checkbox"]):not([type="radio"]),
+.field textarea,
+.field select{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--fgc,#fff);
+  height:var(--ih,auto);
+  outline:none;
+  padding:0 6px;
+  font:600 var(--fs)/1.2 system-ui;
+  text-align:var(--ta,left);
+}
+
+
   .field:focus-within{
     outline: 3px solid #e724ee83;
     outline-offset: 0px;
@@ -55,12 +68,11 @@
     background: rgba(37,99,235,.03);
   }
 
-  /* 세로 가운데(텍스트 한 줄용) */
   .field input[type="text"],
   .field select{
     line-height: var(--ih, 28px);
-    padding-top: 0;
-    padding-bottom: 0;
+    padding-top:0;
+    padding-bottom:0;
   }
 
   /* 리사이즈 손잡이 */
@@ -95,18 +107,6 @@
     padding-right: 8px;
   }
 
-  .field input,.field textarea,.field select{
-    width:100%;
-    background:transparent;
-    border:none;
-    color:var(--fgc,#fff);
-    height:var(--ih,auto);
-    outline:none;
-    padding:0 6px;
-    font:600 var(--fs)/1.2 system-ui;
-    text-align:var(--ta,left);
-  }
-
   .field textarea{
     white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
     overflow:hidden;resize:none !important;scrollbar-width:none;min-height:5px;max-height:none !important;
@@ -117,281 +117,32 @@
   .field [data-locked="1"]{caret-color:transparent}
   .field [data-locked="1"]::placeholder{color:var(--phc);font-weight:900;background:var(--phbg);padding:0 .25em;border-radius:6px;}
 
-  /* 체크/라디오 */
-  .field.checkbox input,.field.radio input[type="checkbox"]{
-    appearance:none;-webkit-appearance:none;background:transparent;
-    border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000);
-    position:relative;vertical-align:middle;display:inline-block;box-sizing:border-box;
-  }
   /* ===== radio 표시 스타일 3종 (dot / solid / tick) ===== */
-.field.radio.rd-dot input[type="checkbox"]:checked::after{
-  content:"";
-  position:absolute;
-  inset:3px;
-  border-radius:999px;
-  background:#000;
-}
-
-.field.radio.rd-solid input[type="checkbox"]:checked::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  border-radius:999px;
-  background:#000;
-}
-
-/* ✓ 체크 표시 (동그라미 안에 체크) */
-.field.radio.rd-tick input[type="checkbox"]:checked::after{
-  content:"";
-  position:absolute;
-  left:5px;
-  top:2px;
-  width:calc(var(--rsize,18px) - 10px);
-  height:calc(var(--rsize,18px) - 10px);
-  border-right:2px solid #000;
-  border-bottom:2px solid #000;
-  transform:rotate(45deg);
-  border-radius:0;
-}
-
-  .field.checkbox input{width:var(--cksize,18px);height:var(--cksize,18px);border-radius:2px;}
-/* ✅ PRINT: checkbox tick 기본 */
-.field.checkbox.ck-tick input:checked::after,
-.field.checkbox:not(.ck-solid):not(.ck-dot) input:checked::after{
-  content:"";
-  position:absolute;
-  left:3px;
-  top:0px;
-  width:calc(var(--cksize,18px) - 6px);
-  height:calc(var(--cksize,18px) - 6px);
-  border-right:2px solid #000;
-  border-bottom:2px solid #000;
-  transform:rotate(45deg) translateY(-2px);
-}
-
-/* ✅ PRINT: checkbox solid */
-.field.checkbox.ck-solid input:checked::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  background:#000;
-  border:none;
-  transform:none;
-}
-
-/* ✅ PRINT: checkbox dot */
-.field.checkbox.ck-dot input:checked::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:calc(var(--cksize,18px) * 0.45);
-  height:calc(var(--cksize,18px) * 0.45);
-  background:#000;
-  border-radius:999px;
-  transform:translate(-50%,-50%);
-  border:none;
-}
-
-  .field.checkbox .label{top:0;left:24px}
-  /* ===== radio 개선 ===== */
-  .field.radio{
-    white-space: normal;
+  .field.radio.rd-dot input[type="radio"]:checked::after{
+    content:"";
+    position:absolute;
+    inset:3px;
+    border-radius:999px;
+    background:#000;
   }
-
-  .field.radio > div{
-    display:flex;
-    flex-wrap:wrap;
-    gap: var(--rgap,12px);
-    align-items:center;
-    max-width:100%;
+  .field.radio.rd-solid input[type="radio"]:checked::after{
+    content:"";
+    position:absolute;
+    inset:2px;
+    border-radius:999px;
+    background:#000;
   }
-
-.field.radio .radio-item{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-
-  padding:2px 6px;
-  border-radius:8px;
-  background:transparent;
-  border:1px solid rgba(0,0,0,.25);
-
-  flex:0 1 auto;
-  max-width:100%;
-}
-
-.field.radio .radio-item span{
-  display:inline;
-  font-weight:700;
-  color:#000;
-
-  white-space:normal;
-  word-break:keep-all;
-}
-/* ===== radio-item(겉 테두리) / 텍스트 표시 제어 ===== */
-.field.radio .radio-item{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-
-  padding:2px 6px;
-  border-radius:8px;
-
-  border: var(--rbw,1px) solid var(--rbc, rgba(0,0,0,.25));
-  background: var(--rbg, transparent);
-
-  flex:0 1 auto;
-  max-width:100%;
-}
-
-.field.radio.noText .radio-item span{
-  display:none !important;
-}
-
-  /* ===== 체크 스타일 변형(tick/solid/dot) ===== */
-.field.checkbox.ck-solid input:checked::after{
-  content:"";
-  position:absolute;
-  inset:2px;
-  background:#000;
-  border:none;
-  transform:none;
-}
-
-.field.checkbox.ck-dot input:checked::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:calc(var(--cksize,18px) * 0.45);
-  height:calc(var(--cksize,18px) * 0.45);
-  background:#000;
-  border-radius:999px;
-  transform:translate(-50%,-50%);
-  border:none;
-}
-
-/* tick은 기존 스타일 그대로 사용 */
-
-  .sel{outline:3px solid #00d2ff66;border-radius:8px}
-
-  /* 우측 기본도구 */
-  .group{border:2px solid #2b3a54;border-radius:12px;padding:10px;margin:10px 0 14px;background:#0f1624}
-  .group h4{margin:0 0 8px;font-size:12px;color:#9fb0cc;font-weight:800;letter-spacing:.4px}
-  .row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px}
-  .row input,.row select,.row textarea{width:100%;background:#0f1624;border:1px solid #2b3a54;border-radius:10px;color:#dfe9ff;outline:none;padding:8px 10px;font-weight:700}
-  .hint{color:#9fb0cc;font-size:12px}
-  .stack .paper{margin-bottom:56px}
-  .stack{padding-bottom:140px}
-  .pager{display:flex;align-items:center;gap:8px;justify-content:center;margin:6px 0 18px;flex-wrap:wrap}
-  #pageInfo{min-width:84px;text-align:center;font-weight:800}
-
-  .toast{position:fixed;left:0;right:0;bottom:16px;display:none;justify-content:center;z-index:9999}
-  .toast__card{background:#172131;border:1px solid #2b3a54;border-radius:10px;padding:10px 12px;color:#fff;max-width:680px;width:calc(100% - 32px)}
-  .invalid{outline:3px solid var(--danger)!important;background:rgba(255,59,59,.2);border-radius:8px}
-  html.fill .builder{display:none}
-
-  /* 인쇄 공통 */
-  @page{size:A4 portrait;margin:0}
-  #printAll{display:none}
-  .print-value{display:none;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui}
-
-    /* ✅ PRINT: radio (원형 유지) */
-  .field.radio input[type="checkbox"]{
-    width:var(--rsize,18px) !important;
-    height:var(--rsize,18px) !important;
-    border-radius:999px !important;
-  }
-
-@media print{
-  body{background:#fff !important; color:#000 !important;}
-
-  .wrap,.builder,.pager,.hint,.hd,#affPopup{display:none !important}
-  #printAll{display:block}
-
-  .pageWrap{
-    width:210mm;height:297mm;position:relative;overflow:visible;
-    padding:0;box-sizing:border-box;page-break-after:always;
-    background:#fff !important;
-  }
-  .pageWrap:last-child{page-break-after:auto}
-
-  #printAll .stage{transform:scale(1)}
-  #printAll .paper{
-    border:none;height:auto;
-    background:#fff !important;
-  }
-  #printAll .stage img{width:100%;height:100%;object-fit:fill}
-
-  #printAll .overlay{position:absolute;inset:0;overflow:visible !important}
-
-  #printAll,#printAll *{
-    font-family:system-ui,"Noto Sans KR",sans-serif !important;
-    letter-spacing:0 !important;
-    box-shadow:none !important;
-    text-shadow:none !important;
-    background-image:none !important;
-  }
-
-  #printAll .field input,
-  #printAll .field textarea,
-  #printAll .field select{
-    color:#000 !important;
-    background:transparent !important;
-    border-bottom:none !important;
-  }
-
-  #printAll .label{color:#000 !important;text-shadow:none !important}
-
-  #printAll .field.radio.noText .radio-item span{display:none !important;}
-
-  /* select는 실제 컨트롤 숨기고, print-value로 텍스트 찍기 */
-  #printAll .field select{display:none !important}
-
-  #printAll .field{min-height:var(--ih, 28px) !important;}
-
-  #printAll .field .print-value{
-    display:block !important;
-    color:#000 !important;
-    position:absolute !important;
-    inset:0 !important;
-    padding:0 6px !important;
-    height:var(--ih, 28px) !important;
-    line-height:var(--ih, 28px) !important;
-    font:600 var(--fs,14px)/1.2 system-ui !important;
-    white-space:pre-wrap;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-    text-align:var(--ta, left) !important;
-  }
-
-  /* textarea는 자동 높이 유지 */
-  #printAll .field textarea{min-height:5px !important; height:auto !important; resize:none !important; max-height:none !important;}
-
-  /* label이 select 위에 겹쳐 문제면 숨김(원하실 때만 유지) */
-  /* #printAll .field .label{display:none !important;} */
-}
-
-  #printAll textarea{
-    height:auto !important;
-    resize:none !important;
-    max-height:none !important;
-  }
-
-  .field.checkbox input,.field.radio input[type="checkbox"]{
-    appearance:none !important;
-    -webkit-appearance:none !important;
-    background:transparent !important;
-    border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;
-    position:relative !important;
-    vertical-align:middle;
-  }
-
-  .field.checkbox input{
-    width:var(--cksize,18px) !important;
-    height:var(--cksize,18px) !important;
-    border-radius:2px !important
+  .field.radio.rd-tick input[type="radio"]:checked::after{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:2px;
+    width:calc(var(--rsize,18px) - 10px);
+    height:calc(var(--rsize,18px) - 10px);
+    border-right:2px solid #000;
+    border-bottom:2px solid #000;
+    transform:rotate(45deg);
+    border-radius:0;
   }
 
   /* ✅ PRINT: checkbox tick 기본 */
@@ -432,38 +183,156 @@
     border:none;
   }
 
+  .field.checkbox .label{top:0;left:24px}
+
+  /* ===== radio 개선 ===== */
+  .field.radio{white-space: normal;}
+  .field.radio > div{
+    display:flex;
+    flex-wrap:wrap;
+    gap: var(--rgap,12px);
+    align-items:center;
+    max-width:100%;
+  }
+  .field.radio .radio-item{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    padding:2px 6px;
+    border-radius:8px;
+    background:transparent;
+    border: var(--rbw,1px) solid var(--rbc, rgba(0,0,0,.25));
+
+    flex:0 1 auto;
+    max-width:100%;
+  }
+  .field.radio .radio-item span{
+    display:inline;
+    font-weight:700;
+    color:#000;
+    white-space:normal;
+    word-break:keep-all;
+  }
+
+  /* ============================
+     ✅ 라디오 텍스트 "가리기(숨김)" 모드
+  ============================ */
+  .field.radio.noText .radio-item span{display:none !important;}
+  .field.radio.noText .radio-item{
+    border:none !important;
+    padding:0 !important;
+    background:transparent !important;
+    gap:0 !important;
+    border-radius:0 !important;
+  }
+  .field.radio.noText > div{gap: var(--rgap,6px);}
+  .field.radio.noText .radio-item{
+    display:inline-flex !important;
+    width:fit-content !important;
+    max-width:none !important;
+    flex:0 0 auto !important;
+    margin:0 !important;
+  }
+.field.radio.noText .radio-item input[type="radio"]{margin:0 !important;}
+
+
+  .sel{outline:3px solid #00d2ff66;border-radius:8px}
+
+  /* 우측 기본도구 */
+  .group{border:2px solid #2b3a54;border-radius:12px;padding:10px;margin:10px 0 14px;background:#0f1624}
+  .group h4{margin:0 0 8px;font-size:12px;color:#9fb0cc;font-weight:800;letter-spacing:.4px}
+  .row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+  .row input,.row select,.row textarea{width:100%;background:#0f1624;border:1px solid #2b3a54;border-radius:10px;color:#dfe9ff;outline:none;padding:8px 10px;font-weight:700}
+  .hint{color:#9fb0cc;font-size:12px}
+  .stack .paper{margin-bottom:56px}
+  .stack{padding-bottom:140px}
+  .pager{display:flex;align-items:center;gap:8px;justify-content:center;margin:6px 0 18px;flex-wrap:wrap}
+  #pageInfo{min-width:84px;text-align:center;font-weight:800}
+
+  .toast{position:fixed;left:0;right:0;bottom:16px;display:none;justify-content:center;z-index:9999}
+  .toast__card{background:#172131;border:1px solid #2b3a54;border-radius:10px;padding:10px 12px;color:#fff;max-width:680px;width:calc(100% - 32px)}
+  .invalid{outline:3px solid var(--danger)!important;background:rgba(255,59,59,.2);border-radius:8px}
+  html.fill .builder{display:none}
+
+  /* 인쇄 공통 */
+  @page{size:A4 portrait;margin:0}
+  #printAll{display:none}
+  .print-value{display:none;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui}
+
+  @media print{
+    body{background:#fff !important; color:#000 !important;}
+
+    .wrap,.builder,.pager,.hint,.hd,#affPopup{display:none !important}
+    #printAll{display:block}
+
+    .pageWrap{
+      width:210mm;height:297mm;position:relative;overflow:visible;
+      padding:0;box-sizing:border-box;page-break-after:always;
+      background:#fff !important;
+    }
+    .pageWrap:last-child{page-break-after:auto}
+
+    #printAll .stage{transform:scale(1)}
+    #printAll .paper{
+      border:none;height:auto;
+      background:#fff !important;
+    }
+    #printAll .stage img{width:100%;height:100%;object-fit:fill}
+    #printAll .overlay{position:absolute;inset:0;overflow:visible !important}
+
+    #printAll,#printAll *{
+      font-family:system-ui,"Noto Sans KR",sans-serif !important;
+      letter-spacing:0 !important;
+      box-shadow:none !important;
+      text-shadow:none !important;
+      background-image:none !important;
+    }
+
+    /* ✅ 텍스트 입력만(체크/라디오 제외) */
+    #printAll .field input:not([type="checkbox"]),
+    #printAll .field textarea,
+    #printAll .field select{
+      color:#000 !important;
+      background:transparent !important;
+      border-bottom:none !important;
+    }
+
+    #printAll .label{color:#000 !important;text-shadow:none !important}
+
+    /* select는 실제 컨트롤 숨기고, print-value로 텍스트 찍기 */
+    #printAll .field select{display:none !important}
+    #printAll .field{min-height:var(--ih, 28px) !important;}
+
+    #printAll .field .print-value{
+      display:block !important;
+      color:#000 !important;
+      position:absolute !important;
+      inset:0 !important;
+      padding:0 6px !important;
+      height:var(--ih, 28px) !important;
+      line-height:var(--ih, 28px) !important;
+      font:600 var(--fs,14px)/1.2 system-ui !important;
+      white-space:pre-wrap;
+      word-break:break-word;
+      overflow-wrap:anywhere;
+      text-align:var(--ta, left) !important;
+    }
+
+    #printAll .field textarea{min-height:5px !important; height:auto !important; resize:none !important; max-height:none !important;}
+
+    /* ✅ PRINT에서도 라디오 텍스트 숨김이면 span 숨김 + 테두리/패딩 제거 */
+    #printAll .field.radio.noText .radio-item span{display:none !important;}
+    #printAll .field.radio.noText .radio-item{border:none !important; padding:0 !important; background:transparent !important; gap:0 !important;}
+  }
+
+  #printAll textarea{
+    height:auto !important;
+    resize:none !important;
+    max-height:none !important;
+  }
+
   .env-badge{display:none !important;}
-
-  /* PRINT: radio dot */
-  .field.radio.rd-dot input[type="checkbox"]:checked::after{
-    content:"";
-    position:absolute;
-    inset:3px;
-    border-radius:999px;
-    background:#000;
-  }
-
-  /* PRINT: radio solid */
-  .field.radio.rd-solid input[type="checkbox"]:checked::after{
-    content:"";
-    position:absolute;
-    inset:2px;
-    border-radius:999px;
-    background:#000;
-  }
-
-  /* PRINT: radio tick */
-  .field.radio.rd-tick input[type="checkbox"]:checked::after{
-    content:"";
-    position:absolute;
-    left:5px;
-    top:2px;
-    width:calc(var(--rsize,18px) - 10px);
-    height:calc(var(--rsize,18px) - 10px);
-    border-right:2px solid #000;
-    border-bottom:2px solid #000;
-    transform:rotate(45deg);
-  }
 
   .field.checkbox .label{top:0;left:24px}
 
@@ -487,10 +356,14 @@
     background:#f59e0b;color:#111827;box-shadow:0 2px 6px rgba(0,0,0,.2);
     user-select:none;pointer-events:none;
   }
+
+  /* ✅ 운영(prod)에서도 ?builder=1이면 도구 보이게 */
   html.is-prod .builder{display:none !important;}
   html.is-prod .hd .builder{display:none !important;}
   html.force-builder .builder{display:block !important;}
   html.force-builder .hd .builder{display:block !important;}
+  html.is-prod.force-builder .builder{display:block !important;}
+  html.is-prod.force-builder .hd .builder{display:block !important;}
 
   .btn-back{
     min-width: 140px;
@@ -503,16 +376,6 @@
     content: "←";
     margin-right: 4px;
     font-size: 14px;
-  }
-
-  /* ✅✅ PRINT 강제 보정(맨 아래에 추가) */
-  @media print{
-    html, body { background:#fff !important; color:#000 !important; }
-    .wrap, .builder, .pager, .hint, .hd, #affPopup { display:none !important; }
-    #printAll { display:block !important; }
-    #printAll, #printAll * { background:transparent !important; }
-    #printAll .pageWrap { background:#fff !important; }
-    #printAll .paper { background:#fff !important; border:none !important; }
   }
 
   /* ✅ 메시지 박스(모달) */
@@ -552,6 +415,61 @@
   #msgModal .msgModal__ft{
     display:flex; justify-content:flex-end; gap:8px;
   }
+
+  /* =====================================================
+     ✅✅✅ 체크/라디오 ONLY 최종 고정 (CSS 맨 아래에 1번만)
+     - 납작 원형 방지
+     - padding/height 공통 규칙 영향 차단
+  ===================================================== */
+
+  /* 라디오(체크박스로 구현) */
+.field.radio input[type="radio"]{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  background:transparent !important;
+
+  width:var(--rsize,18px) !important;
+  height:var(--rsize,18px) !important;
+  padding:0 !important;
+  margin:0 !important;
+  line-height:0 !important;
+
+  border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;
+  border-radius:999px !important;
+
+  display:inline-block !important;
+  vertical-align:middle !important;
+  box-sizing:border-box !important;
+
+  position:relative !important; /* ✅ ::after 위치 기준 */
+  cursor:pointer;
+}
+.field.radio .radio-item{ cursor:pointer; }
+
+
+  /* 체크박스 */
+  .field.checkbox input{
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    background:transparent !important;
+
+    width:var(--cksize,18px) !important;
+    height:var(--cksize,18px) !important;
+    padding:0 !important;
+    margin:0 !important;
+    line-height:0 !important;
+
+    border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;
+    border-radius:2px !important;
+
+    display:inline-block !important;
+    vertical-align:middle !important;
+    box-sizing:border-box !important;
+  }
+
+  /* ✅ noText 모드에서 잔폭 제거(간격 안 줄어드는 문제 보완) */
+  .field.radio.noText .radio-item{min-width:0 !important;}
+  .field.radio.noText > div{justify-content:flex-start;}
 </style>
 
 <script>
@@ -597,21 +515,20 @@
       </div>
     </div>
 
-      <div class="paper" id="paper">
-        <div class="stage" id="stage">
-          <img id="bg" src="" alt="">
-          <div class="overlay" id="overlay"></div>
-        </div>
+    <div class="paper" id="paper">
+      <div class="stage" id="stage">
+        <img id="bg" src="" alt="">
+        <div class="overlay" id="overlay"></div>
       </div>
-
-      <div class="pager">
-        <button class="btn--ghost btn" id="prev">◀ 이전</button>
-        <div id="pageInfo">1 / 7</div>
-        <button class="btn--ghost btn" id="next">다음 ▶</button>
-        <button class="btn" id="btnPdf">PDF 생성OR인쇄</button>
-      </div>
-      <p class="hint" style="text-align:center">필드를 클릭해 드래그로 이동. 입력은 컨트롤을 클릭 후 타이핑.</p>
     </div>
+
+    <div class="pager">
+      <button class="btn--ghost btn" id="prev">◀ 이전</button>
+      <div id="pageInfo">1 / 7</div>
+      <button class="btn--ghost btn" id="next">다음 ▶</button>
+      <button class="btn" id="btnPdf">PDF 생성OR인쇄</button>
+    </div>
+    <p class="hint" style="text-align:center">필드를 클릭해 드래그로 이동. 입력은 컨트롤을 클릭 후 타이핑.</p>
   </section>
 
   <section class="panel builder">
@@ -666,18 +583,24 @@
         <div class="row"><div>라디오 크기(px)</div><input id="p_radioSize" type="number" min="10" max="32" step="1" placeholder="18"></div>
         <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="200" step="1" placeholder="12"></div>
 
-        <!-- ✅✅✅ 추가: 라디오 개수 -->
+        <!-- ✅ 라디오 개수 -->
         <div class="row" id="row_radioCount">
           <div>라디오 개수</div>
           <input id="p_radioCount" type="number" min="2" max="20" step="1" placeholder="예: 2">
         </div>
 
+        <!-- ✅✅✅ 추가: 라디오 옵션 텍스트 숨김(가리기) -->
+        <div class="row" id="row_radioHideText">
+          <div>옵션 텍스트 숨김</div>
+          <label><input type="checkbox" id="p_radioHideText"> 원만 표시</label>
+        </div>
+
         <div class="row" id="row_checkStyle">
-        <div>체크 스타일</div>
-        <select id="p_checkStyle">
-        <option value="tick">✓ 체크</option>
-        <option value="solid">■ 꽉찬</option>
-        <option value="dot">● 점</option>
+          <div>체크 스타일</div>
+          <select id="p_checkStyle">
+            <option value="tick">✓ 체크</option>
+            <option value="solid">■ 꽉찬</option>
+            <option value="dot">● 점</option>
           </select>
         </div>
 
@@ -890,6 +813,15 @@ function setValueById(id, value) {
 
   const el = elById[id];
   if (!el) return;
+  // ✅ radio DOM 체크 상태 동기화
+  if (el && typeof el === 'object' && el.type === 'radio') {
+    const v = String(value ?? '');
+    overlay
+      .querySelectorAll(`.field[data-id="${CSS.escape(String(id))}"] input[type="radio"]`)
+      .forEach(r => { r.checked = (r.value === v); });
+    el.value = v;
+    return;
+  }
 
   if (el.type === 'checkbox') {
     el.checked = !!value;
@@ -922,9 +854,6 @@ const bg      = document.getElementById('bg');
 const pageInfo= document.getElementById('pageInfo');
 const affBanner=document.getElementById('affBanner');
 const affPopup = document.getElementById('affPopup');
-
-const extraBar = document.getElementById('extraBar');
-const extraBarText = document.getElementById('extraBarText');
 
 let LAST_EXTRA_TXT = '';
 let __MIRRORING__ = false;
@@ -1295,7 +1224,7 @@ function getSelectedPlanName(){
 }
 
 /* =========================
-   ✅ render() (원본 유지)
+   ✅ render() (원본 유지 + radioHideText 연동)
 ========================= */
 function render(){
   Object.keys(elById).forEach(k => delete elById[k]);
@@ -1330,6 +1259,7 @@ function render(){
       w.classList.remove('rd-dot','rd-solid','rd-tick');
       w.classList.add('rd-' + rs);
 
+      /* ✅✅✅ 여기: 옵션 텍스트 숨김 */
       if (f.radioShowText === false) w.classList.add('noText');
       else w.classList.remove('noText');
 
@@ -1522,36 +1452,32 @@ function render(){
         const it = document.createElement('label');
         it.className = 'radio-item';
 
-        const cb = document.createElement('input');
-        cb.type  = 'checkbox';
-        cb.value = o;
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+const cb = document.createElement('input');
+cb.type = 'radio';
+cb.name = 'r_' + String(f.id || ('radio_' + i));   // ✅ 같은 그룹으로 묶기
+cb.value = o;
+cb.checked = (f.value === o);
+if (f.locked || lockByPlaceholder) cb.disabled = true;
 
-        cb.onchange = () => {
-          if (!cb.checked) return;
+cb.onchange = () => {
+  if (!cb.checked) return;
 
-          ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
-            if (x !== cb) x.checked = false;
-          });
+  f.value = o;
+  setValueById(f.id, o);
+  applyMirror(f, o);
 
-          f.value = o;
-          setValueById(f.id, o);
-          applyMirror(f, o);
-
-          scheduleSave();
-          evaluateAffBanner();
-          evaluateExtraDataAndBar();
-        };
+  scheduleSave();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
 
         const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+        it.appendChild(cb);
+
         if (!hideText) {
           const s = document.createElement('span');
           s.textContent = o;
-          it.appendChild(cb);
           it.appendChild(s);
-        } else {
-          it.appendChild(cb);
         }
 
         ctrl.appendChild(it);
@@ -1700,7 +1626,8 @@ function applyMask(value, mask, maskRe){
 const pLabel=document.getElementById('p_label'),
       pRadioSize=document.getElementById('p_radioSize'),
       pRadioGap=document.getElementById('p_radioGap'),
-      pRadioCount=document.getElementById('p_radioCount'),  /* ✅✅✅ 추가 */
+      pRadioCount=document.getElementById('p_radioCount'),
+      pRadioHideText=document.getElementById('p_radioHideText'), /* ✅✅✅ 추가 */
       pColor=document.getElementById('p_color'),
       pHeight=document.getElementById('p_height'),
       pWrap=document.getElementById('p_wrap'),
@@ -1730,12 +1657,14 @@ function updatePanel(){
         pw=document.getElementById('p_w'),
         rowOpts=document.getElementById('row_opts'),
         rowReq=document.getElementById('row_req'),
-        rowRadioCount=document.getElementById('row_radioCount'); /* ✅✅✅ 추가 */
+        rowRadioCount=document.getElementById('row_radioCount'),
+        rowRadioHideText=document.getElementById('row_radioHideText');
 
   if(selected<0){
     info.textContent='없음'; px.value=py.value=pw.value='';
     pLabel.value=''; pRadioSize.value=''; pRadioGap.value='';
-    if(pRadioCount) pRadioCount.value=''; /* ✅ */
+    if(pRadioCount) pRadioCount.value='';
+    if(pRadioHideText) pRadioHideText.checked=false;
     pColor.value='#000000'; pHeight.value=''; pWrap.checked=true; pId.value='';
     pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=false;
     pBgColor.value='#000000'; pBgTransparent.checked=false;
@@ -1743,7 +1672,8 @@ function updatePanel(){
     pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
     if(rowOpts) rowOpts.style.display='none'; 
     if(rowReq) rowReq.style.display='none';
-    if(rowRadioCount) rowRadioCount.style.display='none'; /* ✅ */
+    if(rowRadioCount) rowRadioCount.style.display='none';
+    if(rowRadioHideText) rowRadioHideText.style.display='none';
     if (pCheckStyle) pCheckStyle.value = 'tick';
     return;
   }
@@ -1756,11 +1686,16 @@ function updatePanel(){
   pRadioSize.value = (f.type === 'checkbox') ? (f.checkSize ?? 18) : (f.radioSize ?? 18);
   pRadioGap.value = (f.radioGap ?? 12);
 
-  /* ✅✅✅ 라디오 개수: 라디오일 때만 노출 + 값 세팅 */
   if(rowRadioCount) rowRadioCount.style.display = (f.type==='radio') ? '' : 'none';
   if(pRadioCount){
     const currentCount = (f.radioCount ?? (Array.isArray(f.options) ? f.options.length : 2));
     pRadioCount.value = (f.type==='radio') ? String(currentCount) : '';
+  }
+
+  /* ✅✅✅ 라디오 텍스트 숨김 옵션 표시/세팅 */
+  if(rowRadioHideText) rowRadioHideText.style.display = (f.type==='radio') ? '' : 'none';
+  if(pRadioHideText){
+    pRadioHideText.checked = (f.type==='radio') ? (f.radioShowText === false) : false;
   }
 
   pColor.value=(f.color || '#000000');
@@ -1877,10 +1812,10 @@ document.getElementById('addField').onclick=()=>{
         req=document.getElementById('newReq').checked;
   const base={id:(id||`${t}_${Date.now()}`),label,type:t,x:50,y:50,w:30,required:req};
   if(t==='select'||t==='radio') base.options=opts;
-  if(t==='radio'){ 
-    base.radioSize=18; base.radioGap=12; 
-    /* ✅ 기본 2개 */
+  if(t==='radio'){
+    base.radioSize=18; base.radioGap=12;
     base.radioCount = Math.max(2, opts.length || 2);
+    base.radioShowText = true; /* 기본: 텍스트 보임 */
   }
   cur().fields.push(base); selected=cur().fields.length-1; render(); scheduleSave();
 };
@@ -1910,11 +1845,14 @@ document.getElementById('applyProp').onclick = () => {
 
   f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 200);
 
-  /* ✅✅✅ 핵심: 라디오 개수 저장 */
   if (f.type === 'radio') {
     const rc = parseInt(pRadioCount?.value, 10);
     if (Number.isFinite(rc)) f.radioCount = clamp(rc, 2, 20);
     else f.radioCount = (f.radioCount ?? 2);
+
+    /* ✅✅✅ 옵션 텍스트 숨김 저장 */
+    const hide = !!pRadioHideText?.checked;
+    f.radioShowText = !hide;
   }
 
   f.color = pColor.value || '#000000';
@@ -2033,9 +1971,6 @@ document.getElementById('resetValues').onclick=()=>{
   Object.keys(valuesById).forEach(k=>delete valuesById[k]);
   selected=-1;
   if(affBanner) affBanner.style.display='none';
-  try{ updateExtraBarDom(''); }catch(_){}
-  try{ mirrorExtraDataIntoBoxes(''); }catch(_){}
-  try{ mirrorPlanNameIntoBoxes(''); }catch(_){}
   clearAutosave();
   render();
   evaluateAffBanner();
@@ -2124,6 +2059,7 @@ function createPrintDOM(page, pageIdx){
       w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
       w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
 
+      /* ✅✅✅ 인쇄에서도 텍스트 숨김 반영 */
       if (f.radioShowText === false) w.classList.add('noText');
 
       const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
@@ -2241,7 +2177,6 @@ function createPrintDOM(page, pageIdx){
     else if (f.type === 'radio') {
       ctrl = document.createElement('div');
 
-      /* ✅✅✅ 핵심: 인쇄에서도 radioCount 반영 */
       const opts = (Array.isArray(f.options) && f.options.length)
         ? f.options
         : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
@@ -2250,10 +2185,12 @@ function createPrintDOM(page, pageIdx){
         const it = document.createElement('label');
         it.className = 'radio-item';
 
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+const cb = document.createElement('input');
+cb.type = 'radio';
+cb.name = 'r_' + String(f.id || ('radio_' + pageIdx)); // ✅ 인쇄에서도 그룹 유지
+cb.checked = (f.value === o);
+if (f.locked || lockByPlaceholder) cb.disabled = true;
+
 
         const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
         it.appendChild(cb);
@@ -2353,14 +2290,8 @@ function forceWrapForHeaderBox(){
 }
 
 /* ===== 제휴 배너/extraData/요금제 등 (원본 그대로) ===== */
-/* 아래 함수들은 광섭님 원본 그대로 유지되어야 하므로,
-   이미 붙여주신 코드가 계속 이어진다고 가정합니다.
-   (evaluateAffBanner / evaluateExtraDataAndBar / mirrorPlanNameIntoBoxes 등)
-*/
 function evaluateAffBanner(){ try{}catch(_){} }
 function evaluateExtraDataAndBar(){ try{}catch(_){} }
-function updateExtraBarDom(){ }
-function mirrorExtraDataIntoBoxes(){ }
 function mirrorPlanNameIntoBoxes(){ }
 function forceMirrorPlan(){ }
 
@@ -2459,16 +2390,13 @@ function enableWrapAllTextFields(){
 }
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
-// ✅ Ctrl+P 포함, 어떤 경로로 인쇄해도 출력 DOM을 먼저 생성
+
 window.addEventListener('beforeprint', () => {
   try { buildPrintAll(); } catch (e) { console.error(e); }
 });
-
-// (선택) 인쇄 끝난 후 #printAll을 비워서 메모리/중복 방지
 window.addEventListener('afterprint', () => {
   try { document.getElementById('printAll').innerHTML = ''; } catch (e) {}
 });
-
 </script>
 </body>
 </html>
