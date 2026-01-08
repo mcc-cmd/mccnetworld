@@ -2252,26 +2252,56 @@ w.classList.add('ck-' + style);
 
 else if (f.type === 'radio') {
   ctrl = document.createElement('div');
-  const opts = Array.isArray(f.options) ? f.options : [];
+
+  const opts = (f.options && f.options.length)
+    ? f.options
+    : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+
+  const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
+  f.value = init;
+
+  if (f.id) elById[f.id] = { type: 'radio', value: init }; // 더미 등록(미러/저장용)
 
   opts.forEach(o => {
     const it = document.createElement('label');
     it.className = 'radio-item';
 
-    const checked = (f.value === o);
-    if (checked) it.classList.add('is-checked');
-
     const cb = document.createElement('input');
-    cb.type = 'checkbox';
+    cb.type  = 'checkbox';
     cb.value = o;
-    cb.checked = checked;
+    cb.checked = (f.value === o);
     if (f.locked || lockByPlaceholder) cb.disabled = true;
 
+    // ✅ 화면에서도 r-ui 생성 (원 표시)
     const ui = document.createElement('span');
     ui.className = 'r-ui';
 
+    // ✅ 초기 체크 표시
+    if (cb.checked) it.classList.add('is-checked');
+
+    cb.onchange = () => {
+      if (!cb.checked) return;
+
+      // 다른 것 해제 + 클래스 제거
+      ctrl.querySelectorAll('.radio-item').forEach(lbl => lbl.classList.remove('is-checked'));
+      ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => { if (x !== cb) x.checked = false; });
+
+      // 현재 체크 + 클래스 부여
+      it.classList.add('is-checked');
+
+      f.value = o;
+      if (f.id && elById[f.id] && elById[f.id].type === 'radio') elById[f.id].value = o;
+
+      setValueById(f.id, o);
+      applyMirror(f, o);
+      scheduleSave();
+      evaluateAffBanner();
+      evaluateExtraDataAndBar();
+    };
+
     const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
 
+    // ✅ 순서: input + r-ui + (텍스트)
     it.appendChild(cb);
     it.appendChild(ui);
 
@@ -2284,7 +2314,6 @@ else if (f.type === 'radio') {
     ctrl.appendChild(it);
   });
 }
-
 
 
     else {
