@@ -697,7 +697,6 @@
           "fontSize": 10,
           "placeholder": "MVNO 선택시 기존 통신사 필수 작성",
           "locked": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -713,7 +712,8 @@
           "mask": "",
           "maskRe": "",
           "autoDate": "",
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "text_1765783977667",
@@ -799,7 +799,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "10"
         },
         {
           "id": "판매자 성함",
@@ -954,8 +954,8 @@
           "id": "신규/번이",
           "label": "",
           "type": "radio",
-          "x": 57.93584454002638,
-          "y": 8.336594420184387,
+          "x": 59.71335200144746,
+          "y": 8.884198576853848,
           "w": 16.99654866935291,
           "required": true,
           "options": [
@@ -963,7 +963,7 @@
             "번이"
           ],
           "radioSize": 20,
-          "radioGap": 5,
+          "radioGap": 22,
           "radioStyle": "tick",
           "radioShowText": false,
           "checkSize": 20,
@@ -983,7 +983,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": ""
+          "value": "",
+          "radioCount": 2
         },
         {
           "id": "가입 유형 체크",
@@ -1108,7 +1109,7 @@
           "x": 66.52689502225908,
           "y": 72.42905194709884,
           "w": 17.6536312849162,
-          "required": true,
+          "required": false,
           "options": [],
           "radioSize": 18,
           "radioGap": 0,
@@ -1454,7 +1455,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "10"
         },
         {
           "id": "자필 성함싸인",
