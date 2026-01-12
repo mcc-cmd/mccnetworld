@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>선불 서류</title>
+<title>선불</title>
 
 <style>
 :root{
@@ -138,7 +138,7 @@ body{
 <div class="wrap">
   <section class="panel wm">
     <div class="hd">
-      <strong id="pageTitle">선불 서류</strong>
+      <strong id="pageTitle">선불</strong>
       <div class="sub">
         <button class="btn" type="button" id="btnBack">뒤로</button>
 <button class="btn primary" type="button" id="btnPrint">인쇄</button>
@@ -188,7 +188,7 @@ async function loadDocs(key){
   docs.innerHTML = '';
 
   const label = BRAND_LABEL[key] || key;
-  setText('pageTitle', `선불 서류 - ${label}`);
+  setText('pageTitle', `선불 - ${label}`);
 
   // 1장
   const one = await findFile(`./images/${key}`);
