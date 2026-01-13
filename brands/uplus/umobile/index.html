@@ -718,28 +718,6 @@ const CONDITIONAL_REQUIRED = [
   { sourceId: '신규/번이', whenValue: '신규', requiredOn: ['희망번호'] },
   { sourceId: '신규/번이', whenValue: '번이', requiredOn: ['번호이동'] },
 ];
-
-function setRequiredById(id, isRequired){
-  const key = String(id || '').toLowerCase();
-  pages.forEach(pg => (pg.fields || []).forEach(f => {
-    if (String(f.id || '').toLowerCase() === key) {
-      f.required = !!isRequired;
-    }
-  }));
-}
-function applyConditionalRequired(){
-  const allTargets = new Set();
-  CONDITIONAL_REQUIRED.forEach(r => (r.requiredOn || []).forEach(t => allTargets.add(t)));
-  allTargets.forEach(tid => setRequiredById(tid, false));
-
-  CONDITIONAL_REQUIRED.forEach(rule => {
-    const curVal = (valuesById[rule.sourceId] ?? '').toString().trim();
-    if (curVal === String(rule.whenValue)) {
-      (rule.requiredOn || []).forEach(tid => setRequiredById(tid, true));
-    }
-  });
-}
-
 function openMsgBox(title, text){
   const modal = document.getElementById('msgModal');
   const t = document.getElementById('msgModalTitle');
@@ -797,6 +775,7 @@ function setValueById(id, value) {
   if (!id) return;
 
   valuesById[id] = (value ?? "");
+  valuesById[String(id).toLowerCase()] = (value ?? ""); // ✅ 추가
 
   try {
     const key = String(id).toLowerCase();
@@ -1384,6 +1363,8 @@ function render(){
         setValueById(f.id, sel.value);
         applyMirror(f, sel.value);
 
+        applyConditionalRequired();   // ✅ 추가
+
         const isPlan =
           PLAN_ID_RE.test(String(f.id || '')) ||
           PLAN_LABEL_RE.test(String(f.label || ''));
@@ -1466,6 +1447,8 @@ cb.onchange = () => {
   f.value = o;
   setValueById(f.id, o);
   applyMirror(f, o);
+
+    applyConditionalRequired();   // ✅ 추가
 
   scheduleSave();
   evaluateAffBanner();
@@ -1583,6 +1566,7 @@ cb.onchange = () => {
   requestAnimationFrame(refitAllSelects);
   requestAnimationFrame(() => autosizeAllTextareas(overlay));
   requestAnimationFrame(() => {
+    applyConditionalRequired();   // ✅ 추가
     evaluateAffBanner();
     evaluateExtraDataAndBar();
     forceMirrorPlan();
@@ -1978,7 +1962,45 @@ document.getElementById('resetValues').onclick=()=>{
   evaluateExtraDataAndBar();
 };
 
-/* ===== 필수 검증/토스트 ===== */
+/* =========================
+   ✅ 조건부 필수 (LG 방식)
+========================= */
+
+function getValueByIdSafe(id){
+  if(!id) return '';
+  const key = String(id);
+  const v = (valuesById[key] ?? valuesById[key.toLowerCase()]);
+  return (v == null) ? '' : String(v);
+}
+function setRequiredAllPages(targetId, on){
+  const key = String(targetId || '').toLowerCase();
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if(String(f.id || '').toLowerCase() === key){
+        f.required = !!on;
+      }
+    });
+  });
+}
+
+/* 규칙 전체를 한번에 반영 */
+function applyConditionalRequired(){
+  if(!Array.isArray(CONDITIONAL_REQUIRED) || !CONDITIONAL_REQUIRED.length) return;
+
+  // 1) 규칙에 등장하는 requiredOn 대상들을 일단 false로 초기화(중복 규칙 대비)
+  const allTargets = new Set();
+  CONDITIONAL_REQUIRED.forEach(r => (r.requiredOn || []).forEach(t => allTargets.add(String(t))));
+  allTargets.forEach(tid => setRequiredAllPages(tid, false));
+
+  // 2) 현재 선택값에 맞는 규칙만 required=true 적용
+  CONDITIONAL_REQUIRED.forEach(rule => {
+    const curVal = getValueByIdSafe(rule.sourceId).trim();
+    if(curVal === String(rule.whenValue)){
+      (rule.requiredOn || []).forEach(tid => setRequiredAllPages(tid, true));
+    }
+  });
+}
+
 function findMissingAll(){
   const miss=[];
   pages.forEach((pg,pi)=>{

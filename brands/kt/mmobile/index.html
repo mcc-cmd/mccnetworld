@@ -235,12 +235,12 @@
   align-items:center;
   gap:6px;
 
-  padding:2px 6px;
-  border-radius:8px;
+  padding:0 !important;
+  border-radius:0 !important;
 
-  /* ✅ 기존 고정 border 제거 → 변수로 */
-  border: var(--rbw,1px) solid var(--rbc, rgba(0,0,0,.25));
-  background: var(--rbg, transparent);
+ /* ✅ 라디오 옵션 박스(테두리/패딩) 제거해서 간격 최대한 좁히기 */
+  border: 0 !important;
+  background: transparent !important;
 
   flex:0 1 auto;
   max-width:100%;
@@ -721,6 +721,47 @@
 const valuesById = Object.create(null);
 const elById = Object.create(null);
 
+// ✅ 조건부 필수 규칙 (신규/번이에 따라)
+const CONDITIONAL_REQUIRED = [
+  { sourceId: '신규/번이', whenValue: '신규', requiredOn: ['희망번호'] },
+  { sourceId: '신규/번이', whenValue: '번호이동', requiredOn: ['번호이동'] },
+];
+
+// ✅ 현재 값 읽기(전역값 → 설계값 순)
+function getValueById(id){
+  if (!id) return '';
+  const v1 = valuesById[id];
+  if (v1 != null && String(v1).trim() !== '') return String(v1);
+
+  // pages 설계값에서도 찾아봄
+  try{
+    const key = String(id).toLowerCase();
+    for (const pg of pages){
+      for (const f of (pg.fields||[])){
+        if (String(f.id||'').toLowerCase() === key){
+          if (f.type === 'checkbox') return f.value ? 'Y' : '';
+          return (f.value ?? '').toString();
+        }
+      }
+    }
+  }catch(_){}
+  return '';
+}
+
+// ✅ 지금 시점에 “조건부로 필수인 ID들”을 Set으로 만들어줌
+function getConditionalRequiredSet(){
+  const s = new Set();
+  for (const rule of CONDITIONAL_REQUIRED){
+    const cur = (getValueById(rule.sourceId) || '').trim();
+    if (cur === rule.whenValue){
+      (rule.requiredOn || []).forEach(id => s.add(id));
+    }
+  }
+  return s;
+}
+
+
+
 function setValueById(id, value) {
   if (!id) return;
 
@@ -909,6 +950,29 @@ const getFieldsByIdAll=id=>{
   }));
   return out;
 };
+function getValueByIdAllPages(id){
+  const key = String(id || '').toLowerCase();
+
+  // 1) valuesById 우선
+  if (valuesById && Object.prototype.hasOwnProperty.call(valuesById, id)) {
+    return valuesById[id];
+  }
+
+  // 2) pages에 저장된 값에서 찾기
+  for (const pg of pages) {
+    for (const f of (pg.fields || [])) {
+      if (String(f.id || '').toLowerCase() === key) return f.value;
+    }
+  }
+  return '';
+}
+
+function isEmptyFieldValue(f){
+  if (!f) return true;
+  if (f.type === 'checkbox') return !f.value;
+  return !(String(f.value ?? '').trim());
+}
+
 
 /* ===== 자필(잠금) 키 입력 방지 ===== */
 function blockTyping(el){
@@ -1789,6 +1853,14 @@ document.getElementById('applyProp').onclick = () => {
   f.borderColor = f.borderTransparent
     ? 'transparent'
     : ((pBorderColor?.value || '').trim() || undefined);
+    // ✅ 라디오/드롭다운 옵션 반영 (빠져있던 부분)
+if (f.type === 'select' || f.type === 'radio') {
+  const opts = (pOptions?.value || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+  f.options = opts;
+}
 
   const bw = parseInt(pBorderWidth?.value, 10);
   f.borderWidth = Number.isFinite(bw) ? clamp(bw, 1, 8) : undefined;
@@ -1906,17 +1978,37 @@ document.getElementById('resetValues').onclick=()=>{
 
 /* ===== 필수 검증/토스트 ===== */
 function findMissingAll(){
-  const miss=[];
-  pages.forEach((pg,pi)=>{
-    (pg.fields||[]).forEach((f,fi)=>{
-      if(!f.required) return;
+  const miss = [];
+  const condSet = getConditionalRequiredSet(); // ✅ 추가
+
+  pages.forEach((pg, pi) => {
+    (pg.fields || []).forEach((f, fi) => {
+
+      // ✅ 기존 required OR 조건부 required
+      const isCondRequired = f.id && condSet.has(f.id);
+      if (!f.required && !isCondRequired) return;
+
+      // placeholder 잠금 + 값 없으면 제외(기존 로직 유지)
       if (f.locked && f.lockOnPh && !f.value) return;
-      const v=(f.type==='checkbox')?!!f.value:(f.value??'').toString().trim();
-      if(!v) miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)});
+
+      const v = (f.type === 'checkbox')
+        ? (!!f.value ? 'Y' : '')
+        : (f.value ?? '').toString().trim();
+
+      if(!v){
+        miss.push({
+          page: pi,
+          idx: fi,
+          label: (f.label || f.id || `필드${fi+1}`)
+        });
+      }
     });
   });
+
   return miss;
 }
+
+
 function markInvalidForPage(pIdx,list){
   if(pIdx!==pageIndex) return;
   overlay.querySelectorAll('.field.invalid').forEach(el=>el.classList.remove('invalid'));
