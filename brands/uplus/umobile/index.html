@@ -55,7 +55,8 @@
   color:var(--fgc,#fff);
   height:var(--ih,auto);
   outline:none;
-  padding:0 6px;
+  padding:2px 4px;        /* ✅ 여백 줄이기 */
+  line-height:1.1;        /* ✅ 글자 줄간격 타이트 */
   font:600 var(--fs)/1.2 system-ui;
   text-align:var(--ta,left);
 }
@@ -70,7 +71,7 @@
 
   .field input[type="text"],
   .field select{
-    line-height: var(--ih, 28px);
+    line-height:1.1;        /* ✅ 강제 28px 제거 */
     padding-top:0;
     padding-bottom:0;
   }
@@ -2256,6 +2257,7 @@ function buildPrintAll(){
 }
 
 async function printAllNow(){
+ forceMirrorPlan(); // ✅ 인쇄 직전 planecho 강제 채움
   const container=buildPrintAll();
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch{} }
   await waitForImages(container);
@@ -2292,8 +2294,63 @@ function forceWrapForHeaderBox(){
 /* ===== 제휴 배너/extraData/요금제 등 (원본 그대로) ===== */
 function evaluateAffBanner(){ try{}catch(_){} }
 function evaluateExtraDataAndBar(){ try{}catch(_){} }
-function mirrorPlanNameIntoBoxes(){ }
-function forceMirrorPlan(){ }
+// ✅ 요금제명 미러 대상(planecho) ID 목록
+const PLAN_ECHO_IDS = ['planecho', 'plan_echo', 'planEcho'];
+
+// ✅ "선택 요금제"처럼 라벨로도 찾아서 채우기(안전장치)
+const PLAN_ECHO_LABEL_RE = /(선택\s*요금제|요금제\s*명|요금제\s*선택)/i;
+
+function setFieldValueEverywhere(id, value){
+  const key = String(id || '').toLowerCase();
+  pages.forEach(pg => (pg.fields || []).forEach(f => {
+    if (String(f.id || '').toLowerCase() === key) {
+      if (f.type === 'checkbox') f.value = !!value;
+      else f.value = (value ?? '');
+    }
+  }));
+}
+
+function setFieldValueByLabelEverywhere(value){
+  pages.forEach(pg => (pg.fields || []).forEach(f => {
+    if (!f) return;
+    const label = String(f.label || '');
+    if (!PLAN_ECHO_LABEL_RE.test(label)) return;
+
+    // 텍스트성 필드만 대상(라디오/체크/셀렉트는 제외)
+    if (f.type === 'text' || f.type === 'textarea') {
+      f.value = (value ?? '');
+      // valuesById도 같이 맞춰주면 화면에서도 바로 보임
+      if (f.id) valuesById[f.id] = (value ?? '');
+    }
+  }));
+}
+
+function mirrorPlanNameIntoBoxes(planName){
+  const v = String(planName ?? '').trim();
+  if (!v) return;
+
+  // 1) ID로 확실히 찍기
+  let hit = 0;
+  PLAN_ECHO_IDS.forEach(id => {
+    const found = getFieldsByIdAll(id);
+    if (found.length) hit++;
+    setValueById(id, v);
+    setFieldValueEverywhere(id, v);
+  });
+
+  // 2) ID가 하나도 안 맞으면 label로라도 채우기(공백 방지)
+  if (hit === 0) {
+    setFieldValueByLabelEverywhere(v);
+  }
+}
+
+function forceMirrorPlan(){
+  const p = getSelectedPlanName();
+  if (!p) return;
+  mirrorPlanNameIntoBoxes(p);
+}
+
+
 
 /* ===== 요금제 UI (원본) ===== */
 function parsePlansFromText(text){
@@ -2390,9 +2447,11 @@ function enableWrapAllTextFields(){
 }
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
-
 window.addEventListener('beforeprint', () => {
-  try { buildPrintAll(); } catch (e) { console.error(e); }
+  try {
+    forceMirrorPlan();   // ✅ 여기 추가
+    buildPrintAll();
+  } catch (e) { console.error(e); }
 });
 window.addEventListener('afterprint', () => {
   try { document.getElementById('printAll').innerHTML = ''; } catch (e) {}
