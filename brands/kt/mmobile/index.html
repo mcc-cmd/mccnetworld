@@ -296,7 +296,7 @@
   html.fill .builder{display:none}
 
   /* 인쇄 공통 */
-  @page{size:A4 portrait;margin:0}
+ @page{size:A4 portrait;margin:0}
   #printAll{display:none}
   .print-value{display:none;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui}
 
@@ -307,29 +307,72 @@
     border-radius:999px !important; /* ← 원형 */
   }
 
-@media print{
-  body{background:#fff}
-  .wrap,.builder,.pager,.hint,.hd,#affPopup{display:none !important}
-  #printAll{display:block}
-  .pageWrap{width:210mm;height:297mm;position:relative;overflow:visible;padding:0;box-sizing:border-box;page-break-after:always;}
-  .pageWrap:last-child{page-break-after:auto}
-  #printAll .stage{transform:scale(1)}
-  #printAll .paper{border:none;height:auto}
-  #printAll .stage img{width:100%;height:100%;object-fit:fill}
-  #printAll .overlay{position:absolute;inset:0;overflow:visible !important}
-  #printAll,#printAll *{font-family:system-ui,"Noto Sans KR",sans-serif !important;letter-spacing:0 !important}
-  #printAll .field input,#printAll .field textarea,#printAll .field select{color:#000 !important;background:transparent !important;border-bottom:none !important}
-  #printAll .label{color:#000 !important;text-shadow:none !important}
-  #printAll .field.radio .radio-item span{display:inline !important;color:#000 !important}
-  #printAll .field select{display:none !important}
-  #printAll .field .print-value{display:block !important;color:#000 !important}
+@page{ size:A4 portrait; margin:0; }
 
+@media print{
+  :root{ --print-safe: 0.985; } /* 0.97~0.99 미세조정 */
+
+  body{ background:#fff; }
+  html, body{ margin:0; padding:0; }
+
+  .wrap,.builder,.pager,.hint,.hd,#affPopup{ display:none !important; }
+  #printAll{ display:block; }
+
+  .pageWrap{
+    width:210mm;
+    height:297mm;
+    position:relative;
+    overflow:hidden;              /* ✅ 잘림/2페이지 방지 핵심 */
+    padding:0;
+    padding-top:3mm;   /* ✅ 추가 (2~5mm 사이로 조절) */
+    box-sizing:border-box;
+    page-break-after:always;
+
+    display:flex;                 /* ✅ 가운데 정렬 */
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding-top:3mm;
+  }
+  .pageWrap:last-child{ page-break-after:auto; }
+
+  #printAll .paper{ border:none; height:auto; }
+
+  #printAll .stage{
+    width:210mm;
+    height:297mm;
+    transform-origin:flex-start;
+        /* ✅ 안전 축소 */
+    transform: scale(var(--print-safe));
+  }
+
+  #printAll .stage img{ width:100%; height:100%; object-fit:fill; }
+  #printAll .overlay{ position:absolute; inset:0; overflow:visible !important; }
+
+  #printAll,#printAll *{
+    font-family:system-ui,"Noto Sans KR",sans-serif !important;
+    letter-spacing:0 !important;
+  }
+
+  #printAll .field input,
+  #printAll .field textarea,
+  #printAll .field select{
+    color:#000 !important;
+    background:transparent !important;
+    border-bottom:none !important;
+  }
+
+  #printAll .label{ color:#000 !important; text-shadow:none !important; }
+  #printAll .field.radio .radio-item span{ display:inline !important; color:#000 !important; }
+  #printAll .field select{ display:none !important; }
+  #printAll .field .print-value{ display:block !important; color:#000 !important; }
 
   #printAll textarea{
     height:auto !important;
     resize:none !important;
     max-height:none !important;
   }
+}
+
 
   .field.checkbox input,.field.radio input[type="checkbox"]{
     appearance:none !important;
@@ -419,8 +462,6 @@
 }
 
   .field.checkbox .label{top:0;left:24px}
-}
-
 
   .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
   #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
@@ -1344,52 +1385,62 @@ else if (f.type === 'checkbox') {
 }
 
 
-    /* ===== radio ===== */
-    else if (f.type === 'radio') {
-      ctrl = document.createElement('div');
-      const opts = (f.options && f.options.length)
-        ? f.options
-        : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+/* ===== radio (render) ===== */
+else if (f.type === 'radio') {
+  ctrl = document.createElement('div');
 
-      const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
-      f.value = init;
-if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/저장용)
-      opts.forEach(o => {
-        const it = document.createElement('label');
-        it.className = 'radio-item';
+  const opts = (f.options && f.options.length)
+    ? f.options
+    : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
-        const cb = document.createElement('input');
-        cb.type  = 'checkbox';
-        cb.value = o;
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+  const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
+  f.value = init;
 
-        cb.onchange = () => {
-          if (!cb.checked) return;
-          ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
-            if (x !== cb) x.checked = false;
-          });
-          f.value = o;
-          setValueById(f.id, o);
-          applyMirror(f, o);
-          scheduleSave();
-          evaluateAffBanner();
-          evaluateExtraDataAndBar();
-        };
+  // ✅ 더미 등록(미러/저장용)
+  if (f.id) elById[f.id] = { type: 'radio', value: init };
 
-        const s = document.createElement('span');
-const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+  opts.forEach(o => {
+    const it = document.createElement('label');
+    it.className = 'radio-item';
 
-if (!hideText) {
-  s.textContent = o;
-  it.appendChild(s);
-  } else {
-  // span을 아예 붙이지 않음(=무조건 숨김)
-}
-it.appendChild(cb);
-ctrl.appendChild(it);
+    const cb = document.createElement('input');
+    cb.type  = 'checkbox';
+    cb.value = o;
+    cb.checked = (f.value === o);
+    if (f.locked || lockByPlaceholder) cb.disabled = true;
+
+    cb.onchange = () => {
+      if (!cb.checked) return;
+
+      // ✅ 단일선택 강제
+      ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
+        if (x !== cb) x.checked = false;
       });
+
+      f.value = o;
+      setValueById(f.id, o);
+      applyMirror(f, o);
+      scheduleSave();
+      evaluateAffBanner();
+      evaluateExtraDataAndBar();
+    };
+
+    // ✅ 숫자(1,2,3...) 옵션은 텍스트 숨김이 "맞다"는 정책 유지
+    const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+
+    // ✅ input 먼저 붙이고, 텍스트는 뒤에(레이아웃/정렬 안정)
+    it.appendChild(cb);
+
+    if (!hideText) {
+      const s = document.createElement('span');
+      s.textContent = o;
+      it.appendChild(s);
     }
+
+    ctrl.appendChild(it);
+  });
+}
+
 
     /* ===== 일반 input(text) ===== */
     else {
@@ -2058,33 +2109,41 @@ w.classList.add('ck-' + style);
       if (f.locked || lockByPlaceholder) ctrl.disabled = true;
     }
 
-    else if (f.type === 'radio') {
-      ctrl = document.createElement('div');
-const opts = Array.isArray(f.options) ? f.options : [];
+/* ===== radio (print) ===== */
+else if (f.type === 'radio') {
+  ctrl = document.createElement('div');
 
-      opts.forEach(o => {
-        const it = document.createElement('label');
-        it.className = 'radio-item';
+  // ✅ print에서도 options fallback 포함(없으면 1,2... 생성)
+  const opts = (f.options && f.options.length)
+    ? f.options
+    : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+  opts.forEach(o => {
+    const it = document.createElement('label');
+    it.className = 'radio-item';
 
-const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = o;
+    cb.checked = (f.value === o);
+    if (f.locked || lockByPlaceholder) cb.disabled = true;
 
-it.appendChild(cb);
+    // ✅ 숫자(1,2,3...) 옵션은 텍스트 숨김 정책 유지
+    const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
 
-if (!hideText) {
-  const s = document.createElement('span');
-  s.textContent = o;
-  it.appendChild(s);
+    // ✅ input 먼저
+    it.appendChild(cb);
+
+    if (!hideText) {
+      const s = document.createElement('span');
+      s.textContent = o;
+      it.appendChild(s);
+    }
+
+    ctrl.appendChild(it);
+  });
 }
 
-ctrl.appendChild(it);
-
-      });
-    }
 
     else {
       ctrl = document.createElement('input');
