@@ -416,6 +416,8 @@
   #msgModal .msgModal__ft{
     display:flex; justify-content:flex-end; gap:8px;
   }
+    #msgModal{ display:none !important;
+     }
 
   /* =====================================================
      ✅✅✅ 체크/라디오 ONLY 최종 고정 (CSS 맨 아래에 1번만)
@@ -471,6 +473,58 @@
   /* ✅ noText 모드에서 잔폭 제거(간격 안 줄어드는 문제 보완) */
   .field.radio.noText .radio-item{min-width:0 !important;}
   .field.radio.noText > div{justify-content:flex-start;}
+  /* =========================
+   ✅ PRINT FIX (검정화면 출력 방지)
+========================= */
+@media print {
+
+  /* 1) 전체 배경/글자색 강제 고정 */
+  html, body{
+    background:#fff !important;
+    color:#000 !important;
+  }
+
+  /* 2) 박스 그림자/그라데이션 등 프린터 충돌 요소 제거 */
+  *{
+    box-shadow:none !important;
+    text-shadow:none !important;
+    filter:none !important;
+    -webkit-filter:none !important;
+  }
+
+  /* 3) 카드/패널 배경도 흰색으로 */
+  .panel, .group, .brand, .form-duo-wrap, .form-duo .form-half{
+    background:#fff !important;
+    background-image:none !important;
+  }
+
+  /* 4) 워터마크(배경이미지) 제거 */
+  .group::after{
+    display:none !important;
+    content:none !important;
+  }
+
+  /* 5) 모달/백드롭(검정 오버레이) 전부 숨김 */
+  .modal, .cs-modal, .form-modal,
+  .modal-backdrop, .cs-backdrop, .form-backdrop{
+    display:none !important;
+  }
+
+  /* 6) 모달 안쪽에 어두운 배경(#0b1220)도 방지 */
+  .modal-body{
+    background:#fff !important;
+  }
+
+  /* 7) 링크 색/밑줄 정리(선택) */
+  a, a:visited{
+    color:#000 !important;
+    text-decoration:none !important;
+  }
+
+  /* 8) 인쇄 시 화면 너비/여백 안정화(선택) */
+  .wrap{max-width:none !important; padding:0 !important;}
+}
+
 </style>
 
 <script>
@@ -499,6 +553,37 @@
     if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
   }
 })();
+/* =========================
+   ✅ 인쇄 직전: 모달/오버레이 강제 종료 (브랜드/타이핑 서식지용)
+========================= */
+/* =========================
+   ✅ 인쇄 직전: 모달/검정 백드롭 강제 종료 (서식지 검정 출력 방지)
+   - 주의: 이 페이지의 서식 레이어가 class="overlay"라서
+           querySelector에 .overlay를 넣으면 서식 레이어가 숨겨집니다.
+========================= */
+(function(){
+  function closeAllOverlays(){
+    // ✅ 메시지 모달 강제 종료
+    const msg = document.getElementById('msgModal');
+    if (msg){
+      msg.style.display = 'none';
+      msg.setAttribute('aria-hidden','true');
+    }
+
+    // ✅ 혹시 다른 모달이 있으면 닫기(서식 레이어 .overlay는 절대 건드리지 않음)
+    document.querySelectorAll('.modal, .popup, .dim, .backdrop, .modal-backdrop')
+      .forEach(el=>{
+        el.style.display = 'none';
+        el.setAttribute?.('aria-hidden','true');
+        el.classList?.remove('open');
+      });
+
+    document.body.classList.remove('modal-open','open','locked','no-scroll');
+  }
+
+  window.addEventListener('beforeprint', closeAllOverlays);
+})();
+
 </script>
 </head>
 

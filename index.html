@@ -5,14 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>MCCNETWORLD</title>
 
-<!-- ✅ 여기부터 OG 메타태그 추가 -->
+<!-- ✅ OG 메타태그 -->
 <meta property="og:title" content="MCCNETWORLD" />
 <meta property="og:description" content="여기 글을 눌러 링크를 확인하세요." />
 <meta property="og:url" content="https://mcc-cmd.github.io/mccnetworld/index.html" />
 <meta property="og:image" content="https://mcc-cmd.github.io/mccnetworld/assets/og-mcc.png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="MCCNETWORLD" />
-<!-- ✅ 여기까지 OG 메타태그 추가 -->
 
 <link rel="icon" href="./favicon.ico?v=2">
 <link rel="icon" type="image/png" sizes="16x16"  href="favicon-16x16.png">
@@ -56,10 +55,31 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:14px 16px;
+  padding:14px 220px; /* ✅ 좌우 공간 확보 (대략값) */
   border-bottom:1px solid var(--line);
 }
 .hd strong{font-weight:900;letter-spacing:.2px}
+
+/* ✅ 왼쪽 다운로드 영역 */
+.hd-left{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* ✅ 안내문구(파일명 표시) */
+.hd-hint{
+  font-size:12px;
+  font-weight:800;
+  color:#64748b;
+  white-space:nowrap;
+}
+
+/* ✅ 오른쪽 구비서류 버튼 */
 .hd-actions{
   position:absolute;
   right:14px;
@@ -68,6 +88,8 @@ body{
   display:flex;
   gap:8px;
 }
+
+/* 버튼 공통 */
 .hd-btn{
   padding:8px 12px;
   border-radius:10px;
@@ -76,8 +98,39 @@ body{
   cursor:pointer;
   font-weight:800;
   font-size:12px;
+  text-decoration:none;
+  color:inherit;
+  display:inline-flex;
+  align-items:center;
 }
 .hd-btn:hover{box-shadow:0 6px 18px rgba(2,6,23,.08)}
+
+/* ✅ 모바일 대응 */
+@media (max-width:720px){
+  .hd{
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .hd-left{
+    position:static;
+    transform:none;
+    order:1;
+    width:100%;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+  .hd-actions{
+    position:static;
+    transform:none;
+    order:2;
+    width:100%;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+  }
+  .hd-hint{white-space:normal}
+}
 
 /* =========================================================
   [3] 섹션/탭/그리드
@@ -141,8 +194,7 @@ body{
 .group[data-carrier="kt"]{ --g-accent:#0ea5e9; }
 .group[data-carrier="uplus"]{ --g-accent:#8b5cf6; }
 .group[data-carrier="device"]{ --g-accent:#111827; }
-.group[data-carrier="prepaid"]{ --g-accent:#f59e0b; } /* 선불 섹션 포인트 색 */
-
+.group[data-carrier="prepaid"]{ --g-accent:#f59e0b; }
 
 /* =========================================================
   [4] 카드(브랜드)
@@ -325,7 +377,7 @@ body{
 }
 
 /* =========================================================
-  ✅ [NEW] 동판 옆 빈칸에 "유심양식/동판양식" 2개 반반(절반) 배치
+  ✅ 동판 옆 빈칸에 "유심양식/동판양식" 2개 반반
 ========================================================= */
 .form-duo-wrap{
   border:1px solid var(--line);
@@ -372,7 +424,7 @@ body{
 }
 
 /* =========================================================
-  ✅ [NEW] 양식 팝업(복사 버튼 포함)
+  ✅ 양식 팝업(복사 버튼 포함)
 ========================================================= */
 .form-modal{
   position:fixed;
@@ -450,6 +502,7 @@ body{
   display:none;
 }
 .form-toast.show{display:block}
+
 </style>
 </head>
 
@@ -457,8 +510,17 @@ body{
 <div class="wrap">
   <section class="panel">
 
+    <!-- ✅ 헤더 완성본 -->
     <div class="hd">
       <strong>MCCNETWORLD</strong>
+
+      <div class="hd-left">
+        <a class="hd-btn" href="./assets/files/URL_260114.xlsx" download
+           title="KT 요금제 구간표(엑셀) 다운로드">
+          KT 요금제 구간표
+        </a>
+        <div class="hd-hint">※ 파일명: URL_260114.xlsx (클릭 시 다운로드)</div>
+      </div>
 
       <div class="hd-actions">
         <button class="hd-btn" type="button" data-docs="sk">SK 구비서류</button>
@@ -477,10 +539,11 @@ body{
         </div>
         <div class="group-wrap" id="joinTabsList"></div>
       </div>
-<div class="section-title" style="margin-top:16px">선불 서류</div>
-<div id="prepaidSection">
-  <div class="group-wrap" id="prepaidList"></div>
-</div>
+
+      <div class="section-title" style="margin-top:16px">선불 서류</div>
+      <div id="prepaidSection">
+        <div class="group-wrap" id="prepaidList"></div>
+      </div>
 
       <div class="section-title" style="margin-top:8px">변경 서류</div>
       <div id="changeTabs">
@@ -534,7 +597,7 @@ body{
     </div>
   </div>
 
-  <!-- ✅ [NEW] 유심/동판 양식 팝업 -->
+  <!-- 유심/동판 양식 팝업 -->
   <div class="form-modal" id="formModal" aria-hidden="true">
     <div class="form-backdrop" data-form-close="1"></div>
     <div class="form-panel" role="dialog" aria-modal="true" aria-label="양식 복사 팝업">
@@ -559,18 +622,14 @@ body{
 let JOIN_AGE = 'adult';
 function updateDeviceLogosByAge(){
   const age = (JOIN_AGE || 'adult').toLowerCase();
-
   const me = document.getElementById('deviceLogoME');
   const mo = document.getElementById('deviceLogoMO');
-
   if (me) me.src = (age === 'teen') ? './assets/logos/METEEN.png' : './assets/logos/ME.png';
   if (mo) mo.src = (age === 'teen') ? './assets/logos/MOTEEN.png' : './assets/logos/MO.png';
 }
 
-/* ✅ 미운영(클릭 시 팝업만 띄우고 이동 차단) 브랜드 목록 */
-const UNAVAILABLE_BRANDS = new Set([
-  '스카이라이프'
-]);
+/* ✅ 미운영 브랜드 */
+const UNAVAILABLE_BRANDS = new Set(['스카이라이프']);
 
 const BRANDS = [
   { carrier:'uplus', theme:'theme-um', name:'미디어로그', cap:'',
@@ -592,18 +651,14 @@ const BRANDS = [
   { carrier:'sk', theme:'theme-pr', name:'프리티SK', cap:'',
     logoAdult:'./assets/logos/FREE SK.png', logoTeen :'./assets/logos/FREE SK TEEN.png' }
 ];
+
 const PREPAID_BRANDS = [
   { theme:'theme-um', name:'스마텔LG',  cap:'', logoAdult:'./assets/logos/PREPAID_SMATEL.png',  brandKey:'smatel_lg' },
   { theme:'theme-pr', name:'LG프리티',  cap:'', logoAdult:'./assets/logos/PREPAID_LGFREET.png', brandKey:'lgfreeT' },
   { theme:'theme-mm', name:'밸류컴',    cap:'', logoAdult:'./assets/logos/PREPAID_VALUE.png',   brandKey:'valuecom' },
   { theme:'theme-pr', name:'SK프리티',  cap:'', logoAdult:'./assets/logos/PREPAID_SKFREET.png', brandKey:'skfreeT' },
   { theme:'theme-mm', name:'코드모바일', cap:'', logoAdult:'./assets/logos/PREPAID_CODE.png',    brandKey:'codemobile' },
-].map(b => ({
-  ...b,
-  carrier:'prepaid',
-  doc:'prepaid'
-}));
-
+].map(b => ({ ...b, carrier:'prepaid', doc:'prepaid' }));
 
 const JOIN_ONLY = [
   { carrier:'kt', theme:'theme-mm', name:'정규KT신규', cap:'', special:true,
@@ -657,7 +712,6 @@ const BRAND_ROUTE = {
 
 function buildBrandUrl(route, doc, age){
   if (!route || !route.carrier || !route.brand) return '#';
-
   const base = `brands/${route.carrier}/${route.brand}/index.html`;
   const abs  = new URL(base, location.href).href;
 
@@ -682,9 +736,9 @@ function card(item){
   const dataName = name.replace(/\(청소년\)/,'');
   const docAttr  = doc || 'join';
   const ageAttr  = (docAttr==='join' && age) ? ` data-age="${age}"` : '';
-  const keyAttr = item.brandKey ? ` data-brandkey="${item.brandKey}"` : '';
-  const isLong  = name.length >= 9;
-  const longCls = isLong ? 'long-name' : '';
+  const keyAttr  = item.brandKey ? ` data-brandkey="${item.brandKey}"` : '';
+  const isLong   = name.length >= 9;
+  const longCls  = isLong ? 'long-name' : '';
 
   const logo = pickLogo(item);
   const logoHtml = logo
@@ -700,7 +754,7 @@ function card(item){
   `;
 }
 
-/* ✅ "유심양식/동판양식" 2개를 한 칸 안에 절반씩 */
+/* ✅ "유심양식/동판양식" 2개를 한 칸에 */
 function formDuoCard(){
   return `
     <div class="form-duo-wrap" aria-label="동판 양식 묶음">
@@ -716,10 +770,7 @@ function formDuoCard(){
   `;
 }
 
-/* ✅ [핵심 수정]
-   단말 개통은 "업데이트 예정" 카드로만 표시(이동/링크 없음)
-   + 성인/청소년에 따라 로고만 바뀌게 id 유지
-*/
+/* ✅ 단말개통 업데이트 예정 카드 */
 function deviceSectionHTML(){
   return `
     <section class="group" data-carrier="device">
@@ -754,20 +805,15 @@ function attachNavigateHandlers(scope){
       e.preventDefault();
       e.stopPropagation();
 
-      /* ✅ (남아있을 수 있는) device-link가 있으면 이동 */
       if (cardEl.classList.contains('device-link')) {
         const url = cardEl.getAttribute('data-url') || '';
         if (url) location.href = url;
         return;
       }
 
-      /* ✅ 업데이트 예정(단말) */
       if (cardEl.classList.contains('device-comingsoon')) return;
 
-      const nm = (cardEl.getAttribute('data-name') || '')
-        .replace(/\s+/g, ' ')
-        .trim();
-
+      const nm = (cardEl.getAttribute('data-name') || '').replace(/\s+/g, ' ').trim();
       const doc = cardEl.getAttribute('data-doc') || 'join';
       const age = cardEl.getAttribute('data-age') || '';
 
@@ -775,14 +821,13 @@ function attachNavigateHandlers(scope){
         alert('미운영 회사입니다. (현재 서류 제공/접수 불가)');
         return;
       }
-// ✅ 선불 서류: 전용 뷰어 페이지로 이동(팝업/모달 없이 운영 통일)
-if (doc === 'prepaid') {
-  const key = cardEl.getAttribute('data-brandkey') || '';
-  if (key) {
-    location.href = `./brands/prepaid/index.html?brand=${encodeURIComponent(key)}`;
-  }
-  return;
-}
+
+      // ✅ 선불: 전용 뷰어 페이지로 이동
+      if (doc === 'prepaid') {
+        const key = cardEl.getAttribute('data-brandkey') || '';
+        if (key) location.href = `./brands/prepaid/index.html?brand=${encodeURIComponent(key)}`;
+        return;
+      }
 
       const route = BRAND_ROUTE[nm];
       if (!route) {
@@ -794,7 +839,6 @@ if (doc === 'prepaid') {
         location.href = route.externalJoin;
         return;
       }
-
       if (route.external) {
         location.href = route.external;
         return;
@@ -811,13 +855,14 @@ function safeRender(listEl, items){
     listEl.innerHTML = (items && items.length)
       ? items.map(card).join('')
       : '<div style="opacity:.6">자료 없음</div>';
-
     attachNavigateHandlers(listEl);
   }catch(err){
     console.error('[render error]', err);
     listEl.innerHTML = '<div style="color:#b91c1c;font-weight:800">렌더 오류 – 콘솔을 확인하세요.</div>';
   }
 }
+
+/* ✅ (중복 제거) 선불 섹션 렌더 */
 function prepaidSectionHTML(items){
   return `
     <section class="group" data-carrier="prepaid">
@@ -832,32 +877,10 @@ function prepaidSectionHTML(items){
     </section>
   `;
 }
-
 function renderPrepaid(listEl){
   listEl.innerHTML = prepaidSectionHTML(PREPAID_BRANDS);
   attachNavigateHandlers(listEl);
 }
-
-function prepaidSectionHTML(items){
-  return `
-    <section class="group" data-carrier="prepaid">
-      <div class="group-head">
-        <span class="group-dot"></span>
-        <span class="group-title">선불</span>
-        <span class="group-sub"></span>
-      </div>
-      <div class="brand-grid">
-        ${items.map(card).join('')}
-      </div>
-   </section>
-  `;
-}
-
-function renderPrepaid(listEl){
-  listEl.innerHTML = prepaidSectionHTML(PREPAID_BRANDS);
-  attachNavigateHandlers(listEl);
-}
-
 
 function renderJoinGrouped(listEl, items){
   const specialItems = items.filter(x => x.special === true);
@@ -892,7 +915,6 @@ function renderJoinGrouped(listEl, items){
     `;
   }).join('');
 
-  /* ✅ KT 링크(정규/웰컴/동판) + 유심/동판 양식 */
   const specialHTML = specialItems.length ? `
     <section class="group" data-carrier="kt">
       <div class="group-head">
@@ -907,10 +929,7 @@ function renderJoinGrouped(listEl, items){
     </section>
   ` : '';
 
-  /* ✅ [핵심 수정]
-     단말개통은 "가입서류 영역 제일 하단"으로 배치 */
   listEl.innerHTML = normalHTML + specialHTML + deviceSectionHTML();
-
   attachNavigateHandlers(listEl);
 }
 
@@ -998,7 +1017,7 @@ function wireTabs(containerId, listId, data){
   });
 })();
 
-/* 단말개통 - 업데이트 예정 모달 (device-comingsoon만 대상) */
+/* 단말개통 - 업데이트 예정 모달 */
 (function(){
   const modal = document.getElementById('comingSoonModal');
   const body  = document.getElementById('csBody');
@@ -1173,6 +1192,34 @@ function wireTabs(containerId, listId, data){
   });
   copyBtn?.addEventListener('click', ()=> copyText(ta.value));
 })();
+/* =========================
+   ✅ 인쇄 직전 검정화면 방지: 모달/오버레이 강제 닫기
+========================= */
+(function(){
+  function forceCloseOverlaysForPrint(){
+    const ids = ['docsModal','comingSoonModal','formModal'];
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if (el) el.setAttribute('aria-hidden','true');
+    });
+
+    const img = document.getElementById('docsImg');
+    if (img){
+      img.classList.remove('zoom');
+      img.src = '';
+    }
+  }
+
+  window.addEventListener('beforeprint', forceCloseOverlaysForPrint);
+
+  document.addEventListener('click', (e)=>{
+    if (e.target && e.target.id === 'btnPrint'){
+      forceCloseOverlaysForPrint();
+      window.print();
+    }
+  });
+})();
+
 
 window.addEventListener('DOMContentLoaded', ()=>{
   wireKindTabs('joinTabs','joinTabsList',JOIN_DATA);
@@ -1184,7 +1231,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
   wireTabs('cancelTabs','cancelTabsList',CANCEL_CARDS);
   updateDeviceLogosByAge();
 });
-
 </script>
 </body>
 </html>
