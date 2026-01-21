@@ -150,8 +150,8 @@
           "id": "유효기간",
           "label": "",
           "type": "text",
-          "x": 73.71123293324756,
-          "y": 42.50668539358206,
+          "x": 73.02637915790693,
+          "y": 44.1188211089465,
           "w": 22,
           "required": false,
           "radioSize": 18,
@@ -357,7 +357,7 @@
           "lockOnPh": false,
           "value": ""
         },
-                  {
+        {
           "id": "주소",
           "label": "",
           "type": "text",
@@ -642,7 +642,7 @@
           "autoDate": "year",
           "locked": false,
           "lockOnPh": false,
-          "value": "2025"
+          "value": "2026"
         },
         {
           "id": "월",
@@ -671,7 +671,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "12"
+          "value": "01"
         },
         {
           "id": "일",
@@ -700,7 +700,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "30"
+          "value": "21"
         },
         {
           "id": "판매점명",
@@ -1085,7 +1085,7 @@
           "lockOnPh": false,
           "value": ""
         },
-                {
+        {
           "id": "가입 유형 체크",
           "label": "",
           "type": "text",
@@ -1093,7 +1093,6 @@
           "y": 10.537018566741404,
           "w": 12.393557047884919,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1110,6 +1109,36 @@
           "mask": "",
           "maskRe": "",
           "placeholder": "가입 유형 체크 필수",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": false,
+          "value": ""
+        },
+        {
+          "id": "관계필수작성",
+          "label": "",
+          "type": "text",
+          "x": 84.09350057012543,
+          "y": 42.259523142869654,
+          "w": 9.247434435575823,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 21,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 8,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "관계필수작성",
           "autoDate": "",
           "locked": true,
           "lockOnPh": false

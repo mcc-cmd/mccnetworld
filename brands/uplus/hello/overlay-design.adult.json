@@ -149,8 +149,8 @@
           "id": "유효기간",
           "label": "",
           "type": "text",
-          "x": 73.71123293324756,
-          "y": 42.50668539358206,
+          "x": 72.453894446622,
+          "y": 44.11794028189418,
           "w": 22,
           "required": false,
           "radioSize": 18,
@@ -670,7 +670,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "08"
+          "value": "21"
         },
         {
           "id": "판매점명",
@@ -1035,6 +1035,35 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "관계필수작성",
+          "label": "",
+          "type": "text",
+          "x": 83.63740022805017,
+          "y": 42.259523142869654,
+          "w": 9.817559863169894,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 31,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 8,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "관계필수작성",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": false
         }
       ]
     },
