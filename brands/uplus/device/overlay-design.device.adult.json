@@ -458,8 +458,12 @@
           "w": 20,
           "required": true,
           "options": [
+            "U8800",
+            "K9000",
+            "K6000",
             "C4930",
-            "C4620"
+            "C4620",
+            "K3610"
           ],
           "radioSize": 18,
           "checkSize": 18,
