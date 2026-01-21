@@ -1,6 +1,22 @@
 {
   "plans": [
     {
+  "id": "lte_smart_ansim_10gb",
+  "name": "LTE 스마트 안심 10GB",
+  "baseFee": 34900,
+  "discountFee": 0,
+  "contractDiscount": 0,
+  "totalFee": 34900
+},
+{
+  "id": "lte_smart_ansim_7gb",
+  "name": "LTE 스마트 안심 7GB",
+  "baseFee": 29900,
+  "discountFee": 0,
+  "contractDiscount": 0,
+  "totalFee": 29900
+},
+    {
       "id": "lte_tonghwa_mamkkeot_25gb_m",
       "name": "LTE 통화 맘껏 2.5GB (M)",
       "baseFee": 43500,
