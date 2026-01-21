@@ -597,12 +597,17 @@
         el.classList?.remove('open');
       });
 
+    /* ✅✅✅ [A안 추가] 토스트 + invalid 인쇄 방지 */
+    const toast = document.getElementById('toast');
+    if (toast) toast.style.display = 'none';
+    document.querySelectorAll('.field.invalid')
+      .forEach(el => el.classList.remove('invalid'));
+
     document.body.classList.remove('modal-open','open','locked','no-scroll');
   }
 
   window.addEventListener('beforeprint', closeAllOverlays);
 })();
-
 </script>
 </head>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MCCNETWORLD · KT 단말</title>
+<title>MCCNETWORLD · 미디어로그 단말</title>
 
 <link rel="icon" type="image/png" sizes="16x16"  href="/mccnetworld/favicon-16x16.png?v=2">
 <link rel="icon" type="image/png" sizes="32x32"  href="/mccnetworld/favicon-32x32.png?v=2">
@@ -528,7 +528,7 @@
 <div class="wrap">
   <section class="panel">
     <div class="hd">
-      <strong>MCC · KT 단말 개통</strong>
+      <strong>MCC · 미디어로그 단말 개통</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
@@ -728,29 +728,54 @@ let SHOW_INVALID = false;
 
 function setValueById(id, value) {
   if (!id) return;
-  valuesById[id] = (value ?? "");
+  const v = (value ?? "");
 
+  // 1) 값 저장
+  valuesById[id] = v;
+
+  // 2) pages 설계에도 반영
   try {
     const key = String(id).toLowerCase();
     pages.forEach(pg => {
       (pg.fields || []).forEach(f => {
         if (String(f.id || '').toLowerCase() === key) {
           if (f.type === 'checkbox') f.value = !!value;
-          else f.value = (value ?? "");
+          else f.value = v;
         }
       });
     });
   } catch (_) {}
 
-  const el = elById[id];
+  // 3) ✅ 화면 DOM 반영: elById 없으면 id로 직접 찾기
+  let el = elById[id];
+  if (!el) el = document.getElementById(id);
+
   if (!el) return;
 
-  if (el.type === 'checkbox') el.checked = !!value;
-  else {
-    if (typeof el === 'object' && el.type === 'radio') el.value = (value ?? "");
-    else el.value = valuesById[id];
+  // radio 더미객체면 값만 보관
+  if (typeof el === 'object' && el.type === 'radio') {
+    el.value = v;
+    return;
+  }
+
+  // checkbox
+  if (el.type === 'checkbox') {
+    el.checked = !!value;
+    return;
+  }
+
+  // input/textarea/select
+  if ('value' in el) {
+    el.value = v;
+
+    // 값 넣었는데 UI/연산 로직이 안 따라오면 이벤트도 한번 쏴줌
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  } else {
+    el.textContent = v;
   }
 }
+
 function applyAutoDateAll(){
   const d = new Date();
   const YYYY = String(d.getFullYear());
@@ -1041,17 +1066,12 @@ function getSubsidy(deviceId, planId){
   return Number(v)||0;
 }
 
-function calcMonthlyFeeAvg(principal, months, feePercent){
-  principal = Number(principal) || 0;
-  months = Number(months) || 0;
-  feePercent = Number(feePercent) || 0;
-
-  if (principal <= 0 || months <= 0 || feePercent <= 0) return 0;
-
-  const monthlyInstall = principal / months;
-  return monthlyInstall * (feePercent / 100);
+function calcMonthlyFeeSimple(principal, aprPercent){
+  principal = Number(principal)||0;
+  const r = (Number(aprPercent)||0) / 100 / 12;
+  if (principal <= 0 || r <= 0) return 0;
+  return principal * r;
 }
-
 
 async function fetchJson(url){
   const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now(), { cache:'no-store' });
@@ -1217,9 +1237,10 @@ function recalcDevicePricing(){
 
   if(!dv.id || !pl.id){
     [
-      'deviceName','msrp','commonSubsidy','extraSubsidy','otherDiscount',
-      'principal','monthlyInstall','monthlyFeeAvg','monthlyPayTotal',
-      'baseFee','discountFee','totalFee','monthlyBasePay','planEcho'
+       'deviceName','msrp','commonSubsidy','extraSubsidy','otherDiscount',
+    'principal','monthlyInstall','monthlyFeeAvg','monthlyPayTotal',
+    'baseFee','discountFee','totalFee','monthlyBasePay','planEcho',
+    'penalty12','penalty18'
     ].forEach(id => setValueById(id,''));
     return;
   }
@@ -1235,6 +1256,10 @@ function recalcDevicePricing(){
   const down     = numOnly(valuesById.downPayment ?? 0);
   const otherDis = numOnly(valuesById.otherDiscount ?? 0);
 
+  const totalSupport = commonSubsidy + down;
+setValueById('totalSupport', won(totalSupport));
+setValueById('supportSum',  won(totalSupport));
+
   let extraSub = numOnly(valuesById.extraSubsidy ?? 0);
   let principal = 0;
 
@@ -1245,18 +1270,27 @@ function recalcDevicePricing(){
     setValueById('extraSubsidy', won(extraSub));
     setValueById('downPayment',  '0');
     setValueById('otherDiscount','0');
+      // ✅ (권장) 일시불에서도 공시+선납 합계 표기(선납은 0으로 강제된 값 기준)
+  setValueById('supportSum', won(commonSubsidy + 0));
 
-  } else {
-    // 할부
-    extraSub = 0;
-    setValueById('extraSubsidy', '0');
+} else {
+  // 할부
+  extraSub = 0;
+  setValueById('extraSubsidy', '0');
 
-    principal = Math.max(0, msrp - commonSubsidy - extraSub - otherDis - down);
-  }
+  // ✅ LG: 공시+선납 합계
+  const supportSum = commonSubsidy + down; // commonSubsidy + downPayment
+  setValueById('supportSum', won(supportSum)); // 디자인에 supportSum 텍스트필드가 있으면 표기
+
+  // ✅ principal = msrp - (공시+선납) - 기타할인
+  principal = Math.max(0, msrp - supportSum - otherDis);
+}
+
 
   // ✅ 월 할부/수수료 계산
   const monthlyInstallRaw = (months > 0) ? (principal / months) : 0;
-  const monthlyFeeAvgRaw  = calcMonthlyFeeAvg(principal, months, DEVICE_DB.aprPercent ?? 0);
+  const monthlyFeeAvgRaw  = calcMonthlyFeeSimple(principal, DEVICE_DB.aprPercent ?? 0);
+
   const monthlyInstallWon  = Math.round(monthlyInstallRaw);
   const monthlyFeeAvgWon   = Math.round(monthlyFeeAvgRaw);
   const monthlyPayTotalWon = monthlyInstallWon + monthlyFeeAvgWon;
@@ -1270,6 +1304,16 @@ setValueById('totalFeeByAvg', String(totalFeeByAvgWon));
   setValueById('extraSubsidy',   won(extraSub));
   setValueById('otherDiscount',  won(otherDis));
   setValueById('principal',      won(principal));
+
+  // ✅ 위약금(12개월/18개월) = 공시지원금 기준
+// 12개월: 공시지원금의 절반
+// 18개월: 12개월 위약금의 절반 (= 공시지원금의 1/4)
+const penalty12 = Math.round((commonSubsidy || 0) / 2);
+const penalty18 = Math.round(penalty12 / 2);
+
+setValueById('penalty12', won(penalty12));
+setValueById('penalty18', won(penalty18));
+
 
 if (payType === '일시불') {
   setValueById('monthlyInstall', '0');

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MCCNETWORLD 미디어로그</title>
+<title>MCCNETWORLD 엠모바일</title>
 
 <link rel="icon" type="image/png" sizes="16x16"  href="/mccnetworld/favicon-16x16.png?v=2">
 <link rel="icon" type="image/png" sizes="32x32"  href="/mccnetworld/favicon-32x32.png?v=2">
@@ -11,7 +11,6 @@
 <link rel="icon" type="image/png" sizes="512x512" href="/mccnetworld/android-chrome-512x512.png?v=2">
 <link rel="apple-touch-icon" href="/mccnetworld/apple-touch-icon.png?v=2">
 <link rel="shortcut icon" href="/mccnetworld/favicon.ico?v=2">
-
 <meta name="theme-color" content="#0c1117"/>
 
 <style>
@@ -47,74 +46,66 @@
   .label{position:absolute;top:-16px;left:0;font-size:12px;font-weight:800;text-shadow:0 1px 2px #0009}
   .field input,.field textarea,.field select{
     width:100%;background:transparent;border:none;color:var(--fgc,#fff);
-    /* --ih 변수로 기본 높이 제어, textarea 는 JS에서 다시 계산 */
     height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
   }
   .field:focus-within{
-  outline: 3px solid #e724ee83;   /* 테두리 색 (파란색) */
-  outline-offset: 0px;          /* 테두리가 박스에서 약간 떨어져 보이게 */
-  border-radius: 0px;           /* 모서리 살짝 둥글게 */
-  background: rgba(37,99,235,.03); /* 아주 옅은 배경 하이라이트 (원하면 삭제 가능) */
-}
-/* 세로 가운데(텍스트 한 줄용) */
-.field input[type="text"],
-.field select{
-  line-height: var(--ih, 28px);   /* 높이와 동일하게 */
-  padding-top: 0;
-  padding-bottom: 0;
-}
+    outline: 3px solid #e724ee83;
+    outline-offset: 0px;
+    border-radius: 0px;
+    background: rgba(37,99,235,.03);
+  }
 
-/* 리사이즈 손잡이(빌더 모드에서만) – 기본은 숨김, 호버/선택 시만 보이게 */
-.field .resize-handle{
-  position:absolute;
-  right:-6px;
-  bottom:-6px;
-  width:12px;
-  height:12px;
-  border-radius:3px;
-  cursor:nwse-resize;
+  /* 세로 가운데(텍스트 한 줄용) */
+  .field input[type="text"],
+  .field select{
+    line-height: var(--ih, 28px);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 
-  /* 기본은 안 보이게 */
-  opacity:0;
-  border:1px solid transparent;
-  background:transparent;
-  box-shadow:none;
-}
+  /* 리사이즈 손잡이 */
+  .field .resize-handle{
+    position:absolute;
+    right:-6px;
+    bottom:-6px;
+    width:12px;
+    height:12px;
+    border-radius:3px;
+    cursor:nwse-resize;
+    opacity:0;
+    border:1px solid transparent;
+    background:transparent;
+    box-shadow:none;
+  }
+  .field:hover .resize-handle,
+  .field.sel .resize-handle{
+    opacity:1;
+    border-color:#60a5fa;
+    background:#1d4ed8;
+    box-shadow:0 0 0 1px #0b1120;
+  }
+  html.fill .field .resize-handle{display:none !important;}
 
-/* 마우스를 필드 위에 올렸을 때 / 선택된 필드일 때만 색 표시 */
-.field:hover .resize-handle,
-.field.sel .resize-handle{
-  opacity:1;
-  border-color:#60a5fa;
-  background:#1d4ed8;
-  box-shadow:0 0 0 1px #0b1120;
-}
+  /* 서류 영역(왼쪽 캔버스) 드롭다운 화살표 숨기기 */
+  .paper .field select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none !important;
+    padding-right: 8px;
+  }
 
-/* 작성 모드(FILL)에서는 아예 안 나옴 */
-html.fill .field .resize-handle{
-  display:none !important;
-}
-
-/* 서류 영역(왼쪽 캔버스) 드롭다운 화살표 숨기기 */
-.paper .field select{
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: none !important; /* 일부 브라우저 기본 화살표 제거 */
-  padding-right: 8px;                /* 오른쪽 여유 공간 (텍스트 잘리지 않게) */
-}
-
-.field input,.field textarea,.field select{
-  width:100%;
-  background:transparent;
-  border:none;
-  color:var(--fgc,#fff);
-  height:var(--ih,auto);
-  outline:none;
-  padding:0 6px;              /* ✅ 위아래 0으로 */
-  font:600 var(--fs)/1.2 system-ui;
-  text-align:var(--ta,left);
-}
+  .field input,.field textarea,.field select{
+    width:100%;
+    background:transparent;
+    border:none;
+    color:var(--fgc,#fff);
+    height:var(--ih,auto);
+    outline:none;
+    padding:0 6px;
+    font:600 var(--fs)/1.2 system-ui;
+    text-align:var(--ta,left);
+  }
 
   .field textarea{
     white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
@@ -132,17 +123,159 @@ html.fill .field .resize-handle{
     border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000);
     position:relative;vertical-align:middle;display:inline-block;box-sizing:border-box;
   }
+  /* ===== radio 표시 스타일 3종 (dot / solid / tick) ===== */
+.field.radio.rd-dot input[type="checkbox"]:checked::after{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border-radius:999px;
+  background:#000;
+}
+
+.field.radio.rd-solid input[type="checkbox"]:checked::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:999px;
+  background:#000;
+}
+
+/* ✓ 체크 표시 (동그라미 안에 체크) */
+.field.radio.rd-tick input[type="checkbox"]:checked::after{
+  content:"";
+  position:absolute;
+  left:5px;
+  top:2px;
+  width:calc(var(--rsize,18px) - 10px);
+  height:calc(var(--rsize,18px) - 10px);
+  border-right:2px solid #000;
+  border-bottom:2px solid #000;
+  transform:rotate(45deg);
+  border-radius:0;
+}
+
   .field.checkbox input{width:var(--cksize,18px);height:var(--cksize,18px);border-radius:2px;}
-  .field.checkbox input:checked::after{
-    content:"";position:absolute;left:3px;top:0px;width:calc(var(--cksize,18px) - 6px);height:calc(var(--cksize,18px) - 6px);
-    border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg) translateY(-2px);
-  }
+/* ✅ PRINT: checkbox tick 기본 */
+.field.checkbox.ck-tick input:checked::after,
+.field.checkbox:not(.ck-solid):not(.ck-dot) input:checked::after{
+  content:"";
+  position:absolute;
+  left:3px;
+  top:0px;
+  width:calc(var(--cksize,18px) - 6px);
+  height:calc(var(--cksize,18px) - 6px);
+  border-right:2px solid #000;
+  border-bottom:2px solid #000;
+  transform:rotate(45deg) translateY(-2px);
+}
+
+/* ✅ PRINT: checkbox solid */
+.field.checkbox.ck-solid input:checked::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  background:#000;
+  border:none;
+  transform:none;
+}
+
+/* ✅ PRINT: checkbox dot */
+.field.checkbox.ck-dot input:checked::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:calc(var(--cksize,18px) * 0.45);
+  height:calc(var(--cksize,18px) * 0.45);
+  background:#000;
+  border-radius:999px;
+  transform:translate(-50%,-50%);
+  border:none;
+}
+
   .field.checkbox .label{top:0;left:24px}
-  .field.radio{white-space:nowrap}
-  .field.radio .radio-item{display:inline-flex;align-items:center;gap:6px;margin-right:var(--rgap,12px)}
-  .field.radio input[type="checkbox"]{width:var(--rsize,18px);height:var(--rsize,18px);border-radius:2px;}
-  .field.radio input[type="checkbox"]:checked::after{content:"";position:absolute;inset:1px;background:#000;}
-  .field.radio .radio-item span{display:none}
+  /* ===== radio 개선 ===== */
+  .field.radio{
+    white-space: normal;            /* ✅ nowrap 제거 */
+  }
+
+  .field.radio > div{
+    display:flex;
+    flex-wrap:wrap;                 /* ✅ 폭 줄이면 자동 줄바꿈 */
+    gap: var(--rgap,12px);
+    align-items:center;
+    max-width:100%;   /* ✅ field 폭 제한 */
+  }
+
+.field.radio .radio-item{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:2px 6px;          /* ✅ 내부 여백 축소 */
+  border-radius:8px;
+  background:transparent;
+  border:1px solid rgba(0,0,0,.25);
+
+  flex:0 1 auto;            /* ✅ 줄어들 수 있게 */
+  max-width:100%;           /* ✅ field 폭 초과 금지 */
+}
+
+.field.radio .radio-item span{
+  display:inline;
+  font-weight:700;
+  color:#000;
+
+  white-space:normal;       /* ✅ 줄바꿈 허용 */
+  word-break:keep-all;
+}
+/* ===== radio-item(겉 테두리) / 텍스트 표시 제어 ===== */
+.field.radio .radio-item{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:0 !important;
+  border-radius:0 !important;
+
+ /* ✅ 라디오 옵션 박스(테두리/패딩) 제거해서 간격 최대한 좁히기 */
+  border: 0 !important;
+  background: transparent !important;
+
+  flex:0 1 auto;
+  max-width:100%;
+}
+
+.field.radio.noText .radio-item span{
+  display:none !important; /* ✅ 1,2 표기 숨김 */
+}
+
+
+  /* ===== 체크 스타일 변형(tick/solid/dot) ===== */
+.field.checkbox.ck-solid input:checked::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  background:#000;
+  border:none;
+  transform:none;
+}
+
+.field.checkbox.ck-dot input:checked::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:calc(var(--cksize,18px) * 0.45);
+  height:calc(var(--cksize,18px) * 0.45);
+  background:#000;
+  border-radius:999px;
+  transform:translate(-50%,-50%);
+  border:none;
+}
+
+/* tick은 기존 스타일 그대로 사용 */
+
 
   .sel{outline:3px solid #00d2ff66;border-radius:8px}
 
@@ -163,50 +296,173 @@ html.fill .field .resize-handle{
   html.fill .builder{display:none}
 
   /* 인쇄 공통 */
-  @page{size:A4 portrait;margin:0}
+ @page{size:A4 portrait;margin:0}
   #printAll{display:none}
   .print-value{display:none;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui}
 
-  /* 인쇄 */
-  @media print{
-    body{background:#fff}
-    .wrap,.builder,.pager,.hint,.hd,#affPopup{display:none !important}
-    #printAll{display:block}
-    .pageWrap{width:210mm;height:297mm;position:relative;overflow:visible;padding:0;box-sizing:border-box;page-break-after:always;}
-    .pageWrap:last-child{page-break-after:auto}
-    #printAll .stage{transform:scale(1)}
-    #printAll .paper{border:none;height:auto}
-    #printAll .stage img{width:100%;height:100%;object-fit:fill}
-    #printAll .overlay{position:absolute;inset:0;overflow:visible !important}
-    #printAll,#printAll *{font-family:system-ui,"Noto Sans KR",sans-serif !important;letter-spacing:0 !important}
-    #printAll .field input,#printAll .field textarea,#printAll .field select{color:#000 !important;background:transparent !important;border-bottom:none !important}
-    #printAll .label{color:#000 !important;text-shadow:none !important}
-    #printAll .field select{display:none !important}
-    #printAll .field .print-value{display:block !important;color:#000 !important}
-  /* 인쇄 시 textarea 기본 동작 */
+    /* ✅ PRINT: radio (원형 유지) */
+  .field.radio input[type="checkbox"]{
+    width:var(--rsize,18px) !important;
+    height:var(--rsize,18px) !important;
+    border-radius:999px !important; /* ← 원형 */
+  }
+
+@page{ size:A4 portrait; margin:0; }
+
+@media print{
+  :root{ --print-safe: 0.985; } /* 0.97~0.99 미세조정 */
+
+  body{ background:#fff; }
+  html, body{ margin:0; padding:0; }
+
+  .wrap,.builder,.pager,.hint,.hd,#affPopup{ display:none !important; }
+  #printAll{ display:block; }
+
+  .pageWrap{
+    width:210mm;
+    height:297mm;
+    position:relative;
+    overflow:hidden;              /* ✅ 잘림/2페이지 방지 핵심 */
+    padding:0;
+    padding-top:3mm;   /* ✅ 추가 (2~5mm 사이로 조절) */
+    box-sizing:border-box;
+    page-break-after:always;
+
+    display:flex;                 /* ✅ 가운데 정렬 */
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding-top:3mm;
+  }
+  .pageWrap:last-child{ page-break-after:auto; }
+
+  #printAll .paper{ border:none; height:auto; }
+
+  #printAll .stage{
+    width:210mm;
+    height:297mm;
+    transform-origin:flex-start;
+        /* ✅ 안전 축소 */
+    transform: scale(var(--print-safe));
+  }
+
+  #printAll .stage img{ width:100%; height:100%; object-fit:fill; }
+  #printAll .overlay{ position:absolute; inset:0; overflow:visible !important; }
+
+  #printAll,#printAll *{
+    font-family:system-ui,"Noto Sans KR",sans-serif !important;
+    letter-spacing:0 !important;
+  }
+
+  #printAll .field input,
+  #printAll .field textarea,
+  #printAll .field select{
+    color:#000 !important;
+    background:transparent !important;
+    border-bottom:none !important;
+  }
+
+  #printAll .label{ color:#000 !important; text-shadow:none !important; }
+  #printAll .field.radio .radio-item span{ display:inline !important; color:#000 !important; }
+  #printAll .field select{ display:none !important; }
+  #printAll .field .print-value{ display:block !important; color:#000 !important; }
+
   #printAll textarea{
     height:auto !important;
     resize:none !important;
     max-height:none !important;
   }
+}
 
-    .field.checkbox input,.field.radio input[type="checkbox"]{
-      appearance:none !important;-webkit-appearance:none !important;background:transparent !important;
-      border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;position:relative !important;vertical-align:middle;
-    }
-    .field.checkbox input{width:var(--cksize,18px) !important;height:var(--cksize,18px) !important;border-radius:2px !important}
-    .field.checkbox input:checked::after{
-      content:"";position:absolute;left:3px;top:0px;width:calc(var(--cksize,18px) - 6px);height:calc(var(--cksize,18px) - 6px);
-      border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg) translateY(-2px);
-    }
-    /* STAGING 배지는 인쇄 시 숨김 */
-    .env-badge{display:none !important;}
-    .field.radio input[type="checkbox"]{width:var(--rsize,18px) !important;height:var(--rsize,18px) !important;border-radius:2px !important}
-    .field.radio input[type="checkbox"]:checked::after{content:"";position:absolute;inset:1px;background:#000}
-    .field.checkbox .label{top:0;left:24px}
+
+  .field.checkbox input,.field.radio input[type="checkbox"]{
+    appearance:none !important;
+    -webkit-appearance:none !important;
+    background:transparent !important;
+    border:var(--tick-bdw,1.6px) solid var(--tick-bdc,#000) !important;
+    position:relative !important;
+    vertical-align:middle;
   }
 
-  /* 텍스트 박스 보조 */
+  .field.checkbox input{
+    width:var(--cksize,18px) !important;
+    height:var(--cksize,18px) !important;
+    border-radius:2px !important
+  }
+
+  /* ✅ PRINT: checkbox tick 기본 */
+  .field.checkbox.ck-tick input:checked::after,
+  .field.checkbox:not(.ck-solid):not(.ck-dot) input:checked::after{
+    content:"";
+    position:absolute;
+    left:3px;
+    top:0px;
+    width:calc(var(--cksize,18px) - 6px);
+    height:calc(var(--cksize,18px) - 6px);
+    border-right:2px solid #000;
+    border-bottom:2px solid #000;
+    transform:rotate(45deg) translateY(-2px);
+  }
+
+  /* ✅ PRINT: checkbox solid */
+  .field.checkbox.ck-solid input:checked::after{
+    content:"";
+    position:absolute;
+    inset:2px;
+    background:#000;
+    border:none;
+    transform:none;
+  }
+
+  /* ✅ PRINT: checkbox dot */
+  .field.checkbox.ck-dot input:checked::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:calc(var(--cksize,18px) * 0.45);
+    height:calc(var(--cksize,18px) * 0.45);
+    background:#000;
+    border-radius:999px;
+    transform:translate(-50%,-50%);
+    border:none;
+  }
+
+  .env-badge{display:none !important;}
+
+
+/* PRINT: radio dot */
+.field.radio.rd-dot input[type="checkbox"]:checked::after{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border-radius:999px;
+  background:#000;
+}
+
+/* PRINT: radio solid */
+.field.radio.rd-solid input[type="checkbox"]:checked::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:999px;
+  background:#000;
+}
+
+/* PRINT: radio tick */
+.field.radio.rd-tick input[type="checkbox"]:checked::after{
+  content:"";
+  position:absolute;
+  left:5px;
+  top:2px;
+  width:calc(var(--rsize,18px) - 10px);
+  height:calc(var(--rsize,18px) - 10px);
+  border-right:2px solid #000;
+  border-bottom:2px solid #000;
+  transform:rotate(45deg);
+}
+
+  .field.checkbox .label{top:0;left:24px}
+
   .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
   #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
   .field.hasBG input[type="text"],.field.hasBG textarea{background:var(--bgc,transparent) !important}
@@ -217,45 +473,88 @@ html.fill .field .resize-handle{
   #affPopup{position:fixed;left:50%;transform:translateX(-50%);top:10px;z-index:99999;display:none}
   #affPopup .card b{font-weight:900}
 
-  /* extraData 상단 표시 바 */
   .extraBar{display:none;margin:6px 0 0}
   .extraBar__card{background:#0f2036;border:1px solid #2b3a54;border-radius:10px;padding:8px 10px;font-weight:800;color:#cfe0ff}
   .extraBar__label{opacity:.85;margin-right:8px}
 
-  /* ===== 환경 분리용 추가 ===== */
-  /* 개발(스테이징) 배지 */
   html.is-staging .env-badge{
     position:fixed;z-index:9999;top:10px;left:10px;
     padding:6px 10px;border-radius:6px;font-weight:700;
     background:#f59e0b;color:#111827;box-shadow:0 2px 6px rgba(0,0,0,.2);
     user-select:none;pointer-events:none;
   }
-  /* 운영에서는 디자이너 패널/버튼 전부 숨김 */
   html.is-prod .builder{display:none !important;}
   html.is-prod .hd .builder{display:none !important;}
-  /* 뒤로가기 버튼 전용 스타일 */
-.btn-back{
-  min-width: 140px;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 13px;
-  padding: 6px 14px;
-}
 
-/* 아이콘만 조금 더 눈에 띄게 하고 싶으면 */
-.btn-back::before{
-  content: "←";
-  margin-right: 4px;
-  font-size: 14px;
+  .btn-back{
+    min-width: 140px;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+  .btn-back::before{
+    content: "←";
+    margin-right: 4px;
+    font-size: 14px;
+  }
+  /* =========================
+   ✅ PRINT FIX (검정화면 출력 방지)
+========================= */
+@media print {
+
+  /* 1) 전체 배경/글자색 강제 고정 */
+  html, body{
+    background:#fff !important;
+    color:#000 !important;
+  }
+
+  /* 2) 박스 그림자/그라데이션 등 프린터 충돌 요소 제거 */
+  *{
+    box-shadow:none !important;
+    text-shadow:none !important;
+    filter:none !important;
+    -webkit-filter:none !important;
+  }
+
+  /* 3) 카드/패널 배경도 흰색으로 */
+  .panel, .group, .brand, .form-duo-wrap, .form-duo .form-half{
+    background:#fff !important;
+    background-image:none !important;
+  }
+
+  /* 4) 워터마크(배경이미지) 제거 */
+  .group::after{
+    display:none !important;
+    content:none !important;
+  }
+
+  /* 5) 모달/백드롭(검정 오버레이) 전부 숨김 */
+  .modal, .cs-modal, .form-modal,
+  .modal-backdrop, .cs-backdrop, .form-backdrop{
+    display:none !important;
+  }
+
+  /* 6) 모달 안쪽에 어두운 배경(#0b1220)도 방지 */
+  .modal-body{
+    background:#fff !important;
+  }
+
+  /* 7) 링크 색/밑줄 정리(선택) */
+  a, a:visited{
+    color:#000 !important;
+    text-decoration:none !important;
+  }
+
+  /* 8) 인쇄 시 화면 너비/여백 안정화(선택) */
+  .wrap{max-width:none !important; padding:0 !important;}
 }
 
 </style>
 
-<!-- 환경 자동 판별(운영/스테이징) + 운영에서 작성 모드 강제 -->
 <script>
 (function(){
   const host = location.hostname;
-  // ⬇ 로컬에서도 스테이징으로 취급
   const IS_LOCAL   = /^(localhost|127\.0\.0\.1)$/i.test(host);
   const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
   document.documentElement.classList.toggle('is-staging', IS_STAGING);
@@ -276,27 +575,47 @@ html.fill .field .resize-handle{
     if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
   }
 })();
+/* =========================
+   ✅ 인쇄 직전: 모달/검정 백드롭 강제 종료 (서식지 검정 출력 방지)
+   - 주의: 이 페이지의 서식 레이어가 class="overlay"라서
+           querySelector에 .overlay를 넣으면 서식 레이어가 숨겨집니다.
+========================= */
+(function(){
+  function closeAllOverlays(){
+    // ✅ 메시지 모달 강제 종료
+    const msg = document.getElementById('msgModal');
+    if (msg){
+      msg.style.display = 'none';
+      msg.setAttribute('aria-hidden','true');
+    }
+
+    // ✅ 혹시 다른 모달이 있으면 닫기(서식 레이어 .overlay는 절대 건드리지 않음)
+    document.querySelectorAll('.modal, .popup, .dim, .backdrop, .modal-backdrop')
+      .forEach(el=>{
+        el.style.display = 'none';
+        el.setAttribute?.('aria-hidden','true');
+        el.classList?.remove('open');
+      });
+
+    document.body.classList.remove('modal-open','open','locked','no-scroll');
+  }
+
+  window.addEventListener('beforeprint', closeAllOverlays);
+})();
+
 </script>
 </head>
+
 <body>
 <div class="wrap">
-  <!-- ===== 왼쪽: 서류 화면 ===== -->
   <section class="panel">
-    <!-- ✅ 헤더: 한 번만, 오른쪽에 뒤로가기 + 빌더 버튼 -->
     <div class="hd">
-      <strong>MCC 미디어로그 서류</strong>
+      <strong>MCC 엠모바일</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
-        <!-- 메인(서류 선택 화면)으로 돌아가기 -->
-<a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">
-  서류 선택 화면
-</a>
-
-        <!-- 기존 빌더 버튼 -->
+        <a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
         <div class="builder">
-          <button class="btn--ghost btn" id="enableWrapAll">
-            모든 텍스트 자동 줄바꿈 켜기
-          </button>
+          <button class="btn--ghost btn" id="enableWrapAll">모든 텍스트 자동 줄바꿈 켜기</button>
         </div>
       </div>
     </div>
@@ -304,7 +623,6 @@ html.fill .field .resize-handle{
     <div class="stack">
       <div id="affBanner" class="affBanner"><div class="affBanner__card">제휴 요금제 진행 시 <b> C-1 성함·동의 체크</b>가 필요합니다.</div></div>
 
-      <!-- extraData 표시 바 -->
       <div id="extraBar" class="extraBar">
         <div class="extraBar__card"><span class="extraBar__label">추가 데이터</span><span id="extraBarText"></span></div>
       </div>
@@ -326,7 +644,6 @@ html.fill .field .resize-handle{
     </div>
   </section>
 
-  <!-- ===== 오른쪽: 빌더 패널 ===== -->
   <section class="panel builder">
     <div class="hd">
       <strong>기본 도구</strong>
@@ -335,7 +652,6 @@ html.fill .field .resize-handle{
         <button class="btn--ghost btn" id="resetValues">값 초기화</button>
         <button class="btn" id="saveJson">설계 저장(JSON)</button>
 
-        <!-- 요금표 관리 -->
         <button class="btn--ghost btn" id="bulkPlansBtn">요금 일괄 입력</button>
         <button class="btn--ghost btn" id="savePlans">요금표 저장(plans.json)</button>
         <label class="btn--ghost btn" style="cursor:pointer">
@@ -378,11 +694,20 @@ html.fill .field .resize-handle{
         <div class="row"><div>폭(%)</div><input id="p_w" type="number" step="0.1"></div>
 
         <div class="row"><div>라디오 크기(px)</div><input id="p_radioSize" type="number" min="10" max="32" step="1" placeholder="18"></div>
-        <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="60" step="1" placeholder="12"></div>
+        <div class="row"><div>라디오 간격(px)</div><input id="p_radioGap" type="number" min="0" max="200" step="1" placeholder="12"></div>
+        <div class="row" id="row_checkStyle">
+        <div>체크 스타일</div>
+        <select id="p_checkStyle">
+        <option value="tick">✓ 체크</option>
+        <option value="solid">■ 꽉찬</option>
+        <option value="dot">● 점</option>
+          </select>
+        </div>
 
         <div class="row"><div>텍스트 색상</div><input id="p_color" type="color" value="#000000"></div>
         <div class="row"><div>입력 높이(px)</div><input id="p_height" type="number" min="5" max="60" step="1" placeholder="auto"></div>
         <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="5" max="32" step="1" placeholder="14"></div>
+
         <div class="row"><div>정렬</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="btn--ghost btn" id="alignLeft">좌</button>
@@ -391,15 +716,15 @@ html.fill .field .resize-handle{
             <button class="btn--ghost btn" id="alignTop">상</button>
             <button class="btn--ghost btn" id="alignCY">중앙</button>
             <button class="btn--ghost btn" id="alignBottom">하</button>
-            <div class="row"><div>텍스트 정렬</div>
-           <select id="p_textAlign">
-            <option value="">기본(좌측)</option>
-            <option value="left">좌측</option>
-            <option value="center">가운데</option>
-            <option value="right">우측</option>
-           </select>
-</div>
 
+            <div class="row"><div>텍스트 정렬</div>
+              <select id="p_textAlign">
+                <option value="">기본(좌측)</option>
+                <option value="left">좌측</option>
+                <option value="center">가운데</option>
+                <option value="right">우측</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -470,6 +795,95 @@ html.fill .field .resize-handle{
 <div id="affPopup"><div class="card">⚠️ <b>제휴 요금제</b>입니다. <b> C-1 성함·동의 체크</b>가 모두 완료되어야 진행됩니다.</div></div>
 
 <script>
+/* =========================
+   ✅ 전역 값 저장/동기화
+========================= */
+const valuesById = Object.create(null);
+const elById = Object.create(null);
+
+// ✅ 조건부 필수 규칙 (신규/번이에 따라)
+const CONDITIONAL_REQUIRED = [
+  { sourceId: '신규/번이', whenValue: '신규', requiredOn: ['희망번호'] },
+  { sourceId: '신규/번이', whenValue: '번호이동', requiredOn: ['번호이동'] },
+];
+
+// ✅ 현재 값 읽기(전역값 → 설계값 순)
+function getValueById(id){
+  if (!id) return '';
+  const v1 = valuesById[id];
+  if (v1 != null && String(v1).trim() !== '') return String(v1);
+
+  // pages 설계값에서도 찾아봄
+  try{
+    const key = String(id).toLowerCase();
+    for (const pg of pages){
+      for (const f of (pg.fields||[])){
+        if (String(f.id||'').toLowerCase() === key){
+          if (f.type === 'checkbox') return f.value ? 'Y' : '';
+          return (f.value ?? '').toString();
+        }
+      }
+    }
+  }catch(_){}
+  return '';
+}
+
+// ✅ 지금 시점에 “조건부로 필수인 ID들”을 Set으로 만들어줌
+function getConditionalRequiredSet(){
+  const s = new Set();
+  for (const rule of CONDITIONAL_REQUIRED){
+    const cur = (getValueById(rule.sourceId) || '').trim();
+    if (cur === rule.whenValue){
+      (rule.requiredOn || []).forEach(id => s.add(id));
+    }
+  }
+  return s;
+}
+
+
+
+function setValueById(id, value) {
+  if (!id) return;
+
+  // 1) 전역 값 저장
+  valuesById[id] = (value ?? "");
+
+  // 2) ✅ 설계 데이터(pages의 모든 동일 id 필드)도 같이 갱신
+  try {
+    const key = String(id).toLowerCase();
+    pages.forEach(pg => {
+      (pg.fields || []).forEach(f => {
+        if (String(f.id || '').toLowerCase() === key) {
+          // checkbox는 boolean, 나머지는 string로
+          if (f.type === 'checkbox') f.value = !!value;
+          else f.value = (value ?? "");
+        }
+      });
+    });
+  } catch (_) {}
+
+  // 3) 현재 화면에 떠 있는 컨트롤이 있으면 그것도 갱신
+  const el = elById[id];
+  if (!el) return;
+
+  if (el.type === 'checkbox') {
+    el.checked = !!value;
+  } else {
+    // radio 더미(객체)일 수도 있으니 안전 처리
+    if (typeof el === 'object' && el.type === 'radio') {
+      el.value = (value ?? "");
+    } else {
+      el.value = valuesById[id];
+    }
+  }
+}
+
+
+function applyMirror(sourceField, value) {
+  const targets = sourceField.mirrorTo || [];
+  targets.forEach(tid => setValueById(tid, value));
+}
+
 /* ===== 모드/상태 ===== */
 const FILL  = new URLSearchParams(location.search).get('mode')==='fill';
 const FRESH = new URLSearchParams(location.search).get('fresh')==='1';
@@ -486,11 +900,9 @@ const pageInfo= document.getElementById('pageInfo');
 const affBanner=document.getElementById('affBanner');
 const affPopup = document.getElementById('affPopup');
 
-/* extraData 바 노드 */
 const extraBar = document.getElementById('extraBar');
 const extraBarText = document.getElementById('extraBarText');
 
-/* ★ 누적/재귀 방지 상태 변수 */
 let LAST_EXTRA_TXT = '';
 let __MIRRORING__ = false;
 
@@ -511,45 +923,11 @@ function applyZoom(){
 }
 window.addEventListener('resize', applyZoom);
 
-/* ===== 자동 저장 (값만) ===== */
+/* ===== 자동 저장 비활성 ===== */
 const AUTOSAVE_KEY=null;
-let saveTimer=null;
-const collectValuesOnly=()=>({pageIndex,values:pages.map(pg=>({fields:(pg.fields||[]).map(f=>({id:f.id||'',value:f.type==='checkbox'?!!f.value:(f.value??'')}))}))});
-function applyValuesOnly(s){
-  if(!s || !s.values) return;
-
-  s.values.forEach((pgSnap, i)=>{
-    const pg = pages[i];
-    if (!pg) return;
-
-    (pg.fields || []).forEach((f, j)=>{
-      const sv = pgSnap.fields?.[j];
-      if (!sv) return;
-
-      if (f.type === 'checkbox') {
-        f.value = !!sv.value;
-        return;
-      }
-
-      let v = sv.value;
-      if (typeof v === 'boolean' || v == null) {
-        v = '';
-      }
-      f.value = v;
-    });
-  });
-
-  if (Number.isInteger(s.pageIndex)) {
-    pageIndex = clamp(s.pageIndex, 0, pages.length - 1);
-  }
-}
-
-// 자동 저장 기능 사용 안 함
 function scheduleSave(){ }
 function tryLoadAutosave(){ }
-const clearAutosave = () => { 
-  try { localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {}
-};
+const clearAutosave = () => { try { localStorage.removeItem(AUTOSAVE_KEY); } catch(_) {} };
 
 /* ===== 드롭다운 글자 자동 축소 ===== */
 function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
@@ -561,6 +939,7 @@ function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
     const ARROW_W = (typeof arrowPx === 'number') ? arrowPx : 17;
     const inner = sel.clientWidth - padL - padR - ARROW_W;
     if (inner <= 0 || !text) return;
+
     let meas = document.getElementById('__measure_span__');
     if (!meas) {
       meas = document.createElement('span');
@@ -589,51 +968,6 @@ function fitSelectText(sel, maxPx = 16, minPx = 8, arrowPx) {
   } catch (_) {}
 }
 const refitAllSelects=()=>overlay.querySelectorAll('select').forEach(fitSelectText);
-
-/* ===== 인쇄용(.print-value) 글자 자동 축소 ===== */
-function fitPrintValue(el, maxPx = 16, minPx = 8){
-  try{
-    const text = (el.textContent || '').trim();
-    if (!text) return;
-
-    const style = getComputedStyle(el);
-    const padL  = parseFloat(style.paddingLeft)  || 0;
-    const padR  = parseFloat(style.paddingRight) || 0;
-    const inner = el.clientWidth - padL - padR;
-    if (inner <= 0) return;
-
-    let meas = document.getElementById('__print_measure_span__');
-    if (!meas){
-      meas = document.createElement('span');
-      meas.id = '__print_measure_span__';
-      meas.style.position   = 'fixed';
-      meas.style.visibility = 'hidden';
-      meas.style.whiteSpace = 'nowrap';
-      meas.style.left       = '-9999px';
-      document.body.appendChild(meas);
-    }
-
-    meas.style.fontFamily    = style.fontFamily;
-    meas.style.fontWeight    = style.fontWeight;
-    meas.style.fontStyle     = style.fontStyle;
-    meas.style.letterSpacing = style.letterSpacing;
-    meas.style.textTransform = style.textTransform;
-
-    for (let px = maxPx; px >= minPx; px -= 0.5){
-      meas.style.fontSize = px + 'px';
-      meas.textContent    = text;
-      if (meas.getBoundingClientRect().width <= inner){
-        el.style.fontSize = px + 'px';
-        return;
-      }
-    }
-    el.style.fontSize = minPx + 'px';
-  }catch(_){}
-}
-function refitAllPrintValues(root){
-  if (!root) return;
-  root.querySelectorAll('.print-value').forEach(el=>fitPrintValue(el, 16, 9));
-}
 
 /* ===== textarea 자동 높이 ===== */
 function autosizeTA(el){
@@ -672,21 +1006,14 @@ async function loadDesign(){
     const r = await fetch(url, { cache: 'no-store' });
     if (r.ok) {
       const j = await r.json();
-      if (Array.isArray(j.pages) && j.pages.length) {
-        pages = j.pages;
-      } else {
-        seed7();
-      }
-    } else {
-      seed7();
-    }
+      if (Array.isArray(j.pages) && j.pages.length) pages = j.pages;
+      else seed7();
+    } else seed7();
   } catch (err) {
     console.error('[loadDesign] fetch 실패:', err);
     seed7();
   }
-  pages.forEach(pg => {
-    if (!Array.isArray(pg.fields)) pg.fields = [];
-  });
+  pages.forEach(pg => { if (!Array.isArray(pg.fields)) pg.fields = []; });
   pageIndex = 0;
 }
 
@@ -695,22 +1022,37 @@ const PLAN_LABEL_RE = /(요금제|요금.?상품)/i;
 const PLAN_ID_RE    = /^(plan|planselect|plan_name)$/i;
 
 const findFieldsAllPages=id=>{const a=[]; pages.forEach(pg=>(pg.fields||[]).forEach(f=>{if(f.id===id)a.push(f);})); return a;};
-const getFieldById=id=>(cur().fields||[]).find(x=>x.id===id);
-const setFieldValue=(id,v)=>findFieldsAllPages(id).forEach(f=>{f.value=(f.type==='checkbox')?!!v:v;});
-
-/* 모든 페이지에서 ID로 찾기 */
-function getFieldsByIdAll(id){
+const getFieldsByIdAll=id=>{
   id=String(id||'').toLowerCase();
   const out=[];
   pages.forEach((pg,pi)=>(pg.fields||[]).forEach((f,idx)=>{
     if(String(f.id||'').toLowerCase()===id) out.push({f,pi,idx});
   }));
   return out;
+};
+function getValueByIdAllPages(id){
+  const key = String(id || '').toLowerCase();
+
+  // 1) valuesById 우선
+  if (valuesById && Object.prototype.hasOwnProperty.call(valuesById, id)) {
+    return valuesById[id];
+  }
+
+  // 2) pages에 저장된 값에서 찾기
+  for (const pg of pages) {
+    for (const f of (pg.fields || [])) {
+      if (String(f.id || '').toLowerCase() === key) return f.value;
+    }
+  }
+  return '';
 }
-function getFirstFieldById(id){
-  const a=getFieldsByIdAll(id);
-  return a.length ? a[0].f : null;
+
+function isEmptyFieldValue(f){
+  if (!f) return true;
+  if (f.type === 'checkbox') return !f.value;
+  return !(String(f.value ?? '').trim());
 }
+
 
 /* ===== 자필(잠금) 키 입력 방지 ===== */
 function blockTyping(el){
@@ -737,7 +1079,7 @@ function fillAutoDates(){
   });
 }
 
-/* ======== 요금제 자동 매칭(plans.json) ======== */
+/* ======== 요금제(plans.json) ======== */
 let PLANS = [];
 let PLANS_MAP = new Map();
 
@@ -828,39 +1170,28 @@ function updateFeesFromPlan(planName, doRender=true){
 
   const {base, disc, tot} = getFeeFieldsAll();
 
-  // ■ 월 정액요금
   const baseVal = moneyToString(info.baseFee);
 
-  // ■ 월 요금할인 : 항상 " -3300 " 이런 식으로 표시
   let discVal = '';
   if (info.discountFee != null) {
-    const n = Math.abs(info.discountFee);      // JSON 값은 양수/음수 상관없이 절댓값만
-    if (n === 0) {
-      discVal = '0';                           // 0이면 그냥 0
-    } else {
-      discVal = '-' + moneyToString(n);        // 앞에 - 붙여서 표시
-    }
+    const n = Math.abs(info.discountFee);
+    discVal = (n === 0) ? '0' : '-' + moneyToString(n);
   }
 
-  // ■ 월 납부액
   let totVal = moneyToString(info.totalFee);
   if (!totVal && info.baseFee != null && info.discountFee != null) {
     totVal = moneyToString(info.baseFee - Math.abs(info.discountFee));
   }
 
-  base.forEach(f => { f.value = baseVal; });
-  disc.forEach(f => { f.value = discVal; });
-  tot.forEach(f => { f.value = totVal; });
+  base.forEach(f => { f.value = baseVal; setValueById(f.id, baseVal); });
+  disc.forEach(f => { f.value = discVal; setValueById(f.id, discVal); });
+  tot.forEach(f => { f.value = totVal; setValueById(f.id, totVal); });
 
   if (doRender) { render(); scheduleSave(); }
 }
 
 async function loadPlansJson(){
-  const tryUrls = [
-    './plans.json?v=2',
-    '/public/plans.json?v=2',
-    '/plans.json?v=2'
-  ];
+  const tryUrls = ['./plans.json?v=2','/public/plans.json?v=2','/plans.json?v=2'];
   for (const url of tryUrls){
     try{
       const r = await fetch(url,{cache:'no-store'});
@@ -884,7 +1215,7 @@ function syncFeesFromExistingPlan(){
   render(); scheduleSave();
 }
 
-/* ===== 이름 칸 글자 자동 축소 ===== */
+/* ===== 이름칸 자동 축소 ===== */
 function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
   try {
     const cs = getComputedStyle(el);
@@ -925,8 +1256,7 @@ function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
     for (let px = max; px >= min; px -= 0.5) {
       span.style.fontSize = px + 'px';
       span.textContent = text;
-      const w = span.getBoundingClientRect().width;
-      if (w <= innerW) {
+      if (span.getBoundingClientRect().width <= innerW) {
         el.style.fontSize = px + 'px';
         return;
       }
@@ -941,7 +1271,6 @@ function isNameField(f){
   const ph    = String(f.placeholder || '');
   if (AUTO_SHRINK_NAME_RE.test(label)) return true;
   if (AUTO_SHRINK_NAME_RE.test(ph))    return true;
-    // ✅ ID 가 '이름', '가입자명' 이런 한글이어도 이름칸으로 인식
   if (AUTO_SHRINK_NAME_RE.test(id))    return true;
   if (/name|custname/i.test(id))       return true;
   return false;
@@ -949,19 +1278,16 @@ function isNameField(f){
 function setupNameAutoShrink(ctrl, f){
   if (!isNameField(f)) return;
   ctrl.dataset.autofit = '1';
-  // 줄바꿈 허용 (nowrap/hidden 안 씀)
-
   const run = () => {
     const cs = getComputedStyle(ctrl);
     const baseFs = f.fontSize || parseFloat(cs.fontSize) || 14;
     autoShrinkTextareaFont(ctrl, 5, baseFs);
   };
-
   requestAnimationFrame(run);
   ctrl.addEventListener('input', run);
 }
 
-/* ===== 제휴/추가데이터 인식 ===== */
+/* ===== 제휴/추가데이터 ===== */
 function getSelectedPlanName(){
   const tars = getPlanSelectTargets();
   const sel = tars.find(t => t.f.value)?.f;
@@ -975,7 +1301,12 @@ function isAffiliatePlan(planName){
   return !!(info && info.bundleAnyone);
 }
 
+/* =========================
+   ✅ render() 오류 수정 완성본
+========================= */
 function render(){
+  Object.keys(elById).forEach(k => delete elById[k]);
+
   const p = cur();
   bg.src = p.bg || '';
   overlay.innerHTML = '';
@@ -1001,7 +1332,35 @@ function render(){
     if (f.type === 'radio') {
       w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
       w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+
+      const rs = (f.radioStyle || 'dot'); // dot/solid/tick
+      w.classList.remove('rd-dot','rd-solid','rd-tick');
+      w.classList.add('rd-' + rs);
     }
+    if (f.type === 'radio') {
+  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
+  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+
+  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
+  w.classList.remove('rd-dot','rd-solid','rd-tick');
+  w.classList.add('rd-' + rs);
+
+  /* ✅ (추가) 1,2 표기 숨김 옵션 */
+  if (f.radioShowText === false) w.classList.add('noText');
+  else w.classList.remove('noText');
+
+  /* ✅ (추가) 겉 테두리(.radio-item) 제어 */
+  const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
+                    : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
+
+  const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
+    ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
+    : 1;
+
+  w.style.setProperty('--rbc', outerColor);
+  w.style.setProperty('--rbw', outerWidth + 'px');
+}
+
     if (f.color) w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
 
@@ -1022,47 +1381,38 @@ function render(){
     let ctrl;
 
     const isName = isNameField(f);
-
-    // 이름 칸은 text여도 textarea로 취급
     const treatAsTextarea =
       (f.type === 'textarea') ||
       (f.type === 'text' && (f.wrap || isName));
 
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
+    /* ===== textarea (text+wrap 포함) ===== */
     if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
-      ctrl.value = f.value ?? '';
+      ctrl.spellcheck = false;
+      ctrl.style.resize = 'none';
+
+      const init = (f.id ? (valuesById[f.id] ?? f.value ?? "") : (f.value ?? ""));
+      ctrl.value = init;
+      f.value = init;
+      if (f.id) elById[f.id] = ctrl;
+
       if (f.placeholder) ctrl.placeholder = f.placeholder;
-      if (f.maxLength)   ctrl.maxLength  = f.maxLength;
+      if (f.maxLength)   ctrl.maxLength = f.maxLength;
 
-      if (f.inputHeight){
-        const h = f.inputHeight;
-
-        if (isName) {
-          // ★ 이름 칸은 "최소 높이"만 주고 autosize로 늘어나게
-          ctrl.dataset.minH = String(h);
-          ctrl.style.minHeight = h + 'px';
-        } else {
-          // 그 외 textarea는 입력 높이를 고정
-          ctrl.dataset.fixedH = String(h);
-          ctrl.style.height    = h + 'px';
-          ctrl.style.minHeight = h + 'px';
-        }
-      } else {
-        ctrl.dataset.minH = isName ? '24' : '5';
+      if (f.inputHeight) {
+        ctrl.dataset.fixedH = f.inputHeight;
+        ctrl.style.height = f.inputHeight + 'px';
       }
 
-      // autosize는 이름/일반 둘 다 적용 (이름은 minH 기준으로 계속 늘어남)
-      requestAnimationFrame(() => autosizeTA(ctrl));
-
-      if (f.locked || lockByPlaceholder){
+      if (f.locked || lockByPlaceholder) {
         ctrl.readOnly = true;
         ctrl.dataset.locked = '1';
         blockTyping(ctrl);
       }
 
-      const onInput = () => {
+      ctrl.oninput = () => {
         if (f.locked || lockByPlaceholder) return;
 
         let v = ctrl.value;
@@ -1071,49 +1421,45 @@ function render(){
         if (ctrl.value !== v) ctrl.value = v;
 
         f.value = v;
+        setValueById(f.id, v);
+        applyMirror(f, v);
 
         autosizeTA(ctrl);
-
-        if (ctrl.dataset.autofit === '1') {
-          autoShrinkTextareaFont(ctrl, 5, f.fontSize || 14);
-        }
-
         scheduleSave();
         evaluateAffBanner();
         evaluateExtraDataAndBar();
       };
+    }
 
-      ctrl.addEventListener('input', onInput);
+    /* ===== ✅ select (오류났던 부분 전면 복구) ===== */
+    else if (f.type === 'select') {
+      const sel = document.createElement('select');
 
-} else if (f.type === 'select') {
-  const sel = document.createElement('select');
-  if (f.fontSize) sel.style.fontSize = f.fontSize + 'px';
+      // 전역 값 우선 적용
+      const init = (f.id ? (valuesById[f.id] ?? f.value ?? "") : (f.value ?? ""));
+      f.value = init;
 
-
-  // ✅ select용 "placeholder 옵션" 처리
-  const phText = (f.placeholder || '').trim();
-  if (phText) {
-    const op0 = document.createElement('option');
-    op0.value = '';
-    op0.textContent = phText;     // 예: "유심 선택"
-    op0.disabled = true;
-    op0.hidden = true;            // 열었을 때 목록에서 숨기려면 유지
-    sel.appendChild(op0);
-  }
-
-  (f.options || []).forEach(o => {
-    const op = document.createElement('option');
-    op.value = op.textContent = o;
-    sel.appendChild(op);
-  });
-
-  // 값이 없으면 placeholder(빈값)로 유지
-  sel.value = (f.value ?? '');
-
-
-      if (f.inputHeight) {
-        sel.style.height = f.inputHeight + 'px';
+      // placeholder 옵션
+      const phText = (f.placeholder || '').trim();
+      if (phText) {
+        const op0 = document.createElement('option');
+        op0.value = '';
+        op0.textContent = phText;
+        op0.disabled = true;
+        op0.hidden = true;
+        sel.appendChild(op0);
       }
+
+      (f.options || []).forEach(o => {
+        const op = document.createElement('option');
+        op.value = op.textContent = o;
+        sel.appendChild(op);
+      });
+
+      sel.value = (init ?? '');
+      if (f.id) elById[f.id] = sel;
+
+      if (f.inputHeight) sel.style.height = f.inputHeight + 'px';
 
       if (f.locked || lockByPlaceholder) {
         sel.disabled = true;
@@ -1121,8 +1467,12 @@ function render(){
       }
 
       sel.onchange = () => {
-        if (sel.value === '') return;   // ✅ 추가 (placeholder 상태 방지)
+        if (sel.value === '') return; // placeholder 상태 방지
+
         f.value = sel.value;
+        setValueById(f.id, sel.value);
+        applyMirror(f, sel.value);
+
         const isPlan =
           PLAN_ID_RE.test(String(f.id || '')) ||
           PLAN_LABEL_RE.test(String(f.label || ''));
@@ -1133,70 +1483,119 @@ function render(){
         }
 
         scheduleSave();
-        fitSelectText(sel, (f.fontSize ?? 16), 5);   // ✅ 여기
+        fitSelectText(sel, (f.fontSize ?? 16), 5);
         evaluateAffBanner();
         evaluateExtraDataAndBar();
       };
 
-      requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5)); // ✅ 여기
+      requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5));
       ctrl = sel;
+    }
 
-    } else if (f.type === 'checkbox') {
-      ctrl = document.createElement('input');
-      ctrl.type    = 'checkbox';
-      ctrl.checked = !!f.value;
-      if (f.locked || lockByPlaceholder){
-        ctrl.disabled = true;
-        ctrl.dataset.locked = '1';
-      }
-      w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
-      ctrl.onchange = () => {
-        f.value = ctrl.checked;
-        scheduleSave();
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
-      lab.style.top  = '0';
-      lab.style.left = '24px';
+/* ===== checkbox ===== */
+else if (f.type === 'checkbox') {
+  ctrl = document.createElement('input');
+  ctrl.type = 'checkbox';
 
-    } else if (f.type === 'radio') {
-      ctrl = document.createElement('div');
-      const opts = (f.options && f.options.length)
-        ? f.options
-        : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+  const init = (f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
+  ctrl.checked = !!init;
+  f.value = !!init;
+  if (f.id) elById[f.id] = ctrl;
 
-      opts.forEach(o => {
-        const it = document.createElement('label');
-        it.className = 'radio-item';
+  if (f.locked || lockByPlaceholder){
+    ctrl.disabled = true;
+    ctrl.dataset.locked = '1';
+  }
 
-        const cb = document.createElement('input');
-        cb.type  = 'checkbox';
-        cb.value = o;
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+  w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
 
-        cb.onchange = () => {
-          if (!cb.checked) return;
-          ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
-            if (x !== cb) x.checked = false;
-          });
-          f.value = o;
-          scheduleSave();
-          evaluateAffBanner();
-          evaluateExtraDataAndBar();
-        };
+  // ✅ 체크 스타일 클래스 적용 (tick/solid/dot)
+  const style = (f.checkStyle || 'tick');
+  w.classList.remove('ck-tick','ck-solid','ck-dot');
+  w.classList.add('ck-' + style);
 
-        const s = document.createElement('span');
-        s.textContent = o;
-        it.appendChild(cb);
-        it.appendChild(s);
-        ctrl.appendChild(it);
+  ctrl.onchange = () => {
+    f.value = ctrl.checked;
+    setValueById(f.id, ctrl.checked);
+    applyMirror(f, ctrl.checked);
+
+    scheduleSave();
+    evaluateAffBanner();
+    evaluateExtraDataAndBar();
+  };
+
+  lab.style.top  = '0';
+  lab.style.left = '24px';
+}
+
+
+/* ===== radio (render) ===== */
+else if (f.type === 'radio') {
+  ctrl = document.createElement('div');
+
+  const opts = (f.options && f.options.length)
+    ? f.options
+    : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+
+  const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
+  f.value = init;
+
+  // ✅ 더미 등록(미러/저장용)
+  if (f.id) elById[f.id] = { type: 'radio', value: init };
+
+  opts.forEach(o => {
+    const it = document.createElement('label');
+    it.className = 'radio-item';
+
+    const cb = document.createElement('input');
+    cb.type  = 'checkbox';
+    cb.value = o;
+    cb.checked = (f.value === o);
+    if (f.locked || lockByPlaceholder) cb.disabled = true;
+
+    cb.onchange = () => {
+      if (!cb.checked) return;
+
+      // ✅ 단일선택 강제
+      ctrl.querySelectorAll('input[type="checkbox"]').forEach(x => {
+        if (x !== cb) x.checked = false;
       });
 
-    } else {
+      f.value = o;
+      setValueById(f.id, o);
+      applyMirror(f, o);
+      scheduleSave();
+      evaluateAffBanner();
+      evaluateExtraDataAndBar();
+    };
+
+    // ✅ 숫자(1,2,3...) 옵션은 텍스트 숨김이 "맞다"는 정책 유지
+    const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
+
+    // ✅ input 먼저 붙이고, 텍스트는 뒤에(레이아웃/정렬 안정)
+    it.appendChild(cb);
+
+    if (!hideText) {
+      const s = document.createElement('span');
+      s.textContent = o;
+      it.appendChild(s);
+    }
+
+    ctrl.appendChild(it);
+  });
+}
+
+
+    /* ===== 일반 input(text) ===== */
+    else {
       ctrl = document.createElement('input');
-      ctrl.type  = 'text';
-      ctrl.value = f.value ?? '';
+      ctrl.type = 'text';
+
+      const init = (f.id ? (valuesById[f.id] ?? f.value ?? "") : (f.value ?? ""));
+      ctrl.value = init;
+      f.value = init;
+      if (f.id) elById[f.id] = ctrl;
+
       if (f.placeholder) ctrl.placeholder = f.placeholder;
       if (f.maxLength)   ctrl.maxLength  = f.maxLength;
 
@@ -1212,7 +1611,10 @@ function render(){
         v = applyMask(v, f.mask, f.maskRe);
         if (f.maxLength) v = v.slice(0, f.maxLength);
         if (ctrl.value !== v) ctrl.value = v;
+
         f.value = v;
+        setValueById(f.id, v);
+        applyMirror(f, v);
 
         scheduleSave();
         evaluateAffBanner();
@@ -1255,17 +1657,14 @@ function render(){
     w.appendChild(ctrl);
     overlay.appendChild(w);
 
-    // 이름 칸이면 자동 축소 로직 연결
-    if (isNameField(f)) {
-      setupNameAutoShrink(ctrl, f);
-    }
+    if (isNameField(f)) setupNameAutoShrink(ctrl, f);
 
-    if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select')) {
-      const rh = document.createElement('div');
-      rh.className = 'resize-handle';
-      rh.addEventListener('mousedown', ev => startResize(ev, i, w));
-      w.appendChild(rh);
-    }
+if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+  const rh = document.createElement('div');
+  rh.className = 'resize-handle';
+  rh.addEventListener('mousedown', ev => startResize(ev, i, w));
+  w.appendChild(rh);
+}
 
     if (!FILL) {
       w.addEventListener('mousedown', e => startDrag(e, i, w));
@@ -1278,7 +1677,6 @@ function render(){
 
   requestAnimationFrame(refitAllSelects);
   requestAnimationFrame(() => autosizeAllTextareas(overlay));
-  requestAnimationFrame(applyZoom);
   requestAnimationFrame(() => {
     evaluateAffBanner();
     evaluateExtraDataAndBar();
@@ -1291,13 +1689,9 @@ function maskFilterByRegex(value, allowPattern){
   try{
     const re = new RegExp(allowPattern);
     let out = '';
-    for (const ch of String(value)) {
-      if (re.test(ch)) out += ch;
-    }
+    for (const ch of String(value)) if (re.test(ch)) out += ch;
     return out;
-  }catch(_){
-    return value;
-  }
+  }catch(_){ return value; }
 }
 function formatPhone(digits){
   if (!digits) return '';
@@ -1314,22 +1708,13 @@ function formatPhone(digits){
 }
 function applyMask(value, mask, maskRe){
   if(mask==='custom' && maskRe) return maskFilterByRegex(value, maskRe);
-
   switch(mask){
-    case 'number':
-      return String(value).replace(/[^\d]/g,'');
-    case 'tel': {
-      const digits = String(value).replace(/[^\d]/g,'');
-      return formatPhone(digits);
-    }
-    case 'alpha':
-      return String(value).replace(/[^A-Za-z\s]/g,'');
-    case 'alnum':
-      return String(value).replace(/[^A-Za-z0-9\s]/g,'');
-    case 'hangul':
-      return String(value).replace(/[^\u3131-\u318E\uAC00-\uD7A3\s]/g,'');
-    default:
-      return value;
+    case 'number': return String(value).replace(/[^\d]/g,'');
+    case 'tel':    return formatPhone(String(value).replace(/[^\d]/g,''));
+    case 'alpha':  return String(value).replace(/[^A-Za-z\s]/g,'');
+    case 'alnum':  return String(value).replace(/[^A-Za-z0-9\s]/g,'');
+    case 'hangul': return String(value).replace(/[^\u3131-\u318E\uAC00-\uD7A3\s]/g,'');
+    default:       return value;
   }
 }
 
@@ -1356,7 +1741,8 @@ const pLabel=document.getElementById('p_label'),
       pPlaceholder=document.getElementById('p_placeholder'),
       pAutoDate=document.getElementById('p_autoDate'),
       pLocked=document.getElementById('p_locked'),
-      pLockOnPh=document.getElementById('p_lockOnPh');
+      pLockOnPh=document.getElementById('p_lockOnPh'),
+      pCheckStyle=document.getElementById('p_checkStyle');
 
 function updatePanel(){
   const info=document.getElementById('selInfo'),
@@ -1365,6 +1751,7 @@ function updatePanel(){
         pw=document.getElementById('p_w'),
         rowOpts=document.getElementById('row_opts'),
         rowReq=document.getElementById('row_req');
+
   if(selected<0){
     info.textContent='없음'; px.value=py.value=pw.value='';
     pLabel.value=''; pRadioSize.value=''; pRadioGap.value='';
@@ -1374,30 +1761,40 @@ function updatePanel(){
     pFontSize.value=''; pMask.value=''; pMaskRe.value=''; pMaxLen.value=''; pPlaceholder.value='';
     pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
     if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
+    if (pCheckStyle) pCheckStyle.value = 'tick';  // ✅ 추가
     return;
   }
+
   const f=cur().fields[selected];
   info.textContent=(f.label||f.id||('필드'+(selected+1)));
   px.value=f.x; py.value=f.y; pw.value=f.w ?? 24;
   pLabel.value = f.label || '';
 
-  pRadioSize.value = (
-    f.type === 'checkbox'
-      ? (f.checkSize ?? 18)
-      : (f.radioSize ?? 18)
-  );
+  pRadioSize.value = (f.type === 'checkbox') ? (f.checkSize ?? 18) : (f.radioSize ?? 18);
   pRadioGap.value = (f.radioGap ?? 12);
 
-  pColor.value=(f.color || '#000000'); pHeight.value=(f.inputHeight ?? ''); pWrap.checked=true; pId.value=f.id || '';
+  pColor.value=(f.color || '#000000');
+  pHeight.value=(f.inputHeight ?? '');
+  pWrap.checked=true;
+  pId.value=f.id || '';
+
   pBorderColor.value=f.borderTransparent?'#000000':(f.borderColor||'#ff3b3b');
-  pBorderWidth.value=(f.borderWidth ?? 2); pBorderTransparent.checked=!!f.borderTransparent;
-  pBgColor.value=f.bgTransparent?'#000000':(f.bgColor||'#000000'); pBgTransparent.checked=!!f.bgTransparent;
-  if(rowReq) rowReq.style.display=''; if(pRequired) pRequired.checked=!!f.required;
+  pBorderWidth.value=(f.borderWidth ?? 2);
+  pBorderTransparent.checked=!!f.borderTransparent;
+
+  pBgColor.value=f.bgTransparent?'#000000':(f.bgColor||'#000000');
+  pBgTransparent.checked=!!f.bgTransparent;
+
+  if(rowReq) rowReq.style.display='';
+  if(pRequired) pRequired.checked=!!f.required;
+
   if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
   if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
+
   pFontSize.value = (f.fontSize ?? 14);
   pTextAlign.value = f.textAlign || '';
-  pMask.value = f.mask || ''; pMaskRe.value = f.maskRe || '';
+  pMask.value = f.mask || '';
+  pMaskRe.value = f.maskRe || '';
   pMaxLen.value = f.maxLength || '';
   pPlaceholder.value = f.placeholder || '';
   pAutoDate.value = f.autoDate || '';
@@ -1409,13 +1806,10 @@ const select=i=>{selected=i; render();};
 /* ===== 드래그 ===== */
 function startDrag(e, i, el){
   if (FILL) return;
-
-  e.stopPropagation();
-  e.preventDefault();
+  e.stopPropagation(); e.preventDefault();
 
   const f    = cur().fields[i];
   const rect = stage.getBoundingClientRect();
-
   const fieldRect = el.getBoundingClientRect();
   const offsetX   = e.clientX - fieldRect.left;
   const offsetY   = e.clientY - fieldRect.top;
@@ -1430,13 +1824,10 @@ function startDrag(e, i, el){
     const nx = clamp((relX / rect.width)  * 100, 0, 100);
     const ny = clamp((relY / rect.height) * 100, 0, 100);
 
-    f.x = nx;
-    f.y = ny;
-
+    f.x = nx; f.y = ny;
     el.style.left = nx + '%';
     el.style.top  = ny + '%';
   }
-
   function up(){
     window.removeEventListener('mousemove', move);
     window.removeEventListener('mouseup', up);
@@ -1444,15 +1835,13 @@ function startDrag(e, i, el){
     paper.style.cursor = '';
     scheduleSave();
   }
-
   window.addEventListener('mousemove', move);
   window.addEventListener('mouseup', up);
 }
 
-/* ===== 리사이즈(가로/세로) ===== */
+/* ===== 리사이즈 ===== */
 function startResize(e, i, el){
-  e.stopPropagation();
-  e.preventDefault();
+  e.stopPropagation(); e.preventDefault();
 
   const f = cur().fields[i];
   const r = stage.getBoundingClientRect();
@@ -1478,7 +1867,6 @@ function startResize(e, i, el){
     f.inputHeight = newH;
     el.style.setProperty('--ih', newH + 'px');
   }
-
   function up(){
     window.removeEventListener('mousemove', mv);
     window.removeEventListener('mouseup', up);
@@ -1486,7 +1874,6 @@ function startResize(e, i, el){
     paper.style.cursor = '';
     scheduleSave();
   }
-
   window.addEventListener('mousemove', mv);
   window.addEventListener('mouseup', up);
 }
@@ -1503,68 +1890,135 @@ document.getElementById('addField').onclick=()=>{
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
   cur().fields.push(base); selected=cur().fields.length-1; render(); scheduleSave();
 };
-document.getElementById('applyProp').onclick=()=>{
-  if(selected<0) return; const f=cur().fields[selected];
-  f.x=clamp(num(document.getElementById('p_x').value,f.x),0,100);
-  f.y=clamp(num(document.getElementById('p_y').value,f.y),0,100);
-  f.w=clamp(num(document.getElementById('p_w').value,f.w??24),2,95);
-  f.label=pLabel.value.trim();
 
-  const sizeInput = num(
-    pRadioSize.value,
-    (f.checkSize ?? f.radioSize ?? 18)
-  );
+document.getElementById('applyProp').onclick = () => {
+  if (selected < 0) return;
+
+  const f = cur().fields[selected];
+  const style = (pCheckStyle?.value || 'tick'); // tick / solid / dot
+
+  // ✅ 스타일
+  if (f.type === 'checkbox') {
+    f.checkStyle = style;
+  }
+  if (f.type === 'radio') {
+    f.radioStyle = style;
+  }
+
+  // ✅ 위치 / 크기
+  f.x = clamp(num(document.getElementById('p_x').value, f.x), 0, 100);
+  f.y = clamp(num(document.getElementById('p_y').value, f.y), 0, 100);
+  f.w = clamp(num(document.getElementById('p_w').value, f.w ?? 24), 2, 95);
+  f.label = pLabel.value.trim();
+
+  // ✅ 라디오 / 체크 크기
+  const sizeInput = num(pRadioSize.value, (f.checkSize ?? f.radioSize ?? 18));
   const safeSize = clamp(sizeInput, 8, 40);
-
   f.radioSize = safeSize;
   f.checkSize = safeSize;
 
-  f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 60);
+  f.radioGap = clamp(num(pRadioGap.value, f.radioGap ?? 12), 0, 200);
 
-  f.color=pColor.value||'#000000';
-  const h=parseInt(pHeight.value,10); f.inputHeight=Number.isFinite(h)?clamp(h,5,60):undefined;
-  f.wrap=true; f.id=(pId.value||'').trim()||f.id; f.required=!!pRequired?.checked;
+  // ✅ 색상 / 높이
+  f.color = pColor.value || '#000000';
+  const h = parseInt(pHeight.value, 10);
+  f.inputHeight = Number.isFinite(h) ? clamp(h, 5, 60) : undefined;
+
+  // ✅ 기타 속성
+  f.wrap = true;
+  f.id = (pId.value || '').trim() || f.id;
+  f.required = !!pRequired?.checked;
 
   f.borderTransparent = !!pBorderTransparent?.checked;
-  f.borderColor       = f.borderTransparent ? 'transparent' : ((pBorderColor?.value||'').trim()||undefined);
-  const bw            = parseInt(pBorderWidth?.value,10);
-  f.borderWidth       = Number.isFinite(bw)?clamp(bw,1,8):undefined;
-  f.bgTransparent     = !!pBgTransparent?.checked;
-  f.bgColor           = f.bgTransparent ? 'transparent' : ((pBgColor?.value||'').trim()||undefined);
-  const fs            = parseInt(pFontSize?.value,10);
-  f.fontSize          = Number.isFinite(fs)?clamp(fs,5,32):undefined;
-  f.textAlign         = (pTextAlign?.value || '');
-  f.mask              = (pMask?.value||'');
-  f.maskRe            = (pMaskRe?.value||'').trim();
-  const ml            = parseInt(pMaxLen?.value,10);
-  f.maxLength         = Number.isFinite(ml)?clamp(ml,1,500):undefined;
-  f.placeholder       = (pPlaceholder?.value||'').trim();
-  f.autoDate          = (pAutoDate?.value||'');
-  f.locked            = !!pLocked?.checked;
-  f.lockOnPh          = !!pLockOnPh?.checked;
+  f.borderColor = f.borderTransparent
+    ? 'transparent'
+    : ((pBorderColor?.value || '').trim() || undefined);
+    // ✅ 라디오/드롭다운 옵션 반영 (빠져있던 부분)
+if (f.type === 'select' || f.type === 'radio') {
+  const opts = (pOptions?.value || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+  f.options = opts;
+}
 
-  if((PLAN_ID_RE.test(String(f.id||'')) || PLAN_LABEL_RE.test(String(f.label||''))) && f.value){
-    updateFeesFromPlan(f.value,false);
+  const bw = parseInt(pBorderWidth?.value, 10);
+  f.borderWidth = Number.isFinite(bw) ? clamp(bw, 1, 8) : undefined;
+
+  f.bgTransparent = !!pBgTransparent?.checked;
+  f.bgColor = f.bgTransparent
+    ? 'transparent'
+    : ((pBgColor?.value || '').trim() || undefined);
+
+  const fs = parseInt(pFontSize?.value, 10);
+  f.fontSize = Number.isFinite(fs) ? clamp(fs, 5, 32) : undefined;
+
+  f.textAlign = (pTextAlign?.value || '');
+  f.mask = (pMask?.value || '');
+  f.maskRe = (pMaskRe?.value || '').trim();
+
+  const ml = parseInt(pMaxLen?.value, 10);
+  f.maxLength = Number.isFinite(ml) ? clamp(ml, 1, 500) : undefined;
+
+  f.placeholder = (pPlaceholder?.value || '').trim();
+  f.autoDate = (pAutoDate?.value || '');
+  f.locked = !!pLocked?.checked;
+  f.lockOnPh = !!pLockOnPh?.checked;
+
+  // ✅ 요금제 연동
+  if (
+    (PLAN_ID_RE.test(String(f.id || '')) ||
+     PLAN_LABEL_RE.test(String(f.label || ''))) &&
+    f.value
+  ) {
+    updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
   }
-  if (f.type==='select' && (PLAN_ID_RE.test(f.id||'') || PLAN_LABEL_RE.test(f.label||''))) {
+
+  if (
+    f.type === 'select' &&
+    (PLAN_ID_RE.test(f.id || '') || PLAN_LABEL_RE.test(f.label || ''))
+  ) {
     f.options = Array.isArray(PLANS) ? [...PLANS] : [];
   }
+
   fillAutoDates();
-  render(); scheduleSave();
+  render();
+  scheduleSave();
 };
-document.getElementById('delField').onclick=()=>{ if(selected<0) return; cur().fields.splice(selected,1); selected=-1; render(); scheduleSave(); };
+/* ✅ 선택된 필드 삭제(여기 바깥에 있어야 정상) */
+document.getElementById('delField').onclick = () => {
+  if (selected < 0) {
+    alert('삭제할 필드를 먼저 클릭해서 선택해주세요.');
+    return;
+  }
+
+  const f = cur().fields[selected];
+
+  if (f && f.id) {
+    delete valuesById[f.id];
+    delete elById[f.id];
+  }
+
+  cur().fields.splice(selected, 1);
+  selected = -1;
+  render();
+  scheduleSave();
+};
+
 
 /* ===== 정렬 버튼 ===== */
 function alignSelectedX(mode){
-  if(selected<0) return; const f=cur().fields[selected];
+  if(selected<0) return;
+  const f=cur().fields[selected];
   if(mode==='left')   f.x = 0;
   if(mode==='center') f.x = clamp(50 - (f.w??24)/2, 0, 100);
   if(mode==='right')  f.x = clamp(100 - (f.w??24), 0, 100);
   render(); scheduleSave();
 }
 function alignSelectedY(mode){
-  if(selected<0) return; const f=cur().fields[selected];
+  if(selected<0) return;
+  const f=cur().fields[selected];
   if(mode==='top')    f.y = 0;
   if(mode==='middle') f.y = 50;
   if(mode==='bottom') f.y = 100;
@@ -1583,9 +2037,14 @@ document.getElementById('prev').onclick=()=>changePage(-1);
 document.getElementById('next').onclick=()=>changePage(1);
 
 /* ===== 저장/초기화 ===== */
-document.getElementById('saveJson').onclick=()=>{ const blob=new Blob([JSON.stringify({pages},null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='overlay-design.json'; a.click(); URL.revokeObjectURL(a.href); };
+document.getElementById('saveJson').onclick=()=>{
+  const blob=new Blob([JSON.stringify({pages},null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='overlay-design.json'; a.click();
+  URL.revokeObjectURL(a.href);
+};
 document.getElementById('resetValues').onclick=()=>{
   pages.forEach(pg=>(pg.fields||[]).forEach(f=>delete f.value));
+  Object.keys(valuesById).forEach(k=>delete valuesById[k]);
   selected=-1;
   affBanner.style.display='none';
   updateExtraBarDom('');
@@ -1599,17 +2058,44 @@ document.getElementById('resetValues').onclick=()=>{
 
 /* ===== 필수 검증/토스트 ===== */
 function findMissingAll(){
-  const miss=[]; pages.forEach((pg,pi)=>{ (pg.fields||[]).forEach((f,fi)=>{ 
-  if(!f.required) return;
-  if (f.locked && f.lockOnPh && !f.value) return;
-  const v=(f.type==='checkbox')?!!f.value:(f.value??'').toString().trim(); 
-  if(!v) miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)}); }); });
+  const miss = [];
+  const condSet = getConditionalRequiredSet(); // ✅ 추가
+
+  pages.forEach((pg, pi) => {
+    (pg.fields || []).forEach((f, fi) => {
+
+      // ✅ 기존 required OR 조건부 required
+      const isCondRequired = f.id && condSet.has(f.id);
+      if (!f.required && !isCondRequired) return;
+
+      // placeholder 잠금 + 값 없으면 제외(기존 로직 유지)
+      if (f.locked && f.lockOnPh && !f.value) return;
+
+      const v = (f.type === 'checkbox')
+        ? (!!f.value ? 'Y' : '')
+        : (f.value ?? '').toString().trim();
+
+      if(!v){
+        miss.push({
+          page: pi,
+          idx: fi,
+          label: (f.label || f.id || `필드${fi+1}`)
+        });
+      }
+    });
+  });
+
   return miss;
 }
+
+
 function markInvalidForPage(pIdx,list){
   if(pIdx!==pageIndex) return;
   overlay.querySelectorAll('.field.invalid').forEach(el=>el.classList.remove('invalid'));
-  list.forEach(m=>{ const el=overlay.querySelector(`.field[data-i="${m.idx}"]`); if(el) el.classList.add('invalid'); });
+  list.forEach(m=>{
+    const el=overlay.querySelector(`.field[data-i="${m.idx}"]`);
+    if(el) el.classList.add('invalid');
+  });
 }
 function showToast(items){
   const toast=document.getElementById('toast'), list=document.getElementById('missList');
@@ -1632,6 +2118,7 @@ async function waitForImages(root){
   }));
 }
 
+/* ===== 인쇄 DOM ===== */
 function createPrintDOM(page, pageIdx){
   const wrap = document.createElement('div');
   wrap.className = 'paper';
@@ -1661,11 +2148,40 @@ function createPrintDOM(page, pageIdx){
     w.style.top  = `${f.y}%`;
     w.style.width = `${(f.w ?? 24)}%`;
 
-    if (f.fontSize)    w.style.setProperty('--fs', f.fontSize + 'px');
-    if (f.type === 'radio') {
-      w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-      w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
-    }
+    if (f.fontSize)    
+    w.style.setProperty('--fs', f.fontSize + 'px');
+if (f.type === 'radio') {
+  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
+  w.classList.remove('rd-dot','rd-solid','rd-tick');
+  w.classList.add('rd-' + rs);
+
+  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
+  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+}
+if (f.type === 'radio') {
+  const rs = (f.radioStyle || 'dot');
+  w.classList.remove('rd-dot','rd-solid','rd-tick');
+  w.classList.add('rd-' + rs);
+
+  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
+  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
+
+  // ✅ 1,2 표기 숨김
+  if (f.radioShowText === false) w.classList.add('noText');
+
+  // ✅ 겉 테두리 제어
+  const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
+                    : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
+  const outerWidth = Number.isFinite(Number(f.radioOuterBorderWidth))
+    ? Math.max(0, Math.min(8, Number(f.radioOuterBorderWidth)))
+    : 1;
+
+  w.style.setProperty('--rbc', outerColor);
+  w.style.setProperty('--rbw', outerWidth + 'px');
+}
+
+
+
     if (f.color)       w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
 
@@ -1684,44 +2200,26 @@ function createPrintDOM(page, pageIdx){
     w.appendChild(lab);
 
     let ctrl;
-
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
-
-    // 자필/싸인 칸 여부
-    const isHandSign = /(자필|싸인|서명)/.test(
-      String(f.placeholder || '') + String(f.label || '')
-    );
-
-    // 이름 칸 여부
+    const isHandSign = /(자필|싸인|서명)/.test(String(f.placeholder || '') + String(f.label || ''));
     const isNameBox = isNameField(f);
 
-    // textarea 로 처리할지 여부
     const treatAsTextarea =
       f.type === 'textarea' ||
       (f.type === 'text' && (f.wrap || isNameBox));
 
     if (treatAsTextarea) {
-      // ===== textarea (이름 칸 포함) =====
       ctrl = document.createElement('textarea');
-
-      if (isHandSign) {
-        // 자필/싸인 칸은 인쇄 시 값 비우기
-        ctrl.value = '';
-      } else {
-        ctrl.value = f.value ?? '';
-        if (f.placeholder && lockByPlaceholder) {
-          ctrl.placeholder = f.placeholder;
-        }
-      }
-
       ctrl.spellcheck = false;
       ctrl.style.resize = 'none';
 
-      // ✅ 이름 칸은 "화면에 보이는 폰트/줄바꿈" 그대로 복사해서 사용
+      if (isHandSign) ctrl.value = '';
+      else ctrl.value = f.value ?? '';
+
+      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+
       if (isNameBox && pageIdx === pageIndex) {
-        const live = overlay.querySelector(
-          `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
-        );
+        const live = overlay.querySelector(`.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`);
         if (live) {
           const cs = getComputedStyle(live);
           ctrl.style.fontSize   = cs.fontSize;
@@ -1731,7 +2229,6 @@ function createPrintDOM(page, pageIdx){
         }
       }
 
-      // 높이 설정
       if (f.inputHeight) {
         ctrl.style.minHeight = f.inputHeight + 'px';
         ctrl.style.height    = f.inputHeight + 'px';
@@ -1740,115 +2237,109 @@ function createPrintDOM(page, pageIdx){
         ctrl.style.height    = 'auto';
       }
 
-      if (f.locked || lockByPlaceholder) {
-        ctrl.readOnly = true;
-      }
+      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+    }
 
-
-    } else if (f.type === 'select') {
-      // ===== select + 인쇄 전용 div(.print-value) =====
+    else if (f.type === 'select') {
       ctrl = document.createElement('select');
-      if (f.fontSize) ctrl.style.fontSize = f.fontSize + 'px';
-        // ✅ 인쇄용도 placeholder 옵션 추가
-  const phText = (f.placeholder || '').trim();
-  if (phText) {
-    const op0 = document.createElement('option');
-    op0.value = '';
-    op0.textContent = phText;
-    op0.disabled = true;
-    op0.hidden = true;
-    ctrl.appendChild(op0);
-  }
+
+      const phText = (f.placeholder || '').trim();
+      if (phText) {
+        const op0 = document.createElement('option');
+        op0.value = '';
+        op0.textContent = phText;
+        op0.disabled = true;
+        op0.hidden = true;
+        ctrl.appendChild(op0);
+      }
 
       (f.options || []).forEach(o => {
         const op = document.createElement('option');
         op.value = op.textContent = o;
         ctrl.appendChild(op);
       });
+
       ctrl.value = f.value ?? '';
       if (f.locked || lockByPlaceholder) ctrl.disabled = true;
 
       const pv = document.createElement('div');
-      pv.className   = 'print-value';
-      const selText  = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
+      pv.className = 'print-value';
+      const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
       pv.textContent = selText;
       w.appendChild(pv);
+    }
 
-    } else if (f.type === 'checkbox') {
-      // ===== checkbox =====
+    else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
+      const style = (f.checkStyle || 'tick');
+w.classList.remove('ck-tick','ck-solid','ck-dot');
+w.classList.add('ck-' + style);
+
       ctrl.checked = !!f.value;
       w.style.setProperty('--cksize', (f.checkSize ?? f.radioSize ?? 18) + 'px');
       if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+    }
 
-    } else if (f.type === 'radio') {
-      // ===== radio(단일선택) =====
-      ctrl = document.createElement('div');
-      const opts = (f.options && f.options.length)
-        ? f.options
-        : Array.from({ length: f.radioCount || 2 }, (_, k) => String(k + 1));
+/* ===== radio (print) ===== */
+else if (f.type === 'radio') {
+  ctrl = document.createElement('div');
 
-      opts.forEach(o => {
-        const it = document.createElement('label');
-        it.className = 'radio-item';
+  // ✅ print에서도 options fallback 포함(없으면 1,2... 생성)
+  const opts = (f.options && f.options.length)
+    ? f.options
+    : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
 
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.checked = (f.value === o);
-        if (f.locked || lockByPlaceholder) cb.disabled = true;
+  opts.forEach(o => {
+    const it = document.createElement('label');
+    it.className = 'radio-item';
 
-        const s = document.createElement('span');
-        s.textContent = o;
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.value = o;
+    cb.checked = (f.value === o);
+    if (f.locked || lockByPlaceholder) cb.disabled = true;
 
-        it.appendChild(cb);
-        it.appendChild(s);
-        ctrl.appendChild(it);
-      });
+    // ✅ 숫자(1,2,3...) 옵션은 텍스트 숨김 정책 유지
+    const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
 
-    } else {
-      // ===== 일반 input(text) =====
+    // ✅ input 먼저
+    it.appendChild(cb);
+
+    if (!hideText) {
+      const s = document.createElement('span');
+      s.textContent = o;
+      it.appendChild(s);
+    }
+
+    ctrl.appendChild(it);
+  });
+}
+
+
+    else {
       ctrl = document.createElement('input');
       ctrl.type = 'text';
 
-      if (isHandSign) {
-        ctrl.value = '';
-      } else {
-        ctrl.value = f.value ?? '';
-        if (f.placeholder && lockByPlaceholder) {
-          ctrl.placeholder = f.placeholder;
-        }
-      }
+      if (isHandSign) ctrl.value = '';
+      else ctrl.value = f.value ?? '';
 
-      if (f.locked || lockByPlaceholder) {
-        ctrl.readOnly = true;
-      }
-
-      if (f.inputHeight) {
-        ctrl.style.height = f.inputHeight + 'px';
-      }
+      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+      if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
     }
 
-    // 공통 스타일 적용
     if (f.color) ctrl.style.color = f.color;
-    if (f.textAlign) {
-      ctrl.style.textAlign = f.textAlign;
-      w.style.setProperty('--ta', f.textAlign);
-    }
+    if (f.textAlign) { ctrl.style.textAlign = f.textAlign; w.style.setProperty('--ta', f.textAlign); }
 
-    if ((f.type === 'text' || f.type === 'textarea') &&
-        (f.borderColor || f.borderTransparent)) {
+    if ((f.type === 'text' || f.type === 'textarea') && (f.borderColor || f.borderTransparent)) {
       w.classList.add('hasBorder');
-      w.style.setProperty('--bdc',
-        f.borderTransparent ? 'transparent' : (f.borderColor || '#ff3b3b'));
+      w.style.setProperty('--bdc', f.borderTransparent ? 'transparent' : (f.borderColor || '#ff3b3b'));
       w.style.setProperty('--bdw', (f.borderWidth ?? 2) + 'px');
     }
-
-    if ((f.type === 'text' || f.type === 'textarea') &&
-        (f.bgColor || f.bgTransparent)) {
+    if ((f.type === 'text' || f.type === 'textarea') && (f.bgColor || f.bgTransparent)) {
       w.classList.add('hasBG');
-      w.style.setProperty('--bgc',
-        f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
+      w.style.setProperty('--bgc', f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
     }
 
     w.appendChild(ctrl);
@@ -1872,16 +2363,10 @@ function buildPrintAll(){
 
   requestAnimationFrame(()=>{
     autosizeAllTextareas(container);
-    refitAllPrintValues(container);
-
-    container.querySelectorAll('textarea[data-autofit="1"]').forEach(el=>{
-      const cs = getComputedStyle(el);
-      const base = parseFloat(cs.fontSize) || 14;
-      autoShrinkTextareaFont(el, 5, base);
-    });
   });
   return container;
 }
+
 async function printAllNow(){
   const container=buildPrintAll();
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch{} }
@@ -1916,7 +2401,7 @@ function forceWrapForHeaderBox(){
   });
 }
 
-/* ===== 제휴 배너 표시 로직 ===== */
+/* ===== 제휴 배너 ===== */
 const AFF_SEEN_KEY = 'affBanner_seen_once';
 function showAffBanner(show){ if(!affBanner) return; affBanner.style.display = show ? 'block' : 'none'; }
 function oncePopup(){
@@ -1934,7 +2419,9 @@ function evaluateAffBanner(){
       if(typeof v==='string') values.push(v);
     }));
     overlay.querySelectorAll('input,select,textarea').forEach(el=>{
-      let v=''; if(el.type==='checkbox') v=el.checked?'Y':''; else v=el.value||'';
+      let v='';
+      if(el.type==='checkbox') v=el.checked?'Y':'';
+      else v=el.value||'';
       if(typeof v==='string') values.push(v);
     });
 
@@ -1942,11 +2429,12 @@ function evaluateAffBanner(){
     const planName = getSelectedPlanName();
     if (isAffiliatePlan(planName)) hit = true;
 
-    showAffBanner(hit); if(hit) oncePopup();
+    showAffBanner(hit);
+    if(hit) oncePopup();
   }catch(_){}
 }
 
-/* ===== extraData 수집/표시 ===== */
+/* ===== extraData ===== */
 function computeExtraDataText(){
   const pick = [];
   const SKIP_IDS = new Set(['extradata','extradataecho','extradatabox']);
@@ -1968,9 +2456,7 @@ function computeExtraDataText(){
   const planName = getSelectedPlanName();
   const info = PLANS_MAP.get(planName);
   if (info && info.extraDataGb){
-    const token = info.bundleAnyone
-      ? `아무나 결합 +${info.extraDataGb}GB`
-      : `추가 데이터 +${info.extraDataGb}GB`;
+    const token = info.bundleAnyone ? `아무나 결합 +${info.extraDataGb}GB` : `추가 데이터 +${info.extraDataGb}GB`;
     pick.push(token);
   }
 
@@ -2006,24 +2492,16 @@ function mirrorExtraDataIntoBoxes(txt){
     const byIdExact  = idMatch.test(id);
     const byIdFuzzy  = fuzzy.test(id);
     const byLabel    = fuzzy.test(label);
-    if ((byIdExact || byIdFuzzy || byLabel) && (f.type === 'text' || f.type === 'textarea')) {
-      targets.push(f);
-    }
+    if ((byIdExact || byIdFuzzy || byLabel) && (f.type === 'text' || f.type === 'textarea')) targets.push(f);
   }));
 
   targets.forEach(f => {
     f.value = txt || '';
-    const node = overlay.querySelector(
-      `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
-    );
+    setValueById(f.id, txt || '');
+    const node = overlay.querySelector(`.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`);
     if (node) {
       node.value = txt || '';
-      if (node.tagName === 'TEXTAREA') {
-        try {
-          node.style.height = 'auto';
-          node.style.height = Math.max(node.scrollHeight, 5) + 'px';
-        } catch (_) {}
-      }
+      if (node.tagName === 'TEXTAREA') autosizeTA(node);
     }
   });
 
@@ -2037,7 +2515,7 @@ function evaluateExtraDataAndBar(){
   mirrorExtraDataIntoBoxes(txt);
 }
 
-/* ===== 요금제 수동 입력/저장/불러오기 ===== */
+/* ===== 요금제 UI ===== */
 function parsePlansFromText(text){
   const raw=text.split(/\r?\n|,/).map(s=>s.trim()).filter(Boolean);
   return Array.from(new Set(raw));
@@ -2059,7 +2537,8 @@ function openBulkPlansPrompt(){
 function savePlansToFile(){
   const list=Array.isArray(PLANS)?PLANS:[];
   const blob=new Blob([JSON.stringify(list,null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='plans.json'; a.click(); URL.revokeObjectURL(a.href);
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='plans.json'; a.click();
+  URL.revokeObjectURL(a.href);
 }
 function hookLoadPlansFile(){
   const input=document.getElementById('loadPlansFile'); if(!input) return;
@@ -2076,8 +2555,11 @@ function hookLoadPlansFile(){
       mirrorPlanNameIntoBoxes(getSelectedPlanName());
       forceMirrorPlan();
       alert(`불러오기 완료: ${PLANS.length}개`);
-    }catch(err){ alert('plans.json 읽기 실패: '+(err&&err.message?err.message:err)); }
-    finally{ e.target.value=''; }
+    }catch(err){
+      alert('plans.json 읽기 실패: '+(err&&err.message?err.message:err));
+    }finally{
+      e.target.value='';
+    }
   };
 }
 (function initPlansUI(){
@@ -2086,10 +2568,13 @@ function hookLoadPlansFile(){
   if(bulkBtn) bulkBtn.onclick=openBulkPlansPrompt;
   if(saveBtn) saveBtn.onclick=savePlansToFile;
   hookLoadPlansFile();
-  try{ const raw=localStorage.getItem('plans_json_v1'); if(raw){ PLANS=JSON.parse(raw); applyPlansToDesign(); } }catch(_){}
+  try{
+    const raw=localStorage.getItem('plans_json_v1');
+    if(raw){ PLANS=JSON.parse(raw); applyPlansToDesign(); }
+  }catch(_){}
 })();
 
-/* ===== 요금제명 미러링 (앞장 → 다른 페이지 텍스트박스) ===== */
+/* ===== 요금제명 미러링 ===== */
 let __MIRROR_PLAN__ = false;
 function mirrorPlanNameIntoBoxes(planName){
   if (__MIRROR_PLAN__) return;
@@ -2104,31 +2589,22 @@ function mirrorPlanNameIntoBoxes(planName){
     const label = String(f.label || '');
     const byIdExact = idExact.test(id);
     const byFuzzy   = fuzzy.test(id) || fuzzy.test(label);
-    if ((byIdExact || byFuzzy) && (f.type === 'text' || f.type === 'textarea')) {
-      targets.push(f);
-    }
+    if ((byIdExact || byFuzzy) && (f.type === 'text' || f.type === 'textarea')) targets.push(f);
   }));
 
   targets.forEach(f => {
     f.value = planName || '';
-    const node = overlay.querySelector(
-      `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
-    );
+    setValueById(f.id, planName || '');
+    const node = overlay.querySelector(`.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`);
     if (node) {
       node.value = planName || '';
-      if (node.tagName === 'TEXTAREA') {
-        try {
-          node.style.height = 'auto';
-          node.style.height = Math.max(node.scrollHeight, 5) + 'px';
-        } catch (_) {}
-      }
+      if (node.tagName === 'TEXTAREA') autosizeTA(node);
     }
   });
 
   __MIRROR_PLAN__ = false;
 }
 
-/* ===== 현재 상태 기준 강제 동기화 ===== */
 function forceMirrorPlan(){
   let v = getSelectedPlanName();
   try{
@@ -2146,8 +2622,10 @@ function forceMirrorPlan(){
 async function boot(){
   await loadDesign();
   forceWrapForHeaderBox();
+
   pages.forEach(pg => (pg.fields || []).forEach(f => delete f.value));
-  if(!FRESH) tryLoadAutosave(); else pages.forEach(pg=>(pg.fields||[]).forEach(f=>delete f.value));
+  if(!FRESH) tryLoadAutosave();
+
   await loadPlansJson();
   fillAutoDates();
   render();
@@ -2172,7 +2650,6 @@ function enableWrapAllTextFields(){
   });
   render(); scheduleSave();
 }
-
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
 </script>

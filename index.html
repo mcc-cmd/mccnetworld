@@ -313,69 +313,6 @@ body{
   z-index:0;
 }
 .group > *{position:relative;z-index:1}
-
-/* =========================================================
-  [NEW] 단말개통 "업데이트 예정" 모달
-========================================================= */
-.cs-modal{
-  position:fixed;
-  inset:0;
-  display:none;
-  z-index:10000;
-}
-.cs-modal[aria-hidden="false"]{display:block}
-.cs-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
-.cs-panel{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:min(420px, calc(100% - 32px));
-  background:#fff;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
-}
-.cs-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 14px;
-  border-bottom:1px solid var(--line);
-}
-.cs-head strong{font-weight:900}
-.cs-x{
-  border:1px solid var(--line);
-  background:#fff;
-  border-radius:10px;
-  padding:6px 10px;
-  cursor:pointer;
-  font-weight:800;
-  font-size:12px;
-}
-.cs-body{
-  padding:14px;
-  color:#111;
-  font-weight:800;
-  font-size:13px;
-  line-height:1.6;
-}
-.cs-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  padding:0 14px 14px;
-}
-.cs-btn{
-  border:none;
-  border-radius:10px;
-  padding:8px 14px;
-  background:#111827;
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-}
-
 /* =========================================================
   ✅ 동판 옆 빈칸에 "유심양식/동판양식" 2개 반반
 ========================================================= */
@@ -581,22 +518,6 @@ body{
       </div>
     </div>
   </div>
-
-  <!-- 업데이트 예정 모달 -->
-  <div class="cs-modal" id="comingSoonModal" aria-hidden="true">
-    <div class="cs-backdrop" data-cs-close="1"></div>
-    <div class="cs-panel" role="dialog" aria-modal="true" aria-label="업데이트 예정 안내">
-      <div class="cs-head">
-        <strong>업데이트 예정</strong>
-        <button class="cs-x" id="csCloseX" type="button">닫기</button>
-      </div>
-      <div class="cs-body" id="csBody">준비 중인 기능입니다.</div>
-      <div class="cs-actions">
-        <button class="cs-btn" id="csOkBtn" type="button">확인</button>
-      </div>
-    </div>
-  </div>
-
   <!-- 유심/동판 양식 팝업 -->
   <div class="form-modal" id="formModal" aria-hidden="true">
     <div class="form-backdrop" data-form-close="1"></div>
@@ -770,33 +691,43 @@ function formDuoCard(){
   `;
 }
 
-/* ✅ 단말개통 업데이트 예정 카드 */
+/* ✅ 단말개통: 현재 탭(성인/청소년)에 맞춰 이동 */
 function deviceSectionHTML(){
+  const age = (JOIN_AGE || 'adult').toLowerCase();
+  const safeAge = (age === 'teen') ? 'teen' : 'adult';
+
   return `
     <section class="group" data-carrier="device">
       <div class="group-head">
         <span class="group-dot"></span>
         <span class="group-title">단말 개통</span>
-        <span class="group-sub">업데이트 예정</span>
+        <span class="group-sub"></span>
       </div>
+
       <div class="brand-grid">
-        <div class="brand theme-um device-comingsoon" data-device="미디어로그">
+        <!-- ✅ LG(미디어로그) 단말 -->
+        <div class="brand theme-um device-link"
+             data-url="./brands/uplus/device/index.html?mode=fill&doc=device&age=${safeAge}&brand=me">
           <div class="logo-frame">
-            <img id="deviceLogoME" src="./assets/logos/ME.png" alt="미디어로그 로고">
+            <img id="deviceLogoME" src="${safeAge === 'teen' ? './assets/logos/METEEN.png' : './assets/logos/ME.png'}" alt="미디어로그 로고">
           </div>
-          <div class="cap">업데이트 예정</div>
+          <div class="cap">단말개통</div>
         </div>
 
-        <div class="brand theme-mm device-comingsoon" data-device="엠모바일">
+        <!-- ✅ KT(엠모바일) 단말 -->
+        <div class="brand theme-mm device-link"
+             data-url="./brands/kt/device/index.html?mode=fill&doc=device&age=${safeAge}&brand=mo">
           <div class="logo-frame">
-            <img id="deviceLogoMO" src="./assets/logos/MO.png" alt="엠모바일 로고">
+            <img id="deviceLogoMO" src="${safeAge === 'teen' ? './assets/logos/MOTEEN.png' : './assets/logos/MO.png'}" alt="엠모바일 로고">
           </div>
-          <div class="cap">업데이트 예정</div>
+          <div class="cap">단말개통</div>
         </div>
       </div>
     </section>
   `;
 }
+
+
 
 /* 카드 클릭 시 이동 */
 function attachNavigateHandlers(scope){
@@ -804,12 +735,16 @@ function attachNavigateHandlers(scope){
     cardEl.addEventListener('click', (e)=>{
       e.preventDefault();
       e.stopPropagation();
+if (cardEl.classList.contains('device-link')) {
+  const raw = cardEl.getAttribute('data-url') || '';
+  if (!raw) return;
 
-      if (cardEl.classList.contains('device-link')) {
-        const url = cardEl.getAttribute('data-url') || '';
-        if (url) location.href = url;
-        return;
-      }
+  // ✅ 어떤 경로로 index.html을 열었든 항상 정상 이동 (로컬/깃헙 모두)
+  const url = new URL(raw, location.href).href;
+  location.href = url;
+  return;
+}
+
 
       if (cardEl.classList.contains('device-comingsoon')) return;
 
@@ -1017,39 +952,7 @@ function wireTabs(containerId, listId, data){
   });
 })();
 
-/* 단말개통 - 업데이트 예정 모달 */
-(function(){
-  const modal = document.getElementById('comingSoonModal');
-  const body  = document.getElementById('csBody');
-  const xBtn  = document.getElementById('csCloseX');
-  const okBtn = document.getElementById('csOkBtn');
 
-  function openCS(text){
-    body.textContent = text;
-    modal.setAttribute('aria-hidden','false');
-  }
-  function closeCS(){
-    modal.setAttribute('aria-hidden','true');
-  }
-
-  document.addEventListener('click', (e)=>{
-    const card = e.target.closest('.device-comingsoon');
-    if (card){
-      const brand = card.getAttribute('data-device') || '';
-      openCS(`${brand} 단말 개통 기능은 현재 업데이트 예정입니다.`);
-      return;
-    }
-    const t = e.target;
-    if (t && t.dataset && t.dataset.csClose === '1') closeCS();
-  });
-
-  xBtn?.addEventListener('click', closeCS);
-  okBtn?.addEventListener('click', closeCS);
-
-  window.addEventListener('keydown', (e)=>{
-    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeCS();
-  });
-})();
 
 /* 유심/동판 양식 팝업 + 복사 */
 (function(){
