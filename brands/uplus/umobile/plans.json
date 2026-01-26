@@ -60,6 +60,18 @@
     "extraDataGb": 10,
     "bundleAnyone": false
   },
+      "데이터플러스 (15GB+/100분) [약정형]": {
+    "base": 368000,
+    "discount": 9900,
+    "extraDataGb": 10,
+    "bundleAnyone": false
+  },  
+  "데이터플러스 (10GB+/통화기본) [약정형]": {
+    "base": 29800,
+    "discount": 9900,
+    "extraDataGb": 10,
+    "bundleAnyone": false
+  },
   "LTE 스페셜 플러스 N": {
     "base": 46600,
     "discount": 4700,
