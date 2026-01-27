@@ -783,7 +783,7 @@ function applyAutoDateAll(){
       if(!f.autoDate) return;
 
       // 값이 비어있을 때만 자동 입력
-      if(String(f.value || '').trim() !== '') return;
+      //if(String(f.value || '').trim() !== '') return;
 
       if (f.autoDate === 'year')  f.value = YYYY;
       if (f.autoDate === 'month') f.value = MM;
@@ -1235,7 +1235,11 @@ function recalcDevicePricing(){
 
   // ✅ payType는 1번만
   const payType = (valuesById.payType ?? '').toString().trim();
-
+{
+  const apr = Number(DEVICE_DB?.aprPercent ?? 0);
+  if (payType === '일시불') setValueById('aprEcho', '0');
+  else setValueById('aprEcho', String(apr)); // 필요하면 apr.toFixed(1)
+}
   // ✅ payType에 따라 installMonths 자동 변경(계산 전에 1번만)
   if (payType === '일시불') {
     if (String(valuesById.installMonths ?? '') !== '0') {
@@ -1276,7 +1280,7 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
     [
       'deviceName','msrp','commonSubsidy','extraSubsidy','otherDiscount',
       'principal','monthlyInstall','monthlyFeeAvg','monthlyPayTotal',
-      'baseFee','discountFee','totalFee','monthlyBasePay','planEcho'
+      'baseFee','discountFee','totalFee','monthlyBasePay','planEcho','aprEcho','penalty12','penalty18','penaltyTotal'
     ].forEach(id => setValueById(id,''));
     return;
   }
@@ -1288,7 +1292,18 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
 
   const msrp         = Number(dev?.msrp) || 0;
   const commonSubsidy= getSubsidy(dv.id, pl.id);
+{
+  const CONTRACT_MONTHS = 24;
+  const S = Number(commonSubsidy) || 0;
 
+  const pTotal = S;
+  const p12 = Math.round(S * Math.max(0, CONTRACT_MONTHS - 12) / CONTRACT_MONTHS);
+  const p18 = Math.round(S * Math.max(0, CONTRACT_MONTHS - 18) / CONTRACT_MONTHS);
+
+  setValueById('penaltyTotal', won(pTotal));
+  setValueById('penalty12',    won(p12));
+  setValueById('penalty18',    won(p18));
+}
   const down     = numOnly(valuesById.downPayment ?? 0);
   const otherDis = numOnly(valuesById.otherDiscount ?? 0);
 
