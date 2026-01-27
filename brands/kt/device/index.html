@@ -1156,7 +1156,7 @@ function applyDeviceDbToDesign(){
   setOptionsByFieldId('planId', planOpts);
   setOptionsByFieldId('plan', planOpts);
 
-  const monthOpts = ['12','24','30','36'];
+  const monthOpts = ['0','12','24','30','36'];
   setOptionsByFieldId('installMonths', monthOpts);
 
   const defM = String(Number(DEVICE_DB.defaultInstallmentMonths || 24));
@@ -1233,8 +1233,44 @@ function recalcDevicePricing(){
   const dv = parsePackedId(rawDevice);
   const pl = parsePackedId(rawPlan);
 
-  const months  = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentMonths ?? 24);
-  const payType = (valuesById.payType ?? '').toString().trim(); // ✅ 여기 1번만
+  // ✅ payType는 1번만
+  const payType = (valuesById.payType ?? '').toString().trim();
+
+  // ✅ payType에 따라 installMonths 자동 변경(계산 전에 1번만)
+  if (payType === '일시불') {
+    if (String(valuesById.installMonths ?? '') !== '0') {
+      setValueById('installMonths', '0');
+
+      const mSel = elById['installMonths'];
+      if (mSel && mSel.tagName === 'SELECT') {
+        mSel.value = '0';
+        const found = getFieldsByIdAll('installMonths')[0];
+        if (found) {
+          const wrapEl = overlay.querySelector(`.field[data-i="${found.idx}"]`);
+          if (wrapEl) setSelectDisplay(wrapEl, mSel, found.f);
+        }
+      }
+    }
+  } else {
+    if (String(valuesById.installMonths ?? '') === '0') {
+      const defM = String(Number(DEVICE_DB?.defaultInstallmentMonths || 24));
+      setValueById('installMonths', defM);
+
+      const mSel = elById['installMonths'];
+      if (mSel && mSel.tagName === 'SELECT') {
+        mSel.value = defM;
+        const found = getFieldsByIdAll('installMonths')[0];
+        if (found) {
+          const wrapEl = overlay.querySelector(`.field[data-i="${found.idx}"]`);
+          if (wrapEl) setSelectDisplay(wrapEl, mSel, found.f);
+        }
+      }
+    }
+  }
+
+
+// ✅ 이제 months 계산
+const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentMonths ?? 24);
 
   if(!dv.id || !pl.id){
     [
@@ -1260,12 +1296,26 @@ function recalcDevicePricing(){
   let principal = 0;
 
   if (payType === '일시불') {
-    extraSub  = Math.max(0, msrp - commonSubsidy);
-    principal = 0;
+  // ✅ 일시불이면 할부개월수 0으로 강제 세팅
+  if (String(valuesById.installMonths ?? '') !== '0') {
+    setValueById('installMonths', '0');
 
-    setValueById('extraSubsidy', won(extraSub));
-    setValueById('downPayment',  '0');
-    setValueById('otherDiscount','0');
+    // selectLike 표시(div)도 즉시 갱신
+    const mSel = elById['installMonths'];
+    if (mSel && mSel.tagName === 'SELECT') {
+      mSel.value = '0';
+
+      // 현재 페이지 필드 찾아서 display 갱신
+      const found = getFieldsByIdAll('installMonths')[0];
+      if (found) {
+        const wrapEl = overlay.querySelector(`.field[data-i="${found.idx}"]`);
+        if (wrapEl) setSelectDisplay(wrapEl, mSel, found.f);
+      }
+    }
+  }
+
+  extraSub  = Math.max(0, msrp - commonSubsidy);
+  principal = 0;
 
   } else {
     // 할부
