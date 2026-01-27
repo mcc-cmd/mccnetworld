@@ -606,6 +606,26 @@
 
   window.addEventListener('beforeprint', closeAllOverlays);
 })();
+/* ✅ 모든 입력에서 Enter 줄바꿈/제출 방지(동적 생성 포함) */
+(function blockEnterEverywhere(){
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+
+    const t = e.target;
+    if (!t) return;
+
+    // 입력 요소에서만 막기
+    const isInputLike =
+      t.tagName === 'TEXTAREA' ||
+      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
+      t.isContentEditable;
+
+    if (!isInputLike) return;
+
+    // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
+    e.preventDefault();
+  }, true);
+})();
 
 </script>
 </head>
