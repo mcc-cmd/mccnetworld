@@ -606,26 +606,6 @@
 
   window.addEventListener('beforeprint', closeAllOverlays);
 })();
-/* ✅ 모든 입력에서 Enter 줄바꿈/제출 방지(동적 생성 포함) */
-(function blockEnterEverywhere(){
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-
-    const t = e.target;
-    if (!t) return;
-
-    // 입력 요소에서만 막기
-    const isInputLike =
-      t.tagName === 'TEXTAREA' ||
-      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
-      t.isContentEditable;
-
-    if (!isInputLike) return;
-
-    // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
-    e.preventDefault();
-  }, true);
-})();
 
 </script>
 </head>
@@ -725,6 +705,7 @@
         <option value="tick">✓ 체크</option>
         <option value="solid">■ 꽉찬</option>
         <option value="dot">● 점</option>
+        
           </select>
         </div>
 
@@ -798,7 +779,11 @@
           <div class="row"><div>배경 색상</div><input id="p_bgColor" type="color" value="#000000"></div>
           <div class="row"><div>배경 투명</div><label><input type="checkbox" id="p_bgTransparent"> 사용</label></div>
         </div>
-
+        <div class="group" style="margin-top:8px">
+          <h4>확장 도구</h4>
+          <div id="toolMount"></div>
+          <p class="hint">새 도구는 TOOLS 배열에 추가하면 자동으로 나타납니다.</p>
+        </div>
         <div class="row" style="margin-top:8px">
           <button class="btn--ghost btn" id="applyProp">적용</button>
           <button class="btn--ghost btn" id="delField" style="margin-left:8px">삭제</button>
@@ -1324,6 +1309,23 @@ function render(){
     if (f.color) w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
 
+    /* ✅ [여기에 추가] 라디오 박스(전체) 테두리 적용 */
+if (f.type === 'radio' && f.radioBoxBorder){
+  const c  = f.radioBoxBorderColor || '#e6007e';
+  const bw = Number.isFinite(Number(f.radioBoxBorderWidth)) ? f.radioBoxBorderWidth : 2;
+  const br = Number.isFinite(Number(f.radioBoxBorderRadius)) ? f.radioBoxBorderRadius : 3;
+  const pd = Number.isFinite(Number(f.radioBoxPadding)) ? f.radioBoxPadding : 2;
+
+  w.style.boxSizing = 'border-box';
+  w.style.border = `${bw}px solid ${c}`;
+  w.style.borderRadius = `${br}px`;
+  w.style.padding = `${pd}px`;
+} else if (f.type === 'radio') {
+  w.style.border = '';
+  w.style.borderRadius = '';
+  w.style.padding = '';
+}
+
     if (f.type === 'checkbox' || f.type === 'radio') {
       const tickColor = f.borderTransparent ? 'transparent' : '#000';
       const tickWidth = Number.isFinite(Number(f.borderWidth))
@@ -1693,6 +1695,202 @@ const pLabel=document.getElementById('p_label'),
       pLocked=document.getElementById('p_locked'),
       pLockOnPh=document.getElementById('p_lockOnPh'),
       pCheckStyle=document.getElementById('p_checkStyle');
+      /* =========================
+   ✅ 확장 도구(플러그인) 시스템
+   - TOOLS에만 추가하면 UI/저장/로드 자동
+========================= */
+
+const TOOLS = [
+  // 예시: 라디오 박스 테두리(전체)
+  {
+    id: 'radioBox',
+    title: '라디오 박스(전체) 테두리',
+    showWhen: (f) => f?.type === 'radio',
+    fields: [
+      { key:'radioBoxBorder', label:'사용', type:'checkbox', def:false },
+      { key:'radioBoxBorderColor', label:'색상', type:'color', def:'#e6007e' },
+      { key:'radioBoxBorderWidth', label:'굵기(px)', type:'number', min:0, max:8, step:1, def:2 },
+      { key:'radioBoxBorderRadius', label:'라운드(px)', type:'number', min:0, max:20, step:1, def:3 },
+      { key:'radioBoxPadding', label:'패딩(px)', type:'number', min:0, max:20, step:1, def:2 },
+    ],
+  },
+
+  // ✅ 앞으로 여기에 “갑자기 필요한 도구”를 계속 추가하면 됩니다.
+];
+
+function toolInputId(toolId, key){ return `t_${toolId}__${key}`; }
+/* =========================
+   ✅ renderTools / applyToolsToField (호환 브릿지)
+========================= */
+function renderTools(field){
+  ensureToolUI();
+
+  // 선택 없음이면 전부 숨김
+  if (!field){
+    TOOLS.forEach(tool=>{
+      const box = document.querySelector(`#toolMount [data-tool="${tool.id}"]`);
+      if (box) box.style.display = 'none';
+    });
+    return;
+  }
+
+  // 선택 필드 값 → UI 반영 + showWhen 처리
+  TOOLS.forEach(tool => {
+    const box = document.querySelector(`#toolMount [data-tool="${tool.id}"]`);
+    if (!box) return;
+
+    const show = tool.showWhen ? !!tool.showWhen(field) : true;
+    box.style.display = show ? '' : 'none';
+    if (!show) return;
+
+    (tool.fields || []).forEach(fd => {
+      const inp = document.getElementById(toolInputId(tool.id, fd.key));
+      if (!inp) return;
+
+      const v = (field[fd.key] != null) ? field[fd.key] : fd.def;
+
+      if (inp.type === 'checkbox') inp.checked = !!v;
+      else inp.value = (v ?? '');
+    });
+  });
+}
+
+function applyToolsToField(field){
+  if (!field) return;
+  ensureToolUI();
+
+  // UI → field 저장
+  TOOLS.forEach(tool => {
+    if (tool.showWhen && !tool.showWhen(field)) return;
+
+    (tool.fields || []).forEach(fd => {
+      const inp = document.getElementById(toolInputId(tool.id, fd.key));
+      if (!inp) return;
+
+      let v;
+      if (inp.type === 'checkbox') v = !!inp.checked;
+      else if (fd.type === 'number') v = Number(inp.value);
+      else v = inp.value;
+
+      if (fd.type === 'number' && !isFinite(v)) v = fd.def ?? 0;
+      field[fd.key] = v;
+    });
+  });
+}
+
+
+function ensureToolUI(){
+  const mount = document.getElementById('toolMount');
+  if (!mount) return;
+
+  // 이미 만들어졌으면 재사용
+  if (mount.dataset.built === '1') return;
+
+  mount.innerHTML = '';
+  TOOLS.forEach(tool => {
+    const box = document.createElement('div');
+    box.className = 'group';
+    box.style.margin = '8px 0 0';
+    box.dataset.tool = tool.id;
+
+    const h = document.createElement('h4');
+    h.textContent = tool.title || tool.id;
+    box.appendChild(h);
+
+    (tool.fields || []).forEach(fd => {
+      const row = document.createElement('div');
+      row.className = 'row';
+
+      const left = document.createElement('div');
+      left.textContent = fd.label || fd.key;
+
+      const right = document.createElement('div');
+
+      let inp;
+      if (fd.type === 'checkbox'){
+        inp = document.createElement('input');
+        inp.type = 'checkbox';
+      } else {
+        inp = document.createElement('input');
+        inp.type = (fd.type || 'text');
+        if (fd.min != null) inp.min = fd.min;
+        if (fd.max != null) inp.max = fd.max;
+        if (fd.step != null) inp.step = fd.step;
+      }
+      inp.id = toolInputId(tool.id, fd.key);
+      inp.dataset.tkey = fd.key;
+      inp.dataset.tool = tool.id;
+
+      // 값 변경 즉시 선택 필드에 반영(적용 버튼 없이도 동작하게)
+      inp.addEventListener('input', () => applyToolToSelected(tool.id));
+      inp.addEventListener('change', () => applyToolToSelected(tool.id));
+
+      right.appendChild(inp);
+      row.appendChild(left);
+      row.appendChild(right);
+      box.appendChild(row);
+    });
+
+    mount.appendChild(box);
+  });
+
+  mount.dataset.built = '1';
+}
+
+function loadToolFromSelected(){
+  ensureToolUI();
+  if (selected < 0) return;
+
+  const f = cur().fields[selected];
+  TOOLS.forEach(tool => {
+    const box = document.querySelector(`#toolMount [data-tool="${tool.id}"]`);
+    if (!box) return;
+
+    const show = tool.showWhen ? !!tool.showWhen(f) : true;
+    box.style.display = show ? '' : 'none';
+    if (!show) return;
+
+    (tool.fields || []).forEach(fd => {
+      const inp = document.getElementById(toolInputId(tool.id, fd.key));
+      if (!inp) return;
+      const v = (f[fd.key] != null) ? f[fd.key] : fd.def;
+
+      if (inp.type === 'checkbox') inp.checked = !!v;
+      else inp.value = (v ?? '');
+    });
+  });
+}
+
+function applyToolToSelected(toolId){
+  if (selected < 0) return;
+  const f = cur().fields[selected];
+
+  const tool = TOOLS.find(t => t.id === toolId);
+  if (!tool) return;
+
+  // showWhen을 만족하지 않으면 적용 안 함
+  if (tool.showWhen && !tool.showWhen(f)) return;
+
+  (tool.fields || []).forEach(fd => {
+    const inp = document.getElementById(toolInputId(tool.id, fd.key));
+    if (!inp) return;
+
+    let v;
+    if (inp.type === 'checkbox') v = !!inp.checked;
+    else if (fd.type === 'number') v = Number(inp.value);
+    else v = inp.value;
+
+    // NaN 방지(숫자)
+    if (fd.type === 'number' && !isFinite(v)) v = fd.def ?? 0;
+
+    f[fd.key] = v;
+  });
+
+  // 화면 즉시 반영
+  render();
+  scheduleSave();
+}
+
 
 function updatePanel(){
   const info=document.getElementById('selInfo'),
@@ -1712,6 +1910,7 @@ function updatePanel(){
     pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
     if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
     if (pCheckStyle) pCheckStyle.value = 'tick';  // ✅ 추가
+    renderTools(null);
     return;
   }
 
@@ -1750,6 +1949,7 @@ function updatePanel(){
   pAutoDate.value = f.autoDate || '';
   pLocked.checked = !!f.locked;
   pLockOnPh.checked = !!f.lockOnPh;
+  renderTools(f);
 }
 const select=i=>{selected=i; render();};
 
@@ -1846,6 +2046,7 @@ document.getElementById('applyProp').onclick = () => {
 
   const f = cur().fields[selected];
   const style = (pCheckStyle?.value || 'tick'); // tick / solid / dot
+  
 
   // ✅ 스타일
   if (f.type === 'checkbox') {
@@ -1906,6 +2107,8 @@ document.getElementById('applyProp').onclick = () => {
   f.autoDate = (pAutoDate?.value || '');
   f.locked = !!pLocked?.checked;
   f.lockOnPh = !!pLockOnPh?.checked;
+  applyToolsToField(f);  // ✅ 추가
+
 
   // ✅ 요금제 연동
   if (

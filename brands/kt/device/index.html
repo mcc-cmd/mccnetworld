@@ -448,6 +448,13 @@
   }
   */
 }
+/* ✅ 라디오 전체 박스 테두리(컨테이너) */
+.field.radio.radioBox{
+  border: var(--box-bdw, 2px) solid var(--box-bdc, #000) !important;
+  border-radius: var(--box-bdr, 6px);
+  background: var(--box-bg, transparent);
+  padding: var(--box-pad, 2px);
+}
 
   /* ✅ (원하시면) 평상시에도 msgModal 자체를 사용 안 할 경우 */
   /* #msgModal{ display:none !important; } */
@@ -1731,6 +1738,18 @@ function render(){
       const opts = (f.options && f.options.length)
         ? f.options
         : Array.from({ length: (f.radioCount || 2) }, (_, k) => String(k + 1));
+        // ✅ 라디오 전체 컨테이너 테두리(필드 박스)
+if (f.radioBoxBorder) {
+  w.classList.add('radioBox');
+  w.style.setProperty('--box-bdc', f.radioBoxBorderTransparent ? 'transparent' : (f.radioBoxBorderColor || '#000'));
+  w.style.setProperty('--box-bdw', ((Number.isFinite(Number(f.radioBoxBorderWidth)) ? Number(f.radioBoxBorderWidth) : 2)) + 'px');
+  w.style.setProperty('--box-bdr', ((Number.isFinite(Number(f.radioBoxBorderRadius)) ? Number(f.radioBoxBorderRadius) : 6)) + 'px');
+  w.style.setProperty('--box-pad', ((Number.isFinite(Number(f.radioBoxPadding)) ? Number(f.radioBoxPadding) : 2)) + 'px');
+  w.style.setProperty('--box-bg',  (f.radioBoxBgTransparent ? 'transparent' : (f.radioBoxBgColor || 'transparent')));
+} else {
+  w.classList.remove('radioBox');
+}
+
 
       const init = (f.id ? (valuesById[f.id] ?? f.value ?? '') : (f.value ?? ''));
       f.value = init;
