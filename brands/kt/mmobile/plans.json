@@ -4,31 +4,25 @@
       "base": 15900,
       "discount": 10400
     },
-    "M 프리미엄 15GB 100분(밀리의서재)": {
-      "base": 37000,
-      "discount": 10600,
-      "extraDataGb": 10,
-      "bundleAnyone": true
-    },
     "M 알뜰 안심": {
       "base": 18900,
       "discount": 11400
     },
     "M 알뜰 2.5GB": {
       "base": 20000,
-      "discount": 13500
+      "discount": 11500
     },
     "통화 맘껏 4.5GB": {
       "base": 47500,
-      "discount": 40600
+      "discount": 39600
     },
     "M 알뜰 안심 2.5GB": {
       "base": 22200,
-      "discount": 12700
+      "discount": 11700
     },
     "M 라이트 4.5GB 플러스": {
       "base": 26000,
-      "discount": 14000
+      "discount": 15000
     },
     "M 라이트 6GB 플러스": {
       "base": 28000,
@@ -54,10 +48,6 @@
       "base": 31900,
       "discount": 16000
     },
-    "데이터 맘껏 10GB+/180분": {
-      "base": 37800,
-      "discount": 19800
-    },
     "M 스페셜 10GB 플러스": {
       "base": 39600,
       "discount": 20200,
@@ -82,7 +72,7 @@
     },
     "M 스페셜 7GB(지니뮤직)": {
       "base": 31000,
-      "discount": 10800,
+      "discount": 10700,
       "extraDataGb": 5,
       "bundleAnyone": true
     },
@@ -110,15 +100,21 @@
       "extraDataGb": 10,
       "bundleAnyone": true
     },
-    "M 스페셜 15GB(밀리의서재)": {
+        "M 스페셜 15GB(밀리의서재)": {
       "base": 43000,
       "discount": 20600,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
-    "M 프리미엄 15GB 100분": {
+        "M 프리미엄 15GB 100분": {
       "base": 36300,
       "discount": 10400,
+      "extraDataGb": 10,
+      "bundleAnyone": true
+    },
+      "M 프리미엄 15GB 100분(밀리의서재)": {
+      "base": 37000,
+      "discount": 10600,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
@@ -194,9 +190,45 @@
       "extraDataGb": 20,
       "bundleAnyone": true
     },
-    "5G M 알뜰 10GB": {
+    "5G M 알뜰 3GB 200분": {
+      "base": 20000,
+      "discount": 11200
+    },
+      "5G M 알뜰 6GB 200분": {
+      "base": 24000,
+      "discount": 13100
+    },
+      "5G M 알뜰 10GB 200분": {
+      "base": 30000,
+      "discount": 17100
+    },
+    "5G M 알뜰 15GB 200분": {
+      "base": 36000,
+      "discount": 20100
+    },
+    "5G M 알뜰 20GB 200분": {
+      "base": 40000,
+      "discount": 22100
+    },
+      "5G M 알뜰 3GB": {
+      "base": 28000,
+      "discount": 18100
+    },
+      "5G M 알뜰 6GB": {
+      "base": 33000,
+      "discount": 21100
+    },
+      "5G M 알뜰 10GB": {
       "base": 42000,
       "discount": 23100
+    },
+     "5G M 알뜰 15GB": {
+      "base": 44000,
+      "discount": 27100
+    },
+    "5G M 알뜰 20GB": {
+      "base": 46000,
+      "discount": 27100
     },
     "5G M 스페셜 30GB": {
       "base": 61000,
