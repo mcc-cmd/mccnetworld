@@ -1317,17 +1317,14 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
   let extraSub = numOnly(valuesById.extraSubsidy ?? 0);
   let principal = 0;
 
-  if (payType === '일시불') {
+if (payType === '일시불') {
   // ✅ 일시불이면 할부개월수 0으로 강제 세팅
   if (String(valuesById.installMonths ?? '') !== '0') {
     setValueById('installMonths', '0');
 
-    // selectLike 표시(div)도 즉시 갱신
     const mSel = elById['installMonths'];
     if (mSel && mSel.tagName === 'SELECT') {
       mSel.value = '0';
-
-      // 현재 페이지 필드 찾아서 display 갱신
       const found = getFieldsByIdAll('installMonths')[0];
       if (found) {
         const wrapEl = overlay.querySelector(`.field[data-i="${found.idx}"]`);
@@ -1336,16 +1333,25 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
     }
   }
 
-  extraSub  = Math.max(0, msrp - commonSubsidy);
-  principal = 0;
+  // ✅ 핵심: 차액을 고객수납금(downPayment)으로 자동 입력
+  const gap = Math.max(0, msrp - commonSubsidy - otherDis);
 
-  } else {
-    // 할부
-    extraSub = 0;
-    setValueById('extraSubsidy', '0');
+  extraSub  = 0;       // 추가지원금은 0
+  principal = 0;       // 할부원금 0
 
-    principal = Math.max(0, msrp - commonSubsidy - extraSub - otherDis - down);
-  }
+  // 화면/값 동기화
+  setValueById('extraSubsidy', '0');
+  setValueById('downPayment', String(gap));
+
+} else {
+  // ✅ 할부: 고객수납금은 사용자가 입력한 값을 유지(자동 덮어쓰기 금지)
+  extraSub = 0;
+  setValueById('extraSubsidy', '0');
+
+  // down(고객수납금)은 위에서 읽은 const down 그대로 사용
+  principal = Math.max(0, msrp - commonSubsidy - otherDis - down);
+}
+
 
   // ✅ 월 할부/수수료 계산
   const monthlyInstallRaw = (months > 0) ? (principal / months) : 0;
