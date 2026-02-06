@@ -14,7 +14,7 @@
     },
     "통화 맘껏 4.5GB": {
       "base": 47500,
-      "discount": 39600
+      "discount": 40600
     },
     "M 알뜰 안심 2.5GB": {
       "base": 22200,
@@ -79,12 +79,6 @@
     "M 스페셜 10GB(밀리의서재)": {
       "base": 40000,
       "discount": 20100,
-      "extraDataGb": 10,
-      "bundleAnyone": true
-    },
-    "M 스페셜 10GB(CU 20%할인)": {
-      "base": 39600,
-      "discount": 19200,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
