@@ -6,7 +6,8 @@
     { "id": "omd_sm_a155n", "name": "OMD-SM-A155N (갤럭시A15 공신폰2)",     "msrp": 319000 },
     { "id": "omd_sm_a165n", "name": "OMD-SM-A165N (갤럭시A16 공신폰3)", "msrp": 319000 },
     { "id": "omd_am_f2000", "name": "OMD-AM-F2000 (에이루트 A1프로)",   "msrp": 237600 },
-    { "id": "z2339K","name": "Z2339K (클래식폴더)",  "msrp": 237600 }
+    { "id": "z2339K","name": "Z2339K (클래식폴더)",  "msrp": 237600 },
+    { "id": "at-m140l", "name": "AT-M140L (스타일폴더2)", "msrp": 237600 }
   ],
 
   "plans": [
@@ -72,19 +73,19 @@
     "sm_a226l|economy_2gb_200m": 299200,
     "sm_a226l|lte_7gbp_basiccall": 299200,
 
-    "at_m140l|lte_2gb_120m": 138600,
-    "at_m140l|lte_4gb_200m": 138600,
-    "at_m140l|lte_10gbp_200m": 138600,
-    "at_m140l|lte_1p5gb_basiccall": 138600,
-    "at_m140l|lte_4p5gbp_basiccall": 138600,
-    "at_m140l|lte_6gbp_basiccall": 138600,
-    "at_m140l|lte_15gbp_100m": 138600,
-    "at_m140l|lte_special": 138600,
-    "at_m140l|economy_300mb_90m": 138600,
-    "at_m140l|economy_1gb_120m": 138600,
-    "at_m140l|economy_1gbp_basiccall": 138600,
-    "at_m140l|data_block": 138600,
-    "at_m140l|economy_2gb_200m": 138600,
-    "at_m140l|lte_7gbp_basiccall": 138600
+    "at-m140l|lte_2gb_120m": 138600,
+    "at-m140l|lte_4gb_200m": 138600,
+    "at-m140l|lte_10gbp_200m": 138600,
+    "at-m140l|lte_1p5gb_basiccall": 138600,
+    "at-m140l|lte_4p5gbp_basiccall": 138600,
+    "at-m140l|lte_6gbp_basiccall": 138600,
+    "at-m140l|lte_15gbp_100m": 138600,
+    "at-m140l|lte_special": 138600,
+    "at-m140l|economy_300mb_90m": 138600,
+    "at-m140l|economy_1gb_120m": 138600,
+    "at-m140l|economy_1gbp_basiccall": 138600,
+    "at-m140l|data_block": 138600,
+    "at-m140l|economy_2gb_200m": 138600,
+    "at-m140l|lte_7gbp_basiccall": 138600
   }
 }

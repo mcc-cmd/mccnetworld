@@ -16,11 +16,12 @@ const OUT_FILE       = path.join(OUT_DIR, "latest.json");
 // - "모든 요금제에 동일 공시"를 원하면 이렇게 device별로만 금액을 넣으면 됩니다.
 // - 특정 요금제만 다르게 주려면 아래 "planOverrides"를 사용하세요.
 const subsidyByDevice = {
-  "omd_sm_a165n": 0,       // ← 원하는 공시금액으로 수정
-  "omd_sm_a245": 0,
-  "omd_sm_a226l": 0,
-  "AT-M140L":       0
+  "omd_sm_a165n": 220000,
+  "omd_sm_a245n": 396000,
+  "omd_sm_a226l": 299200,
+  "at-m140l": 138600
 };
+
 
 // ✅ (선택) 특정 요금제는 예외로 다른 금액 주고 싶을 때
 // 키: `${deviceId}|${planId}`

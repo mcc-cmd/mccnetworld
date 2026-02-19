@@ -746,10 +746,15 @@ const CONDITIONAL_REQUIRED = [
 const valuesById = Object.create(null);
 const elById = Object.create(null);
 let SHOW_INVALID = false;
+let __programmaticUpdate = false;
+
 
 function setValueById(id, value) {
   if (!id) return;
   const v = (value ?? "");
+
+  // ✅ 같은 값이면 DOM 업데이트 자체를 하지 않음(루프 예방)
+  if (valuesById[id] === v) return;
 
   // 1) 값 저장
   valuesById[id] = v;
@@ -767,31 +772,32 @@ function setValueById(id, value) {
     });
   } catch (_) {}
 
-  // 3) ✅ 화면 DOM 반영: elById 없으면 id로 직접 찾기
+  // 3) 화면 DOM 반영
   let el = elById[id];
   if (!el) el = document.getElementById(id);
-
   if (!el) return;
+
+  // ✅ 여기부터는 "프로그램이 값을 넣는 중"이라고 표시
+  __programmaticUpdate = true;
 
   // radio 더미객체면 값만 보관
   if (typeof el === 'object' && el.type === 'radio') {
     el.value = v;
+    __programmaticUpdate = false;
     return;
   }
 
   // checkbox
   if (el.type === 'checkbox') {
     el.checked = !!value;
+    __programmaticUpdate = false;
     return;
   }
 
   // input/textarea/select
   if ('value' in el) {
     el.value = v;
-
-    // 값 넣었는데 UI/연산 로직이 안 따라오면 이벤트도 한번 쏴줌
-    el.dispatchEvent(new Event('input', { bubbles: true }));
-    el.dispatchEvent(new Event('change', { bubbles: true }));
+    
   } else {
     el.textContent = v;
   }
@@ -1075,17 +1081,22 @@ function findPlanById(id){
   return (DEVICE_DB?.plans||[]).find(p => p.id === id) || null;
 }
 function getSubsidy(deviceId, planId){
-  if(!DEVICE_DB) return 0;
+  // ✅ 정규화: 대소문자/공백 차이로 인한 미매칭 방지 (AT-M140L 케이스 해결)
+  const d = String(deviceId || '').trim().toLowerCase();
+  const p = String(planId   || '').trim().toLowerCase();
+  const key = `${d}|${p}`;
 
-  const norm = s => String(s||'')
-    .trim()
-    .toLowerCase()
-    .replace(/-/g,'_');
+  // ✅ subsidy/latest.json 로딩 결과 객체(기존 변수명에 맞춰 사용)
+  const map =
+    (SUBSIDY_LATEST && SUBSIDY_LATEST.subsidyMap) ? SUBSIDY_LATEST.subsidyMap :
+    (window.SUBSIDY_LATEST && window.SUBSIDY_LATEST.subsidyMap) ? window.SUBSIDY_LATEST.subsidyMap :
+    null;
 
-  const key = `${norm(deviceId)}|${norm(planId)}`;
-  const v = DEVICE_DB.subsidyMap ? DEVICE_DB.subsidyMap[key] : 0;
-  return Number(v)||0;
+  const v = map ? Number(map[key] ?? 0) : 0;
+
+  return Number.isFinite(v) ? v : 0;
 }
+
 
 function calcMonthlyFeeSimple(principal, aprPercent){
   principal = Number(principal)||0;
@@ -1107,7 +1118,8 @@ async function loadDevicePricingSeparated(){
       fetchJson(PATH_PLAN_CATALOG),
       fetchJson(PATH_SUBSIDY_LATEST),
     ]);
-
+    SUBSIDY_LATEST = subsidyLatest;
+    window.SUBSIDY_LATEST = subsidyLatest;
     const devices = Array.isArray(deviceCatalog.devices) ? deviceCatalog.devices : [];
     const plans   = Array.isArray(planCatalog.plans) ? planCatalog.plans : [];
 
@@ -1590,22 +1602,25 @@ function render(){
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
-        let v = ctrl.value;
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+ctrl.oninput = () => {
+  if (__programmaticUpdate) return;
+  if (f.locked || lockByPlaceholder) return;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  let v = ctrl.value;
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+  if (ctrl.value !== v) ctrl.value = v;
 
-        autosizeTA(ctrl);
-        scheduleSave();
-        if (f.id === 'downPayment') recalcDevicePricing();
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
 
-        refreshConditionalInvalid();
-      };
+  autosizeTA(ctrl);
+  scheduleSave();
+  if (f.id === 'downPayment') recalcDevicePricing();
+
+  refreshConditionalInvalid();
+};
+
     }
     else if (f.type === 'select') {
       const sel = document.createElement('select');
@@ -1770,22 +1785,25 @@ function render(){
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
-        let v = ctrl.value;
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+ctrl.oninput = () => {
+  if (__programmaticUpdate) return;
+  if (f.locked || lockByPlaceholder) return;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  let v = ctrl.value;
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+  if (ctrl.value !== v) ctrl.value = v;
 
-        scheduleSave();
-        if (f.id === 'downPayment') recalcDevicePricing();
-        fitTextToWidth(ctrl, (Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20)), 12);
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
 
-        refreshConditionalInvalid();
-      };
+  scheduleSave();
+  if (f.id === 'downPayment') recalcDevicePricing();
+  fitTextToWidth(ctrl, (Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20)), 12);
+
+  refreshConditionalInvalid();
+};
+
     }
 
     if (f.color) ctrl.style.color = f.color;
