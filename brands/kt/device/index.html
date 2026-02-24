@@ -1076,10 +1076,26 @@ function calcMonthlyFeeAvg(principal, months, feePercent){
 
   if (principal <= 0 || months <= 0 || feePercent <= 0) return 0;
 
-  const monthlyInstall = principal / months;
-  return monthlyInstall * (feePercent / 100);
-}
+  const r = feePercent / 100 / 12;
 
+  // 월 납부액 (원리금균등) - 원단위 반올림
+  const pmt = Math.round(
+    principal * r * Math.pow(1+r, months) /
+    (Math.pow(1+r, months) - 1)
+  );
+
+  let balance = principal;
+  let totalInterest = 0;
+
+  for (let i = 0; i < months; i++){
+    const interest = Math.floor(balance * r); // ★ 월이자 원단위 버림
+    const principalPay = pmt - interest;
+    balance -= principalPay;
+    totalInterest += interest;
+  }
+
+  return Math.round(totalInterest / months);
+}
 
 async function fetchJson(url){
   const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'v=' + Date.now(), { cache:'no-store' });
