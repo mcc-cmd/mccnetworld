@@ -41,36 +41,16 @@
           "w": 20,
           "required": true,
           "options": [
-            "lte_smart_ansim_10gb|LTE 스마트 안심 10GB",
-            "lte_smart_ansim_7gb|LTE 스마트 안심 7GB",
-            "lte_tonghwa_mamkkeot_25gb_m|LTE 통화 맘껏 2.5GB (M)",
-            "lte_tonghwa_mamkkeot_45gb_m|LTE 통화 맘껏 4.5GB (M)",
-            "lte_data_chungbun_3gb_100m|LTE 데이터 충분 3GB/100분",
-            "lte_ansimchadan_25gb_100m|LTE 안심차단 2.5GB/100분",
-            "lte_data_chungbun_5gb_150m|LTE 데이터 충분 5GB/150분",
-            "lte_data_chungbun_3gb_200m|LTE 데이터 충분 3GB/200분",
-            "lte_data_chungbun_3gb_300m|LTE 데이터 충분 3GB/300분",
+            "lte_ansim_10gb|LTE 스마트 안심 10GB",
+            "lte_ansim_7gb|LTE 스마트 안심 7GB",
+            "lte_ansim_4p5gb|LTE 스마트 안심 4.5GB",
+            "lte_ansim_2p5gb|LTE 스마트 안심 2.5GB",
             "m_alttuel_ansim_danmal_tonghwa_mamkkeot_2gb|M 알뜰 안심 단말 통화맘껏 2GB",
-            "senior_ansim_4gb_plus|시니어 안심 4GB+",
-            "lte_data_silsok_5gb_200m|LTE 데이터 실속 5GB/200분",
             "m_alttuel_danmal_tonghwa_mamkkeot_2gb|M 알뜰 단말 통화맘껏 2GB",
-            "lte_senior_ansim_2gb_plus|LTE 시니어 안심 2GB+",
-            "lte_data_silsok_3gb_300m|LTE 데이터 실속 3GB/300분",
-            "lte_data_silsok_5gb_100m|LTE 데이터 실속 5GB/100분",
-            "lte_data_silsok_2gb_300m|LTE 데이터 실속 2GB/300분",
-            "lte_data_silsok_3gb_200m|LTE 데이터 실속 3GB/200분",
-            "lte_data_silsok_5gb_60m|LTE 데이터 실속 5GB/60분",
-            "m_alttuel_danmal_tonghwa_mamkkeot_30mb|M 알뜰 단말 통화맘껏 30MB",
-            "lte_data_silsok_2gb_200m|LTE 데이터 실속 2GB/200분",
-            "lte_data_silsok_3gb_100m|LTE 데이터 실속 3GB/100분",
-            "lte_data_silsok_2gb_60m|LTE 데이터 실속 2GB/60분",
-            "lte_data_silsok_2gb_100m|LTE 데이터 실속 2GB/100분",
-            "lte_data_silsok_3gb_60m|LTE 데이터 실속 3GB/60분",
             "m_alttuel_danmal_300m_30mb|M 알뜰 단말 300분 30MB",
+            "m_alttuel_danmal_tonghwa_mamkkeot_30mb|M 알뜰 단말 통화맘껏 30MB",
             "senior_save_100m_500mb|시니어 세이브 100분/500MB",
-            "alttuel_80m_500geon|알뜰 80분/500건",
             "m_alttuel_danmal_200m_30mb|M 알뜰 단말 200분 30MB",
-            "senior_vip_medium_lte|시니어 VIP 미디엄(LTE)",
             "m_alttuel_danmal_100m_30mb|M 알뜰 단말 100분 30MB",
             "m_alttuel_danmal_30m_30mb|M 알뜰 단말 30분 30MB",
             "bokji_50m_0mb|복지 50분/0MB"
@@ -678,7 +658,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "01"
+          "value": "03"
         },
         {
           "id": "일",
@@ -705,7 +685,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "20"
+          "value": "04"
         },
         {
           "id": "예금주 생년월일",
@@ -1197,7 +1177,8 @@
             "omd_sm_a165n|OMD-SM-A165N (갤럭시A16 공신폰3)",
             "omd_am_f2000|OMD-AM-F2000 (에이루트 A1프로)",
             "z2339k|Z2339K (클래식폴더)",
-            "sm_a175n|SM-A175NK (갤럭시A17)"
+            "sm_a175n|SM-A175NK (갤럭시A17)",
+            "sm_a175n_omd|SM-A175N-OMD(공신폰4)"
           ],
           "value": "",
           "radioSize": 18,
@@ -1345,6 +1326,7 @@
           "w": 8,
           "required": true,
           "options": [
+            "0",
             "12",
             "24",
             "30",
@@ -2888,7 +2870,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false
-        },  {
+        },
+        {
           "id": "aprEcho",
           "label": "",
           "type": "text",
