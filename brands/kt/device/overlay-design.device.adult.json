@@ -36,8 +36,8 @@
           "id": "planId",
           "label": "",
           "type": "select",
-          "x": 6.893167132296747,
-          "y": 25.408888146839885,
+          "x": 6.892274417418384,
+          "y": 24.921543802049342,
           "w": 20,
           "required": true,
           "options": [
@@ -685,7 +685,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "04"
+          "value": "05"
         },
         {
           "id": "예금주 생년월일",
