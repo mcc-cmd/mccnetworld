@@ -1249,7 +1249,7 @@
           "x": 22.68879537049889,
           "y": 62.919889791539596,
           "w": 25.939086294416242,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
