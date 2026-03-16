@@ -1146,11 +1146,11 @@
       ]
     },
     {
-      "bg": "images/teen-2.jpg?v=20251205",
+      "bg": "images/teen-2.jpg?v=20260316",
       "fields": []
     },
     {
-      "bg": "images/teen-3.jpg?v=20251205",
+      "bg": "images/teen-3.jpg?v=20260316",
       "fields": [
         {
           "id": "법대 자필 성함싸인 입니다",
@@ -1181,6 +1181,10 @@
           "lockOnPh": false
         }
       ]
+    },
+        {
+      "bg": "images/teen-4.jpg?v=20251205",
+      "fields": []
     },
     {
       "bg": "images/teen-2.jpg?v=20251205",
