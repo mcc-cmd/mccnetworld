@@ -536,7 +536,6 @@
     const t = e.target;
     if (!t) return;
 
-    // 입력 요소에서만 막기
     const isInputLike =
       t.tagName === 'TEXTAREA' ||
       (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
@@ -544,8 +543,40 @@
 
     if (!isInputLike) return;
 
-    // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
     e.preventDefault();
+  }, true);
+})();
+
+(function bindCtrlPToCustomPrint(){
+  let printing = false;
+
+  document.addEventListener('keydown', async (e) => {
+    const isPrintShortcut =
+      (e.ctrlKey || e.metaKey) &&
+      String(e.key).toLowerCase() === 'p';
+
+    if (!isPrintShortcut) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if (printing) return;
+    printing = true;
+
+    try {
+      const toast = document.getElementById('toast');
+      if (toast) toast.style.display = 'none';
+
+      document.querySelectorAll('.field.invalid')
+        .forEach(el => el.classList.remove('invalid'));
+
+      await printAllNow();
+    } catch (err) {
+      console.error('[Ctrl+P print error]', err);
+    } finally {
+      setTimeout(() => { printing = false; }, 1200);
+    }
   }, true);
 })();
 
@@ -1251,12 +1282,7 @@ function recalcDevicePricing(){
   if(!DEVICE_DB) return;
 // ✅ (KT) 특정 단말+요금제 조합 추가지원금(원) 강제
 // 키 형식: "deviceId|planId" (둘 다 소문자 기준으로 비교)
-const EXTRA_SUBSIDY_OVERRIDES = {
-  "sm_a175n|lte_ansim_10gb": 20000,
-  "sm_a175n|lte_ansim_7gb": 20000,
-  "sm_a175n|lte_ansim_4p5gb": 20000,
-  "sm_a175n|lte_ansim_2p5gb": 20250,
-};
+const EXTRA_SUBSIDY_OVERRIDES = {};
   const rawDevice = (valuesById.deviceId || valuesById.deviceid || '');
   const rawPlan   = (valuesById.planId   || valuesById.plan     || '');
 
