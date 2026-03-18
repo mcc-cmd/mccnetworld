@@ -1278,8 +1278,65 @@ function refreshConditionalInvalid(){
 /* =========================================================
    ✅ 요금 계산
 ========================================================= */
+let LAST_SPLIT_EDIT = '';
+
+function getRemainAmount(msrp, commonSubsidy, otherDiscount){
+  return Math.max(
+    0,
+    (Number(msrp) || 0) - (Number(commonSubsidy) || 0) - (Number(otherDiscount) || 0)
+  );
+}
+
+function clampSplitByLastEdited(msrp, commonSubsidy, otherDiscount, extraSub, downPayment){
+  const remain = getRemainAmount(msrp, commonSubsidy, otherDiscount);
+
+  let extra = Math.max(0, Number(extraSub) || 0);
+  let down  = Math.max(0, Number(downPayment) || 0);
+
+  if (extra + down <= remain) {
+    return { extra, down, remain };
+  }
+
+  if (LAST_SPLIT_EDIT === 'extraSubsidy') {
+    down = Math.max(0, remain - extra);
+  } else if (LAST_SPLIT_EDIT === 'downPayment') {
+    extra = Math.max(0, remain - down);
+  } else {
+    down = Math.max(0, remain - extra);
+  }
+
+  if (extra > remain) {
+    extra = remain;
+    down = 0;
+  }
+
+  if (down > remain) {
+    down = remain;
+    extra = 0;
+  }
+
+  return { extra, down, remain };
+}
+let EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = false;
+
+function getExtraSubsidyMax(commonSubsidy){
+  return Math.max(0, Math.floor((Number(commonSubsidy) || 0) * 0.15));
+}
+
+function clampExtraSubsidy(extraSub, commonSubsidy){
+  const maxExtra = getExtraSubsidyMax(commonSubsidy);
+  const safeExtra = Math.max(0, Number(extraSub) || 0);
+
+  return {
+    value: Math.min(safeExtra, maxExtra),
+    max: maxExtra,
+    exceeded: safeExtra > maxExtra
+  };
+}
+
 function recalcDevicePricing(){
   if(!DEVICE_DB) return;
+
 // ✅ (KT) 특정 단말+요금제 조합 추가지원금(원) 강제
 // 키 형식: "deviceId|planId" (둘 다 소문자 기준으로 비교)
 const EXTRA_SUBSIDY_OVERRIDES = {};
@@ -1348,15 +1405,8 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
   if (forcedExtra != null) {
     valuesById.extraSubsidy = String(forcedExtra);
     setValueById('extraSubsidy', won(Number(forcedExtra) || 0));
-
-    // 완전지원 목적이면 downPayment도 0
-    valuesById.downPayment = '0';
-    setValueById('downPayment', '0');
-  } else {
-    // ✅ 다른 요금제로 바꾸면 추가지원금은 0으로 복귀
-    valuesById.extraSubsidy = '0';
-    setValueById('extraSubsidy', '0');
   }
+  // forcedExtra가 없으면 사용자가 입력한 extraSubsidy 값을 유지
 }
   const dev  = findDeviceById(dv.id);
   const plan = findPlanById(pl.id);
@@ -1377,49 +1427,68 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
   setValueById('penalty12',    won(p12));
   setValueById('penalty18',    won(p18));
 }
-  const down     = numOnly(valuesById.downPayment ?? 0);
-  const otherDis = numOnly(valuesById.otherDiscount ?? 0);
+const rawDown   = numOnly(valuesById.downPayment ?? 0);
+const otherDis  = numOnly(valuesById.otherDiscount ?? 0);
+const rawExtra  = numOnly(valuesById.extraSubsidy ?? 0);
 
-  let extraSub = numOnly(valuesById.extraSubsidy ?? 0);
-  let principal = 0;
+let extraSub = 0;
+let down = 0;
+let principal = 0;
 
-if (payType === '일시불') {
-  // ✅ 일시불이면 할부개월수 0으로 강제 세팅
-  if (String(valuesById.installMonths ?? '') !== '0') {
-    setValueById('installMonths', '0');
+// ✅ 추가지원금 15% 제한
+const extraLimit = clampExtraSubsidy(rawExtra, commonSubsidy);
+const limitedExtra = extraLimit.value;
 
-    const mSel = elById['installMonths'];
-    if (mSel && mSel.tagName === 'SELECT') {
-      mSel.value = '0';
-      const found = getFieldsByIdAll('installMonths')[0];
-      if (found) {
-        const wrapEl = overlay.querySelector(`.field[data-i="${found.idx}"]`);
-        if (wrapEl) setSelectDisplay(wrapEl, mSel, found.f);
-      }
-    }
-  }
-// ✅ 일시불: (출고가 - 공시 - 추가 - 기타할인) 차액을 고객수납금으로
-extraSub = numOnly(valuesById.extraSubsidy ?? 0);
-
-// gap 계산에 extraSub 포함(추가지원금이 있으면 고객수납이 줄어야 정상)
-const gap = Math.max(0, msrp - commonSubsidy - extraSub - otherDis);
-
-principal = 0; // 일시불은 할부원금 0
-
-// 화면/값 동기화 (0으로 리셋하지 말고 현재 extraSub를 반영)
-setValueById('extraSubsidy', won(extraSub));
-setValueById('downPayment', String(gap));
-
-} else {
-  // ✅ 할부: extraSub는 입력/강제값(valuesById.extraSubsidy)을 그대로 사용
-  extraSub = numOnly(valuesById.extraSubsidy ?? 0);
-  setValueById('extraSubsidy', won(extraSub));
-
-  // down(고객수납금)은 위에서 읽은 const down 그대로 사용
-  principal = Math.max(0, msrp - commonSubsidy - extraSub - otherDis - down);
+// ✅ 15% 초과 입력 시 최대치로 보정 + 팝업
+if (extraLimit.exceeded && !EXTRA_SUBSIDY_LIMIT_POPUP_LOCK) {
+  EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = true;
+  alert(`추가지원금은 공통지원금의 15%까지만 입력할 수 있습니다.\n최대 입력 가능 금액: ${won(extraLimit.max)}원`);
+  setTimeout(() => {
+    EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = false;
+  }, 100);
 }
 
+const remain = getRemainAmount(msrp, commonSubsidy, otherDis);
 
+if (payType === '일시불') {
+  const split = clampSplitByLastEdited(
+    msrp,
+    commonSubsidy,
+    otherDis,
+    limitedExtra,
+    rawDown
+  );
+
+  extraSub = split.extra;
+  down = split.down;
+  principal = 0;
+
+  valuesById.extraSubsidy = String(extraSub);
+  valuesById.downPayment = String(down);
+
+  setValueById('extraSubsidy', won(extraSub));
+  setValueById('downPayment', won(down));
+}
+else {
+  const split = clampSplitByLastEdited(
+    msrp,
+    commonSubsidy,
+    otherDis,
+    limitedExtra,
+    rawDown
+  );
+
+  extraSub = split.extra;
+  down = split.down;
+
+  principal = Math.max(0, msrp - commonSubsidy - otherDis - extraSub - down);
+
+  valuesById.extraSubsidy = String(extraSub);
+  valuesById.downPayment = String(down);
+
+  setValueById('extraSubsidy', won(extraSub));
+  setValueById('downPayment', won(down));
+}
   // ✅ 월 할부/수수료 계산
   const monthlyInstallRaw = (months > 0) ? (principal / months) : 0;
   const monthlyFeeAvgRaw  = calcMonthlyFeeAvg(principal, months, DEVICE_DB.aprPercent ?? 0);
@@ -1482,22 +1551,28 @@ if (payType === '일시불') {
   setValueById('monthlyBasePay', won(A + B));
 }
 
-let __DEVICE_RECALC_HOOKED__ = false;
 function hookDeviceRecalc(){
-  if (__DEVICE_RECALC_HOOKED__) return;
-
   const ids = ['deviceId','deviceid','planId','plan','installMonths','downPayment','extraSubsidy','otherDiscount','payType'];
-  let hookedAny = false;
 
   ids.forEach(id=>{
     const el = elById[id];
     if(!el || !el.addEventListener) return;
-    el.addEventListener('change', recalcDevicePricing);
-    el.addEventListener('input', recalcDevicePricing);
-    hookedAny = true;
-  });
 
-  if (hookedAny) __DEVICE_RECALC_HOOKED__ = true;
+    const markLastEdit = () => {
+      if (id === 'downPayment') LAST_SPLIT_EDIT = 'downPayment';
+      if (id === 'extraSubsidy') LAST_SPLIT_EDIT = 'extraSubsidy';
+    };
+
+    el.addEventListener('input', () => {
+      markLastEdit();
+      recalcDevicePricing();
+    });
+
+    el.addEventListener('change', () => {
+      markLastEdit();
+      recalcDevicePricing();
+    });
+  });
 }
 
 /* =========================
@@ -1703,8 +1778,36 @@ function render(){
 
         autosizeTA(ctrl);
         scheduleSave();
-        if (f.id === 'downPayment') recalcDevicePricing();
+        if (f.id === 'downPayment') {
+  LAST_SPLIT_EDIT = 'downPayment';
+  recalcDevicePricing();
+}
 
+if (f.id === 'extraSubsidy') {
+  LAST_SPLIT_EDIT = 'extraSubsidy';
+
+  const commonSubsidyNow = numOnly(valuesById.commonSubsidy ?? 0);
+  const maxExtra = getExtraSubsidyMax(commonSubsidyNow);
+  const nowExtra = numOnly(valuesById.extraSubsidy ?? 0);
+
+  if (valuesById.extraSubsidy === '') {
+    recalcDevicePricing();
+    return;
+  }
+
+  if (nowExtra > maxExtra) {
+    const fixed = String(maxExtra);
+    valuesById.extraSubsidy = fixed;
+
+    if (ctrl.value !== fixed) {
+      ctrl.value = fixed;
+    }
+
+    alert(`추가지원금은 공통지원금의 15%까지만 입력할 수 있습니다.\n최대 입력 가능 금액: ${won(maxExtra)}원`);
+  }
+
+  recalcDevicePricing();
+}
         refreshConditionalInvalid();
       };
     }
@@ -1894,7 +1997,36 @@ if (f.radioBoxBorder) {
         applyMirror(f, v);
 
         scheduleSave();
-        if (f.id === 'downPayment') recalcDevicePricing();
+        if (f.id === 'downPayment') {
+  LAST_SPLIT_EDIT = 'downPayment';
+  recalcDevicePricing();
+}
+
+if (f.id === 'extraSubsidy') {
+  LAST_SPLIT_EDIT = 'extraSubsidy';
+
+  const commonSubsidyNow = numOnly(valuesById.commonSubsidy ?? 0);
+  const maxExtra = getExtraSubsidyMax(commonSubsidyNow);
+  const nowExtra = numOnly(valuesById.extraSubsidy ?? 0);
+
+  if (valuesById.extraSubsidy === '') {
+    recalcDevicePricing();
+    return;
+  }
+
+  if (nowExtra > maxExtra) {
+    const fixed = String(maxExtra);
+    valuesById.extraSubsidy = fixed;
+
+    if (ctrl.value !== fixed) {
+      ctrl.value = fixed;
+    }
+
+    alert(`추가지원금은 공통지원금의 15%까지만 입력할 수 있습니다.\n최대 입력 가능 금액: ${won(maxExtra)}원`);
+  }
+
+  recalcDevicePricing();
+}
         fitTextToWidth(ctrl, (Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20)), 12);
 
         refreshConditionalInvalid();
@@ -2591,6 +2723,12 @@ async function boot(){
   if (DEVICE_DB) applyDeviceDbToDesign();
 
   if(!FRESH) tryLoadAutosave();
+  if (!valuesById.extraSubsidy || String(valuesById.extraSubsidy).trim() === '') {
+  valuesById.extraSubsidy = '0';
+}
+if (!valuesById.downPayment || String(valuesById.downPayment).trim() === '') {
+  valuesById.downPayment = '0';
+}
   render();
   recalcDevicePricing();
   refreshConditionalInvalid();
