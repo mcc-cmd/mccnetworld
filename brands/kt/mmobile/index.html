@@ -340,7 +340,7 @@
   #printAll .stage{
     width:210mm;
     height:297mm;
-    transform-origin:flex-start;
+    transform-origin: top left;
         /* ✅ 안전 축소 */
     transform: scale(var(--print-safe));
   }
@@ -626,6 +626,58 @@
 
     // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
     e.preventDefault();
+  }, true);
+})();
+
+/* ✅ Ctrl+P를 버튼 인쇄와 동일하게 처리 */
+(function blockEnterEverywhere(){
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+
+    const t = e.target;
+    if (!t) return;
+
+    const isInputLike =
+      t.tagName === 'TEXTAREA' ||
+      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
+      t.isContentEditable;
+
+    if (!isInputLike) return;
+
+    e.preventDefault();
+  }, true);
+})();
+
+(function bindCtrlPToCustomPrint(){
+  let printing = false;
+
+  document.addEventListener('keydown', async (e) => {
+    const isPrintShortcut =
+      (e.ctrlKey || e.metaKey) &&
+      String(e.key).toLowerCase() === 'p';
+
+    if (!isPrintShortcut) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if (printing) return;
+    printing = true;
+
+    try {
+      const toast = document.getElementById('toast');
+      if (toast) toast.style.display = 'none';
+
+      document.querySelectorAll('.field.invalid')
+        .forEach(el => el.classList.remove('invalid'));
+
+      await printAllNow();
+    } catch (err) {
+      console.error('[Ctrl+P print error]', err);
+    } finally {
+      setTimeout(() => { printing = false; }, 1200);
+    }
   }, true);
 })();
 
@@ -1334,7 +1386,7 @@ function render(){
   Object.keys(elById).forEach(k => delete elById[k]);
 
   const p = cur();
-  bg.src = p.bg || '';
+  bg.src = p.bg ? new URL(p.bg, location.href).href : '';
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
@@ -2153,8 +2205,8 @@ function createPrintDOM(page, pageIdx){
   st.className = 'stage';
   st.style.transform = 'scale(1)';
 
-  const img = document.createElement('img');
-  img.src = page.bg || '';
+const img = document.createElement('img');
+img.src = page.bg ? new URL(page.bg, location.href).href : '';
 
   const ov = document.createElement('div');
   ov.className = 'overlay';
@@ -2413,7 +2465,20 @@ document.getElementById('btnPdf').onclick=async ()=>{
   }
   await printAllNow();
 };
+window.addEventListener('beforeprint', () => {
+  try {
+    forceMirrorPlan();
+    buildPrintAll();
+  } catch (e) {
+    console.error(e);
+  }
+});
 
+window.addEventListener('afterprint', () => {
+  try {
+    document.getElementById('printAll').innerHTML = '';
+  } catch (e) {}
+});
 /* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
 function forceWrapForHeaderBox(){
   const re=/대리점|상담사|연락처/;

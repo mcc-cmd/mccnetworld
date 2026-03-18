@@ -2156,8 +2156,8 @@ function createPrintDOM(page, pageIdx){
   st.className = 'stage';
   st.style.transform = 'scale(1)';
 
-  const img = document.createElement('img');
-  img.src = page.bg ? new URL(page.bg, location.href).href : '';
+const img = document.createElement('img');
+img.src = page.bg ? new URL(page.bg, location.href).href : '';
 
   const ov = document.createElement('div');
   ov.className = 'overlay';
@@ -2404,7 +2404,11 @@ document.getElementById('btnPdf').onclick=async ()=>{
   }
   await printAllNow();
 };
-
+window.addEventListener('afterprint', () => {
+  try {
+    document.getElementById('printAll').innerHTML = '';
+  } catch (e) {}
+});
 /* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
 function forceWrapForHeaderBox(){
   const re=/대리점|상담사|연락처/;
