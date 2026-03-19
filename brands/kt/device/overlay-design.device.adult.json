@@ -2492,7 +2492,7 @@
           "lockOnPh": false
         },
         {
-          "id": "downPayment",
+          "id": "supportTotal",
           "label": "",
           "type": "text",
           "x": 44.86887115165336,

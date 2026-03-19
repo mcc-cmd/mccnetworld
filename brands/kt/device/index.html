@@ -1390,11 +1390,12 @@ const EXTRA_SUBSIDY_OVERRIDES = {};
 const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentMonths ?? 24);
 
   if(!dv.id || !pl.id){
-    [
-      'deviceName','msrp','commonSubsidy','extraSubsidy','otherDiscount',
-      'principal','monthlyInstall','monthlyFeeAvg','monthlyPayTotal',
-      'baseFee','discountFee','totalFee','monthlyBasePay','planEcho','aprEcho','penalty12','penalty18','penaltyTotal'
-    ].forEach(id => setValueById(id,''));
+[
+  'deviceName','msrp','commonSubsidy','extraSubsidy','otherDiscount',
+  'principal','monthlyInstall','monthlyFeeAvg','monthlyPayTotal',
+  'baseFee','discountFee','totalFee','monthlyBasePay','planEcho','aprEcho',
+  'penalty12','penalty18','penaltyTotal','supportTotal'
+].forEach(id => setValueById(id,''));
     return;
   }
   // ✅ 특정 단말+요금제 조합이면 추가지원금 강제 주입
@@ -1429,7 +1430,17 @@ const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentM
 }
 const rawDown   = numOnly(valuesById.downPayment ?? 0);
 const otherDis  = numOnly(valuesById.otherDiscount ?? 0);
-const rawExtra  = numOnly(valuesById.extraSubsidy ?? 0);
+
+let rawExtra = numOnly(valuesById.extraSubsidy ?? 0);
+
+// ✅ 처음 진입 시 추가지원금 기본세팅
+if (String(valuesById.extraSubsidy ?? '').trim() === '') {
+  rawExtra = Math.min(
+    getRemainAmount(msrp, commonSubsidy, otherDis),
+    getExtraSubsidyMax(commonSubsidy)
+  );
+  valuesById.extraSubsidy = String(rawExtra);
+}
 
 let extraSub = 0;
 let down = 0;
@@ -1505,6 +1516,9 @@ setValueById('totalFeeByAvg', String(totalFeeByAvgWon));
   setValueById('extraSubsidy',   won(extraSub));
   setValueById('otherDiscount',  won(otherDis));
   setValueById('principal',      won(principal));
+
+  const totalSupport = extraSub + down;
+setValueById('supportTotal', won(totalSupport));
 
 if (payType === '일시불') {
   setValueById('monthlyInstall', '0');
@@ -2723,9 +2737,6 @@ async function boot(){
   if (DEVICE_DB) applyDeviceDbToDesign();
 
   if(!FRESH) tryLoadAutosave();
-  if (!valuesById.extraSubsidy || String(valuesById.extraSubsidy).trim() === '') {
-  valuesById.extraSubsidy = '0';
-}
 if (!valuesById.downPayment || String(valuesById.downPayment).trim() === '') {
   valuesById.downPayment = '0';
 }
