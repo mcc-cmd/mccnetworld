@@ -614,7 +614,7 @@
 <div class="wrap">
   <section class="panel">
     <div class="hd">
-      <strong>MCC 스테이지파이브 SK </strong>
+      <strong id="topTitle">MCC 스테이지파이브 SK</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
@@ -2749,6 +2749,7 @@ async function boot(){
   await loadPlansJson();
   fillAutoDates();
   render();
+  setTopTitle();
   evaluateAffBanner();
   evaluateExtraDataAndBar();
   syncFeesFromExistingPlan();
@@ -2769,6 +2770,18 @@ function enableWrapAllTextFields(){
     });
   });
   render(); scheduleSave();
+}
+function setTopTitle() {
+  const params = new URLSearchParams(location.search);
+  const doc = params.get('doc');
+
+  let text = 'MCC 스테이지파이브 SK';
+
+  if (doc === 'change') text += ' 변경';
+  else if (doc === 'cancel') text += ' 해지';
+
+  const el = document.getElementById('topTitle');
+  if (el) el.textContent = text;
 }
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MCCNETWORLD 엠모바일</title>
+<title>MCCNETWORLD 스테이지파이브 KT </title>
 
 <link rel="icon" type="image/png" sizes="16x16"  href="/mccnetworld/favicon-16x16.png?v=2">
 <link rel="icon" type="image/png" sizes="32x32"  href="/mccnetworld/favicon-32x32.png?v=2">
@@ -630,7 +630,7 @@
 <div class="wrap">
   <section class="panel">
     <div class="hd">
-      <strong>MCC 엠모바일</strong>
+      <strong id="topTitle">MCC 스테이지파이브 KT</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
@@ -2646,6 +2646,7 @@ async function boot(){
   await loadPlansJson();
   fillAutoDates();
   render();
+  setTopTitle(); 
   evaluateAffBanner();
   evaluateExtraDataAndBar();
   syncFeesFromExistingPlan();
@@ -2666,6 +2667,18 @@ function enableWrapAllTextFields(){
     });
   });
   render(); scheduleSave();
+}
+function setTopTitle() {
+  const params = new URLSearchParams(location.search);
+  const doc = params.get('doc');
+
+  let text = 'MCC 스테이지파이브 KT';
+
+  if (doc === 'change') text += ' 변경';
+  else if (doc === 'cancel') text += ' 해지';
+
+  const el = document.getElementById('topTitle');
+  if (el) el.textContent = text;
 }
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
