@@ -13,7 +13,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="MCCNETWORLD" />
 
-<link rel="icon" href="./favicon.ico?v=2">
+<link rel="icon" href="./public/favicon.ico?v=2">
 <link rel="icon" type="image/png" sizes="16x16"  href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32"  href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
@@ -549,9 +549,6 @@ function updateDeviceLogosByAge(){
   if (mo) mo.src = (age === 'teen') ? './assets/logos/MOTEEN.png' : './assets/logos/MO.png';
 }
 
-/* ✅ 미운영 브랜드 */
-const UNAVAILABLE_BRANDS = new Set(['스카이라이프']);
-
 const BRANDS = [
   { carrier:'uplus', theme:'theme-um', name:'미디어로그', cap:'',
     logoAdult:'./assets/logos/ME.png', logoTeen :'./assets/logos/METEEN.png' },
@@ -751,12 +748,6 @@ if (cardEl.classList.contains('device-link')) {
       const nm = (cardEl.getAttribute('data-name') || '').replace(/\s+/g, ' ').trim();
       const doc = cardEl.getAttribute('data-doc') || 'join';
       const age = cardEl.getAttribute('data-age') || '';
-
-      if (UNAVAILABLE_BRANDS.has(nm)) {
-        alert('미운영 회사입니다. (현재 서류 제공/접수 불가)');
-        return;
-      }
-
       // ✅ 선불: 전용 뷰어 페이지로 이동
       if (doc === 'prepaid') {
         const key = cardEl.getAttribute('data-brandkey') || '';

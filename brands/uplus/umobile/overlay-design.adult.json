@@ -133,8 +133,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 23.86978244490915,
-          "y": 18.254569340107892,
+          "x": 23.198676986439175,
+          "y": 18.883524374255785,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -154,7 +154,7 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22,
+          "inputHeight": 24,
           "textAlign": "",
           "value": ""
         },
@@ -604,7 +604,7 @@
           "type": "text",
           "x": 21.257097468029855,
           "y": 72.14713254402136,
-          "w": 33,
+          "w": 35,
           "required": false,
           "radioSize": 30,
           "checkSize": 30,
@@ -617,7 +617,7 @@
           "borderWidth": 1,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 16,
+          "fontSize": 13,
           "mask": "tel",
           "maskRe": "",
           "placeholder": "번호이동시 번호이동 번호 필수 기재 입니다",
@@ -772,7 +772,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "02"
+          "value": "03"
         },
         {
           "id": "일",
@@ -801,7 +801,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "20"
         },
         {
           "id": "판매자 성함",
@@ -1118,8 +1118,7 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     },
@@ -1316,7 +1315,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "02"
+          "value": "03"
         },
         {
           "id": "일",
@@ -1344,7 +1343,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "20"
         },
         {
           "id": "자필 성함싸인",

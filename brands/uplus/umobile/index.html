@@ -55,27 +55,21 @@
   color:var(--fgc,#fff);
   height:var(--ih,auto);
   outline:none;
-  padding:2px 4px;        /* ✅ 여백 줄이기 */
-  line-height:1.1;        /* ✅ 글자 줄간격 타이트 */
-  font:600 var(--fs)/1.2 system-ui;
+  box-sizing:border-box;
+  padding:0 !important;
+  margin:0;
+  font-size:var(--fs);
+  font-weight:600;
+  font-family:system-ui,"Noto Sans KR",sans-serif;
+  line-height:1.15 !important;
   text-align:var(--ta,left);
 }
-
-
   .field:focus-within{
     outline: 3px solid #e724ee83;
     outline-offset: 0px;
     border-radius: 0px;
     background: rgba(37,99,235,.03);
   }
-
-  .field input[type="text"],
-  .field select{
-    line-height:1.1;        /* ✅ 강제 28px 제거 */
-    padding-top:0;
-    padding-bottom:0;
-  }
-
   /* 리사이즈 손잡이 */
   .field .resize-handle{
     position:absolute;
@@ -337,7 +331,25 @@
 
   .field.checkbox .label{top:0;left:24px}
 
-  .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
+.field.hasBorder input[type="text"],
+.field.hasBorder textarea{
+  border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;
+  border-radius:8px;
+  background:transparent;
+  padding:0 2px !important;
+}
+
+/* ✅ 여기 바로 아래 */
+.field input[type="text"]{
+  -webkit-appearance:none !important;
+  appearance:none !important;
+  display:block !important;
+  padding:0 2px !important;
+  margin:0 !important;
+  height:100% !important;
+  line-height:normal !important;
+  box-sizing:border-box !important;
+}
   #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
   .field.hasBG input[type="text"],.field.hasBG textarea{background:var(--bgc,transparent) !important}
   #printAll .field.hasBG input[type="text"],#printAll .field.hasBG textarea{background:var(--bgc,transparent) !important}
