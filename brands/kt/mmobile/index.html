@@ -748,6 +748,7 @@
             <option value="select">드롭다운</option>
             <option value="radio">라디오(단일선택)</option>
             <option value="checkbox">체크박스</option>
+            <option value="imagecheck">체크이미지</option>
           </select>
         </div>
         <div class="row"><div>새 필드 ID</div><input id="newId" placeholder="예: applyYear / applyMonth / applyDay 등"></div>
@@ -878,6 +879,7 @@
 ========================= */
 const valuesById = Object.create(null);
 const elById = Object.create(null);
+const CHECK_IMAGE_SRC = '/brands/kt/mmobile/images/check_on.png';
 
 // ✅ 조건부 필수 규칙 (신규/번이에 따라)
 const CONDITIONAL_REQUIRED = [
@@ -923,31 +925,39 @@ function getConditionalRequiredSet(){
 function setValueById(id, value) {
   if (!id) return;
 
-  // 1) 전역 값 저장
   valuesById[id] = (value ?? "");
 
-  // 2) ✅ 설계 데이터(pages의 모든 동일 id 필드)도 같이 갱신
   try {
     const key = String(id).toLowerCase();
     pages.forEach(pg => {
       (pg.fields || []).forEach(f => {
         if (String(f.id || '').toLowerCase() === key) {
-          // checkbox는 boolean, 나머지는 string로
           if (f.type === 'checkbox') f.value = !!value;
+          else if (f.type === 'imagecheck') f.value = !!value;
           else f.value = (value ?? "");
         }
       });
     });
   } catch (_) {}
 
-  // 3) 현재 화면에 떠 있는 컨트롤이 있으면 그것도 갱신
   const el = elById[id];
   if (!el) return;
 
   if (el.type === 'checkbox') {
     el.checked = !!value;
+  } else if (el.dataset && el.dataset.type === 'imagecheck') {
+    el.innerHTML = '';
+    if (value) {
+      const img = document.createElement('img');
+      img.src = CHECK_IMAGE_SRC;
+      img.alt = 'check';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'contain';
+      img.style.pointerEvents = 'none';
+      el.appendChild(img);
+    }
   } else {
-    // radio 더미(객체)일 수도 있으니 안전 처리
     if (typeof el === 'object' && el.type === 'radio') {
       el.value = (value ?? "");
     } else {
@@ -956,6 +966,41 @@ function setValueById(id, value) {
   }
 }
 
+/* ✅ 여기 바깥에 따로 둬야 함 */
+function setImageCheckById(id, checked){
+  if (!id) return;
+
+  valuesById[id] = !!checked;
+
+  try {
+    const key = String(id).toLowerCase();
+    pages.forEach(pg => {
+      (pg.fields || []).forEach(f => {
+        if (String(f.id || '').toLowerCase() === key) {
+          if (f.type === 'imagecheck') {
+            f.value = !!checked;
+          }
+        }
+      });
+    });
+  } catch (_) {}
+
+  const el = elById[id];
+  if (!el) return;
+
+  if (el.dataset && el.dataset.type === 'imagecheck') {
+    el.innerHTML = '';
+    if (checked) {
+      const img = document.createElement('img');
+      img.src = CHECK_IMAGE_SRC;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'contain';
+      img.style.pointerEvents = 'none';
+      el.appendChild(img);
+    }
+  }
+}
 
 function applyMirror(sourceField, value) {
   const targets = sourceField.mirrorTo || [];
@@ -1278,10 +1323,14 @@ async function loadPlansJson(){
       const root = (json && typeof json === 'object' && json.plans) ? json.plans : json;
       const {names,map} = normalizePlans(root);
       PLANS = names; PLANS_MAP = map;
-      applyPlansToDesign();
-      syncFeesFromExistingPlan();
-      mirrorPlanNameIntoBoxes(getSelectedPlanName());
-      return;
+applyPlansToDesign();
+syncFeesFromExistingPlan();
+
+const currentPlan = getSelectedPlanName();
+mirrorPlanNameIntoBoxes(currentPlan);
+syncAffiliateImageMarks(currentPlan);
+
+return;
     }catch(_){}
   }
 }
@@ -1379,6 +1428,31 @@ function isAffiliatePlan(planName){
   return !!(info && info.bundleAnyone);
 }
 
+/* ✅ 여기부터 바로 추가 */
+function getAffiliateType(planName){
+  const name = String(planName || '');
+
+  if (/밀리의\s*서재|밀리의서재/.test(name)) return 'millie';
+  if (/지니\s*뮤직|지니뮤직/.test(name)) return 'genie';
+  if (/메가박스\s*FREE|메가박스/.test(name)) return 'megabox';
+  if (/CU\s*20%\s*할인|CU20%할인|CU20할인/.test(name)) return 'cu';
+
+  return '';
+}
+
+function syncAffiliateImageMarks(planName){
+  const type = getAffiliateType(planName);
+
+  setImageCheckById('affiliate_millie', false);
+  setImageCheckById('affiliate_genie', false);
+  setImageCheckById('affiliate_megabox', false);
+  setImageCheckById('affiliate_cu', false);
+
+  if (type === 'millie')  setImageCheckById('affiliate_millie', true);
+  if (type === 'genie')   setImageCheckById('affiliate_genie', true);
+  if (type === 'megabox') setImageCheckById('affiliate_megabox', true);
+  if (type === 'cu')      setImageCheckById('affiliate_cu', true);
+}
 /* =========================
    ✅ render() 오류 수정 완성본
 ========================= */
@@ -1555,10 +1629,11 @@ function render(){
           PLAN_ID_RE.test(String(f.id || '')) ||
           PLAN_LABEL_RE.test(String(f.label || ''));
 
-        if (isPlan) {
-          updateFeesFromPlan(f.value);
-          mirrorPlanNameIntoBoxes(f.value);
-        }
+if (isPlan) {
+  updateFeesFromPlan(f.value);
+  mirrorPlanNameIntoBoxes(f.value);
+  syncAffiliateImageMarks(f.value);
+}
 
         scheduleSave();
         fitSelectText(sel, (f.fontSize ?? 16), 5);
@@ -1569,6 +1644,33 @@ function render(){
       requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5));
       ctrl = sel;
     }
+    else if (f.type === 'imagecheck') {
+  ctrl = document.createElement('div');
+  ctrl.dataset.type = 'imagecheck';
+  ctrl.style.width = '100%';
+  ctrl.style.height = (f.inputHeight ? f.inputHeight + 'px' : '24px');
+  ctrl.style.display = 'flex';
+  ctrl.style.alignItems = 'center';
+  ctrl.style.justifyContent = 'center';
+  ctrl.style.pointerEvents = 'none';
+
+  const init = !!(f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
+  f.value = init;
+  if (f.id) elById[f.id] = ctrl;
+
+  if (init) {
+    const img = document.createElement('img');
+    img.src = CHECK_IMAGE_SRC;
+    img.alt = 'check';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    img.style.pointerEvents = 'none';
+    ctrl.appendChild(img);
+  }
+
+  lab.style.display = 'none';
+}
 
 /* ===== checkbox ===== */
 else if (f.type === 'checkbox') {
@@ -1755,11 +1857,13 @@ if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' 
 
   requestAnimationFrame(refitAllSelects);
   requestAnimationFrame(() => autosizeAllTextareas(overlay));
-  requestAnimationFrame(() => {
-    evaluateAffBanner();
-    evaluateExtraDataAndBar();
-    forceMirrorPlan();
-  });
+requestAnimationFrame(() => {
+  const currentPlan = getSelectedPlanName();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+  forceMirrorPlan();
+  syncAffiliateImageMarks(currentPlan);
+});
 }
 
 /* ===== 입력 마스크 ===== */
@@ -1963,10 +2067,17 @@ document.getElementById('addField').onclick=()=>{
         label=document.getElementById('newLabel').value.trim(),
         opts=document.getElementById('newOpts').value.split(',').map(s=>s.trim()).filter(Boolean),
         req=document.getElementById('newReq').checked;
-  const base={id:(id||`${t}_${Date.now()}`),label,type:t,x:50,y:50,w:30,required:req};
+
+  const base={id:(id||`${t}_${Date.now()}`),label,type:t,x:50,y:50,w:3,required:req};
+
   if(t==='select'||t==='radio') base.options=opts;
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
-  cur().fields.push(base); selected=cur().fields.length-1; render(); scheduleSave();
+  if(t==='imagecheck'){ base.inputHeight = 24; base.value = false; }
+
+  cur().fields.push(base);
+  selected=cur().fields.length-1;
+  render();
+  scheduleSave();
 };
 
 document.getElementById('applyProp').onclick = () => {
@@ -2346,6 +2457,28 @@ if (f.type === 'radio') {
       pv.textContent = selText;
       w.appendChild(pv);
     }
+    else if (f.type === 'imagecheck') {
+  ctrl = document.createElement('div');
+  ctrl.style.width = '100%';
+  ctrl.style.height = (f.inputHeight ? f.inputHeight + 'px' : '24px');
+  ctrl.style.display = 'flex';
+  ctrl.style.alignItems = 'center';
+  ctrl.style.justifyContent = 'center';
+  ctrl.style.pointerEvents = 'none';
+
+  if (f.value) {
+    const img = document.createElement('img');
+    img.src = CHECK_IMAGE_SRC;
+    img.alt = 'check';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    img.style.pointerEvents = 'none';
+    ctrl.appendChild(img);
+  }
+
+  lab.style.display = 'none';
+}
 
     else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
@@ -2641,10 +2774,13 @@ function hookLoadPlansFile(){
       const {names,map} = normalizePlans(json);
       PLANS=names; PLANS_MAP=map;
       localStorage.setItem('plans_json_v1', JSON.stringify(PLANS));
-      applyPlansToDesign();
-      syncFeesFromExistingPlan();
-      mirrorPlanNameIntoBoxes(getSelectedPlanName());
-      forceMirrorPlan();
+applyPlansToDesign();
+syncFeesFromExistingPlan();
+
+const currentPlan = getSelectedPlanName();
+mirrorPlanNameIntoBoxes(currentPlan);
+syncAffiliateImageMarks(currentPlan);
+forceMirrorPlan();
       alert(`불러오기 완료: ${PLANS.length}개`);
     }catch(err){
       alert('plans.json 읽기 실패: '+(err&&err.message?err.message:err));
@@ -2723,8 +2859,10 @@ async function boot(){
   evaluateAffBanner();
   evaluateExtraDataAndBar();
   syncFeesFromExistingPlan();
-  mirrorPlanNameIntoBoxes(getSelectedPlanName());
-  forceMirrorPlan();
+const currentPlan = getSelectedPlanName();
+mirrorPlanNameIntoBoxes(currentPlan);
+syncAffiliateImageMarks(currentPlan);
+forceMirrorPlan();
 }
 document.getElementById('reload').onclick=boot;
 window.addEventListener('DOMContentLoaded',()=>{ boot(); applyZoom(); });

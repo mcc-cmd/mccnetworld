@@ -754,7 +754,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "05"
+          "value": "20"
         },
         {
           "id": "예금주 생년월일",
@@ -1568,6 +1568,122 @@
           "locked": true,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "affiliate_millie",
+          "label": "",
+          "type": "imagecheck",
+          "x": 89.3,
+          "y": 79.23,
+          "w": 8,
+          "required": false,
+          "inputHeight": 24,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": false,
+          "bgColor": "#000000",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false,
+          "value": false
+        },
+        {
+          "id": "affiliate_genie",
+          "label": "",
+          "type": "imagecheck",
+          "x": 89.3,
+          "y": 72.75749288575155,
+          "w": 8,
+          "required": false,
+          "inputHeight": 24,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": false,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgTransparent": false,
+          "bgColor": "#000000",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "affiliate_megabox",
+          "label": "",
+          "type": "imagecheck",
+          "x": 89.3,
+          "y": 86.85054151139136,
+          "w": 8,
+          "required": false,
+          "inputHeight": 24,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": false,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgTransparent": false,
+          "bgColor": "#000000",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "affiliate_cu",
+          "label": "",
+          "type": "imagecheck",
+          "x": 89.3,
+          "y": 81.85814562787252,
+          "w": 8,
+          "required": false,
+          "inputHeight": 24,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": false,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgTransparent": false,
+          "bgColor": "#000000",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1600,8 +1716,7 @@
           "placeholder": "5G 요금제 선택시 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "text_1766735477552",
@@ -1629,8 +1744,7 @@
           "placeholder": "선택동의 미신청도 필수 첨부 서류 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     },
@@ -1663,8 +1777,7 @@
           "placeholder": "아무나 결합 시 성함,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "아무나 미결합시에도 필수 첨부 서류 입니다",
@@ -1692,8 +1805,7 @@
           "placeholder": "아무나 미결합시에도 필수 첨부 서류 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     },
@@ -1723,8 +1835,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -1749,8 +1860,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "totalFee",
@@ -1775,8 +1885,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "totalFee",
@@ -1801,8 +1910,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "planEcho",
@@ -1855,8 +1963,7 @@
           "locked": true,
           "lockOnPh": true,
           "checkSize": 18,
-          "textAlign": "",
-          "value": ""
+          "textAlign": ""
         },
         {
           "id": "개통상담사",
@@ -1884,8 +1991,7 @@
           "lockOnPh": true,
           "checkSize": 18,
           "inputHeight": 24,
-          "textAlign": "",
-          "value": ""
+          "textAlign": ""
         },
         {
           "id": "번호이동 번호",
@@ -1910,8 +2016,7 @@
           "placeholder": "번호이동 하신 번호 작성 해주세요",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "성함,싸인 자필기재",
@@ -1938,8 +2043,7 @@
           "locked": true,
           "lockOnPh": false,
           "checkSize": 18,
-          "textAlign": "",
-          "value": ""
+          "textAlign": ""
         }
       ]
     }
