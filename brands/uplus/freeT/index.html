@@ -293,6 +293,11 @@
   .toast{position:fixed;left:0;right:0;bottom:16px;display:none;justify-content:center;z-index:9999}
   .toast__card{background:#172131;border:1px solid #2b3a54;border-radius:10px;padding:10px 12px;color:#fff;max-width:680px;width:calc(100% - 32px)}
   .invalid{outline:3px solid var(--danger)!important;background:rgba(255,59,59,.2);border-radius:8px}
+  .required-pending{
+  background: rgba(96, 98, 255, 0.18) !important;
+  outline: 2px solid #3925f1 !important;
+  border-radius: 6px !important;
+}
   html.fill .builder{display:none}
 
   /* 인쇄 공통 */
@@ -553,6 +558,13 @@
   /* 8) 인쇄 시 화면 너비/여백 안정화(선택) */
   .wrap{max-width:none !important; padding:0 !important;}
 }
+  #printAll .field.required-pending,
+  #printAll .field.invalid{
+    outline:none !important;
+    border:none !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
 
 </style>
 
@@ -825,6 +837,11 @@
 ========================= */
 const valuesById = Object.create(null);
 const elById = Object.create(null);
+const CONDITIONAL_REQUIRED = [
+  { sourceId: '신규/번이', whenValue: '신규', requiredOn: ['희망번호'] },
+  { sourceId: '신규/번이', whenValue: '번이', requiredOn: ['번호이동', '전통신사'] },
+  { sourceId: '전통신사', whenValue: 'MVNO', requiredOn: ['통신사명'] },
+];
 
 function setValueById(id, value) {
   if (!id) return;
@@ -1447,6 +1464,7 @@ function render(){
         fitSelectText(sel, (f.fontSize ?? 16), 5);
         evaluateAffBanner();
         evaluateExtraDataAndBar();
+        applyConditionalRequired();
       };
 
       requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5));
@@ -1483,6 +1501,7 @@ else if (f.type === 'checkbox') {
     scheduleSave();
     evaluateAffBanner();
     evaluateExtraDataAndBar();
+    applyConditionalRequired();
   };
 
   lab.style.top  = '0';
@@ -1516,11 +1535,14 @@ if (f.id) elById[f.id] = { type:'radio', value:init }; // 더미 등록(미러/�
             if (x !== cb) x.checked = false;
           });
           f.value = o;
-          setValueById(f.id, o);
-          applyMirror(f, o);
-          scheduleSave();
-          evaluateAffBanner();
-          evaluateExtraDataAndBar();
+      setValueById(f.id, o);
+      applyMirror(f, o);
+      scheduleSave();
+      evaluateAffBanner();
+      evaluateExtraDataAndBar();
+      applyConditionalRequired();
+      render();
+      return;
         };
 
         const s = document.createElement('span');
@@ -1605,8 +1627,9 @@ ctrl.appendChild(it);
       ctrl.addEventListener('mousedown', e => e.stopPropagation());
     }
 
-    w.appendChild(ctrl);
-    overlay.appendChild(w);
+w.appendChild(ctrl);
+bindRequiredFieldVisual(f, w, ctrl);
+overlay.appendChild(w);
 
     if (isNameField(f)) setupNameAutoShrink(ctrl, f);
 
@@ -1998,6 +2021,109 @@ document.getElementById('resetValues').onclick=()=>{
   evaluateAffBanner();
   evaluateExtraDataAndBar();
 };
+function getValueByIdSafe(id){
+  if(!id) return '';
+  const key = String(id);
+  const v = (valuesById[key] ?? valuesById[key.toLowerCase()]);
+  return (v == null) ? '' : String(v);
+}
+
+function setRequiredAllPages(targetId, on){
+  const key = String(targetId || '').toLowerCase();
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if(String(f.id || '').toLowerCase() === key){
+        f.required = !!on;
+      }
+    });
+  });
+}
+
+function applyConditionalRequired(){
+  if(!Array.isArray(CONDITIONAL_REQUIRED) || !CONDITIONAL_REQUIRED.length) return;
+
+  const allTargets = new Set();
+  CONDITIONAL_REQUIRED.forEach(rule => {
+    (rule.requiredOn || []).forEach(tid => allTargets.add(String(tid)));
+  });
+  allTargets.forEach(tid => setRequiredAllPages(tid, false));
+
+  const joinType = String(getValueByIdSafe('신규/번이') || '').trim();
+  const prevCarrier = String(getValueByIdSafe('전통신사') || '').trim();
+
+  if (joinType === '신규') {
+    setRequiredAllPages('희망번호', true);
+    setRequiredAllPages('번호이동', false);
+    setRequiredAllPages('전통신사', false);
+    setRequiredAllPages('통신사명', false);
+    return;
+  }
+
+  if (joinType === '번이') {
+    setRequiredAllPages('번호이동', true);
+    setRequiredAllPages('전통신사', true);
+
+    if (prevCarrier === 'MVNO') {
+      setRequiredAllPages('통신사명', true);
+    } else {
+      setRequiredAllPages('통신사명', false);
+    }
+    return;
+  }
+
+  setRequiredAllPages('희망번호', false);
+  setRequiredAllPages('번호이동', false);
+  setRequiredAllPages('전통신사', false);
+  setRequiredAllPages('통신사명', false);
+}
+
+function isRequiredFieldFilled(f, ctrl){
+  if (!f || !f.required) return true;
+  if (!ctrl) return false;
+
+  if (f.type === 'checkbox') return !!ctrl.checked;
+
+  if (f.type === 'radio') {
+    return !!ctrl.querySelector('input[type="radio"]:checked');
+  }
+
+  return String(ctrl.value ?? '').trim() !== '';
+}
+
+function updateRequiredFieldVisual(f, wrap, ctrl){
+  if (!f || !wrap) return;
+
+  if (!f.required) {
+    wrap.classList.remove('required-pending');
+    return;
+  }
+
+  const filled = isRequiredFieldFilled(f, ctrl);
+
+  if (filled) wrap.classList.remove('required-pending');
+  else wrap.classList.add('required-pending');
+}
+
+function bindRequiredFieldVisual(f, wrap, ctrl){
+  if (!f || !wrap || !ctrl) return;
+
+  const apply = () => updateRequiredFieldVisual(f, wrap, ctrl);
+
+  if (f.type === 'radio') {
+    ctrl.querySelectorAll('input[type="radio"]').forEach(r => {
+      r.addEventListener('change', apply);
+    });
+  } else if (f.type === 'checkbox' || f.type === 'select') {
+    ctrl.addEventListener('change', apply);
+    ctrl.addEventListener('input', apply);
+  } else {
+    ctrl.addEventListener('input', apply);
+    ctrl.addEventListener('change', apply);
+    ctrl.addEventListener('blur', apply);
+  }
+
+  apply();
+}
 
 /* ===== 필수 검증/토스트 ===== */
 function findMissingAll(){
@@ -2260,8 +2386,9 @@ ctrl.appendChild(it);
       w.style.setProperty('--bgc', f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
     }
 
-    w.appendChild(ctrl);
-    ov.appendChild(w);
+w.appendChild(ctrl);
+bindRequiredFieldVisual(f, w, ctrl);
+ov.appendChild(w);
   });
 
   return wrap;
@@ -2546,6 +2673,7 @@ async function boot(){
 
   await loadPlansJson();
   fillAutoDates();
+  applyConditionalRequired();
   render();
   setTopTitle();
   evaluateAffBanner();

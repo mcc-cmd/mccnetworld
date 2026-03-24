@@ -576,20 +576,20 @@
           "type": "text",
           "x": 18.98046393830469,
           "y": 56.41442223818678,
-          "w": 30,
+          "w": 33.73626373626374,
           "required": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 200,
           "color": "#000000",
-          "inputHeight": 24,
+          "inputHeight": 28,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
           "borderWidth": 1,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 12,
+          "fontSize": 15,
           "mask": "",
           "maskRe": "",
           "placeholder": "신규 개통시 희망 번호 입력 해주세요.",
@@ -824,7 +824,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "판매자 성함",
@@ -1108,8 +1108,7 @@
           "placeholder": "법대 자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법정대리인",
@@ -1141,8 +1140,7 @@
           "placeholder": "법정대리인 관계",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     },
@@ -1367,7 +1365,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "자필 성함싸인",

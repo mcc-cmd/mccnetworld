@@ -574,29 +574,30 @@
           "id": "희망번호",
           "label": "",
           "type": "text",
-          "x": 21.15137443140524,
-          "y": 56.81633161970235,
-          "w": 30,
+          "x": 18.184239314152645,
+          "y": 56.738046039349186,
+          "w": 35.27472527472528,
           "required": false,
           "radioSize": 18,
           "checkSize": 18,
-          "radioGap": 510,
+          "radioGap": 200,
           "color": "#000000",
-          "inputHeight": 15,
+          "inputHeight": 20,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
-          "borderWidth": 0,
+          "borderWidth": 1,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 8,
+          "fontSize": 15,
           "mask": "",
           "maskRe": "",
           "placeholder": "신규 개통시 희망 번호 입력 해주세요.",
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": ""
+          "value": "",
+          "textAlign": ""
         },
         {
           "id": "번호이동",
@@ -801,7 +802,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "판매자 성함",
@@ -1348,7 +1349,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "23"
+          "value": "24"
         },
         {
           "id": "자필 성함싸인",
