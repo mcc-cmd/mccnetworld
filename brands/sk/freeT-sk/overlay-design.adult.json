@@ -236,13 +236,13 @@
           "value": ""
         },
         {
-          "id": "이름1",
+          "id": "이름",
           "label": "",
           "type": "text",
-          "x": 24.716513164181958,
-          "y": 35.724724255042325,
+          "x": 24.71651372399005,
+          "y": 35.72472878697282,
           "w": 26.024464831804284,
-          "required": false,
+          "required": true,
           "options": [],
           "radioSize": 18,
           "checkSize": 18,
@@ -436,7 +436,9 @@
           "mask": "",
           "maskRe": "",
           "placeholder": "",
-          "mirrorTo": ["예금주 성함"],
+          "mirrorTo": [
+            "예금주 성함"
+          ],
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
@@ -920,7 +922,6 @@
           "y": 75.44160149261204,
           "w": 9.694189602446485,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -939,7 +940,8 @@
           "placeholder": "유심 번호",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "이심",
@@ -959,7 +961,6 @@
           "y": 76.44505068561982,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -978,7 +979,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "이심 IMEI 1",
@@ -988,7 +990,6 @@
           "y": 77.74700820801125,
           "w": 30,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1007,7 +1008,8 @@
           "placeholder": "이심 개통시 IMEI 1번",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "이심 IMEI 2",
@@ -1017,7 +1019,6 @@
           "y": 77.96462507369665,
           "w": 30,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1036,7 +1037,8 @@
           "placeholder": "이심 개통시 IMEI 2",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "이심 EID",
@@ -1046,7 +1048,6 @@
           "y": 80.55934590708462,
           "w": 53.54740061162079,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1065,7 +1066,8 @@
           "placeholder": "이심 개통시 EID 입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "가입/년도",
@@ -1075,7 +1077,6 @@
           "y": 88.91827419461129,
           "w": 6.0448521916411835,
           "required": false,
-          "value": "2025",
           "inputHeight": 30,
           "radioSize": 18,
           "checkSize": 18,
@@ -1094,7 +1095,8 @@
           "placeholder": "",
           "autoDate": "year",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "2026"
         },
         {
           "id": "가입/월",
@@ -1104,7 +1106,6 @@
           "y": 88.91966432418104,
           "w": 4.821610601427116,
           "required": false,
-          "value": "12",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1123,7 +1124,8 @@
           "placeholder": "",
           "autoDate": "month",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "03"
         },
         {
           "id": "가입/일",
@@ -1133,7 +1135,6 @@
           "y": 88.91963792931578,
           "w": 4.821610601427116,
           "required": false,
-          "value": "29",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1152,7 +1153,8 @@
           "placeholder": "",
           "autoDate": "day",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "24"
         },
         {
           "id": "SK",
@@ -1162,7 +1164,6 @@
           "y": 60.300121055650315,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -1181,7 +1182,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "KT",
@@ -1191,7 +1193,6 @@
           "y": 60.300121055650315,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -1210,7 +1211,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "LG",
@@ -1220,7 +1222,6 @@
           "y": 60.300121055650315,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -1239,7 +1240,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "MVNO",
@@ -1249,7 +1251,6 @@
           "y": 60.300121055650315,
           "w": 3,
           "required": false,
-          "value": false,
           "checkStyle": "tick",
           "radioSize": 18,
           "checkSize": 18,
@@ -1268,7 +1269,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         }
       ]
     },

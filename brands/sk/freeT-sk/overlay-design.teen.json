@@ -239,10 +239,10 @@
           "id": "명의자성함",
           "label": "",
           "type": "text",
-          "x": 24.716513164181958,
-          "y": 35.724724255042325,
+          "x": 24.71651372399005,
+          "y": 35.72472878697282,
           "w": 26.024464831804284,
-          "required": false,
+          "required": true,
           "options": [],
           "radioSize": 18,
           "checkSize": 18,
@@ -1096,7 +1096,7 @@
           "autoDate": "year",
           "locked": false,
           "lockOnPh": false,
-          "value": "2025"
+          "value": "2026"
         },
         {
           "id": "가입/월",
@@ -1125,7 +1125,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "12"
+          "value": "03"
         },
         {
           "id": "가입/일",
@@ -1154,7 +1154,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "29"
+          "value": "24"
         },
         {
           "id": "SK",
@@ -1303,8 +1303,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "이름4",
@@ -1332,8 +1331,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1361,8 +1359,7 @@
           "placeholder": "법대 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1390,8 +1387,7 @@
           "placeholder": "법대 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법정대리인 성함",
@@ -1401,7 +1397,6 @@
           "y": 15.978340637525736,
           "w": 29.58205912334353,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1430,7 +1425,6 @@
           "y": 18.430197063184117,
           "w": 30,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1463,7 +1457,6 @@
             "부",
             "모"
           ],
-          "value": "",
           "radioSize": 24,
           "checkSize": 24,
           "radioGap": 12,
@@ -1492,7 +1485,6 @@
           "y": 17.996547023728194,
           "w": 30,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1521,7 +1513,6 @@
           "y": 21.168970073237833,
           "w": 22.966360856269112,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1573,8 +1564,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "이름6",
@@ -1602,8 +1592,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1631,8 +1620,7 @@
           "placeholder": "법대 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1660,8 +1648,7 @@
           "placeholder": "법대 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     }
