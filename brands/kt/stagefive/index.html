@@ -293,6 +293,11 @@
   .toast{position:fixed;left:0;right:0;bottom:16px;display:none;justify-content:center;z-index:9999}
   .toast__card{background:#172131;border:1px solid #2b3a54;border-radius:10px;padding:10px 12px;color:#fff;max-width:680px;width:calc(100% - 32px)}
   .invalid{outline:3px solid var(--danger)!important;background:rgba(255,59,59,.2);border-radius:8px}
+  .required-pending{
+  background: rgba(7, 255, 152, 0.18) !important;
+  outline: 2px solid #00ff9d !important;
+  border-radius: 6px !important;
+}
   html.fill .builder{display:none}
 
   /* 인쇄 공통 */
@@ -1671,8 +1676,9 @@ else if (f.type === 'radio') {
       ctrl.addEventListener('mousedown', e => e.stopPropagation());
     }
 
-    w.appendChild(ctrl);
-    overlay.appendChild(w);
+w.appendChild(ctrl);
+bindRequiredFieldVisual(f, w, ctrl);
+overlay.appendChild(w);
 
     if (isNameField(f)) setupNameAutoShrink(ctrl, f);
 
@@ -2072,6 +2078,50 @@ document.getElementById('resetValues').onclick=()=>{
   evaluateAffBanner();
   evaluateExtraDataAndBar();
 };
+function isRequiredFieldFilled(f, ctrl){
+  if (!f || !f.required) return true;
+  if (!ctrl) return false;
+
+  if (f.type === 'checkbox') return !!ctrl.checked;
+  if (f.type === 'radio') return !!ctrl.querySelector('input[type="checkbox"]:checked');
+
+  return String(ctrl.value ?? '').trim() !== '';
+}
+
+function updateRequiredFieldVisual(f, wrap, ctrl){
+  if (!f || !wrap) return;
+
+  if (!f.required) {
+    wrap.classList.remove('required-pending');
+    return;
+  }
+
+  const filled = isRequiredFieldFilled(f, ctrl);
+
+  if (filled) wrap.classList.remove('required-pending');
+  else wrap.classList.add('required-pending');
+}
+
+function bindRequiredFieldVisual(f, wrap, ctrl){
+  if (!f || !wrap || !ctrl) return;
+
+  const apply = () => updateRequiredFieldVisual(f, wrap, ctrl);
+
+  if (f.type === 'radio') {
+    ctrl.querySelectorAll('input[type="checkbox"]').forEach(r => {
+      r.addEventListener('change', apply);
+    });
+  } else if (f.type === 'checkbox' || f.type === 'select') {
+    ctrl.addEventListener('change', apply);
+    ctrl.addEventListener('input', apply);
+  } else {
+    ctrl.addEventListener('input', apply);
+    ctrl.addEventListener('change', apply);
+    ctrl.addEventListener('blur', apply);
+  }
+
+  apply();
+}
 
 /* ===== 필수 검증/토스트 ===== */
 function findMissingAll(){
