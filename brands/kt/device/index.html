@@ -1875,25 +1875,28 @@ if (f.id === 'extraSubsidy') {
         sel.dataset.locked = '1';
       }
 
-      sel.onchange = () => {
-        if (sel.value === '') return;
+sel.onchange = () => {
+  if (sel.value === '') return;
 
-        f.value = sel.value;
-        setValueById(f.id, sel.value);
-        applyMirror(f, sel.value);
-applyConditionalRequired();
-render();
-        scheduleSave();
-        setSelectDisplay(w, sel, f);
+  f.value = sel.value;
+  setValueById(f.id, sel.value);
+  applyMirror(f, sel.value);
 
-        if (f.id === 'deviceId' || f.id === 'planId' || f.id === 'installMonths') {
-          recalcDevicePricing();
-        }
+  scheduleSave();
+  setSelectDisplay(w, sel, f);
 
-        // ✅ 어떤 select가 바뀌든 조건부필수 표시 갱신
-        refreshConditionalInvalid();
-      };
+  if (
+    f.id === 'deviceId' ||
+    f.id === 'deviceid' ||
+    f.id === 'planId' ||
+    f.id === 'plan' ||
+    f.id === 'installMonths'
+  ) {
+    recalcDevicePricing();
+  }
 
+  refreshConditionalInvalid();
+};
       requestAnimationFrame(() => setSelectDisplay(w, sel, f));
       ctrl = sel;
     }
@@ -1977,9 +1980,6 @@ if (f.radioBoxBorder) {
 
           refreshConditionalInvalid();
         };
-        applyConditionalRequired();
-        render();
-
         const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
         if (!hideText) {
           const s = document.createElement('span');
@@ -2114,10 +2114,21 @@ overlay.appendChild(w);
       w.appendChild(rh);
     }
 
-    if (!FILL) {
-      w.addEventListener('mousedown', e => startDrag(e, i, w));
-      w.addEventListener('click', () => select(i));
-    }
+if (!FILL) {
+  w.addEventListener('click', e => {
+    e.stopPropagation();
+    select(i);
+  });
+
+  w.addEventListener('mousedown', e => {
+    const isControl =
+      e.target.closest('input, textarea, select, label, .resize-handle');
+
+    if (isControl) return;
+
+    startDrag(e, i, w);
+  });
+}
   });
 
   if (!FILL) updatePanel();
