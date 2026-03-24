@@ -56,12 +56,13 @@
   height:var(--ih,auto);
   outline:none;
   box-sizing:border-box;
-  padding:0 !important;
-  margin:0;
+  padding:0 2px !important;
+  margin:0 !important;
   font-size:var(--fs);
   font-weight:600;
   font-family:system-ui,"Noto Sans KR",sans-serif;
-  line-height:1.15 !important;
+  line-height:calc(var(--ih, 24px) - 2px) !important;
+  vertical-align:top;
   text-align:var(--ta,left);
 }
   .field:focus-within{
