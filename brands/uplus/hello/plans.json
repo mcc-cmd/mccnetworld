@@ -60,63 +60,63 @@
       "baseFee": 45100,
       "discountFee": 26550,
       "totalFee": 18550,
-      "extraDataGb": 0,
+      "extraDataGb": 5,
       "bundleAnyone": false
     },
     "DATA 걱정없는 유심 10GB": {
       "baseFee": 48400,
       "discountFee": 23400,
       "totalFee": 25000,
-      "extraDataGb": 0,
+      "extraDataGb":10,
       "bundleAnyone": false
     },
     "DATA 걱정없는 유심 100GB": {
       "baseFee": 52800,
       "discountFee": 11300,
       "totalFee": 41500,
-      "extraDataGb": 0,
+      "extraDataGb":20,
       "bundleAnyone": false
     },
     "데이터 더주는 유심 일5GB": {
       "baseFee": 51700,
       "discountFee": 7200,
       "totalFee": 44500,
-      "extraDataGb": 0,
+      "extraDataGb": 20,
       "bundleAnyone": false
     },
     "데이터 더주는 유심 7GB": {
       "baseFee": 45100,
       "discountFee": 23600,
       "totalFee": 21500,
-      "extraDataGb": 0,
+      "extraDataGb": 5,
       "bundleAnyone": false
     },
     "데이터 더주는 유심 10GB": {
       "baseFee": 48400,
       "discountFee": 20400,
       "totalFee": 28000,
-      "extraDataGb": 0,
+      "extraDataGb":10,
       "bundleAnyone": false
     },
     "데이터 더주는 유심 15GB": {
       "baseFee": 49500,
       "discountFee": 16800,
       "totalFee": 32700,
-      "extraDataGb": 0,
+      "extraDataGb": 15,
       "bundleAnyone": false
     },
     "데이터 더주는 유심 11GB": {
       "baseFee": 49390,
       "discountFee": 12400,
       "totalFee": 36990,
-      "extraDataGb": 0,
+      "extraDataGb": 20,
       "bundleAnyone": false
     },
     "데이터 더주는 유심 15GB 100분": {
       "baseFee": 45100,
       "discountFee": 13280,
       "totalFee": 31820,
-      "extraDataGb": 0,
+      "extraDataGb": 10,
       "bundleAnyone": false
     },
     "보편 안심 유심 1GB 100분": {
@@ -151,7 +151,7 @@
       "baseFee": 45100,
       "discountFee": 16280,
       "totalFee": 28820,
-      "extraDataGb": 0,
+      "extraDataGb": 10,
       "bundleAnyone": false
     },
     "The 착한 데이터 유심 0GB": {
@@ -193,7 +193,7 @@
       "baseFee": 49390,
       "discountFee": 15400,
       "totalFee": 33990,
-      "extraDataGb": 0,
+      "extraDataGb": 20,
       "bundleAnyone": false
     }
   }

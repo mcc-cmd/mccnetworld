@@ -44,23 +44,31 @@
   .field{position:absolute;transform:none;cursor:move;z-index:2;--fs:14px;}
   .field.checkbox{transform:translate(-50%,-50%)}
   .label{position:absolute;top:-16px;left:0;font-size:12px;font-weight:800;text-shadow:0 1px 2px #0009}
-  .field input,.field textarea,.field select{
-    width:100%;background:transparent;border:none;color:var(--fgc,#fff);
-    height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
-  }
+.field input:not([type="checkbox"]):not([type="radio"]),
+.field textarea,
+.field select{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--fgc,#000);
+  height:var(--ih, 28px);
+  outline:none;
+  box-sizing:border-box;
+  padding:2px 4px !important;
+  margin:0 !important;
+  font-size:var(--fs,14px);
+  font-weight:600;
+  font-family:system-ui,"Noto Sans KR",sans-serif;
+  line-height:1.1 !important;
+  letter-spacing:0 !important;
+  text-align:var(--ta,left);
+  vertical-align:middle;
+}
   .field:focus-within{
     outline: 3px solid #e724ee83;
     outline-offset: 0px;
     border-radius: 0px;
     background: rgba(37,99,235,.03);
-  }
-
-  /* 세로 가운데(텍스트 한 줄용) */
-  .field input[type="text"],
-  .field select{
-    line-height: var(--ih, 28px);
-    padding-top: 0;
-    padding-bottom: 0;
   }
 
   /* 리사이즈 손잡이 */
@@ -94,19 +102,6 @@
     background-image: none !important;
     padding-right: 8px;
   }
-
-  .field input,.field textarea,.field select{
-    width:100%;
-    background:transparent;
-    border:none;
-    color:var(--fgc,#fff);
-    height:var(--ih,auto);
-    outline:none;
-    padding:0 6px;
-    font:600 var(--fs)/1.2 system-ui;
-    text-align:var(--ta,left);
-  }
-
   .field textarea{
     white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
     overflow:hidden;resize:none !important;scrollbar-width:none;min-height:5px;max-height:none !important;
@@ -282,7 +277,27 @@
   /* 우측 기본도구 */
   .group{border:2px solid #2b3a54;border-radius:12px;padding:10px;margin:10px 0 14px;background:#0f1624}
   .group h4{margin:0 0 8px;font-size:12px;color:#9fb0cc;font-weight:800;letter-spacing:.4px}
-  .row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px}
+  .row{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:8px;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+#propBox > .row,
+#propBox .group > .row{
+  padding:8px 10px;
+  border:1px solid #2b3a54;
+  border-radius:10px;
+  background:#111a28;
+}
+
+#propBox > .row > div:first-child,
+#propBox .group > .row > div:first-child{
+  font-weight:700;
+  color:#cfe0ff;
+}
   .row input,.row select,.row textarea{width:100%;background:#0f1624;border:1px solid #2b3a54;border-radius:10px;color:#dfe9ff;outline:none;padding:8px 10px;font-weight:700}
   .hint{color:#9fb0cc;font-size:12px}
   .stack .paper{margin-bottom:56px}
@@ -315,7 +330,7 @@
 @page{ size:A4 portrait; margin:0; }
 
 @media print{
-  :root{ --print-safe: 0.985; } /* 0.97~0.99 미세조정 */
+  :root{ --print-safe: 0.98; } /* 0.97~0.99 미세조정 */
 
   body{ background:#fff; }
   html, body{ margin:0; padding:0; }
@@ -327,16 +342,13 @@
     width:210mm;
     height:297mm;
     position:relative;
-    overflow:hidden;              /* ✅ 잘림/2페이지 방지 핵심 */
+    overflow:hidden;
     padding:0;
-    padding-top:3mm;   /* ✅ 추가 (2~5mm 사이로 조절) */
     box-sizing:border-box;
     page-break-after:always;
-
-    display:flex;                 /* ✅ 가운데 정렬 */
+    display:flex;
     align-items:flex-start;
     justify-content:flex-start;
-    padding-top:3mm;
   }
   .pageWrap:last-child{ page-break-after:auto; }
 
@@ -344,9 +356,8 @@
 
   #printAll .stage{
     width:210mm;
-    height:297mm;
+    height:290mm;
     transform-origin: top left;
-        /* ✅ 안전 축소 */
     transform: scale(var(--print-safe));
   }
 
@@ -468,8 +479,14 @@
 
   .field.checkbox .label{top:0;left:24px}
 
-  .field.hasBorder input[type="text"],.field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-radius:8px;background:transparent;padding:6px 8px;}
-  #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
+  .field.hasBorder input[type="text"],.field.hasBorder textarea{
+  border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;
+  border-radius:6px;
+  background:transparent;
+  padding:2px 4px !important;
+  box-sizing:border-box !important;
+  line-height:1.1 !important;
+}
   .field.hasBG input[type="text"],.field.hasBG textarea{background:var(--bgc,transparent) !important}
   #printAll .field.hasBG input[type="text"],#printAll .field.hasBG textarea{background:var(--bgc,transparent) !important}
 
@@ -641,25 +658,6 @@
   }, true);
 })();
 
-/* ✅ Ctrl+P를 버튼 인쇄와 동일하게 처리 */
-(function blockEnterEverywhere(){
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') return;
-
-    const t = e.target;
-    if (!t) return;
-
-    const isInputLike =
-      t.tagName === 'TEXTAREA' ||
-      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
-      t.isContentEditable;
-
-    if (!isInputLike) return;
-
-    e.preventDefault();
-  }, true);
-})();
-
 (function bindCtrlPToCustomPrint(){
   let printing = false;
 
@@ -709,14 +707,6 @@
         </div>
       </div>
     </div>
-
-    <div class="stack">
-      <div id="affBanner" class="affBanner"><div class="affBanner__card">제휴 요금제 진행 시 <b> C-4 성함/싸인·동의 체크</b>필수입니다.</div></div>
-                                                                                                                                                              
-      <div id="extraBar" class="extraBar">
-        <div class="extraBar__card"><span class="extraBar__label">추가 데이터</span><span id="extraBarText"></span></div>
-      </div>
-
       <div class="paper" id="paper">
         <div class="stage" id="stage">
           <img id="bg" src="images/adult-1.jpg" alt="">
@@ -797,27 +787,27 @@
 
         <div class="row"><div>텍스트 색상</div><input id="p_color" type="color" value="#000000"></div>
         <div class="row"><div>입력 높이(px)</div><input id="p_height" type="number" min="5" max="60" step="1" placeholder="auto"></div>
-        <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="5" max="32" step="1" placeholder="14"></div>
+        <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="5" max="32" step="1" placeholder="14"></div> 
+        <div class="row">  <div>자동 글자 축소</div>  <label><input type="checkbox" id="p_autoShrink" checked> 사용</label></div> 
+<div class="row"><div>정렬</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="btn--ghost btn" id="alignLeft">좌</button>
+    <button class="btn--ghost btn" id="alignCX">가운데</button>
+    <button class="btn--ghost btn" id="alignRight">우</button>
+    <button class="btn--ghost btn" id="alignTop">상</button>
+    <button class="btn--ghost btn" id="alignCY">중앙</button>
+    <button class="btn--ghost btn" id="alignBottom">하</button>
+  </div>
+</div>
 
-        <div class="row"><div>정렬</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn--ghost btn" id="alignLeft">좌</button>
-            <button class="btn--ghost btn" id="alignCX">가운데</button>
-            <button class="btn--ghost btn" id="alignRight">우</button>
-            <button class="btn--ghost btn" id="alignTop">상</button>
-            <button class="btn--ghost btn" id="alignCY">중앙</button>
-            <button class="btn--ghost btn" id="alignBottom">하</button>
-
-            <div class="row"><div>텍스트 정렬</div>
-              <select id="p_textAlign">
-                <option value="">기본(좌측)</option>
-                <option value="left">좌측</option>
-                <option value="center">가운데</option>
-                <option value="right">우측</option>
-              </select>
-            </div>
-          </div>
-        </div>
+<div class="row"><div>텍스트 정렬</div>
+  <select id="p_textAlign">
+    <option value="">기본(좌측)</option>
+    <option value="left">좌측</option>
+    <option value="center">가운데</option>
+    <option value="right">우측</option>
+  </select>
+</div>
 
         <div class="row"><div>입력 잠금</div>
           <label><input type="checkbox" id="p_locked"> 화면에서 타이핑 금지</label>
@@ -899,34 +889,6 @@ const CONDITIONAL_REQUIRED = [
   { sourceId: '신규/번이', whenValue: '번이', requiredOn: ['번호이동', '전통신사'] },
   { sourceId: '전통신사', whenValue: 'MVNO', requiredOn: ['통신사명'] },
 ];
-
-function applyConditionalRequired(){
-  if(!Array.isArray(CONDITIONAL_REQUIRED) || !CONDITIONAL_REQUIRED.length) return;
-
-  const allTargets = new Set();
-  CONDITIONAL_REQUIRED.forEach(rule => {
-    (rule.requiredOn || []).forEach(tid => allTargets.add(String(tid)));
-  });
-  allTargets.forEach(tid => setRequiredAllPages(tid, false));
-
-  const joinType = String(getValueByIdSafe('신규/번이') || '').trim();
-  const prevCarrier = String(getValueByIdSafe('전통신사') || '').trim();
-
-  if (joinType === '신규') {
-    setRequiredAllPages('희망번호', true);
-    return;
-  }
-
-  if (joinType === '번이') {
-    setRequiredAllPages('번호이동', true);
-    setRequiredAllPages('전통신사', true);
-
-    if (prevCarrier === 'MVNO') {
-      setRequiredAllPages('통신사명', true);
-    }
-    return;
-  }
-}
 
 // ✅ 현재 값 읽기(전역값 → 설계값 순)
 function getValueById(id){
@@ -1521,15 +1483,6 @@ function render(){
     if (f.fontSize) w.style.setProperty('--fs', f.fontSize + 'px');
     w.dataset.i = i;
     if (f.id) w.dataset.id = f.id;
-
-    if (f.type === 'radio') {
-      w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-      w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
-
-      const rs = (f.radioStyle || 'dot'); // dot/solid/tick
-      w.classList.remove('rd-dot','rd-solid','rd-tick');
-      w.classList.add('rd-' + rs);
-    }
     if (f.type === 'radio') {
   w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
   w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
@@ -1594,10 +1547,18 @@ function render(){
       if (f.placeholder) ctrl.placeholder = f.placeholder;
       if (f.maxLength)   ctrl.maxLength = f.maxLength;
 
-      if (f.inputHeight) {
-        ctrl.dataset.fixedH = f.inputHeight;
-        ctrl.style.height = f.inputHeight + 'px';
-      }
+if (f.inputHeight) {
+  ctrl.dataset.minH = f.inputHeight;
+
+  if (!isNameField(f) && !f.wrap) {
+    ctrl.dataset.fixedH = f.inputHeight;
+    ctrl.style.height = f.inputHeight + 'px';
+  } else {
+    ctrl.style.height = 'auto';
+  }
+}
+
+requestAnimationFrame(() => autosizeTA(ctrl));
 
       if (f.locked || lockByPlaceholder) {
         ctrl.readOnly = true;
@@ -1659,40 +1620,30 @@ function render(){
         sel.dataset.locked = '1';
       }
 
-      sel.onchange = () => {
-        if (sel.value === '') return; // placeholder 상태 방지
-
-        f.value = sel.value;
-        setValueById(f.id, sel.value);
-        applyMirror(f, sel.value);
-        sel.onchange = () => {
+sel.onchange = () => {
   if (sel.value === '') return;
 
   f.value = sel.value;
   setValueById(f.id, sel.value);
   applyMirror(f, sel.value);
 
+  const isPlan =
+    PLAN_ID_RE.test(String(f.id || '')) ||
+    PLAN_LABEL_RE.test(String(f.label || ''));
+
+  if (isPlan) {
+    updateFeesFromPlan(f.value);
+    mirrorPlanNameIntoBoxes(f.value);
+    syncAffiliateImageMarks(f.value);
+  }
+
   applyConditionalRequired();
   render();
-  return;
+  scheduleSave();
+  fitSelectText(sel, (f.fontSize ?? 16), 5);
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
 };
-
-        const isPlan =
-          PLAN_ID_RE.test(String(f.id || '')) ||
-          PLAN_LABEL_RE.test(String(f.label || ''));
-
-if (isPlan) {
-  updateFeesFromPlan(f.value);
-  mirrorPlanNameIntoBoxes(f.value);
-  syncAffiliateImageMarks(f.value);
-}
-
-        scheduleSave();
-        fitSelectText(sel, (f.fontSize ?? 16), 5);
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
-
       requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5));
       ctrl = sel;
     }
@@ -1885,22 +1836,35 @@ else if (f.type === 'radio') {
       w.style.removeProperty('--bgc');
     }
 
-    if (FILL) {
-      ctrl.addEventListener('mousedown', e => e.stopPropagation());
-    }
+if (FILL) {
+  ctrl.addEventListener('mousedown', e => e.stopPropagation());
+}
 
 w.appendChild(ctrl);
-bindRequiredFieldVisual(f, w, ctrl);
-overlay.appendChild(w);
-    if (isNameField(f)) setupNameAutoShrink(ctrl, f);
 
-if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+if (!FILL) {
   const rh = document.createElement('div');
   rh.className = 'resize-handle';
-  rh.addEventListener('mousedown', ev => startResize(ev, i, w));
+  rh.addEventListener('mousedown', (e) => startResize(e, i, w));
   w.appendChild(rh);
 }
 
+bindRequiredFieldVisual(f, w, ctrl);
+overlay.appendChild(w);
+
+if ((f.type === 'text' || f.type === 'textarea') && f.autoShrink !== false) {
+  const run = () => {
+    autoShrinkText(ctrl, 8, f.fontSize || 14);
+  };
+
+  requestAnimationFrame(run);
+
+  if (!ctrl.dataset.bindedShrink) {
+    ctrl.dataset.bindedShrink = '1';
+    ctrl.addEventListener('input', run);
+    window.addEventListener('resize', run);
+  }
+}
     if (!FILL) {
       w.addEventListener('mousedown', e => startDrag(e, i, w));
       w.addEventListener('click', () => select(i));
@@ -1979,7 +1943,8 @@ const pLabel=document.getElementById('p_label'),
       pAutoDate=document.getElementById('p_autoDate'),
       pLocked=document.getElementById('p_locked'),
       pLockOnPh=document.getElementById('p_lockOnPh'),
-      pCheckStyle=document.getElementById('p_checkStyle');
+      pCheckStyle=document.getElementById('p_checkStyle'),
+      pAutoShrink=document.getElementById('p_autoShrink');
 
 function updatePanel(){
   const info=document.getElementById('selInfo'),
@@ -1999,6 +1964,7 @@ function updatePanel(){
     pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
     if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
     if (pCheckStyle) pCheckStyle.value = 'tick';  // ✅ 추가
+    if (pAutoShrink) pAutoShrink.checked = true;
     return;
   }
 
@@ -2037,6 +2003,7 @@ function updatePanel(){
   pAutoDate.value = f.autoDate || '';
   pLocked.checked = !!f.locked;
   pLockOnPh.checked = !!f.lockOnPh;
+  if (pAutoShrink) pAutoShrink.checked = f.autoShrink !== false;
 }
 const select=i=>{selected=i; render();};
 
@@ -2208,6 +2175,7 @@ if (f.type === 'select' || f.type === 'radio') {
   f.autoDate = (pAutoDate?.value || '');
   f.locked = !!pLocked?.checked;
   f.lockOnPh = !!pLockOnPh?.checked;
+  f.autoShrink = !!pAutoShrink.checked;
 
   // ✅ 요금제 연동
   if (
@@ -2493,14 +2461,6 @@ img.src = page.bg ? new URL(page.bg, location.href).href : '';
     if (f.fontSize)    
     w.style.setProperty('--fs', f.fontSize + 'px');
 if (f.type === 'radio') {
-  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
-  w.classList.remove('rd-dot','rd-solid','rd-tick');
-  w.classList.add('rd-' + rs);
-
-  w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
-  w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
-}
-if (f.type === 'radio') {
   const rs = (f.radioStyle || 'dot');
   w.classList.remove('rd-dot','rd-solid','rd-tick');
   w.classList.add('rd-' + rs);
@@ -2582,34 +2542,66 @@ if (f.type === 'radio') {
       if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
     }
 
-    else if (f.type === 'select') {
-      ctrl = document.createElement('select');
+else if (f.type === 'select') {
+  ctrl = document.createElement('select');
+  ctrl.className = 'control';
 
-      const phText = (f.placeholder || '').trim();
-      if (phText) {
-        const op0 = document.createElement('option');
-        op0.value = '';
-        op0.textContent = phText;
-        op0.disabled = true;
-        op0.hidden = true;
-        ctrl.appendChild(op0);
-      }
+  (f.options || []).forEach(o => {
+    const op = document.createElement('option');
+    op.value = o;
+    op.textContent = o;
+    ctrl.appendChild(op);
+  });
 
-      (f.options || []).forEach(o => {
-        const op = document.createElement('option');
-        op.value = op.textContent = o;
-        ctrl.appendChild(op);
-      });
+  ctrl.value = f.value ?? '';
 
-      ctrl.value = f.value ?? '';
-      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+  if (f.locked) ctrl.disabled = true;
 
-      const pv = document.createElement('div');
-      pv.className = 'print-value';
-      const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
-      pv.textContent = selText;
-      w.appendChild(pv);
+  // ===== 출력용 텍스트 =====
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+
+  const selText =
+    (ctrl.options[ctrl.selectedIndex] || {}).text ||
+    ctrl.value ||
+    '';
+
+  pv.textContent = selText;
+
+  // ===== plan만 크게 표시 =====
+  const isPlan =
+    PLAN_ID_RE.test(String(f.id || '')) ||
+    PLAN_LABEL_RE.test(String(f.label || ''));
+
+  if (f.id) {
+    const liveSel = overlay.querySelector(
+      `.field[data-id="${f.id}"] select`
+    );
+
+    if (liveSel) {
+      const cs = getComputedStyle(liveSel);
+
+      // 🔥 핵심: 화면 fontSize 안 따라가고 기본값 사용
+      pv.style.fontSize = isPlan
+        ? ((f.fontSize || 14) + 2) + 'px'
+        : (f.fontSize || 14) + 'px';
+
+      pv.style.lineHeight = '1.1';
+      pv.style.letterSpacing = cs.letterSpacing;
+      pv.style.padding = cs.padding;
+      pv.style.fontWeight = cs.fontWeight;
+      pv.style.fontFamily = cs.fontFamily;
+      pv.style.textAlign = cs.textAlign;
+      pv.style.height = cs.height;
+      pv.style.boxSizing = 'border-box';
+      pv.style.display = 'flex';
+      pv.style.alignItems = 'center';
     }
+  }
+
+  w.appendChild(ctrl);
+  w.appendChild(pv);
+}
     else if (f.type === 'imagecheck') {
   ctrl = document.createElement('div');
   ctrl.style.width = '100%';
@@ -2705,6 +2697,29 @@ else if (f.type === 'radio') {
       w.classList.add('hasBG');
       w.style.setProperty('--bgc', f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
     }
+  /* 🔥 여기 추가 */
+if ((f.type === 'text' || f.type === 'textarea') && f.id) {
+  const live = overlay.querySelector(
+    `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`
+  );
+
+  if (live) {
+    const cs = getComputedStyle(live);
+    ctrl.style.fontSize = cs.fontSize;
+    ctrl.style.lineHeight = cs.lineHeight;
+    ctrl.style.letterSpacing = cs.letterSpacing;
+    ctrl.style.padding = cs.padding;
+    ctrl.style.fontWeight = cs.fontWeight;
+    ctrl.style.fontFamily = cs.fontFamily;
+    ctrl.style.textAlign = cs.textAlign;
+  }
+}
+
+if ((f.type === 'text' || f.type === 'textarea') && f.autoShrink !== false) {
+  requestAnimationFrame(() => {
+    autoShrinkText(ctrl, 8, f.fontSize || 14);
+  });
+}  
 
 w.appendChild(ctrl);
 bindRequiredFieldVisual(f, w, ctrl);
@@ -2712,6 +2727,25 @@ ov.appendChild(w);
   });
 
   return wrap;
+}
+function autoShrinkText(el, minPx = 8, maxPx) {
+  if (!el) return;
+
+  const text = String(el.value || '').trim();
+  const base = maxPx || parseFloat(getComputedStyle(el).fontSize) || 14;
+
+  if (!text) {
+    el.style.fontSize = base + 'px';
+    return;
+  }
+
+  let size = base;
+  el.style.fontSize = size + 'px';
+
+  while (el.scrollWidth > el.clientWidth && size > minPx) {
+    size -= 0.5;
+    el.style.fontSize = size + 'px';
+  }
 }
 
 function buildPrintAll(){
