@@ -14,15 +14,14 @@
 <meta name="theme-color" content="#0c1117"/>
 
 <style>
-:root{
-  --print-safe:0.97;
-  --bg:#0c1117;--fg:#eaf1ff;--card:#121a24;--line:#243347;
-  --pink:#e6007e;--vio:#6a35ff;--danger:#ff3b3b;
-  --zoom:1;
-  --stage-w:210mm;
-  --stage-h:297mm;
-  --phc:#c05;--phbg:#ffe08a66;
-}
+  :root{
+    --bg:#0c1117;--fg:#eaf1ff;--card:#121a24;--line:#243347;
+    --pink:#e6007e;--vio:#6a35ff;--danger:#ff3b3b;
+    --zoom:1;
+    --stage-w:210mm;
+    --stage-h:297mm;
+    --phc:#c05;--phbg:#ffe08a66;
+  }
 
   *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,"Noto Sans KR",sans-serif}
@@ -45,26 +44,10 @@
   .field{position:absolute;transform:none;cursor:move;z-index:2;--fs:14px;}
   .field.checkbox{transform:translate(-50%,-50%)}
   .label{position:absolute;top:-16px;left:0;font-size:12px;font-weight:800;text-shadow:0 1px 2px #0009}
-.field input:not([type="checkbox"]):not([type="radio"]),
-.field textarea,
-.field select{
-  width:100%;
-  background:transparent;
-  border:none;
-  color:var(--fgc,#000);
-  height:var(--ih, 28px);
-  outline:none;
-  box-sizing:border-box;
-  padding:2px 4px !important;
-  margin:0 !important;
-  font-size:var(--fs,14px);
-  font-weight:600;
-  font-family:system-ui,"Noto Sans KR",sans-serif;
-  line-height:1.1 !important;
-  letter-spacing:0 !important;
-  text-align:var(--ta,left);
-  vertical-align:middle;
-}
+  .field input,.field textarea,.field select{
+    width:100%;background:transparent;border:none;color:var(--fgc,#fff);
+    height:var(--ih,auto);outline:none;padding:6px 6px 3px;font:600 var(--fs)/1.2 system-ui
+  }
 .field:focus-within{
   outline: 2px solid #9d56ee9f!important;
   outline-offset: 0;
@@ -116,6 +99,18 @@
     appearance: none;
     background-image: none !important;
     padding-right: 8px;
+  }
+
+  .field input,.field textarea,.field select{
+    width:100%;
+    background:transparent;
+    border:none;
+    color:var(--fgc,#fff);
+    height:var(--ih,auto);
+    outline:none;
+    padding:0 6px;
+    font:600 var(--fs)/1.2 system-ui;
+    text-align:var(--ta,left);
   }
 
   .field textarea{
@@ -1453,17 +1448,19 @@ function render(){
       w.classList.remove('rd-dot','rd-solid','rd-tick');
       w.classList.add('rd-' + rs);
     }
-if (f.type === 'radio') {
+    if (f.type === 'radio') {
   w.style.setProperty('--rsize', (f.radioSize ?? 18) + 'px');
   w.style.setProperty('--rgap',  (f.radioGap  ?? 12) + 'px');
 
-  const rs = (f.radioStyle || 'dot');
+  const rs = (f.radioStyle || 'dot'); // dot/solid/tick
   w.classList.remove('rd-dot','rd-solid','rd-tick');
   w.classList.add('rd-' + rs);
 
+  /* ✅ (추가) 1,2 표기 숨김 옵션 */
   if (f.radioShowText === false) w.classList.add('noText');
   else w.classList.remove('noText');
 
+  /* ✅ (추가) 겉 테두리(.radio-item) 제어 */
   const outerColor = (f.radioOuterBorderTransparent || f.borderTransparent) ? 'transparent'
                     : (f.radioOuterBorderColor || 'rgba(0,0,0,.25)');
 
@@ -1474,6 +1471,7 @@ if (f.type === 'radio') {
   w.style.setProperty('--rbc', outerColor);
   w.style.setProperty('--rbw', outerWidth + 'px');
 }
+
     if (f.color) w.style.setProperty('--fgc', f.color);
     if (f.inputHeight) w.style.setProperty('--ih', f.inputHeight + 'px');
 
@@ -1501,50 +1499,48 @@ if (f.type === 'radio') {
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
     /* ===== textarea (text+wrap 포함) ===== */
-if (treatAsTextarea) {
-  ctrl = document.createElement('textarea');
-  ctrl.className = 'control';
-  ctrl.value = f.value ?? '';
+    if (treatAsTextarea) {
+      ctrl = document.createElement('textarea');
+      ctrl.spellcheck = false;
+      ctrl.style.resize = 'none';
 
-  if (f.placeholder) ctrl.placeholder = f.placeholder;
+      const init = (f.id ? (valuesById[f.id] ?? f.value ?? "") : (f.value ?? ""));
+      ctrl.value = init;
+      f.value = init;
+      if (f.id) elById[f.id] = ctrl;
 
-  if (f.inputHeight) {
-    ctrl.dataset.minH = f.inputHeight;
+      if (f.placeholder) ctrl.placeholder = f.placeholder;
+      if (f.maxLength)   ctrl.maxLength = f.maxLength;
 
-    if (!isNameField(f) && !f.wrap) {
-      ctrl.dataset.fixedH = f.inputHeight;
-      ctrl.style.height = f.inputHeight + 'px';
-    } else {
-      ctrl.style.height = 'auto';
+      if (f.inputHeight) {
+        ctrl.dataset.fixedH = f.inputHeight;
+        ctrl.style.height = f.inputHeight + 'px';
+      }
+
+      if (f.locked || lockByPlaceholder) {
+        ctrl.readOnly = true;
+        ctrl.dataset.locked = '1';
+        blockTyping(ctrl);
+      }
+
+      ctrl.oninput = () => {
+        if (f.locked || lockByPlaceholder) return;
+
+        let v = ctrl.value;
+        v = applyMask(v, f.mask, f.maskRe);
+        if (f.maxLength) v = v.slice(0, f.maxLength);
+        if (ctrl.value !== v) ctrl.value = v;
+
+        f.value = v;
+        setValueById(f.id, v);
+        applyMirror(f, v);
+
+        autosizeTA(ctrl);
+        scheduleSave();
+        evaluateAffBanner();
+        evaluateExtraDataAndBar();
+      };
     }
-  }
-
-  requestAnimationFrame(() => autosizeTA(ctrl));
-
-  if (f.locked || lockByPlaceholder) {
-    ctrl.readOnly = true;
-    ctrl.dataset.locked = '1';
-    blockTyping(ctrl);
-  }
-
-  ctrl.oninput = () => {
-    if (f.locked || lockByPlaceholder) return;
-
-    let v = ctrl.value;
-    v = applyMask(v, f.mask, f.maskRe);
-    if (f.maxLength) v = v.slice(0, f.maxLength);
-    if (ctrl.value !== v) ctrl.value = v;
-
-    f.value = v;
-    setValueById(f.id, v);
-    applyMirror(f, v);
-
-    autosizeTA(ctrl);
-    scheduleSave();
-    evaluateAffBanner();
-    evaluateExtraDataAndBar();
-  };
-}
 
     /* ===== ✅ select (오류났던 부분 전면 복구) ===== */
     else if (f.type === 'select') {
@@ -2282,38 +2278,14 @@ function bindRequiredFieldVisual(f, wrap, ctrl){
 /* ===== 필수 검증/토스트 ===== */
 function findMissingAll(){
   const miss=[];
-
   pages.forEach((pg,pi)=>{
     (pg.fields||[]).forEach((f,fi)=>{
       if(!f.required) return;
-
-      if (f.type === 'checkbox') {
-        if (!f.value) {
-          miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)});
-        }
-        return;
-      }
-
-      if (f.type === 'radio') {
-        const v = (f.value ?? '').toString().trim();
-        if (!v) {
-          miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)});
-        }
-        return;
-      }
-
-      const raw = (f.value ?? '').toString().trim();
-      const hasPlaceholderLock =
-        !!(f.locked && f.lockOnPh && String(f.placeholder || '').trim());
-
-      const effectiveValue = raw || (hasPlaceholderLock ? String(f.placeholder).trim() : '');
-
-      if (!effectiveValue) {
-        miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)});
-      }
+      if (f.locked && f.lockOnPh && !f.value) return;
+      const v=(f.type==='checkbox')?!!f.value:(f.value??'').toString().trim();
+      if(!v) miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`)});
     });
   });
-
   return miss;
 }
 function markInvalidForPage(pIdx,list){
@@ -2357,21 +2329,19 @@ function createPrintDOM(page, pageIdx){
   const img = document.createElement('img');
   img.src = page.bg || '';
 
-const ov = document.createElement('div');
-ov.className = 'overlay';
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
 
   st.appendChild(img);
   st.appendChild(ov);
   wrap.appendChild(st);
 
   (page.fields || []).forEach(f => {
-const w = document.createElement('div');
-w.className =
-  'field ' +
-  (f.type === 'radio' ? 'radio ' : '') +
-  (f.type === 'checkbox' ? 'checkbox ' : '');
-
-if (f.id) w.dataset.id = f.id;
+    const w = document.createElement('div');
+    w.className =
+      'field ' +
+      (f.type === 'radio' ? 'radio ' : '') +
+      (f.type === 'checkbox' ? 'checkbox ' : '');
 
     w.style.left = `${f.x}%`;
     w.style.top  = `${f.y}%`;
@@ -2442,103 +2412,62 @@ if (f.type === 'radio') {
       ctrl.spellcheck = false;
       ctrl.style.resize = 'none';
 
-const rawValue = isHandSign ? '' : (f.value ?? '');
-const hasRealValue = String(rawValue).trim() !== '';
-const showPlaceholderAsText =
-  !!(lockByPlaceholder && !hasRealValue && String(f.placeholder || '').trim());
+      if (isHandSign) ctrl.value = '';
+      else ctrl.value = f.value ?? '';
 
-if (showPlaceholderAsText) {
-  ctrl.value = f.placeholder;
-  ctrl.dataset.printPlaceholder = '1';
-  ctrl.style.color = 'var(--phc)';
-  ctrl.style.background = 'var(--phbg)';
-  ctrl.style.borderRadius = '6px';
-  ctrl.style.paddingLeft = '4px';
-  ctrl.style.paddingRight = '4px';
-} else {
-  ctrl.value = rawValue;
-  if (f.placeholder) ctrl.placeholder = f.placeholder;
-}
+      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
 
-if (isNameBox && pageIdx === pageIndex) {
-  const live = overlay.querySelector(`.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`);
-  if (live) {
-    const cs = getComputedStyle(live);
-    ctrl.style.fontSize   = cs.fontSize;
-    ctrl.style.whiteSpace = cs.whiteSpace;
-    ctrl.style.overflow   = cs.overflow;
-    ctrl.style.lineHeight = cs.lineHeight;
-  }
-}
+      if (isNameBox && pageIdx === pageIndex) {
+        const live = overlay.querySelector(`.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`);
+        if (live) {
+          const cs = getComputedStyle(live);
+          ctrl.style.fontSize   = cs.fontSize;
+          ctrl.style.whiteSpace = cs.whiteSpace;
+          ctrl.style.overflow   = cs.overflow;
+          ctrl.style.lineHeight = cs.lineHeight;
+        }
+      }
 
-if (f.inputHeight) {
-  ctrl.style.minHeight = f.inputHeight + 'px';
-  ctrl.style.height    = f.inputHeight + 'px';
-} else {
-  ctrl.style.minHeight = '5px';
-  ctrl.style.height    = 'auto';
-}
+      if (f.inputHeight) {
+        ctrl.style.minHeight = f.inputHeight + 'px';
+        ctrl.style.height    = f.inputHeight + 'px';
+      } else {
+        ctrl.style.minHeight = '5px';
+        ctrl.style.height    = 'auto';
+      }
 
-if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
     }
 
-else if (f.type === 'select') {
-  ctrl = document.createElement('select');
-  ctrl.className = 'control';
+    else if (f.type === 'select') {
+      ctrl = document.createElement('select');
 
-  (f.options || []).forEach(o => {
-    const op = document.createElement('option');
-    op.value = o;
-    op.textContent = o;
-    ctrl.appendChild(op);
-  });
+      const phText = (f.placeholder || '').trim();
+      if (phText) {
+        const op0 = document.createElement('option');
+        op0.value = '';
+        op0.textContent = phText;
+        op0.disabled = true;
+        op0.hidden = true;
+        ctrl.appendChild(op0);
+      }
 
-  ctrl.value = f.value ?? '';
+      (f.options || []).forEach(o => {
+        const op = document.createElement('option');
+        op.value = op.textContent = o;
+        ctrl.appendChild(op);
+      });
 
-  if (f.locked) ctrl.disabled = true;
+      ctrl.value = f.value ?? '';
+      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
 
-  const pv = document.createElement('div');
-  pv.className = 'print-value';
-
-  const selText =
-    (ctrl.options[ctrl.selectedIndex] || {}).text ||
-    ctrl.value ||
-    '';
-
-  pv.textContent = selText;
-
-  const isPlan =
-    PLAN_ID_RE.test(String(f.id || '')) ||
-    PLAN_LABEL_RE.test(String(f.label || ''));
-
-  if (f.id) {
-    const liveSel = overlay.querySelector(
-      `.field[data-id="${f.id}"] select`
-    );
-
-    if (liveSel) {
-      const cs = getComputedStyle(liveSel);
-
-      pv.style.fontSize = isPlan
-        ? ((f.fontSize || 14) + 2) + 'px'
-        : (f.fontSize || 14) + 'px';
-
-      pv.style.lineHeight = '1.1';
-      pv.style.letterSpacing = cs.letterSpacing;
-      pv.style.padding = cs.padding;
-      pv.style.fontWeight = cs.fontWeight;
-      pv.style.fontFamily = cs.fontFamily;
-      pv.style.textAlign = cs.textAlign;
-      pv.style.height = cs.height;
-      pv.style.boxSizing = 'border-box';
-      pv.style.display = 'flex';
-      pv.style.alignItems = 'center';
+      const pv = document.createElement('div');
+      pv.className = 'print-value';
+      const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
+      pv.textContent = selText;
+      w.appendChild(pv);
     }
-  }
 
-  w.appendChild(ctrl);
-  w.appendChild(pv);
-}
     else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
@@ -2619,29 +2548,15 @@ else if (f.type === 'radio') {
 
 
     else {
-ctrl = document.createElement('input');
-ctrl.type = 'text';
+      ctrl = document.createElement('input');
+      ctrl.type = 'text';
 
-const rawValue = isHandSign ? '' : (f.value ?? '');
-const hasRealValue = String(rawValue).trim() !== '';
-const showPlaceholderAsText =
-  !!(lockByPlaceholder && !hasRealValue && String(f.placeholder || '').trim());
+      if (isHandSign) ctrl.value = '';
+      else ctrl.value = f.value ?? '';
 
-if (showPlaceholderAsText) {
-  ctrl.value = f.placeholder;
-  ctrl.dataset.printPlaceholder = '1';
-  ctrl.style.color = 'var(--phc)';
-  ctrl.style.background = 'var(--phbg)';
-  ctrl.style.borderRadius = '6px';
-  ctrl.style.paddingLeft = '4px';
-  ctrl.style.paddingRight = '4px';
-} else {
-  ctrl.value = rawValue;
-  if (f.placeholder) ctrl.placeholder = f.placeholder;
-}
-
-if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
-if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
+      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+      if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
     }
 
     if (f.color) ctrl.style.color = f.color;
@@ -2691,43 +2606,18 @@ async function printAllNow(){
   setTimeout(()=>window.print(),0);
 }
 
-/* ===== 인쇄 버튼 / Ctrl+P 공통 ===== */
-async function runValidatedPrint(){
-  const all = findMissingAll();
-
-  if (all.length) {
-    const first = all[0].page;
-    pageIndex = first;
-    render();
-
-    const listForPage = all.filter(m => m.page === first);
-    markInvalidForPage(first, listForPage);
-    showToast(listForPage.map(m => `p${m.page + 1} - ${m.label}`));
+/* ===== 인쇄 버튼 ===== */
+document.getElementById('btnPdf').onclick=async ()=>{
+  const all=findMissingAll();
+  if(all.length){
+    const first=all[0].page; pageIndex=first; render();
+    const listForPage=all.filter(m=>m.page===first);
+    markInvalidForPage(first,listForPage);
+    showToast(listForPage.map(m=>`p${m.page+1} - ${m.label}`));
     return;
   }
-
   await printAllNow();
-}
-
-document.getElementById('btnPdf').onclick = async () => {
-  await runValidatedPrint();
 };
-
-(function bindCtrlPPrint(){
-  document.addEventListener('keydown', async (e) => {
-    const isPrintShortcut =
-      (e.ctrlKey || e.metaKey) &&
-      !e.shiftKey &&
-      String(e.key).toLowerCase() === 'p';
-
-    if (!isPrintShortcut) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    await printAllNow();
-  }, true);
-})();
 
 /* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
 function forceWrapForHeaderBox(){
