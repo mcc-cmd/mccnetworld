@@ -535,7 +535,7 @@
           "borderColor": "transparent",
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 14,
+          "fontSize": 12,
           "mask": "",
           "maskRe": "",
           "placeholder": "고객주소",
@@ -545,7 +545,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": ""
+          "value": "",
+          "inputHeight": 24,
+          "borderWidth": 2
         },
         {
           "id": "년",
@@ -683,7 +685,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "24"
+          "value": "25"
         },
         {
           "id": "예금주 생년월일",

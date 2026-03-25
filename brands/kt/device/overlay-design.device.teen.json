@@ -526,7 +526,7 @@
           "x": 18.622976700889872,
           "y": 36.8786612069569,
           "w": 75,
-          "required": false,
+          "required": true,
           "radioSize": 18,
           "radioGap": 12,
           "color": "#000000",
@@ -685,7 +685,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "05"
+          "value": "25"
         },
         {
           "id": "예금주 생년월일",
@@ -1360,7 +1360,7 @@
           "y": 16.38340285634006,
           "w": 11.657142602040835,
           "required": true,
-          "value": "",
+          "value": "0",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,

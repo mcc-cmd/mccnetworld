@@ -53,18 +53,30 @@
   background:transparent;
   border:none;
   color:var(--fgc,#fff);
-  height:var(--ih,auto);
+  height:var(--ih, 24px);
   outline:none;
   box-sizing:border-box;
-  padding:0 2px !important;
+  padding:2px 2px 2px !important;
   margin:0 !important;
   font-size:var(--fs);
   font-weight:600;
   font-family:system-ui,"Noto Sans KR",sans-serif;
-  line-height:calc(var(--ih, 24px) - 2px) !important;
-  vertical-align:top;
+  line-height:calc(var(--ih, 24px) - 10px) !important;
   text-align:var(--ta,left);
+  vertical-align:top;
 }
+
+.field.hasBorder input[type="text"],
+.field.hasBorder textarea{
+  border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;
+  border-radius:8px;
+  background:transparent;
+  padding:2px 2px 2px !important;
+  height:var(--ih, 24px) !important;
+  line-height:calc(var(--ih, 24px) - (var(--bdw,2px) * 2) - 6px) !important;
+  box-sizing:border-box !important;
+}
+
   .field:focus-within{
     outline: 3px solid #e724ee83;
     outline-offset: 0px;
@@ -351,26 +363,6 @@
   .env-badge{display:none !important;}
 
   .field.checkbox .label{top:0;left:24px}
-
-.field.hasBorder input[type="text"],
-.field.hasBorder textarea{
-  border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;
-  border-radius:8px;
-  background:transparent;
-  padding:0 2px !important;
-}
-
-/* ✅ 여기 바로 아래 */
-.field input[type="text"]{
-  -webkit-appearance:none !important;
-  appearance:none !important;
-  display:block !important;
-  padding:0 2px !important;
-  margin:0 !important;
-  height:100% !important;
-  line-height:normal !important;
-  box-sizing:border-box !important;
-}
   #printAll .field.hasBorder input[type="text"],#printAll .field.hasBorder textarea{border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;border-bottom:none !important;border-radius:8px;}
   .field.hasBG input[type="text"],.field.hasBG textarea{background:var(--bgc,transparent) !important}
   #printAll .field.hasBG input[type="text"],#printAll .field.hasBG textarea{background:var(--bgc,transparent) !important}
@@ -744,8 +736,8 @@
         </div>
 
         <div class="row"><div>텍스트 색상</div><input id="p_color" type="color" value="#000000"></div>
-        <div class="row"><div>입력 높이(px)</div><input id="p_height" type="number" min="5" max="60" step="1" placeholder="auto"></div>
-        <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="5" max="32" step="1" placeholder="14"></div>
+        <div class="row"><div>입력 높이(px)</div><input id="p_height" type="number" min="10" max="80" step="1" placeholder="auto"></div>
+        <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="8" max="40" step="1" placeholder="14"></div>
 
         <div class="row"><div>정렬</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
@@ -1264,7 +1256,7 @@ function syncFeesFromExistingPlan(){
 }
 
 /* ===== 이름칸 자동 축소 ===== */
-function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
+function autoShrinkNameFont(el, minPx = 8, maxPx) {
   try {
     const cs = getComputedStyle(el);
     const padL = parseFloat(cs.paddingLeft) || 0;
@@ -1278,7 +1270,7 @@ function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
 
     el.dataset.baseFs = String(base);
 
-    const text = (el.value || el.textContent || '').trim();
+    const text = String(el.value || el.textContent || '').trim();
     if (!text) {
       el.style.fontSize = base + 'px';
       return;
@@ -1297,7 +1289,7 @@ function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
 
     span.style.fontFamily = cs.fontFamily;
     span.style.fontWeight = cs.fontWeight;
-    span.style.fontStyle  = cs.fontStyle;
+    span.style.fontStyle = cs.fontStyle;
     span.style.letterSpacing = cs.letterSpacing;
     span.style.textTransform = cs.textTransform;
 
@@ -1309,6 +1301,7 @@ function autoShrinkTextareaFont(el, minPx = 8, maxPx) {
         return;
       }
     }
+
     el.style.fontSize = min + 'px';
   } catch (_) {}
 }
@@ -1326,12 +1319,15 @@ function isNameField(f){
 function setupNameAutoShrink(ctrl, f){
   if (!isNameField(f)) return;
   ctrl.dataset.autofit = '1';
+
   const run = () => {
     const cs = getComputedStyle(ctrl);
     const baseFs = f.fontSize || parseFloat(cs.fontSize) || 14;
-    autoShrinkTextareaFont(ctrl, 5, baseFs);
+    autoShrinkNameFont(ctrl, 8, baseFs);
   };
+
   requestAnimationFrame(run);
+  window.addEventListener('resize', run);
   ctrl.addEventListener('input', run);
 }
 
@@ -1353,8 +1349,8 @@ function render(){
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
-    if (Number.isFinite(f.fontSize))    f.fontSize    = clamp(f.fontSize, 5, 32);
-    if (Number.isFinite(f.inputHeight)) f.inputHeight = clamp(f.inputHeight, 5, 60);
+if (Number.isFinite(f.fontSize))    f.fontSize    = clamp(f.fontSize, 8, 40);
+if (Number.isFinite(f.inputHeight)) f.inputHeight = clamp(f.inputHeight, 10, 80);
 
     const w = document.createElement('div');
     w.className = 'field '
@@ -1413,10 +1409,10 @@ function render(){
 
     let ctrl;
 
-    const isName = isNameField(f);
-    const treatAsTextarea =
-      (f.type === 'textarea') ||
-      (f.type === 'text' && (f.wrap || isName));
+const isName = isNameField(f);
+const treatAsTextarea =
+  (f.type === 'textarea') ||
+  (f.type === 'text' && f.wrap && !isName);
 
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
@@ -1982,7 +1978,7 @@ document.getElementById('applyProp').onclick = () => {
 
   f.color = pColor.value || '#000000';
   const h = parseInt(pHeight.value, 10);
-  f.inputHeight = Number.isFinite(h) ? clamp(h, 5, 60) : undefined;
+  f.inputHeight = Number.isFinite(h) ? clamp(h, 10, 80) : undefined;
 
   f.wrap = true;
   f.id = (pId.value || '').trim() || f.id;
@@ -2002,7 +1998,7 @@ document.getElementById('applyProp').onclick = () => {
     : ((pBgColor?.value || '').trim() || undefined);
 
   const fs = parseInt(pFontSize?.value, 10);
-  f.fontSize = Number.isFinite(fs) ? clamp(fs, 5, 32) : undefined;
+f.fontSize = Number.isFinite(fs) ? clamp(fs, 8, 40) : undefined;
 
   f.textAlign = (pTextAlign?.value || '');
   f.mask = (pMask?.value || '');
@@ -2323,11 +2319,11 @@ img.src = page.bg ? new URL(page.bg, location.href).href : '';
     let ctrl;
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
     const isHandSign = /(자필|싸인|서명)/.test(String(f.placeholder || '') + String(f.label || ''));
-    const isNameBox = isNameField(f);
+const isNameBox = isNameField(f);
 
-    const treatAsTextarea =
-      f.type === 'textarea' ||
-      (f.type === 'text' && (f.wrap || isNameBox));
+const treatAsTextarea =
+  f.type === 'textarea' ||
+  (f.type === 'text' && f.wrap && !isNameBox);
 
     if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
