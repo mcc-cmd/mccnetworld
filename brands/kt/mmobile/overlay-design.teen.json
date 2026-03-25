@@ -830,8 +830,8 @@
           "label": "",
           "type": "text",
           "x": 25.84455508846895,
-          "y": 71.99881969898622,
-          "w": 30,
+          "y": 71.99788936928321,
+          "w": 19.954852581143175,
           "required": false,
           "radioSize": 18,
           "radioGap": 12,
@@ -853,8 +853,8 @@
             "번호이동 번호"
           ],
           "checkSize": 18,
-          "inputHeight": 14,
-          "textAlign": "",
+          "inputHeight": 16,
+          "textAlign": "center",
           "autoShrink": true,
           "value": ""
         },
