@@ -195,6 +195,21 @@
       "totalFee": 33990,
       "extraDataGb": 20,
       "bundleAnyone": false
+    },
+      "5G 라이트 유심 15GB 300분": {
+      "baseFee": 55000,
+      "discountFee": 30100,
+      "totalFee": 24900,
+      "extraDataGb": 0,
+      "bundleAnyone": false
+    },
+      "5G유심 15GB 300분": {
+      "baseFee": 55000,
+      "discountFee": 33100,
+      "totalFee": 21900,
+      "extraDataGb": 0,
+      "bundleAnyone": false
     }
+    
   }
 }

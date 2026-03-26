@@ -253,6 +253,56 @@
   .row{display:grid;grid-template-columns:140px 1fr;gap:8px;align-items:center;margin-bottom:8px}
   .row input,.row select,.row textarea{width:100%;background:#0f1624;border:1px solid #2b3a54;border-radius:10px;color:#dfe9ff;outline:none;padding:8px 10px;font-weight:700}
   .hint{color:#9fb0cc;font-size:12px}
+.prop-box{
+  border:1px solid rgba(120,160,255,.35);
+  border-radius:10px;
+  padding:10px;
+  margin-top:10px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.02);
+}
+
+.prop-row{
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;
+  padding:10px 12px;
+  margin-bottom:8px;
+  background:rgba(255,255,255,.02);
+}
+
+.prop-row:last-child{
+  margin-bottom:0;
+}
+
+.prop-row > div:first-child{
+  min-width:90px;
+  font-weight:600;
+  color:#dbe7ff;
+}
+
+.inline-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.lock-check span{
+  display:block;
+  color:#dbe7ff;
+  font-size:13px;
+  font-weight:600;
+  word-break:keep-all;
+}
+
+.lock-check input[type="checkbox"]{
+  margin-top:2px;
+  width:16px;
+  height:16px;
+  flex:0 0 auto;
+}
+.inline-check input[type="checkbox"]{
+  width:16px;
+  height:16px;
+}
   .stack .paper{margin-bottom:56px}
   .stack{padding-bottom:140px}
   .pager{display:flex;align-items:center;gap:8px;justify-content:center;margin:6px 0 18px;flex-wrap:wrap}
@@ -683,33 +733,62 @@
         <div class="row"><div>텍스트 색상</div><input id="p_color" type="color" value="#000000"></div>
         <div class="row"><div>입력 높이(px)</div><input id="p_height" type="number" min="5" max="60" step="1" placeholder="auto"></div>
         <div class="row"><div>글자 크기(px)</div><input id="p_fontSize" type="number" min="5" max="32" step="1" placeholder="14"></div>
+<div class="row"><div>정렬</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="btn--ghost btn" id="alignLeft">좌</button>
+    <button class="btn--ghost btn" id="alignCX">가운데</button>
+    <button class="btn--ghost btn" id="alignRight">우</button>
+    <button class="btn--ghost btn" id="alignTop">상</button>
+    <button class="btn--ghost btn" id="alignCY">중앙</button>
+    <button class="btn--ghost btn" id="alignBottom">하</button>
+  </div>
+</div>
 
-        <div class="row"><div>정렬</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn--ghost btn" id="alignLeft">좌</button>
-            <button class="btn--ghost btn" id="alignCX">가운데</button>
-            <button class="btn--ghost btn" id="alignRight">우</button>
-            <button class="btn--ghost btn" id="alignTop">상</button>
-            <button class="btn--ghost btn" id="alignCY">중앙</button>
-            <button class="btn--ghost btn" id="alignBottom">하</button>
+<div class="prop-box">
+  <div class="row prop-row">
+    <div>텍스트 정렬</div>
+    <select id="p_textAlign">
+      <option value="">기본</option>
+      <option value="left">좌측</option>
+      <option value="center">가운데</option>
+      <option value="right">우측</option>
+    </select>
+  </div>
 
-            <div class="row"><div>텍스트 정렬</div>
-              <select id="p_textAlign">
-                <option value="">기본(좌측)</option>
-                <option value="left">좌측</option>
-                <option value="center">가운데</option>
-                <option value="right">우측</option>
-              </select>
-            </div>
-          </div>
-        </div>
+  <div class="row prop-row">
+    <div>세로 정렬</div>
+    <select id="p_verticalAlign">
+      <option value="top">상단</option>
+      <option value="middle" selected>가운데</option>
+      <option value="bottom">하단</option>
+    </select>
+  </div>
 
-        <div class="row"><div>입력 잠금</div>
-          <label><input type="checkbox" id="p_locked"> 화면에서 타이핑 금지</label>
-        </div>
-        <div class="row"><div>placeholder 잠금</div>
-          <label><input type="checkbox" id="p_lockOnPh"> placeholder만 표시(값 없으면 읽기전용)</label>
-        </div>
+  <div class="row prop-row">
+    <div>자동 글자 축소</div>
+    <label class="inline-check">
+      <input type="checkbox" id="p_autoShrink" checked> 사용
+    </label>
+  </div>
+</div>
+
+<div class="prop-box">
+  <div class="row prop-row">
+    <div>입력 잠금</div>
+    <label class="inline-check lock-check">
+      <input type="checkbox" id="p_locked">
+      <span> 화면에서 타이핑 금지</span>
+    </label>
+  </div>
+
+  <div class="row prop-row">
+    <div>placeholder 잠금</div>
+    <label class="inline-check lock-check">
+      <input type="checkbox" id="p_lockOnPh">
+      <span>체크 시 placeholder만 화면에 표시 출력되지 않음</span>
+    </label>
+  </div>
+</div>
 
         <div class="group" style="margin:8px 0 0;padding-top:8px">
           <h4>입력 제한(마스크)</h4>
@@ -2160,6 +2239,8 @@ const pLabel=document.getElementById('p_label'),
       pBgTransparent=document.getElementById('p_bgTransparent'),
       pFontSize=document.getElementById('p_fontSize'),
       pTextAlign=document.getElementById('p_textAlign'),
+      pVerticalAlign=document.getElementById('p_verticalAlign'),
+      pAutoShrink=document.getElementById('p_autoShrink'),
       pMask=document.getElementById('p_mask'),
       pMaskRe=document.getElementById('p_maskRe'),
       pMaxLen=document.getElementById('p_maxlen'),
@@ -2177,18 +2258,21 @@ function updatePanel(){
         rowOpts=document.getElementById('row_opts'),
         rowReq=document.getElementById('row_req');
 
-  if(selected<0){
-    info.textContent='없음'; px.value=py.value=pw.value='';
-    pLabel.value=''; pRadioSize.value=''; pRadioGap.value='';
-    pColor.value='#000000'; pHeight.value=''; pId.value='';
-    pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=false;
-    pBgColor.value='#000000'; pBgTransparent.checked=false;
-    pFontSize.value=''; pMask.value=''; pMaskRe.value=''; pMaxLen.value=''; pPlaceholder.value='';
-    pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
-    if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
-    if (pCheckStyle) pCheckStyle.value = 'tick';
-    return;
-  }
+if(selected<0){
+  info.textContent='없음'; px.value=py.value=pw.value='';
+  pLabel.value=''; pRadioSize.value=''; pRadioGap.value='';
+  pColor.value='#000000'; pHeight.value=''; pId.value='';
+  pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=false;
+  pBgColor.value='#000000'; pBgTransparent.checked=false;
+  pFontSize.value=''; pTextAlign.value=''; pVerticalAlign.value='middle';
+  pAutoShrink.checked=true;
+  pMask.value=''; pMaskRe.value=''; pMaxLen.value=''; pPlaceholder.value='';
+  pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
+  if(rowOpts) rowOpts.style.display='none';
+  if(rowReq) rowReq.style.display='none';
+  if (pCheckStyle) pCheckStyle.value = 'tick';
+  return;
+}
 
   const f=cur().fields[selected];
   info.textContent=(f.label||f.id||('필드'+(selected+1)));
@@ -2217,6 +2301,8 @@ function updatePanel(){
 
   pFontSize.value = (f.fontSize ?? 14);
   pTextAlign.value = f.textAlign || '';
+pVerticalAlign.value = f.verticalAlign || 'middle';
+pAutoShrink.checked = (f.autoShrink !== false);
   pMask.value = f.mask || '';
   pMaskRe.value = (f.maskRe || '');
   pMaxLen.value = f.maxLength || '';
@@ -2369,6 +2455,8 @@ document.getElementById('applyProp').onclick = () => {
   f.fontSize = clamp(Number.isFinite(fs) ? fs : autoFs, 5, 32);
 
   f.textAlign = (pTextAlign?.value || '');
+f.verticalAlign = (pVerticalAlign?.value || 'middle');
+f.autoShrink = !!pAutoShrink?.checked;
   f.mask      = (pMask?.value || '');
   f.maskRe    = (pMaskRe?.value || '').trim();
 
