@@ -28,7 +28,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "checkSize": 18
+          "checkSize": 18,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -55,15 +56,16 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 14,
-          "textAlign": "center"
+          "inputHeight": 24,
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 81.57008196966939,
-          "y": 23.912062216553867,
+          "x": 81.56942064061705,
+          "y": 23.911139193105075,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -83,15 +85,16 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 14,
-          "textAlign": "center"
+          "inputHeight": 24,
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "totalFee",
           "label": "",
           "type": "text",
           "x": 81.58910206876816,
-          "y": 27.19707588119758,
+          "y": 27.196169905675283,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -111,8 +114,9 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 14,
-          "textAlign": "center"
+          "inputHeight": 24,
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -139,7 +143,8 @@
           "locked": true,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22
+          "inputHeight": 22,
+          "value": ""
         },
         {
           "id": "유효기간",
@@ -167,7 +172,8 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "유심",
@@ -232,7 +238,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": "center"
+          "textAlign": "center",
+          "value": ""
         },
         {
           "id": "희망번호",
@@ -260,7 +267,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "번호이동",
@@ -288,7 +296,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "통신사명",
@@ -316,7 +325,8 @@
           "placeholder": "통신사명",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -330,7 +340,7 @@
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 33,
+          "inputHeight": 44,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -344,7 +354,8 @@
           "placeholder": "자필 기재 구간 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -372,7 +383,8 @@
           "placeholder": "자필 성함싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "전통신사",
@@ -438,7 +450,8 @@
           "mask": "",
           "maskRe": "",
           "autoDate": "",
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "plan",
@@ -476,7 +489,9 @@
             "The 착한 데이터 유심 2.5GB",
             "The 착한 데이터 유심 3.6GB",
             "The 착한 데이터 유심 9GB 3000분",
-            "The 착한 데이터 유심 11GB"
+            "The 착한 데이터 유심 11GB",
+            "5G 라이트 유심 15GB 300분",
+            "5G유심 15GB 300분"
           ],
           "radioSize": 18,
           "checkSize": 18,
@@ -525,7 +540,8 @@
           "placeholder": "★동의합니다★자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -612,7 +628,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "25"
+          "value": "26"
         },
         {
           "id": "판매점명",
@@ -640,7 +656,8 @@
           "placeholder": "판매점명",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "연락처",
@@ -668,7 +685,8 @@
           "placeholder": "판매점 연락처",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "판매자명",
@@ -696,7 +714,8 @@
           "placeholder": "판매자 성함",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "신규/번이",
@@ -759,7 +778,8 @@
           "placeholder": "가입 유형 체크 필수",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "주소",
@@ -787,7 +807,8 @@
           "placeholder": "주소",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "관계필수작성",
@@ -815,7 +836,8 @@
           "placeholder": "관계필수작성",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },

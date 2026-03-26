@@ -25,8 +25,18 @@
 
   *{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,"Noto Sans KR",sans-serif}
-  .wrap{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;min-height:100vh;padding:12px}
-  html.fill .wrap{grid-template-columns:1fr}
+.wrap{
+  display:grid;
+  grid-template-columns:minmax(0, 1.6fr) minmax(360px, 1fr);
+  gap:12px;
+  min-height:100vh;
+  padding:12px;
+  align-items:start;
+}
+
+html.fill .wrap{
+  grid-template-columns:1fr;
+}
   .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:visible}
   .hd{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
   .hd strong{font-weight:800}
@@ -206,14 +216,10 @@
   display:inline-flex;
   align-items:center;
   gap:6px;
-
-  padding:2px 6px;          /* ✅ 내부 여백 축소 */
-  border-radius:8px;
+  padding:2px 4px; /* 최소 간격만 유지 */
+  border-radius:6px;
   background:transparent;
-  border:1px solid rgba(0,0,0,.25);
-
-  flex:0 1 auto;            /* ✅ 줄어들 수 있게 */
-  max-width:100%;           /* ✅ field 폭 초과 금지 */
+  border:1px solid rgba(0,0,0,.2);
 }
 
 .field.radio .radio-item span{
@@ -223,22 +229,6 @@
 
   white-space:normal;       /* ✅ 줄바꿈 허용 */
   word-break:keep-all;
-}
-/* ===== radio-item(겉 테두리) / 텍스트 표시 제어 ===== */
-.field.radio .radio-item{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-
-  padding:0 !important;
-  border-radius:0 !important;
-
- /* ✅ 라디오 옵션 박스(테두리/패딩) 제거해서 간격 최대한 좁히기 */
-  border: 0 !important;
-  background: transparent !important;
-
-  flex:0 1 auto;
-  max-width:100%;
 }
 
 .field.radio.noText .radio-item span{
@@ -314,7 +304,23 @@
   border-radius: 6px !important;
 }
   html.fill .builder{display:none}
+html.is-prod .builder{display:none !important;}
+html.is-prod .hd .builder{display:none !important;}
 
+html.force-builder .builder{display:block !important;}
+html.force-builder .hd .builder{display:block !important;}
+html.is-prod.force-builder .builder{display:block !important;}
+html.is-prod.force-builder .hd .builder{display:block !important;}
+html.force-builder .wrap,
+html.is-prod.force-builder .wrap{
+  grid-template-columns:minmax(0, 1.6fr) minmax(360px, 1fr) !important;
+  align-items:start !important;
+}
+
+html.force-builder .wrap > .panel,
+html.is-prod.force-builder .wrap > .panel{
+  min-width:0;
+}
   /* 인쇄 공통 */
  @page{size:A4 portrait;margin:0}
   #printAll{display:none}
@@ -479,7 +485,8 @@
 
   .field.checkbox .label{top:0;left:24px}
 
-  .field.hasBorder input[type="text"],.field.hasBorder textarea{
+.field.hasBorder input[type="text"],
+.field.hasBorder textarea{
   border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;
   border-radius:6px;
   background:transparent;
@@ -505,9 +512,6 @@
     background:#f59e0b;color:#111827;box-shadow:0 2px 6px rgba(0,0,0,.2);
     user-select:none;pointer-events:none;
   }
-  html.is-prod .builder{display:none !important;}
-  html.is-prod .hd .builder{display:none !important;}
-
   .btn-back{
     min-width: 140px;
     justify-content: center;
@@ -586,22 +590,51 @@
   const host = location.hostname;
   const IS_LOCAL   = /^(localhost|127\.0\.0\.1)$/i.test(host);
   const IS_STAGING = host.startsWith('staging.') || IS_LOCAL;
+
   document.documentElement.classList.toggle('is-staging', IS_STAGING);
   document.documentElement.classList.toggle('is-prod', !IS_STAGING);
 
-  const fav = document.querySelector('link[rel="icon"][sizes="32x32"]') || document.querySelector('link[rel="icon"]');
+  const url = new URL(location.href);
+
+  // ✅ mode 통합 처리
+  const MODE   = url.searchParams.get('mode') || '';
+  const FILL   = MODE === 'fill';
+  const DESIGN = MODE === 'design';
+
+if (FILL) {
+  document.documentElement.classList.add('fill');
+} else {
+  document.documentElement.classList.remove('fill');
+}
+
+if (DESIGN) {
+  document.documentElement.classList.add('force-builder');
+  document.documentElement.classList.remove('fill');
+} else {
+  document.documentElement.classList.remove('force-builder');
+}
+
+  const fav =
+    document.querySelector('link[rel="icon"][sizes="32x32"]') ||
+    document.querySelector('link[rel="icon"]');
+
   if (IS_STAGING) {
-    document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/,'');
+    document.title = 'STAGING · ' + document.title.replace(/^STAGING ·\s*/, '');
     if (fav) fav.href = '/favicon-32x32.png?v=stg';
+
     const b = document.createElement('div');
     b.className = 'env-badge';
     b.textContent = 'STAGING (개발/테스트)';
-    window.addEventListener('DOMContentLoaded', ()=>document.body.appendChild(b));
+    window.addEventListener('DOMContentLoaded', () => document.body.appendChild(b));
   } else {
-    document.title = document.title.replace(/^STAGING ·\s*/,'');
+    document.title = document.title.replace(/^STAGING ·\s*/, '');
     if (fav) fav.href = '/favicon-32x32.png?v=prod';
-    const url = new URL(location.href);
-    if (!url.searchParams.has('mode')) { url.searchParams.set('mode','fill'); history.replaceState(null,'',url.toString()); }
+
+    // ✅ mode 없을 때만 fill 강제 (design 덮어쓰지 않음)
+    if (!url.searchParams.has('mode')) {
+      url.searchParams.set('mode', 'fill');
+      history.replaceState(null, '', url.toString());
+    }
   }
 })();
 /* =========================
@@ -722,7 +755,6 @@
         <button class="btn" id="btnPdf">PDF 생성OR인쇄</button>
       </div>
       <p class="hint" style="text-align:center">필드를 클릭해 드래그로 이동. 입력은 컨트롤을 클릭 후 타이핑.</p>
-    </div>
   </section>
 
   <section class="panel builder">
@@ -1012,9 +1044,10 @@ function applyMirror(sourceField, value) {
 }
 
 /* ===== 모드/상태 ===== */
-const FILL  = new URLSearchParams(location.search).get('mode')==='fill';
+const MODE  = new URLSearchParams(location.search).get('mode') || '';
+const FILL  = MODE === 'fill';
+const DESIGN = MODE === 'design';
 const FRESH = new URLSearchParams(location.search).get('fresh')==='1';
-if(FILL) document.documentElement.classList.add('fill');
 
 let selected=-1;
 let pages=[{bg:'images/adult-1.jpg',fields:[]}], pageIndex=0;

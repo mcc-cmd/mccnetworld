@@ -56,7 +56,7 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 14,
+          "inputHeight": 24,
           "textAlign": "center",
           "value": ""
         },
@@ -64,11 +64,11 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 83.82874112639355,
-          "y": 23.593302522372237,
+          "x": 83.82746669019896,
+          "y": 23.592379498923446,
           "w": 10,
           "required": false,
-          "radioSize": 18,
+          "radioSize": 24,
           "radioGap": 12,
           "color": "#000000",
           "wrap": true,
@@ -84,8 +84,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "checkSize": 18,
-          "inputHeight": 14,
+          "checkSize": 24,
+          "inputHeight": 24,
           "textAlign": "",
           "value": ""
         },
@@ -114,7 +114,7 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 14,
+          "inputHeight": 24,
           "textAlign": "",
           "value": ""
         },
@@ -519,7 +519,9 @@
             "The 착한 데이터 유심 2.5GB",
             "The 착한 데이터 유심 3.6GB",
             "The 착한 데이터 유심 9GB 3000분",
-            "The 착한 데이터 유심 11GB"
+            "The 착한 데이터 유심 11GB",
+            "5G 라이트 유심 15GB 300분",
+            "5G유심 15GB 300분"
           ],
           "radioSize": 18,
           "checkSize": 18,
@@ -656,7 +658,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "25"
+          "value": "26"
         },
         {
           "id": "판매점명",

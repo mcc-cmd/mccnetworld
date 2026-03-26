@@ -793,7 +793,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "25"
+          "value": "26"
         },
         {
           "id": "성함싸인",
@@ -1269,8 +1269,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "가입 유형 체크",
@@ -1305,26 +1305,26 @@
           "id": "신규/번이",
           "label": "",
           "type": "radio",
-          "x": 51.72539260786802,
-          "y": 4.6315952826236435,
-          "w": 6.040609137055838,
+          "x": 52.05421531593407,
+          "y": 4.397962932084837,
+          "w": 9.337312433759134,
           "required": true,
           "options": [
             "신규",
             "번이"
           ],
-          "radioSize": 15,
-          "radioGap": 0,
+          "radioSize": 10,
+          "radioGap": 0.5,
           "radioStyle": "tick",
-          "checkSize": 15,
+          "checkSize": 10,
           "color": "#000000",
-          "inputHeight": 26,
+          "inputHeight": 13,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
           "borderWidth": 2,
-          "bgTransparent": false,
-          "bgColor": "#000000",
+          "bgTransparent": true,
+          "bgColor": "transparent",
           "fontSize": 12,
           "textAlign": "",
           "radioShowText": false,
@@ -1334,7 +1334,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": ""
+          "value": "",
+          "autoShrink": true
         }
       ]
     },
