@@ -70,8 +70,8 @@
           "lockOnPh": false,
           "checkSize": 18,
           "textAlign": "center",
-          "value": "",
-          "inputHeight": 22
+          "inputHeight": 22,
+          "value": ""
         },
         {
           "id": "baseFee",
@@ -251,7 +251,7 @@
           "id": "명의자 주소",
           "label": "",
           "type": "text",
-          "x": 20.993424300309066,
+          "x": 20.99180955153245,
           "y": 43.6185473121076,
           "w": 35.17802155550925,
           "required": true,
@@ -264,7 +264,7 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 14,
+          "fontSize": 11,
           "mask": "",
           "maskRe": "",
           "placeholder": "",
@@ -569,8 +569,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
-          "textAlign": ""
+          "textAlign": "",
+          "value": ""
         },
         {
           "id": "희망번호",
@@ -804,7 +804,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "24"
+          "value": "26"
         },
         {
           "id": "판매자 성함",
@@ -1351,7 +1351,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "24"
+          "value": "26"
         },
         {
           "id": "자필 성함싸인",
