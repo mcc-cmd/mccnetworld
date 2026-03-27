@@ -362,24 +362,26 @@
   display:none !important;
 }
 
-  #printAll .field select{display:none !important}
+#printAll .field select,
+#printAll .field input[type="text"]{
+  display:none !important;
+}
   #printAll .field{min-height:var(--ih, 28px) !important;}
 
-  #printAll .field .print-value{
-    display:block !important;
-    color:#000 !important;
-    position:absolute !important;
-    inset:0 !important;
-    padding:0 6px !important;
-    height:var(--ih, 28px) !important;
-    line-height:var(--ih, 28px) !important;
-    font:600 var(--fs,14px)/1.2 system-ui !important;
-    white-space:pre-wrap;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-    text-align:var(--ta, left) !important;
-  }
-
+#printAll .field .print-value{
+  display:flex !important;
+  align-items:center !important;
+  color:#000 !important;
+  position:absolute !important;
+  inset:0 !important;
+  padding:0 1px !important;
+  height:100% !important;
+  white-space:nowrap !important;
+  word-break:normal !important;
+  overflow:hidden !important;
+  text-overflow:clip !important;
+  box-sizing:border-box !important;
+}
   #printAll .field textarea{
     min-height:5px !important;
     height:auto !important;
@@ -1333,8 +1335,6 @@ function syncFeesFromExistingPlan(){
   });
   render(); scheduleSave();
 }
-
-/* ===== 이름칸 자동 축소 ===== */
 function autoShrinkNameFont(el, minPx = 8, maxPx) {
   try {
     const cs = getComputedStyle(el);
@@ -1363,6 +1363,8 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
       span.style.visibility = 'hidden';
       span.style.whiteSpace = 'nowrap';
       span.style.left = '-9999px';
+      span.style.top = '0';
+      span.style.pointerEvents = 'none';
       document.body.appendChild(span);
     }
 
@@ -1371,8 +1373,9 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
     span.style.fontStyle = cs.fontStyle;
     span.style.letterSpacing = cs.letterSpacing;
     span.style.textTransform = cs.textTransform;
+    span.style.lineHeight = cs.lineHeight;
 
-    for (let px = max; px >= min; px -= 0.5) {
+    for (let px = max; px >= min; px -= 0.1) {
       span.style.fontSize = px + 'px';
       span.textContent = text;
       if (span.getBoundingClientRect().width <= innerW) {
@@ -1384,7 +1387,73 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
     el.style.fontSize = min + 'px';
   } catch (_) {}
 }
-const AUTO_SHRINK_NAME_RE = /(가입자명|성명|이름|예금주 성함)/;
+
+/* ===== 이름칸 자동 축소 ===== */
+function autoShrinkPrintText(el, text, minPx = 2.5, maxPx = 14){
+  try{
+    const cs = getComputedStyle(el);
+    const parent = el.parentElement;
+
+    const padL = parseFloat(cs.paddingLeft) || 0;
+    const padR = parseFloat(cs.paddingRight) || 0;
+
+    let baseW = 0;
+
+    if (parent) {
+      const pcs = getComputedStyle(parent);
+      const bwL = parseFloat(pcs.borderLeftWidth) || 0;
+      const bwR = parseFloat(pcs.borderRightWidth) || 0;
+      baseW = parent.clientWidth - bwL - bwR;
+    }
+
+    if (!baseW || baseW <= 0) {
+      baseW = el.offsetWidth || el.clientWidth || 0;
+    }
+
+    const innerW = baseW - padL - padR;
+    if (innerW <= 0) return;
+
+    let span = document.getElementById('__print_measure_span__');
+    if (!span) {
+      span = document.createElement('span');
+      span.id = '__print_measure_span__';
+      span.style.position = 'fixed';
+      span.style.visibility = 'hidden';
+      span.style.whiteSpace = 'nowrap';
+      span.style.left = '-9999px';
+      span.style.top = '0';
+      span.style.pointerEvents = 'none';
+      document.body.appendChild(span);
+    }
+
+    span.style.fontFamily = cs.fontFamily;
+    span.style.fontWeight = cs.fontWeight;
+    span.style.fontStyle = cs.fontStyle;
+    span.style.letterSpacing = cs.letterSpacing;
+    span.style.textTransform = cs.textTransform;
+    span.style.lineHeight = cs.lineHeight;
+
+    const value = String(text || '').trim();
+    if (!value) {
+      el.style.fontSize = maxPx + 'px';
+      return;
+    }
+
+    for (let px = maxPx; px >= minPx; px -= 0.1) {
+      span.style.fontSize = px + 'px';
+      span.textContent = value;
+      if (span.getBoundingClientRect().width <= innerW) {
+        el.style.fontSize = px + 'px';
+        return;
+      }
+    }
+
+    el.style.fontSize = minPx + 'px';
+  }catch(_){}
+}
+
+const AUTO_SHRINK_NAME_RE = /(가입자명|고객명|법인명|성명|이름|예금주 성함|예금주|자동이체|계좌주|명의자|납부자)/;
+
 function isNameField(f){
   const label = String(f.label || '');
   const id    = String(f.id || '');
@@ -1395,6 +1464,16 @@ function isNameField(f){
   if (/name|custname/i.test(id))       return true;
   return false;
 }
+
+function isLongAccountNameField(f){
+  const text = [
+    String(f.label || ''),
+    String(f.id || ''),
+    String(f.placeholder || '')
+  ].join(' ');
+  return /(자동이체|예금주|계좌주|명의자|납부자)/i.test(text);
+}
+
 function setupNameAutoShrink(ctrl, f){
   if (f.autoShrink === false) return;
   if (!isNameField(f)) return;
@@ -1404,14 +1483,14 @@ function setupNameAutoShrink(ctrl, f){
   const run = () => {
     const cs = getComputedStyle(ctrl);
     const baseFs = f.fontSize || parseFloat(cs.fontSize) || 14;
-    autoShrinkNameFont(ctrl, 8, baseFs);
+    const minFs = isLongAccountNameField(f) ? 2.5 : 8;
+    autoShrinkNameFont(ctrl, minFs, baseFs);
   };
 
   requestAnimationFrame(run);
   window.addEventListener('resize', run);
   ctrl.addEventListener('input', run);
 }
-
 /* ===== 제휴/추가데이터 ===== */
 function getSelectedPlanName(){
   const tars = getPlanSelectTargets();
@@ -1529,23 +1608,28 @@ const treatAsTextarea =
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
+ctrl.oninput = () => {
+  if (f.locked || lockByPlaceholder) return;
 
-        let v = ctrl.value;
-        v = applyMask(v, f.mask, f.maskRe);
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+  let v = ctrl.value;
+  v = applyMask(v, f.mask, f.maskRe);
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+  if (ctrl.value !== v) ctrl.value = v;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
 
-        autosizeTA(ctrl);
-        scheduleSave();
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
+  if (isNameField(f) && f.autoShrink !== false) {
+    const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+    const minFs = isLongAccountNameField(f) ? 2.5 : 8;
+    autoShrinkNameFont(ctrl, minFs, baseFs);
+  }
+
+  scheduleSave();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
     }
 
     else if (f.type === 'select') {
@@ -1721,6 +1805,13 @@ cb.onchange = () => {
         f.value = v;
         setValueById(f.id, v);
         applyMirror(f, v);
+          // ✅ 이름칸 입력 중 재축소
+  if (isNameField(f) && f.autoShrink !== false) {
+    const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+    const minFs = isLongAccountNameField(f) ? 2.5 : 8;
+    autoShrinkNameFont(ctrl, minFs, baseFs);
+  }
+
 
         scheduleSave();
         evaluateAffBanner();
@@ -2467,38 +2558,42 @@ const treatAsTextarea =
       if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
     }
 
-    else if (f.type === 'select') {
-      ctrl = document.createElement('select');
+else if (f.type === 'select') {
+  ctrl = document.createElement('select');
 
-      const phText = (f.placeholder || '').trim();
-      if (phText) {
-        const op0 = document.createElement('option');
-        op0.value = '';
-        op0.textContent = phText;
-        op0.disabled = true;
-        op0.hidden = true;
-        ctrl.appendChild(op0);
-      }
+  const phText = (f.placeholder || '').trim();
+  if (phText) {
+    const op0 = document.createElement('option');
+    op0.value = '';
+    op0.textContent = phText;
+    op0.disabled = true;
+    op0.hidden = true;
+    ctrl.appendChild(op0);
+  }
 
-      (f.options || []).forEach(o => {
-        const op = document.createElement('option');
-        op.value = op.textContent = o;
-        ctrl.appendChild(op);
-      });
+  (f.options || []).forEach(o => {
+    const op = document.createElement('option');
+    op.value = op.textContent = o;
+    ctrl.appendChild(op);
+  });
 
-      ctrl.value = f.value ?? '';
-      if (f.locked || lockByPlaceholder) ctrl.disabled = true;
+  ctrl.value = f.value ?? '';
+  if (f.locked || lockByPlaceholder) ctrl.disabled = true;
 
-      w.style.height = (f.inputHeight ?? 28) + 'px';
-      w.style.setProperty('--ih', (f.inputHeight ?? 28) + 'px');
+  w.style.height = (f.inputHeight ?? 28) + 'px';
+  w.style.setProperty('--ih', (f.inputHeight ?? 28) + 'px');
 
-      const pv = document.createElement('div');
-      pv.className = 'print-value';
-      const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
-      pv.textContent = selText;
-      w.appendChild(pv);
-    }
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+  const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
+  pv.textContent = selText;
+  w.appendChild(pv);
 
+  requestAnimationFrame(() => {
+    const baseFs = f.fontSize || 14;
+    autoShrinkPrintText(pv, selText, 5, baseFs);
+  });
+}
     else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
@@ -2542,17 +2637,57 @@ if (f.locked || lockByPlaceholder) cb.disabled = true;
       });
     }
 
-    else {
-      ctrl = document.createElement('input');
-      ctrl.type = 'text';
+else {
+  ctrl = document.createElement('input');
+  ctrl.type = 'text';
 
-      if (isHandSign) ctrl.value = '';
-      else ctrl.value = f.value ?? '';
+  const textValue = isHandSign ? '' : (f.value ?? '');
+  ctrl.value = textValue;
 
-      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
-      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
-      if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
+  if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+  if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+  if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
+
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+  pv.textContent = textValue;
+  w.appendChild(pv);
+
+requestAnimationFrame(() => {
+  const live = f.id
+    ? overlay.querySelector(`.field[data-id="${CSS.escape(String(f.id))}"] input[type="text"]`)
+    : null;
+
+let baseFs = f.fontSize || 14;
+const isName = isNameField(f);
+let minFs = isName ? 1.5 : 8;
+
+  if (live) {
+    const cs = getComputedStyle(live);
+    pv.style.fontFamily = cs.fontFamily;
+    pv.style.fontWeight = cs.fontWeight;
+    pv.style.letterSpacing = cs.letterSpacing;
+    pv.style.textAlign = cs.textAlign;
+    pv.style.lineHeight = cs.lineHeight;
+    pv.style.paddingLeft = cs.paddingLeft;
+    pv.style.paddingRight = cs.paddingRight;
+    pv.style.transform = cs.transform === 'none' ? 'translateY(-0.02em)' : cs.transform;
+
+    const liveFs = parseFloat(cs.fontSize);
+    if (!Number.isNaN(liveFs)) {
+      baseFs = liveFs;
+      pv.style.fontSize = liveFs + 'px';
     }
+  }
+
+  // ✅ 이름칸도 출력 DOM 기준으로 한 번 더 맞춤
+  autoShrinkPrintText(pv, textValue, minFs, baseFs);
+
+  setTimeout(() => {
+    autoShrinkPrintText(pv, textValue, minFs, baseFs);
+  }, 0);
+});
+}
 
     if (f.color) ctrl.style.color = f.color;
     if (f.textAlign) { ctrl.style.textAlign = f.textAlign; w.style.setProperty('--ta', f.textAlign); }
@@ -2587,19 +2722,44 @@ function buildPrintAll(){
     container.appendChild(pageWrap);
   });
 
-  requestAnimationFrame(()=>{
+  requestAnimationFrame(() => {
     autosizeAllTextareas(container);
   });
+
   return container;
 }
 
 async function printAllNow(){
- forceMirrorPlan(); // ✅ 인쇄 직전 planecho 강제 채움
-  const container=buildPrintAll();
-  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch{} }
+  forceMirrorPlan();
+
+  const container = buildPrintAll();
+
+  // ✅ 측정용으로만 잠깐 보이게
+  container.style.display = 'block';
+  container.style.visibility = 'hidden';
+  container.style.position = 'absolute';
+  container.style.left = '0';
+  container.style.top = '0';
+  container.style.width = '210mm';
+  container.style.pointerEvents = 'none';
+
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch {}
+  }
+
   await waitForImages(container);
-  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-  setTimeout(()=>window.print(),0);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  // ✅ 측정 끝나면 인쇄 직전에 인라인 스타일 제거
+  container.style.display = '';
+  container.style.visibility = '';
+  container.style.position = '';
+  container.style.left = '';
+  container.style.top = '';
+  container.style.width = '';
+  container.style.pointerEvents = '';
+
+  setTimeout(() => window.print(), 0);
 }
 async function forcePrintBlankForm(){
   overlay.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
@@ -2622,7 +2782,16 @@ document.addEventListener('keydown', async (e) => {
 }, true);
 window.addEventListener('afterprint', () => {
   try {
-    document.getElementById('printAll').innerHTML = '';
+    const container = document.getElementById('printAll');
+    container.innerHTML = '';
+    container.style.display = '';
+    container.style.visibility = '';
+    container.style.position = '';
+    container.style.left = '';
+    container.style.top = '';
+    container.style.width = '';
+    container.style.pointerEvents = '';
+    container.style.opacity = '';
   } catch (e) {}
 });
 /* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
@@ -2802,7 +2971,18 @@ window.addEventListener('beforeprint', () => {
   } catch (e) { console.error(e); }
 });
 window.addEventListener('afterprint', () => {
-  try { document.getElementById('printAll').innerHTML = ''; } catch (e) {}
+  try {
+    const container = document.getElementById('printAll');
+    container.innerHTML = '';
+    container.style.display = '';
+    container.style.visibility = '';
+    container.style.position = '';
+    container.style.left = '';
+    container.style.top = '';
+    container.style.width = '';
+    container.style.pointerEvents = '';
+    container.style.opacity = '';
+  } catch (e) {}
 });
 function setTopTitle() {
   const params = new URLSearchParams(location.search);
