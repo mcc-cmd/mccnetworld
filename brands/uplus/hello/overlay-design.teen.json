@@ -58,9 +58,9 @@
           "checkSize": 18,
           "inputHeight": 16,
           "textAlign": "center",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -89,9 +89,9 @@
           "checkSize": 24,
           "inputHeight": 16,
           "textAlign": "center",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -120,9 +120,9 @@
           "checkSize": 18,
           "inputHeight": 16,
           "textAlign": "center",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -151,9 +151,9 @@
           "checkSize": 18,
           "inputHeight": 15,
           "textAlign": "",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "유효기간",
@@ -182,9 +182,9 @@
           "locked": true,
           "lockOnPh": false,
           "textAlign": "",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "유심",
@@ -221,9 +221,9 @@
           "locked": false,
           "lockOnPh": false,
           "textAlign": "center",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "유심번호",
@@ -252,9 +252,9 @@
           "locked": false,
           "lockOnPh": false,
           "textAlign": "center",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "희망번호",
@@ -283,9 +283,9 @@
           "locked": false,
           "lockOnPh": false,
           "textAlign": "",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "번호이동",
@@ -314,9 +314,9 @@
           "locked": false,
           "lockOnPh": false,
           "textAlign": "",
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "통신사명",
@@ -345,9 +345,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "자필 성함싸인",
@@ -405,9 +405,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "주소",
@@ -436,16 +436,16 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "전통신사",
           "label": "",
           "type": "radio",
-          "x": 68.5342667992907,
-          "y": 67.40163200287418,
+          "x": 68.53295791887463,
+          "y": 67.40162713203804,
           "w": 19.910967783535714,
           "required": false,
           "options": [
@@ -476,37 +476,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
-        },
-        {
-          "id": "mvnoHint",
-          "label": "",
-          "type": "text",
-          "x": 69.78502603604258,
-          "y": 70.00320403601378,
-          "w": 25.01675977653631,
-          "inputHeight": 22,
-          "fontSize": 10,
-          "placeholder": "MVNO 선택시 기존 통신사 필수 작성",
-          "locked": true,
-          "radioSize": 18,
-          "checkSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "required": false,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "textAlign": "",
-          "mask": "",
-          "maskRe": "",
-          "autoDate": "",
-          "lockOnPh": false,
+          "autoShrink": true,
           "value": ""
         },
         {
@@ -568,9 +539,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "동의합니다",
@@ -599,9 +570,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "년",
@@ -688,7 +659,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "26"
+          "value": "27"
         },
         {
           "id": "판매점명",
@@ -717,9 +688,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "연락처",
@@ -748,9 +719,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "판매자명",
@@ -779,9 +750,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "신규/번이",
@@ -816,9 +787,9 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "text_1766732252703",
@@ -847,9 +818,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "text_1766732309612",
@@ -878,9 +849,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "법대 자필 성함싸인 입니다",
@@ -909,9 +880,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "가입 유형 체크",
@@ -969,9 +940,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         }
       ]
     },
@@ -1009,7 +980,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
           "autoShrink": true
         }
@@ -1053,7 +1023,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
           "autoShrink": true
         }
@@ -1089,7 +1058,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
           "autoShrink": true
         },
@@ -1120,7 +1088,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
           "autoShrink": true
         }
