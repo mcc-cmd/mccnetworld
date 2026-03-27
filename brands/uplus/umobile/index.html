@@ -362,25 +362,11 @@
   display:none !important;
 }
 
-#printAll .field select,
-#printAll .field input[type="text"]{
-  display:none !important;
-}
-  #printAll .field{min-height:var(--ih, 28px) !important;}
+
+#printAll .field{min-height:var(--ih, 28px) !important;}
 
 #printAll .field .print-value{
-  display:flex !important;
-  align-items:center !important;
-  color:#000 !important;
-  position:absolute !important;
-  inset:0 !important;
-  padding:0 1px !important;
-  height:100% !important;
-  white-space:nowrap !important;
-  word-break:normal !important;
-  overflow:hidden !important;
-  text-overflow:clip !important;
-  box-sizing:border-box !important;
+  display:none !important;
 }
   #printAll .field textarea{
     min-height:5px !important;
@@ -388,7 +374,18 @@
     resize:none !important;
     max-height:none !important;
   }
-
+#printAll .field input[type="text"],
+#printAll .field select,
+#printAll .field textarea{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  color:#000 !important;
+  background:transparent !important;
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
+}
   #printAll .field.radio.noText .radio-item span{display:none !important;}
   #printAll .field.radio.noText .radio-item{
     border:none !important;
@@ -2964,26 +2961,6 @@ function enableWrapAllTextFields(){
 }
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
-window.addEventListener('beforeprint', () => {
-  try {
-    forceMirrorPlan();   // ✅ 여기 추가
-    buildPrintAll();
-  } catch (e) { console.error(e); }
-});
-window.addEventListener('afterprint', () => {
-  try {
-    const container = document.getElementById('printAll');
-    container.innerHTML = '';
-    container.style.display = '';
-    container.style.visibility = '';
-    container.style.position = '';
-    container.style.left = '';
-    container.style.top = '';
-    container.style.width = '';
-    container.style.pointerEvents = '';
-    container.style.opacity = '';
-  } catch (e) {}
-});
 function setTopTitle() {
   const params = new URLSearchParams(location.search);
   const doc = params.get('doc');
