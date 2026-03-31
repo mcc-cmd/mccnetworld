@@ -585,6 +585,15 @@
   font-weight:700;
   color:var(--fgc,#fff);
 }
+.field.selectLike .select-display.device-one-line{
+  white-space:nowrap !important;
+  word-break:normal !important;
+  overflow:hidden !important;
+  text-overflow:clip !important;
+  overflow-wrap:normal !important;
+  line-height:1.0 !important;
+  transform:translateY(-0.02em) !important;
+}
   /* ✅ [추가] 인쇄 시 검정화면(오버레이/모달) 방지 */
   @media print{
     #msgModal,
@@ -1195,6 +1204,41 @@ function fitTextToWidth(el, maxPx = 20, minPx = 12){
     el.style.fontSize = minPx + 'px';
   }catch(_){}
 }
+function fitStringToWidth(text, widthPx, styleSourceEl, maxPx = 20, minPx = 12){
+  try{
+    const raw = String(text ?? '').replace(/\n+/g,' ').trim();
+    if(!raw) return maxPx;
+
+    let meas = document.getElementById('__measure_span__');
+    if (!meas) {
+      meas = document.createElement('span');
+      meas.id = '__measure_span__';
+      meas.style.position = 'fixed';
+      meas.style.visibility = 'hidden';
+      meas.style.whiteSpace = 'nowrap';
+      meas.style.left = '-9999px';
+      document.body.appendChild(meas);
+    }
+
+    const style = getComputedStyle(styleSourceEl);
+    meas.style.fontFamily = style.fontFamily;
+    meas.style.fontWeight = style.fontWeight;
+    meas.style.fontStyle  = style.fontStyle;
+    meas.style.letterSpacing = style.letterSpacing;
+    meas.style.textTransform  = style.textTransform;
+
+    for (let px = maxPx; px >= minPx; px -= 0.5) {
+      meas.style.fontSize = px + 'px';
+      meas.textContent = raw;
+      if (meas.getBoundingClientRect().width <= widthPx) {
+        return px;
+      }
+    }
+    return minPx;
+  }catch(_){
+    return minPx;
+  }
+}
 function isNameField(f){
   const id = String(f?.id || '').toLowerCase();
   const label = String(f?.label || '').toLowerCase();
@@ -1267,6 +1311,7 @@ function parsePackedId(v){
 
 function setSelectDisplay(wrapEl, selEl, f){
   if(!wrapEl || !selEl) return;
+
   let d = wrapEl.querySelector('.select-display');
   if(!d){
     d = document.createElement('div');
@@ -1274,11 +1319,39 @@ function setSelectDisplay(wrapEl, selEl, f){
     wrapEl.appendChild(d);
   }
 
+  const fid = String(f?.id || '').toLowerCase();
+  const flabel = String(f?.label || '').toLowerCase();
+
+  const isDeviceSelect =
+    fid === 'deviceid' ||
+    fid === 'device' ||
+    fid.includes('단말') ||
+    fid.includes('모델') ||
+    fid.includes('핸드폰모델명') ||
+    flabel.includes('단말') ||
+    flabel.includes('모델') ||
+    flabel.includes('핸드폰모델명');
+
+  d.classList.remove('device-one-line');
+
   const text = (selEl.options[selEl.selectedIndex] || {}).textContent || '';
   d.textContent = text;
 
   const maxPx = Number.isFinite(f?.fontSize) ? f.fontSize : 20;
+
+if (isDeviceSelect) {
+  d.classList.add('device-one-line');
+
+  const style = getComputedStyle(selEl);
+  const padL = parseFloat(style.paddingLeft) || 0;
+  const padR = parseFloat(style.paddingRight) || 0;
+  const inner = selEl.clientWidth - padL - padR;
+
+  const fitted = fitStringToWidth(text, inner, selEl, maxPx, 10);
+  d.style.fontSize = fitted + 'px';
+} else {
   fitSelectDisplay(d, maxPx, 10);
+}
 }
 
 const refitAllSelects = () => {
@@ -2313,9 +2386,10 @@ if (f.id === 'extraSubsidy') {
 }
 const shouldShrink = (f.autoShrink !== false);
 const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
+const minPx = isNameField(f) ? 8 : 12;
 
 if (shouldShrink) {
-  fitTextToWidth(ctrl, maxPx, 12);
+  fitTextToWidth(ctrl, maxPx, minPx);
 } else {
   ctrl.classList.remove('fit-one-line');
   ctrl.style.fontSize = maxPx + 'px';
@@ -2357,9 +2431,10 @@ if (ctrl && ctrl.tagName === 'INPUT' && ctrl.type === 'text') {
   requestAnimationFrame(() => {
     const shouldShrink = (f.autoShrink !== false);
     const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
+    const minPx = isNameField(f) ? 8 : 12;
 
     if (shouldShrink) {
-      fitTextToWidth(ctrl, maxPx, 12);
+      fitTextToWidth(ctrl, maxPx, minPx);
     } else {
       ctrl.classList.remove('fit-one-line');
       ctrl.style.fontSize = maxPx + 'px';
@@ -2589,9 +2664,10 @@ if (inner && inner.tagName === 'TEXTAREA') {
 if (inner && inner.tagName === 'INPUT' && inner.type === 'text') {
   const shouldShrink = (f.autoShrink !== false);
   const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
+  const minPx = isNameField(f) ? 8 : 12;
 
   if (shouldShrink) {
-    fitTextToWidth(inner, maxPx, 12);
+    fitTextToWidth(inner, maxPx, minPx);
   } else {
     inner.classList.remove('fit-one-line');
     inner.style.fontSize = maxPx + 'px';
@@ -2986,8 +3062,8 @@ if (treatAsTextarea) {
 
   if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
 
-  const pv = document.createElement('div');
-  pv.className = 'print-value';
+const pv = document.createElement('div');
+pv.className = 'print-value print-value-ta';
   pv.textContent = ctrl.value || '';
   pv.style.fontSize = (f.fontSize ?? 14) + 'px';
   pv.style.whiteSpace = 'pre-wrap';
@@ -3028,14 +3104,49 @@ if (treatAsTextarea) {
       if (f.locked || lockByPlaceholder) ctrl.disabled = true;
 
 const pv = document.createElement('div');
-pv.className = 'print-value print-value-ta';
+pv.className = 'print-value';
+
+const fid = String(f.id || '').toLowerCase();
+const flabel = String(f.label || '').toLowerCase();
+
+const isDeviceSelect =
+  fid === 'deviceid' ||
+  fid === 'device' ||
+  fid.includes('단말') ||
+  fid.includes('모델') ||
+  fid.includes('핸드폰모델명') ||
+  flabel.includes('단말') ||
+  flabel.includes('모델') ||
+  flabel.includes('핸드폰모델명');
+
 const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
 pv.textContent = selText;
 pv.style.fontSize = (f.fontSize ?? 14) + 'px';
 w.appendChild(pv);
 
 requestAnimationFrame(() => {
+  const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
+
+if (isDeviceSelect) {
+  const style = getComputedStyle(ctrl);
+  const padL = parseFloat(style.paddingLeft) || 0;
+  const padR = parseFloat(style.paddingRight) || 0;
+  const inner = ctrl.clientWidth - padL - padR;
+
+  const fitted = fitStringToWidth(selText, inner, ctrl, maxPx, 9);
+  pv.style.fontSize = fitted + 'px';
+  pv.style.whiteSpace = 'nowrap';
+  pv.style.wordBreak = 'normal';
+  pv.style.overflowWrap = 'normal';
+  pv.style.overflow = 'hidden';
+  pv.style.textOverflow = 'clip';
+  pv.style.lineHeight = '1.0';
+  pv.style.transform = 'translateY(-0.02em)';
+  pv.style.justifyContent = 'flex-start';
+  pv.style.paddingLeft = '1px';
+} else {
   fitSelectDisplay(pv, Number(f.fontSize || 20), 10);
+}
 });
     }
     else if (f.type === 'checkbox') {
@@ -3083,14 +3194,15 @@ w.appendChild(pv);
 requestAnimationFrame(() => {
   const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
 
-  if (shouldShrink) {
-    fitTextToWidth(ctrl, maxPx, 8);
-    pv.style.fontSize = ctrl.style.fontSize || (maxPx + 'px');
-    pv.classList.add('fit-one-line');
-    pv.style.whiteSpace = 'nowrap';
-    pv.style.overflow = 'hidden';
-    pv.style.textOverflow = 'clip';
-  } else {
+if (shouldShrink) {
+  const minPx = isNameField(f) ? 8 : 12;
+  fitTextToWidth(ctrl, maxPx, minPx);
+  pv.style.fontSize = ctrl.style.fontSize || (maxPx + 'px');
+  pv.classList.add('fit-one-line');
+  pv.style.whiteSpace = 'nowrap';
+  pv.style.overflow = 'hidden';
+  pv.style.textOverflow = 'clip';
+} else {
     ctrl.classList.remove('fit-one-line');
     ctrl.style.fontSize = maxPx + 'px';
 
