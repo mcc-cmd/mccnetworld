@@ -1274,7 +1274,7 @@
           "borderWidth": 2,
           "bgTransparent": true,
           "bgColor": "transparent",
-          "fontSize": 10,
+          "fontSize": 14,
           "textAlign": "center",
           "mask": "number",
           "maskRe": "",
