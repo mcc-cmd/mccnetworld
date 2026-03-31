@@ -2645,45 +2645,39 @@ else {
   if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
   if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
 
-  const pv = document.createElement('div');
-  pv.className = 'print-value';
-  pv.textContent = textValue;
-  w.appendChild(pv);
+  requestAnimationFrame(() => {
+    const live = f.id
+      ? overlay.querySelector(`.field[data-id="${CSS.escape(String(f.id))}"] input[type="text"]`)
+      : null;
 
-requestAnimationFrame(() => {
-  const live = f.id
-    ? overlay.querySelector(`.field[data-id="${CSS.escape(String(f.id))}"] input[type="text"]`)
-    : null;
+    let baseFs = f.fontSize || 14;
+    const isName = isNameField(f);
+    let minFs = isName ? 1.5 : 8;
 
-let baseFs = f.fontSize || 14;
-const isName = isNameField(f);
-let minFs = isName ? 1.5 : 8;
+    if (live) {
+      const cs = getComputedStyle(live);
+      ctrl.style.fontFamily = cs.fontFamily;
+      ctrl.style.fontWeight = cs.fontWeight;
+      ctrl.style.letterSpacing = cs.letterSpacing;
+      ctrl.style.textAlign = cs.textAlign;
+      ctrl.style.lineHeight = cs.lineHeight;
+      ctrl.style.paddingLeft = cs.paddingLeft;
+      ctrl.style.paddingRight = cs.paddingRight;
+      ctrl.style.transform = cs.transform === 'none' ? 'translateY(-0.02em)' : cs.transform;
 
-  if (live) {
-    const cs = getComputedStyle(live);
-    pv.style.fontFamily = cs.fontFamily;
-    pv.style.fontWeight = cs.fontWeight;
-    pv.style.letterSpacing = cs.letterSpacing;
-    pv.style.textAlign = cs.textAlign;
-    pv.style.lineHeight = cs.lineHeight;
-    pv.style.paddingLeft = cs.paddingLeft;
-    pv.style.paddingRight = cs.paddingRight;
-    pv.style.transform = cs.transform === 'none' ? 'translateY(-0.02em)' : cs.transform;
-
-    const liveFs = parseFloat(cs.fontSize);
-    if (!Number.isNaN(liveFs)) {
-      baseFs = liveFs;
-      pv.style.fontSize = liveFs + 'px';
+      const liveFs = parseFloat(cs.fontSize);
+      if (!Number.isNaN(liveFs)) {
+        baseFs = liveFs;
+        ctrl.style.fontSize = liveFs + 'px';
+      }
     }
-  }
 
-  // ✅ 이름칸도 출력 DOM 기준으로 한 번 더 맞춤
-  autoShrinkPrintText(pv, textValue, minFs, baseFs);
+    autoShrinkPrintText(ctrl, textValue, minFs, baseFs);
 
-  setTimeout(() => {
-    autoShrinkPrintText(pv, textValue, minFs, baseFs);
-  }, 0);
-});
+    setTimeout(() => {
+      autoShrinkPrintText(ctrl, textValue, minFs, baseFs);
+    }, 0);
+  });
 }
 
     if (f.color) ctrl.style.color = f.color;
