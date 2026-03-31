@@ -1337,7 +1337,11 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
     const cs = getComputedStyle(el);
     const padL = parseFloat(cs.paddingLeft) || 0;
     const padR = parseFloat(cs.paddingRight) || 0;
-    const innerW = el.clientWidth - padL - padR;
+
+    // ✅ 실제 input 렌더링 오차 + 끝글자 잘림 방지
+    const safeGap = 10;
+
+    const innerW = el.clientWidth - padL - padR - safeGap;
     if (innerW <= 0) return;
 
     const base = parseFloat(el.dataset.baseFs || cs.fontSize || '14') || 14;
@@ -1346,7 +1350,7 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
 
     el.dataset.baseFs = String(base);
 
-    const text = String(el.value || el.textContent || '').trim();
+    const text = String(el.value || el.textContent || '');
     if (!text) {
       el.style.fontSize = base + 'px';
       return;
@@ -1375,6 +1379,7 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
     for (let px = max; px >= min; px -= 0.1) {
       span.style.fontSize = px + 'px';
       span.textContent = text;
+
       if (span.getBoundingClientRect().width <= innerW) {
         el.style.fontSize = px + 'px';
         return;
@@ -1471,6 +1476,21 @@ function isLongAccountNameField(f){
   return /(자동이체|예금주|계좌주|명의자|납부자)/i.test(text);
 }
 
+function getNameFieldMinFont(f){
+  if (isLongAccountNameField(f)) return 2.5;
+
+  const text = [
+    String(f.label || ''),
+    String(f.id || ''),
+    String(f.placeholder || '')
+  ].join(' ');
+
+  // 일반 고객명/성명/법인명도 더 내려갈 수 있게 완화
+  if (/(가입자명|고객명|법인명|성명|이름|name|custname)/i.test(text)) return 5;
+
+  return 6;
+}
+
 function setupNameAutoShrink(ctrl, f){
   if (f.autoShrink === false) return;
   if (!isNameField(f)) return;
@@ -1480,7 +1500,7 @@ function setupNameAutoShrink(ctrl, f){
   const run = () => {
     const cs = getComputedStyle(ctrl);
     const baseFs = f.fontSize || parseFloat(cs.fontSize) || 14;
-    const minFs = isLongAccountNameField(f) ? 2.5 : 8;
+    const minFs = getNameFieldMinFont(f);
     autoShrinkNameFont(ctrl, minFs, baseFs);
   };
 
@@ -1619,7 +1639,7 @@ ctrl.oninput = () => {
 
   if (isNameField(f) && f.autoShrink !== false) {
     const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
-    const minFs = isLongAccountNameField(f) ? 2.5 : 8;
+    const minFs = getNameFieldMinFont(f);
     autoShrinkNameFont(ctrl, minFs, baseFs);
   }
 
@@ -1805,7 +1825,7 @@ cb.onchange = () => {
           // ✅ 이름칸 입력 중 재축소
   if (isNameField(f) && f.autoShrink !== false) {
     const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
-    const minFs = isLongAccountNameField(f) ? 2.5 : 8;
+    const minFs = getNameFieldMinFont(f);
     autoShrinkNameFont(ctrl, minFs, baseFs);
   }
 
