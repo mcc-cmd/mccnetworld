@@ -92,8 +92,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 60.22151284305062,
-          "y": 22.737991881567986,
+          "x": 60.221275484125734,
+          "y": 22.73771376768265,
           "w": 10.111110628858059,
           "required": false,
           "wrap": true,
@@ -184,7 +184,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "inputHeight": 16,
           "radioSize": 18,
           "checkSize": 18,
@@ -200,7 +199,8 @@
           "placeholder": "고객명",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "생년월일",
@@ -222,7 +222,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -238,7 +237,8 @@
           "placeholder": "고객생년월일",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "주소",
@@ -260,7 +260,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -276,7 +275,8 @@
           "placeholder": "★주소상세기재★  00도/00시/00구(신주소)/ 전부 기재",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자동이체",
@@ -304,7 +304,6 @@
           ],
           "radioSize": 18,
           "radioGap": 40,
-          "value": "",
           "inputHeight": 25,
           "checkSize": 18,
           "color": "#000000",
@@ -318,7 +317,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "은행/카드명",
@@ -340,7 +340,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -356,7 +355,8 @@
           "placeholder": "은행/카드명",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "카드/계좌번호",
@@ -378,7 +378,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "inputHeight": 16,
           "radioSize": 18,
           "checkSize": 18,
@@ -394,7 +393,8 @@
           "placeholder": "계좌/카드번호",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "카드유효기간",
@@ -416,7 +416,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -432,7 +431,8 @@
           "placeholder": "카드유효기간",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "납부자명",
@@ -454,7 +454,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "inputHeight": 13,
           "radioSize": 18,
           "checkSize": 18,
@@ -470,7 +469,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "납부자생년월일",
@@ -492,7 +492,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -508,7 +507,8 @@
           "placeholder": "납부자생년월일",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "희망번호",
@@ -517,7 +517,7 @@
           "x": 31.998580457995573,
           "y": 54.71215548522578,
           "w": 16.666665739836574,
-          "required": true,
+          "required": false,
           "wrap": true,
           "verticalAlign": "middle",
           "autoShrink": true,
@@ -530,7 +530,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -546,7 +545,8 @@
           "placeholder": "희망번호",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "유심번호",
@@ -568,7 +568,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -584,7 +583,8 @@
           "placeholder": "유심번호",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "번호이동",
@@ -593,7 +593,7 @@
           "x": 33.777778877917555,
           "y": 64.1405326724836,
           "w": 21.444443193600584,
-          "required": true,
+          "required": false,
           "wrap": true,
           "verticalAlign": "middle",
           "autoShrink": true,
@@ -606,7 +606,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -622,7 +621,8 @@
           "placeholder": "번호이동 번호",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "전통신사",
@@ -631,7 +631,7 @@
           "x": 27.664776091527226,
           "y": 65.08261468865199,
           "w": 22.777776436511477,
-          "required": true,
+          "required": false,
           "wrap": true,
           "verticalAlign": "middle",
           "autoShrink": true,
@@ -652,7 +652,6 @@
           ],
           "radioSize": 18,
           "radioGap": 15,
-          "value": "",
           "checkSize": 18,
           "color": "#000000",
           "inputHeight": 22,
@@ -666,7 +665,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "통신사명",
@@ -688,7 +688,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -704,7 +703,8 @@
           "placeholder": "통신사명",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "년",
@@ -726,7 +726,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "2026",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -742,7 +741,8 @@
           "placeholder": "",
           "autoDate": "year",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "2026"
         },
         {
           "id": "월",
@@ -764,7 +764,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "04",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -780,7 +779,8 @@
           "placeholder": "",
           "autoDate": "month",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "04"
         },
         {
           "id": "일",
@@ -802,7 +802,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "01",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -818,7 +817,8 @@
           "placeholder": "",
           "autoDate": "day",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "01"
         },
         {
           "id": "IMEI 1",
@@ -840,7 +840,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -856,7 +855,8 @@
           "placeholder": "eSIM 개통시 필수 입력 값입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "IMEI 2",
@@ -878,7 +878,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -894,7 +893,8 @@
           "placeholder": "eSIM 개통시 필수 입력 값입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "EID",
@@ -916,7 +916,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -933,7 +932,8 @@
           "placeholder": "eSIM 개통시 필수 입력 값입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -955,7 +955,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -971,7 +970,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -993,7 +993,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1009,7 +1008,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "신규/번이",
@@ -1037,7 +1037,6 @@
           ],
           "radioSize": 18,
           "radioGap": 63,
-          "value": "",
           "checkSize": 18,
           "color": "#000000",
           "inputHeight": 25,
@@ -1051,7 +1050,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "자필기재",
@@ -1073,7 +1073,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1089,7 +1088,46 @@
           "placeholder": "빨간 네모칸 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
+        },
+        {
+          "id": "totalFee",
+          "label": "",
+          "type": "text",
+          "x": 31.887469354419668,
+          "y": 22.738157311379087,
+          "w": 8.777777385947171,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 14,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "fontSize": 10,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1116,7 +1154,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1154,7 +1191,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "inputHeight": 20,
           "radioSize": 18,
           "checkSize": 18,
@@ -1197,7 +1233,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1235,7 +1270,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1273,7 +1307,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1311,7 +1344,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1349,7 +1381,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1392,7 +1423,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1430,7 +1460,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1473,7 +1502,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1511,7 +1539,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1549,7 +1576,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1587,7 +1613,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1625,7 +1650,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1662,8 +1686,7 @@
           "bgTransparent": true,
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
-          "radioOuterBorderWidth": 1,
-          "value": ""
+          "radioOuterBorderWidth": 1
         },
         {
           "id": "년",
@@ -1685,7 +1708,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "2026",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1701,7 +1723,8 @@
           "placeholder": "",
           "autoDate": "year",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "2026"
         },
         {
           "id": "년",
@@ -1722,8 +1745,7 @@
           "bgTransparent": true,
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
-          "radioOuterBorderWidth": 1,
-          "value": ""
+          "radioOuterBorderWidth": 1
         },
         {
           "id": "월",
@@ -1745,7 +1767,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "04",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1761,7 +1782,8 @@
           "placeholder": "",
           "autoDate": "month",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "04"
         },
         {
           "id": "월",
@@ -1783,7 +1805,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "01",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1799,7 +1820,8 @@
           "placeholder": "",
           "autoDate": "day",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": "01"
         }
       ]
     }
