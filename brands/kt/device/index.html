@@ -1073,7 +1073,29 @@ function applyMirror(sourceField, value) {
   const targets = sourceField.mirrorTo || [];
   targets.forEach(tid => setValueById(tid, value));
 }
+function syncRadioValue(group, value){
+  setValueById(group, value);
+  refreshConditionalInvalid();
+  scheduleSave();
 
+  if(group === '전통신사' && value === 'MVNO'){
+    const el = elById['통신사명'];
+    if(el){
+      setTimeout(() => el.focus(), 50);
+    }
+  }
+}
+function syncBoxesFromRadioValues(){
+  const joinVal = String(valuesById['신규/번이'] ?? '').trim();
+valuesById['신규_box'] = (joinVal === '신규');
+valuesById['번이_box'] = (joinVal === '번이');
+
+  const carrierVal = String(valuesById['전통신사'] ?? '').trim();
+  valuesById['carrier_sk_box']   = (carrierVal === 'SK');
+  valuesById['carrier_kt_box']   = (carrierVal === 'KT');
+  valuesById['carrier_lg_box']   = (carrierVal === 'LG');
+  valuesById['carrier_mvno_box'] = (carrierVal === 'MVNO');
+}
 /* ===== 모드/상태 ===== */
 const QS  = new URLSearchParams(location.search);
 const DOC = (QS.get('doc') || 'device').toLowerCase();
@@ -1535,6 +1557,13 @@ const getFieldsByIdAll=id=>{
   return out;
 };
 
+function isProxyRadioField(f){
+  return (
+    f &&
+    f.type === 'radio' &&
+    (f.id === '신규/번이' || f.id === '전통신사')
+  );
+}
 function setOptionsByFieldId(fieldId, optionsArr){
   const list = getFieldsByIdAll(fieldId);
   list.forEach(({f})=>{
@@ -2071,6 +2100,7 @@ function blockTyping(el){
    ✅ render()
 ========================= */
 function render(){
+  syncBoxesFromRadioValues();
   Object.keys(elById).forEach(k => delete elById[k]);
 
   const p = cur();
@@ -2078,6 +2108,8 @@ function render(){
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
+    if (isProxyRadioField(f)) return;
+
     if (Number.isFinite(f.fontSize))     f.fontSize     = clamp(f.fontSize, 5, 32);
     if (Number.isFinite(f.inputHeight))  f.inputHeight  = clamp(f.inputHeight, 5, 60);
 
@@ -2335,14 +2367,79 @@ sel.onchange = () => {
       w.classList.remove('ck-tick','ck-solid','ck-dot');
       w.classList.add('ck-' + style);
 
-      ctrl.onchange = () => {
-        f.value = ctrl.checked;
-        setValueById(f.id, ctrl.checked);
-        applyMirror(f, ctrl.checked);
-        scheduleSave();
+ctrl.onchange = () => {
+  f.value = ctrl.checked;
+  setValueById(f.id, ctrl.checked);
 
-        refreshConditionalInvalid();
-      };
+  const uncheckById = (id) => {
+    const otherEl = elById[id];
+    const otherField = getFieldsByIdAll(id)[0]?.f;
+
+    if (otherEl) otherEl.checked = false;
+    if (otherField) otherField.value = false;
+    valuesById[id] = false;
+  };
+
+  if (ctrl.checked) {
+    // ⭐ 신규/번이 그룹: 하나만 선택
+if (f.id === '신규_box') {
+  uncheckById('번이_box');
+  syncRadioValue('신규/번이', '신규');
+}
+
+if (f.id === '번이_box') {
+  uncheckById('신규_box');
+  syncRadioValue('신규/번이', '번이');
+}
+
+    // ⭐ 전통신사 그룹: 하나만 선택
+    if (f.id === 'carrier_sk_box') {
+      uncheckById('carrier_kt_box');
+      uncheckById('carrier_lg_box');
+      uncheckById('carrier_mvno_box');
+      syncRadioValue('전통신사', 'SK');
+    }
+
+    if (f.id === 'carrier_kt_box') {
+      uncheckById('carrier_sk_box');
+      uncheckById('carrier_lg_box');
+      uncheckById('carrier_mvno_box');
+      syncRadioValue('전통신사', 'KT');
+    }
+
+    if (f.id === 'carrier_lg_box') {
+      uncheckById('carrier_sk_box');
+      uncheckById('carrier_kt_box');
+      uncheckById('carrier_mvno_box');
+      syncRadioValue('전통신사', 'LG');
+    }
+
+    if (f.id === 'carrier_mvno_box') {
+      uncheckById('carrier_sk_box');
+      uncheckById('carrier_kt_box');
+      uncheckById('carrier_lg_box');
+      syncRadioValue('전통신사', 'MVNO');
+    }
+  } else {
+    // ⭐ 체크 해제 시 대표값도 비움
+if (f.id === '신규_box' || f.id === '번이_box') {
+  setValueById('신규/번이', '');
+}
+
+    if (
+      f.id === 'carrier_sk_box' ||
+      f.id === 'carrier_kt_box' ||
+      f.id === 'carrier_lg_box' ||
+      f.id === 'carrier_mvno_box'
+    ) {
+      setValueById('전통신사', '');
+    }
+  }
+
+  applyMirror(f, ctrl.checked);
+  scheduleSave();
+  refreshConditionalInvalid();
+};
 
       lab.style.top  = '0';
       lab.style.left = '24px';
@@ -3062,6 +3159,8 @@ function createPrintDOM(page){
   wrap.appendChild(st);
 
   (page.fields || []).forEach(f => {
+    if (isProxyRadioField(f)) return;  
+
     const w = document.createElement('div');
     w.className =
       'field ' +
@@ -3453,7 +3552,8 @@ async function boot(){
 if (!valuesById.downPayment || String(valuesById.downPayment).trim() === '') {
   valuesById.downPayment = '0';
 }
-  render();
+syncBoxesFromRadioValues();
+render();
   recalcDevicePricing();
   refreshConditionalInvalid();
 }
