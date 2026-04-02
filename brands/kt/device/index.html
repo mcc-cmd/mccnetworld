@@ -2131,7 +2131,20 @@ function render(){
 const _w = (f.w ?? 24);
 w.style.left  = `${f.x}%`;
 w.style.top   = `${f.y}%`;
-w.style.width = `${_w}%`;
+
+if (f.type === 'checkbox') {
+  const boxSize = (f.checkSize ?? f.radioSize ?? 18);
+  w.style.width = boxSize + 'px';
+  w.style.height = boxSize + 'px';
+} else {
+  w.style.width = `${_w}%`;
+
+  if (f.inputHeight) {
+    w.style.height = f.inputHeight + 'px';
+  } else {
+    w.style.height = '';
+  }
+}
 
 if (f.fontSize) w.style.setProperty('--fs', f.fontSize + 'px');
 
@@ -2139,12 +2152,16 @@ if (f.color) w.style.setProperty('--fgc', f.color);
 if (f.textAlign) w.style.setProperty('--ta', f.textAlign);
 else w.style.removeProperty('--ta');
 
-if (f.inputHeight) {
-  w.style.setProperty('--ih', f.inputHeight + 'px');
-  w.style.height = f.inputHeight + 'px';
+if (f.type !== 'checkbox') {
+  if (f.inputHeight) {
+    w.style.setProperty('--ih', f.inputHeight + 'px');
+    w.style.height = f.inputHeight + 'px';
+  } else {
+    w.style.removeProperty('--ih');
+    w.style.height = '';
+  }
 } else {
   w.style.removeProperty('--ih');
-  w.style.height = '';
 }
 
 w.dataset.va = f.verticalAlign || 'middle';
@@ -3167,9 +3184,22 @@ function createPrintDOM(page){
       (f.type === 'radio' ? 'radio ' : '') +
       (f.type === 'checkbox' ? 'checkbox ' : '');
 
-    w.style.left = `${f.x}%`;
-    w.style.top  = `${f.y}%`;
-    w.style.width = `${(f.w ?? 24)}%`;
+w.style.left = `${f.x}%`;
+w.style.top  = `${f.y}%`;
+
+if (f.type === 'checkbox') {
+  const boxSize = (f.checkSize ?? f.radioSize ?? 18);
+  w.style.width = boxSize + 'px';
+  w.style.height = boxSize + 'px';
+} else {
+  w.style.width = `${(f.w ?? 24)}%`;
+
+  if (f.inputHeight) {
+    w.style.height = f.inputHeight + 'px';
+  } else {
+    w.style.height = '';
+  }
+}
 
     if (f.type === 'checkbox' || f.type === 'radio') {
       const tickColor = (f.borderTransparent) ? 'transparent' : (f.borderColor || '#000');
@@ -3185,12 +3215,16 @@ function createPrintDOM(page){
 if (f.textAlign) w.style.setProperty('--ta', f.textAlign);
 else w.style.removeProperty('--ta');
 
-if (f.inputHeight) {
-  w.style.setProperty('--ih', f.inputHeight + 'px');
-  w.style.height = f.inputHeight + 'px';
+if (f.type !== 'checkbox') {
+  if (f.inputHeight) {
+    w.style.setProperty('--ih', f.inputHeight + 'px');
+    w.style.height = f.inputHeight + 'px';
+  } else {
+    w.style.removeProperty('--ih');
+    w.style.height = '';
+  }
 } else {
   w.style.removeProperty('--ih');
-  w.style.height = '';
 }
 
 w.dataset.va = f.verticalAlign || 'middle';

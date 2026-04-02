@@ -242,7 +242,7 @@
         },
         {
           "id": "주소",
-          "label": "D",
+          "label": "",
           "type": "text",
           "x": 23.9984250218082,
           "y": 36.17182518374936,
@@ -818,7 +818,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "01"
+          "value": "02"
         },
         {
           "id": "IMEI 1",
@@ -1111,7 +1111,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1127,7 +1126,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
@@ -1169,7 +1169,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1206,7 +1207,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         }
       ]
     },
@@ -1248,7 +1250,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1285,7 +1288,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1322,7 +1326,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1358,8 +1363,9 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 선택시 성함/싸인 필수 입니다",
           "autoDate": "",
-          "locked": false,
-          "lockOnPh": false
+          "locked": true,
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1396,7 +1402,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         }
       ]
     },
@@ -1821,7 +1828,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "01"
+          "value": "02"
         }
       ]
     }
