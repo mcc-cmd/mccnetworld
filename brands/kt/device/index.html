@@ -1665,7 +1665,7 @@ function clampSplitByLastEdited(msrp, commonSubsidy, otherDiscount, extraSub, do
 let EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = false;
 
 function getExtraSubsidyMax(commonSubsidy){
-  return Math.max(0, Math.floor((Number(commonSubsidy) || 0) * 0.30));
+  return Math.max(0, Math.floor((Number(commonSubsidy) || 0) * 0.15));
 }
 
 function clampExtraSubsidy(extraSub, commonSubsidy){
@@ -1801,7 +1801,7 @@ const limitedExtra = extraLimit.value;
 // ✅ 15% 초과 입력 시 최대치로 보정 + 팝업
 if (extraLimit.exceeded && !EXTRA_SUBSIDY_LIMIT_POPUP_LOCK) {
   EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = true;
-  alert(`추가지원금은 공통지원금의 30%까지만 입력할 수 있습니다.\n최대 입력 가능 금액: ${won(extraLimit.max)}원`);
+  alert(`추가지원금은 공통지원금의 15%까지만 입력할 수 있습니다.\n최대 입력 가능 금액: ${won(extraLimit.max)}원`);
   setTimeout(() => {
     EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = false;
   }, 100);
