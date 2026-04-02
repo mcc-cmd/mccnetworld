@@ -1267,7 +1267,7 @@
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 12,
+          "inputHeight": 19,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",

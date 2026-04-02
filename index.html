@@ -102,36 +102,83 @@ body{
   color:inherit;
   display:inline-flex;
   align-items:center;
+  white-space:nowrap;
 }
 .hd-btn:hover{box-shadow:0 6px 18px rgba(2,6,23,.08)}
 
-/* ✅ 모바일 대응 */
+/* ✅ 기본 모바일 */
 @media (max-width:720px){
-  .hd{
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:8px;
+  .wrap{
+    padding:10px;
   }
+
+  .hd{
+    padding:14px 16px;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .hd strong{
+    width:100%;
+    text-align:center;
+  }
+
   .hd-left{
     position:static;
     transform:none;
     order:1;
     width:100%;
     flex-direction:column;
-    align-items:flex-start;
+    align-items:center;
     gap:6px;
   }
+
   .hd-actions{
     position:static;
     transform:none;
     order:2;
     width:100%;
-    justify-content:flex-end;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
   }
-  .hd-hint{white-space:normal}
+
+  .hd-actions .hd-btn,
+  .hd-left .hd-btn{
+    width:100%;
+    min-height:42px;
+    justify-content:center;
+  }
+
+  .hd-hint{
+    white-space:normal;
+    text-align:center;
+  }
+
+  .stack{
+    padding:14px;
+  }
+
+  .brand-grid{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
 }
 
+/* ✅ 중간 */
+@media (max-width:600px){
+  .hd-actions{
+    grid-template-columns:repeat(2, 1fr);
+  }
+}
+
+/* ✅ 작은 화면 */
+@media (max-width:480px){
+  .hd-actions{
+    grid-template-columns:1fr;
+  }
+}
 /* =========================================================
   [3] 섹션/탭/그리드
 ========================================================= */
@@ -619,7 +666,7 @@ const BRAND_ROUTE = {
   '정규KT번이':     { external: 'https://online.kt.com/itg/online/index.do?prdcId=A8C59E15-A80C-4457-BE40-613A13A86A4F' },
   '웰컴 요금제 신규': { external: 'https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0' },
   '웰컴 요금제 번이': { external: 'https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF' },
-  'KT 유선 동판':  { external: 'https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=3E9818A3-37F5-4FA0-B575-C624AF106F89' },
+  'KT 유선 동판':  { external: 'https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=DA0D973B-4AD8-4E7C-B301-63392D31EAA2' },
 
   'SK텔링크': {
     carrier: 'sk',

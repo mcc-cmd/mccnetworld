@@ -646,6 +646,28 @@ body > [style*="position: fixed"]:not(#printAll){
   background: var(--box-bg, transparent);
   padding: var(--box-pad, 2px);
 }
+.field .fixed-label{
+  width:100%;
+  height:100%;
+  box-sizing:border-box;
+  padding:0 2px;
+  font-size:var(--fs);
+  font-weight:700;
+  font-family:"Noto Sans KR", system-ui, sans-serif;
+  color:var(--fgc,#000);
+  line-height:1;
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+}
+
+@media print{
+  #printAll .field .fixed-label{
+    display:none !important;
+  }
+}
 
   /* ✅ (원하시면) 평상시에도 msgModal 자체를 사용 안 할 경우 */
   /* #msgModal{ display:none !important; } */
@@ -826,6 +848,7 @@ body > [style*="position: fixed"]:not(#printAll){
             <option value="select">드롭다운</option>
             <option value="radio">라디오(단일선택)</option>
             <option value="checkbox">체크박스</option>
+            <option value="label">고정텍스트</option>
           </select>
         </div>
         <div class="row"><div>새 필드 ID</div><input id="newId" placeholder="예: deviceId / planId / subsidy 등"></div>
@@ -2272,6 +2295,26 @@ sel.onchange = () => {
       requestAnimationFrame(() => setSelectDisplay(w, sel, f));
       ctrl = sel;
     }
+    else if (f.type === 'label') {
+  ctrl = document.createElement('div');
+  ctrl.className = 'fixed-label';
+  ctrl.textContent = f.value ?? '';
+  ctrl.style.pointerEvents = 'none';
+  ctrl.style.width = '100%';
+  ctrl.style.height = '100%';
+  ctrl.style.display = 'flex';
+  ctrl.style.alignItems = 'center';
+  ctrl.style.whiteSpace = 'nowrap';
+  ctrl.style.overflow = 'hidden';
+  ctrl.style.textOverflow = 'clip';
+
+  if (f.color) ctrl.style.color = f.color;
+  if (f.textAlign) ctrl.style.justifyContent =
+    f.textAlign === 'center' ? 'center' :
+    f.textAlign === 'right' ? 'flex-end' : 'flex-start';
+
+  if (f.id) elById[f.id] = ctrl;
+}
     else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
@@ -3194,6 +3237,28 @@ if (isDeviceSelect) {
 }
 });
     }
+    else if (f.type === 'label') {
+  ctrl = document.createElement('div');
+  ctrl.className = 'fixed-label';
+  ctrl.textContent = f.value ?? '';
+  ctrl.style.width = '100%';
+  ctrl.style.height = '100%';
+  ctrl.style.display = 'flex';
+  ctrl.style.alignItems = 'center';
+  ctrl.style.whiteSpace = 'nowrap';
+  ctrl.style.overflow = 'hidden';
+  ctrl.style.textOverflow = 'clip';
+
+  if (f.color) ctrl.style.color = f.color;
+  if (f.textAlign) ctrl.style.justifyContent =
+    f.textAlign === 'center' ? 'center' :
+    f.textAlign === 'right' ? 'flex-end' : 'flex-start';
+
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+  pv.textContent = f.value ?? '';
+  w.appendChild(pv);
+}
     else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
