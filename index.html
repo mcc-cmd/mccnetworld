@@ -343,11 +343,14 @@ body{
 .brand .name{ display:none; }
 
 /* 워터마크 */
-.group{
+.group,
+.required-grid-box{
   position: relative;
   overflow: hidden;
 }
-.group::after{
+
+.group::after,
+.required-grid-box::after{
   content:"";
   position:absolute;
   inset:0;
@@ -358,6 +361,12 @@ body{
   opacity:0.10;
   pointer-events:none;
   z-index:0;
+}
+
+.group > *,
+.required-grid-box > *{
+  position:relative;
+  z-index:1;
 }
 .group > *{position:relative;z-index:1}
 /* =========================================================
@@ -487,6 +496,264 @@ body{
 }
 .form-toast.show{display:block}
 
+.required-topbar{
+  display:flex;
+  justify-content:flex-end;
+  margin:0 0 12px;
+}
+
+.required-kind-tabs{
+  margin-bottom:0;
+}
+
+.required-grid-box{
+  border:1px solid #cfd8e3;
+  border-radius:18px;
+  background:#f8fafc;
+  overflow:hidden;
+}
+
+.required-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+}
+
+.required-col{
+  min-width:0;
+}
+
+.required-col + .required-col{
+  border-left:1px solid #cfd8e3;
+}
+
+.required-col-head{
+  height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border-bottom:1px solid #cfd8e3;
+  font-weight:900;
+}
+
+.required-col-body{
+  padding:14px;
+}
+
+.required-dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  display:inline-block;
+}
+
+.required-col[data-carrier="uplus"] .required-dot{
+  background:#8b5cf6;
+}
+.required-col[data-carrier="kt"] .required-dot{
+  background:#0ea5e9;
+}
+.required-col[data-carrier="sk"] .required-dot{
+  background:#2563eb;
+}
+
+.required-col-title{
+  font-weight:900;
+  letter-spacing:-0.2px;
+}
+
+.required-open-btn{
+  width:100%;
+  min-height:42px;
+  justify-content:center;
+  border-radius:12px;
+  font-size:14px;
+}
+
+.required-modal-panel{
+  width:min(1180px, 96vw);
+  height:min(860px, 94vh);
+}
+.required-modal-body{
+  flex:1;
+  overflow:auto;
+  background:#f8fafc;
+  padding:14px;
+}
+.required-modal-toolbar{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:14px;
+}
+.required-brand-tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.required-chip{
+  padding:8px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  cursor:pointer;
+  font-weight:800;
+  font-size:13px;
+}
+.required-chip.active{
+  background:#111827;
+  color:#fff;
+  border-color:#111827;
+}
+.required-board{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.required-table-wrap{
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+}
+.required-table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.required-table th,
+.required-table td{
+  border:1px solid #dbe2ea;
+  padding:12px;
+  vertical-align:top;
+}
+.required-table thead th{
+  background:#0f172a;
+  color:#fff;
+  font-weight:900;
+  text-align:center;
+}
+.required-table tbody th{
+  width:170px;
+  background:#0f172a;
+  color:#fff;
+  font-weight:900;
+  text-align:center;
+  vertical-align:middle !important;
+}
+.required-doc-lines{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  white-space:pre-line;
+}
+.required-doc-lines .warn{
+  color:#ef4444;
+  font-weight:800;
+}
+
+/* 👇 여기부터 추가 */
+.required-doc-lines .blue{
+  color:#2563eb;
+  font-weight:700;
+}
+
+.required-doc-lines .green{
+  color:#16a34a;
+  font-weight:700;
+}
+
+.required-doc-lines .orange{
+  color:#f97316;
+  font-weight:700;
+}
+
+.required-doc-lines .gray{
+  color:#6b7280;
+  font-weight:600;
+}
+
+.required-doc-lines .purple{
+  color:#7c3aed;
+  font-weight:700;
+}
+
+.required-images{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.img-box{
+  position:relative;
+  flex:0 0 calc(50% - 5px);
+  max-width:calc(50% - 5px);
+  overflow:visible;
+}
+
+.required-images img{
+  width:100%;
+  height:auto;
+  display:block;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  object-fit:contain;
+  transition:0.2s;
+}
+
+.img-label{
+  position:absolute;
+  top:8px;
+  left:8px;
+  z-index:2;
+  background:#f97316;
+  color:#fff;
+  font-weight:800;
+  font-size:12px;
+  line-height:1.2;
+  padding:4px 8px;
+  border-radius:6px;
+  white-space:normal;
+  max-width:calc(100% - 16px);
+  word-break:keep-all;
+}
+
+.required-images img:hover{
+  transform:scale(1.05);
+}
+
+@media (max-width:720px){
+  .img-box{
+    flex:0 0 100%;
+    max-width:100%;
+  }
+}
+
+@media (max-width:720px){
+  .required-topbar{
+    justify-content:flex-start;
+  }
+
+  .required-grid{
+    grid-template-columns:1fr;
+  }
+
+  .required-col + .required-col{
+    border-left:none;
+    border-top:1px solid #cfd8e3;
+  }
+
+  .required-table{
+    table-layout:auto;
+  }
+
+  .required-table tbody th{
+    width:110px;
+  }
+}
+
 </style>
 </head>
 
@@ -506,15 +773,58 @@ body{
         <div class="hd-hint">※클릭 시 다운로드※</div>
       </div>
 
-      <div class="hd-actions">
-        <button class="hd-btn" type="button" data-docs="sk">SK 구비서류</button>
-        <button class="hd-btn" type="button" data-docs="kt">KT 구비서류</button>
-        <button class="hd-btn" type="button" data-docs="lg">LG 구비서류</button>
-      </div>
+<div class="hd-actions" style="display:none">
+  <button class="hd-btn" type="button" data-docs="sk">SK 구비서류</button>
+  <button class="hd-btn" type="button" data-docs="kt">KT 구비서류</button>
+  <button class="hd-btn" type="button" data-docs="lg">LG 구비서류</button>
+</div>
     </div>
 
     <div class="stack">
+<div class="section-title">구비 서류</div>
+<div id="requiredDocsSection">
+  <div class="required-topbar">
+    <div class="tabs required-kind-tabs">
+      <button class="tab-btn active" type="button" data-required-kind="adult">성인</button>
+      <button class="tab-btn" type="button" data-required-kind="teen">청소년</button>
+      <button class="tab-btn" type="button" data-required-kind="corp">법인/개인사업자</button>
+    </div>
+  </div>
 
+  <div class="required-grid-box">
+    <div class="required-grid">
+      <div class="required-col" data-carrier="uplus">
+        <div class="required-col-head">
+          <span class="required-dot"></span>
+          <span class="required-col-title">LG</span>
+        </div>
+        <div class="required-col-body">
+          <button class="hd-btn required-open-btn" type="button" data-open-required="uplus">LG 구비서류 보기</button>
+        </div>
+      </div>
+
+      <div class="required-col" data-carrier="kt">
+        <div class="required-col-head">
+          <span class="required-dot"></span>
+          <span class="required-col-title">KT</span>
+        </div>
+        <div class="required-col-body">
+          <button class="hd-btn required-open-btn" type="button" data-open-required="kt">KT 구비서류 보기</button>
+        </div>
+      </div>
+
+      <div class="required-col" data-carrier="sk">
+        <div class="required-col-head">
+          <span class="required-dot"></span>
+          <span class="required-col-title">SK</span>
+        </div>
+        <div class="required-col-body">
+          <button class="hd-btn required-open-btn" type="button" data-open-required="sk">SK 구비서류 보기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
       <div class="section-title">가입 서류</div>
       <div id="joinTabs">
         <div class="tabs">
@@ -552,19 +862,23 @@ body{
     </div>
   </section>
 
-  <!-- 구비서류 모달 -->
-  <div class="modal" id="docsModal" aria-hidden="true">
-    <div class="modal-backdrop" data-close="1"></div>
-    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="구비서류 안내">
-      <div class="modal-head">
-        <strong id="docsTitle">구비서류</strong>
-        <button class="modal-x" id="btnDocsClose" type="button">닫기</button>
+<!-- 구비서류 모달 -->
+<div class="modal" id="docsModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close="1"></div>
+  <div class="modal-panel required-modal-panel" role="dialog" aria-modal="true" aria-label="구비서류 안내">
+    <div class="modal-head">
+      <strong id="docsTitle">구비서류</strong>
+      <button class="modal-x" id="btnDocsClose" type="button">닫기</button>
+    </div>
+    <div class="required-modal-body">
+      <div class="required-modal-toolbar">
+        <div class="required-brand-tabs" id="requiredBrandTabs"></div>
       </div>
-      <div class="modal-body">
-        <img id="docsImg" src="" alt="구비서류 이미지" />
-      </div>
+      <div class="required-board" id="requiredBoard"></div>
     </div>
   </div>
+</div>
+
   <!-- 유심/동판 양식 팝업 -->
   <div class="form-modal" id="formModal" aria-hidden="true">
     <div class="form-backdrop" data-form-close="1"></div>
@@ -942,27 +1256,1040 @@ function wireTabs(containerId, listId, data){
   container.querySelector('.tab-btn.active').click();
 }
 
-/* 구비서류 모달 */
+/* =========================
+   ✅ 구비서류 NEW 시스템
+========================= */
 (function(){
   const modal = document.getElementById('docsModal');
-  const imgEl = document.getElementById('docsImg');
   const titleEl = document.getElementById('docsTitle');
   const closeBtn = document.getElementById('btnDocsClose');
+  const brandTabsEl = document.getElementById('requiredBrandTabs');
+  const boardEl = document.getElementById('requiredBoard');
 
-  imgEl.addEventListener('click', ()=> imgEl.classList.toggle('zoom'));
+  let REQUIRED_KIND = 'adult';
+  let currentCarrier = 'uplus';
+  let currentBrand = '';
 
-  const DOCS = {
-    sk: { title:'SK 구비서류', src:'./assets/docs/required_sk.png' },
-    kt: { title:'KT 구비서류', src:'./assets/docs/required_kt.png' },
-    lg: { title:'LG 구비서류', src:'./assets/docs/required_lg.png' },
+  const COMMON_FOREIGN_MINOR_LINES = [
+    '- 법정대리인신분증',
+    '- 외국인등록증(신분증스캔필요)',
+    '- 명의자등록증(신분증스캔필요)',
+    '구비서류(아래 中 택1)',
+    '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+    '② 가족관계증명서',
+    '③ 외국인등록번호 풀기재+성명 영문',
+    '④ 대사관에서 발급한 입증서류, 한국어 번역 공증서',
+    '⑤ 건강보험증',
+    '⑥ 건강보험자격 확인서_열람용제외',
+    '(신분증과 생년월일 같고 발음이 유사한 경우 정상)',
+    '※ 60일이내 발급'
+  ];
+
+  const COMMON_MINOR_BASIC_LINES = [
+    '법정대리인신분증',
+    '- 주민등록증, 운전면허증',
+    '법대관계 미성립시 추가',
+    '① 가족관계증명서_법대기준',
+    '② 기본증명서(상세)_자녀기준',
+    '※ 60일이내 발급'
+  ];
+
+  const REQUIRED_DOCS_DATA = {
+    adult: {
+      uplus: {
+        label: 'LG',
+        brands: {
+          umobile: {
+            label: '미디어로그',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] }
+            ],
+            images: []
+          },
+          hello: {
+            label: '헬로모바일',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] }
+            ],
+            images: []
+          },
+          freeT: {
+            label: '프리티',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] }
+            ],
+            images: []
+          },
+          valuecom: {
+            label: '밸류컴',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인 성인', lines:['- 여권','- 등록증',
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>',] }
+            ],
+images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          },
+          smatel_lg: {
+            label: '스마텔LG',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','여권','<span class="warn">※복지카드</span>'] },
+              { type:'외국인 성인', lines:['- 여권','- 등록증'] }
+            ],
+            images: []
+          },
+          lgfreeT_prepaid: {
+            label: '프리티 선불 LG ',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">★ 내국인 여권-구여권 가능</span>','<span class="warn">★ 신여권 불가 ★</span>'] },
+                { type:'외국인', lines:['외국인등록증',
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>',] }
+              ],
+  images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          }
+        }
+      },
+
+      kt: {
+        label: 'KT',
+        brands: {
+          mmobile: {
+            label: '엠모바일',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          skylife: {
+            label: '스카이라이프',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          stagefive: {
+            label: 'STAGE FIVE',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          ktpost: {
+            label: 'kt',
+            rows: [
+              { type:'내국인', lines:['URL 접수로 신분증 생략'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          codemobile: {
+            label: '코드모바일KT',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인 성인', lines:['<span class="warn">★선불만 해당★</span>','- 여권','- 등록증','- 명의자 여권',
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>'] },
+            ],
+images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          }
+        }
+      },
+
+      sk: {
+        label: 'SK',
+        brands: {
+          '7mobile': {
+            label: '7mobile',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','복지카드','<span class="warn">※여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          'freeT-sk': {
+            label: '프리티SK',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          'stagefive-sk': {
+            label: 'STAGE FIVE',
+            rows: [
+              { type:'내국인', lines:['주민등록증','운전면허증(갱신기간이내)','임시발급증(만료일이내)','<span class="warn">※복지카드, 여권 - 불가</span>'] },
+              { type:'외국인', lines:['외국인등록증'] },
+            ],
+            images: []
+          },
+          freeT_sk_prepaid: {
+            label: '프리티SK선불',
+            rows: [
+              { type:'내국인', lines:['- 주민등록증','- 운전면허증(갱신기간이내)','- 임시발급증(만료일이내)','<span class="warn">내국인 여권-구여권만 가능</span>','<span class="warn">★신여권 불가 ★</span>'] },
+              { type:'외국인', lines:['- 외국인등록증','- 여권',
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>',
+              ] },
+              
+            ],
+images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          }
+        }
+      }
+    },
+
+    teen: {
+      uplus: {
+        label: 'LG',
+        brands: {
+          umobile: {
+            label: '미디어로그',
+            rows: [
+              { type:'미성년자', lines: ['- 법정대리인신분증',
+            '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(상세)_자녀기준',
+                    '<span class="warn">※ 60일이내 발급<span>']},
+              { type:'외국인 미성년자', lines: [
+                  '- 법정대리인신분증',
+                  '- 외국인등록증(신분증스캔필요)',
+                  '- 명의자등록증(신분증스캔필요)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '외국인등록번호 풀기재+성명 영문',
+                  '③대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '(대사관 공증기관 직인날인)',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ] }
+            ],
+            images: []
+          },
+          hello: {
+            label: '헬로모바일',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '법정대리인신분증',
+                  '(주민등록증, 운전면허증,임시발급증)',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-친권,미성년 후견 전부)_자녀기준',
+                  '<span class="warn">★공동친권시★</span>',
+                  '신청서상 부,모 전부 성함 싸인 필수',
+                  '법대 신분증 미접수 법대 기준 위임장필수',
+                  '<span class="green">Ex) 아버지 기준 신청중 인입시 어머니 위임장 필수</span>',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines: [
+                  '- 법정대리인신분증',
+                  '- 외국인등록증(신분증스캔필요)',
+                  '- 명의자등록증(신분증스캔필요)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '외국인등록번호 풀기재+성명 영문',
+                  '③대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '(대사관 공증기관 직인날인)',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ] }
+            ],
+            images: []
+          },
+          freeT: {
+            label: '프리티',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '- 법정대리인신분증',
+                  '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-친권,미성년 후견 전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines: [
+                  '- 법정대리인신분증',
+                  '- 외국인등록증(신분증스캔필요)',
+                  '- 명의자등록증(신분증스캔필요)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '외국인등록번호 풀기재+성명 영문',
+                  '③대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '(대사관 공증기관 직인날인)',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ] }
+            ],
+            images: []
+          },
+          valuecom: {
+            label: '밸류컴',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '- 법정대리인신분증',
+                  '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-친권,미성년 후견 전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              {
+                type:'외국인 미성년자',
+                lines:['<span class="warn">★선불만 해당★</span>',
+                  '- 명의자 여권', 
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>',
+                  '<span class="blue">※ 명의자 여권 접수시 구비서류 불필요 ※</span>',                   
+                  '- 법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '외국인등록번호 풀기재+성명 영문',
+                  '③대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '(대사관 공증기관 직인날인)',
+                  '<span class="warn">※60일이내 발급※</span>'
+              ]
+              },
+            ],
+images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          },
+          smatel_lg: {
+            label: '스마텔 LG',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '- 법정대리인신분증',
+                  '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-친권,미성년 후견 전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              {
+                type:'외국인 미성년자',
+                lines:['<span class="warn">★선불만 해당★</span>',
+                  '- 명의자 여권',
+                  '<span class="blue">※ 명의자 여권 접수시 구비서류 불필요 ※</span>', 
+                  '- 법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '외국인등록번호 풀기재+성명 영문',
+                  '③대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '(대사관 공증기관 직인날인)',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              }
+            ],
+            images: []
+          },
+          lgfreeT_prepaid: {
+            label: '프리티LG선불',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '- 법정대리인신분증',
+                  '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-친권,미성년 후견 전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              {
+                type:'외국인 미성년자',
+                lines:['<span class="warn">★선불만 해당★</span>',
+                  '- 명의자 여권',
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>',
+                  '<span class="blue">※ 명의자 여권 접수시 구비서류 불필요 ※</span>', 
+                  '- 법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              }
+            ],
+images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          }
+        }
+      },
+
+      kt: {
+        label: 'KT',
+        brands: {
+          mmobile: {
+            label: '엠모바일',
+            rows: [
+              { type:'미성년자', lines: ['- 법정대리인신분증',
+            '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(상세)_자녀기준',
+                    '<span class="warn">※ 60일이내 발급<span>']},
+              { type:'외국인 미성년자', lines: [
+                  '- 법정대리인신분증',
+                  '- 외국인등록증(신분증스캔필요)',
+                  '- 명의자등록증(신분증스캔필요)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '③ 외국인등록번호 풀기재+성명 영문',
+                  '대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '④건강보험증',
+                    '건강보험자격 확인서_열람용제외',
+                    '(신분증과 생년월일 같고 발음이 유사한경우 정상)',
+                    '(법정대리인 세대주인 경우 인정)',
+                  '<span class="warn">※60일이내 발급※</span>']},
+            ],
+            images: []
+          },
+          skylife: {
+            label: '스카이라이프',
+            rows: [
+              { type:'미성년자', lines: ['- 법정대리인신분증',
+            '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(상세)_자녀기준',
+                    '<span class="warn">※ 60일이내 발급<span>']},
+              { type:'외국인 미성년자', lines: [
+                  '- 법정대리인신분증',
+                  '- 외국인등록증(신분증스캔필요)',
+                  '- 명의자등록증(신분증스캔필요)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '③ 외국인등록번호 풀기재+성명 영문',
+                  '대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '④건강보험증',
+                    '건강보험자격 확인서_열람용제외',
+                    '(신분증과 생년월일 같고 발음이 유사한경우 정상)',
+                    '(법정대리인 세대주인 경우 인정)',
+                  '<span class="warn">※60일이내 발급※</span>']},
+            ],
+            images: []
+          },
+          stagefive: {
+            label: 'STAGE FIVE',
+            rows: [
+              { type:'미성년자', lines: ['- 법정대리인신분증',
+            '(주민등록증, 운전면허증,임시발급증)',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(상세)_자녀기준',
+                    '<span class="warn">※ 60일이내 발급<span>']},
+              {
+                type:'외국인 미성년자',
+                lines:[
+                  '<span class="warn">■가입불가</span>'
+                ]
+              }
+            ],
+            images: []
+          },
+          ktpost: {
+            label: 'KT',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 기본증명서(상세)_자녀기준',
+                  '<span class="warn"><strong>※ 60일이내 발급※</strong></span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines: [
+                  '- 법정대리인신분증',
+                  '- 명의자등록증',
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서',
+                  '외국인등록번호 풀기재+성명 영문',
+                  '③ 대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                  '(대사관 공증기관 직인날인)',
+                  '④건강보험증',
+                    '건강보험자격 확인서_열람용제외',
+                    '(신분증과 생년월일 같고 발음이 유사한경우 정상)',
+                    '(법정대리인 세대주인 경우 인정)',
+                  '<span class="warn">※60일이내 발급※</span>']},
+            ],
+            images: []
+          },
+          codemobile: {
+            label: '코드모바일',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '법정대리인신분증',
+                  '(주민등록증,운전명허증,임시발급증)',
+                  '- 가족관계증명서_법대기준',
+                  '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '기본증명서 상세(자녀기준)',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              {
+                type:'외국인 미성년자',
+                lines:[
+                  '외국인 미성년자 등록증',
+                  '- 신청서',
+                  '- 명의자 등록증(신분증 스캐너)',
+                  '- 법대 신분증(신분증 스캐너)',
+                  '※ 여권개통진행시',
+                  '서류 위 여권 스캔본 필수 첨부',
+                  '<span class="warn"><strong>※예시본참조※</strong></span>',
+                  '<span class="blue">※ 명의자 여권 접수시 구비서류 불필요 ※</span>', 
+                 '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 외국인 등록 사실증명서, 국내거소 사실 증명서(가족관계표시)',
+                  '② 가족관계증명서(외국인등록번호 풀기재+성명 영문)',
+                  '③ 대사관에서 발급한 입증서류, 한국어 번역 공증서',
+                        '(대사관 공증기관 직인날인)',
+                  '④ 건강보험증, 건강보험자격 확인서_열람용제외',
+                        '(신분증과 생년월일 같고 발음이 유사한 경우 정상)',
+                  '<span class="warn"><strong>※ 60일이내 발급</strong></span>'
+                ]
+              }
+            ],
+images: [
+  {
+    src: "./assets/docs/prepaid.png?v=2",
+    label: "예시본"
+  }
+]
+          }
+        }
+      },
+
+      sk: {
+        label: 'SK',
+        brands: {
+          '7mobile': {
+            label: '7mobile',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                  '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines:['<span class="warn">■ 가입불가</span>'] }
+            ],
+            images: []
+          },
+          'freeT-sk': {
+            label: '프리티SK',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                  '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines:['<span class="warn">■ 가입불가</span>'] }
+            ],
+            images: []
+          },
+          'stagefive-sk': {
+            label: 'STAGE FIVE',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                  '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '<span class="warn">★내국인 미성년자 -> 법대 외국인경우 필수</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(상세)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines:['<span class="warn">■ 가입불가</span>'] }
+            ],
+            images: []
+          },
+          freeT_sk_prepaid: {
+            label: '프리티선불',
+            rows: [
+              {
+                type:'미성년자',
+                lines:[
+                  '법정대리인신분증',
+                  '- 주민등록증, 운전면허증,임시발급증',
+                  '<span class="warn">※법대관계 미성립시 추가 구비서류</span>',
+                  '① 가족관계증명서_법대기준',
+                  '② 기본증명서(특정-전부)_자녀기준',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              { type:'외국인 미성년자', lines:['<span class="warn">■ 가입불가</span>'] }
+            ],
+            images: []
+          }
+        }
+      }
+    },
+
+    corp: {
+      uplus: {
+        label: 'LG',
+        brands: {
+          umobile: {
+            label: '미디어로그',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가','개인명의 개통후 ▶ 개인사업자 유형변경요청'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          hello: {
+            label: '헬로모바일',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가','개인명의 개통후 ▶ 개인사업자 유형변경요청'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          freeT: {
+            label: '프리티',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가','개인명의 개통후 ▶고객센터에 개인사업자변경요청'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          valuecom: {
+            label: '밸류컴',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          smatel_lg: {
+            label: 'SMT',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          lgfreeT_prepaid: {
+            label: '프리티선불',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          }
+        }
+      },
+
+      kt: {
+        label: 'KT',
+        brands: {
+          mmobile: {
+            label: '엠모바일',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>','개인명의 개통후 ▶ 개인사업자 고객센터 유형변경'] },
+              { type:'법인',               lines:[
+                  '<span class="warn">법인 개설 1년 이상 사업자만 가능</span>',
+                  '<span class="warn">(최신설립불가)</span>',
+                  '① 대표자방문 기준',
+                  '- 대표자신분증',
+                  '- 사업자등록증',
+                  '- 법인인감증명서 - 원본스캔 K-note 1부',
+                  '- 법인인감증명서 - 촬영본 1부(워터마크)',
+                  '- 법인계좌 납부시 예금주싸인란 "인감도장날인"',
+                  '② 대리인방문 기준',
+                  '- 대리인신분증',
+                  '- 사업자등록증',
+                  '- 재직증명서 (법인인감날인)',
+                  '- 위임장 (법인인감날인)',
+                  '- 법인인감증명서 - 원본스캔 K-note 1부',
+                  '- 법인인감증명서 - 촬영본 1부(워터마크)',
+                  '- 법인계좌 납부시 예금주싸인란 "인감도장날인"',
+                  '',
+                  '③ 추가 필요 정보 및 서류(사업자 제출서류 外)',
+                  '- 등기부등본, 이사회결의서',
+                  '- 개통목적(디테일한 사용용도)',
+                  '- 예상 사용기간',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ] },
+              { type:'비영리법인',lines:[
+                  '<span class="warn">법인 개설 1년 이상 사업자만 가능</span>',
+                  '<span class="warn">(최신설립불가)</span>',
+                  '① 대표자 방문',
+                  '- 대표자 방문',
+                  '- 사업자등록증',
+                  '- 대표자 신분증',
+                  '- 직원 사실 증명서',
+                  '- 법인 계좌 납부 시 예금주 싸인란 "직인도장날인"',
+                  '',
+                  '② 직원(대리인) 방문',
+                  '- 사업자등록증',
+                  '- 재직증명서(직인날인)',
+                  '- 위임장(직인날인)',
+                  '- 직원 사실 증명서',
+                  '- 직원(대리인) 신분증',
+                  '- 법인 계좌 납부 시 예금주 싸인란 "직인도장날인"',
+                  '',
+                  '③ 추가 필요 정보 및 서류(사업자 제출서류 外)',
+                  '- 등기부등본, 이사회결의서',
+                  '- 개통목적(디테일한 사용용도)',
+                  '- 예상 사용기간',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ] }
+            ],
+images: [
+  {
+    src: "./assets/docs/KT1.png?v=2",
+    label: "법인인감증명서 사진본 예시본"
+  },
+  {
+    src: "./assets/docs/KT2.png?v=2",
+    label: "이사회결의서 예시본"
+  }
+]
+          },
+          skylife: {
+            label: '스카이라이프',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>','개인명의 개통후 ▶ 개인사업자 고객센터 유형변경'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          stagefive: {
+            label: 'STAGE FIVE',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>','개인명의 개통후 ▶ 개인사업자 유형변경'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          ktpost: {
+            label: 'KT',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>','개인명의 개통후 ▶ 개인사업자 고객센터 유형변경'] },
+              {
+                type:'법인',
+                lines:[
+                  '<span class="warn">법인 개설 1년 이상 사업자만 가능</span>',
+                  '<span class="warn">(최신설립불가)</span>',
+                  '① 대표자방문 기준',
+                  '- 대표자신분증',
+                  '- 사업자등록증',
+                  '- 법인인감증명서 - 원본스캔 K-note 1부',
+                  '- 법인인감증명서 - 촬영본 1부(워터마크)',
+                  '- 법인계좌 납부시 예금주싸인란 "인감도장날인"',
+                  '',
+                  '② 대리인방문 기준',
+                  '- 대리인신분증',
+                  '- 사업자등록증',
+                  '- 재직증명서 (법인인감날인)',
+                  '- 위임장 (법인인감날인)',
+                  '- 법인인감증명서 - 원본스캔 K-note 1부',
+                  '- 법인인감증명서 - 촬영본 1부(워터마크)',
+                  '- 법인계좌 납부시 예금주싸인란 "인감도장날인"',
+                  '',
+                  '③ 추가 필요 정보 및 서류(사업자 제출서류 外)',
+                  '- 등기부등본, 이사회결의서',
+                  '- 개통목적(디테일한 사용용도)',
+                  '- 예상 사용기간',
+                  '',
+                  '애니팩스 0502-777-0108 발송 필수',
+                  '',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              },
+              {
+                type:'비영리법인',
+                lines:[
+                  '<span class="warn">법인 개설 1년 이상 사업자만 가능</span>',
+                  '<span class="warn">(최신설립불가)</span>',
+                  '① 대표자 방문',
+                  '- 대표자 방문',
+                  '- 사업자등록증',
+                  '- 대표자 신분증',
+                  '- 직원 사실 증명서',
+                  '- 법인 계좌 납부 시 예금주 싸인란 "직인도장날인"',
+                  '',
+                  '② 직원(대리인) 방문',
+                  '- 사업자등록증',
+                  '- 재직증명서(직인날인)',
+                  '- 위임장(직인날인)',
+                  '- 직원 사실 증명서',
+                  '- 직원(대리인) 신분증',
+                  '- 법인 계좌 납부 시 예금주 싸인란 "직인도장날인"',
+                  '',
+                  '③ 추가 필요 정보 및 서류(사업자 제출서류 外)',
+                  '- 등기부등본, 이사회결의서',
+                  '- 개통목적(디테일한 사용용도)',
+                  '- 예상 사용기간',
+                  '',
+                  '애니팩스 0502-777-0108 발송 필수',
+                  '',
+                  '<span class="warn">※60일이내 발급※</span>'
+                ]
+              }
+            ],
+images: [
+  {
+    src: "./assets/docs/KT1.png?v=2",
+    label: "법인인감증명서 사진본 예시본"
+  },
+  {
+    src: "./assets/docs/KT2.png?v=2",
+    label: "이사회결의서 예시본"
+  }]
+          },
+          codemobile: {
+            label: 'CODEMOBILE',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          }
+        }
+      },
+
+      sk: {
+        label: 'SK',
+        brands: {
+          '7mobile': {
+            label: '7mobile',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가</span>','개인명의 개통후 ▶ 사업자등록증 사본 첨부 후 변경 가능'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          'freeT-sk': {
+            label: '프리티',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가</span>','개인명의 개통후 ▶ 개인사업자 고객센터 유형변경'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          'stagefive-sk': {
+            label: 'STAGE FIVE',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가</span>','개인명의 개통후 <strong>3개월이후</strong> ▶ 개인사업자 유형변경'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          },
+          freeT_sk_prepaid: {
+            label: '프리티선불',
+            rows: [
+              { type:'개인사업자', lines:['<span class="warn">■ 가입불가</span>'] },
+              { type:'법인', lines:['<span class="warn">■가입불가</span>'] },
+              { type:'비영리법인', lines:['<span class="warn">■가입불가</span>'] }
+            ],
+            images: []
+          }
+        }
+      }
+    }
   };
 
-  function openModal(key){
-    const d = DOCS[key];
-    if (!d) return;
-    titleEl.textContent = d.title;
-    imgEl.src = d.src;
-    imgEl.alt = d.title;
+  function getCarrierPack(){
+    return REQUIRED_DOCS_DATA?.[REQUIRED_KIND]?.[currentCarrier] || null;
+  }
+
+  function getBrandPack(){
+    const carrierPack = getCarrierPack();
+    if (!carrierPack) return null;
+    return carrierPack.brands?.[currentBrand] || null;
+  }
+
+  function ensureBrandSelected(){
+    const carrierPack = getCarrierPack();
+    if (!carrierPack) {
+      currentBrand = '';
+      return;
+    }
+    const keys = Object.keys(carrierPack.brands || {});
+    if (!keys.length) {
+      currentBrand = '';
+      return;
+    }
+    if (!carrierPack.brands[currentBrand]) currentBrand = keys[0];
+  }
+
+  function renderBrandTabs(){
+    const carrierPack = getCarrierPack();
+    if (!carrierPack) {
+      brandTabsEl.innerHTML = '';
+      return;
+    }
+    const html = Object.entries(carrierPack.brands || {}).map(([key, item]) => {
+      const active = (key === currentBrand) ? 'active' : '';
+      return `<button type="button" class="required-chip ${active}" data-required-brand="${key}">${item.label}</button>`;
+    }).join('');
+    brandTabsEl.innerHTML = html;
+  }
+
+  function renderBoard(){
+    const brandPack = getBrandPack();
+    if (!brandPack) {
+      boardEl.innerHTML = `<div class="required-empty">등록된 구비서류가 없습니다.</div>`;
+      titleEl.textContent = '구비서류';
+      return;
+    }
+
+    const rows = Array.isArray(brandPack.rows) ? brandPack.rows : [];
+    const rowHTML = rows.map(row => `
+      <tr>
+        <th scope="row">${row.type || ''}</th>
+        <td>
+          <div class="required-doc-lines">
+            ${(row.lines || []).map(line => `<div>${line}</div>`).join('')}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    const images = Array.isArray(brandPack.images) ? brandPack.images : [];
+    const imageHTML = images.length
+      ? `
+<div class="required-images">
+  ${images.map(item => {
+    if (typeof item === 'string') {
+      return `<img src="${item}" alt="">`;
+    }
+
+    return `
+      <div class="img-box">
+        <img src="${item.src}" alt="">
+        ${item.label ? `<div class="img-label">${item.label}</div>` : ''}
+      </div>
+    `;
+  }).join('')}
+</div>
+      `
+      : '';
+
+    const kindLabel = REQUIRED_KIND === 'adult'
+      ? '성인'
+      : REQUIRED_KIND === 'teen'
+        ? '청소년'
+        : '법인/개인사업자';
+
+    boardEl.innerHTML = `
+      <div class="required-table-wrap">
+        <table class="required-table">
+          <thead>
+            <tr>
+              <th style="width:170px">가입유형</th>
+              <th>구비서류 항목</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowHTML}
+          </tbody>
+        </table>
+      </div>
+      ${imageHTML}
+    `;
+
+    titleEl.textContent = `${kindLabel} · ${brandPack.label} 구비서류`;
+  }
+
+  function renderAll(){
+    ensureBrandSelected();
+    renderBrandTabs();
+    renderBoard();
+  }
+
+  function openModal(carrierKey){
+    currentCarrier = carrierKey || 'uplus';
+    currentBrand = '';
+    renderAll();
     modal.classList.add('open');
     modal.setAttribute('aria-hidden','false');
   }
@@ -970,12 +2297,29 @@ function wireTabs(containerId, listId, data){
   function closeModal(){
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
-    imgEl.classList.remove('zoom');
-    imgEl.src = '';
+    boardEl.innerHTML = '';
+    brandTabsEl.innerHTML = '';
   }
 
-  document.querySelectorAll('[data-docs]').forEach(btn=>{
-    btn.addEventListener('click', ()=> openModal(btn.dataset.docs));
+  document.querySelectorAll('[data-open-required]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      openModal(btn.dataset.openRequired);
+    });
+  });
+
+  document.querySelectorAll('[data-required-kind]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('[data-required-kind]').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      REQUIRED_KIND = btn.dataset.requiredKind;
+    });
+  });
+
+  brandTabsEl.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-required-brand]');
+    if (!btn) return;
+    currentBrand = btn.dataset.requiredBrand;
+    renderAll();
   });
 
   closeBtn?.addEventListener('click', closeModal);
@@ -986,11 +2330,9 @@ function wireTabs(containerId, listId, data){
   });
 
   window.addEventListener('keydown', (e)=>{
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
   });
 })();
-
-
 
 /* 유심/동판 양식 팝업 + 복사 */
 (function(){
@@ -1143,12 +2485,6 @@ function wireTabs(containerId, listId, data){
       const el = document.getElementById(id);
       if (el) el.setAttribute('aria-hidden','true');
     });
-
-    const img = document.getElementById('docsImg');
-    if (img){
-      img.classList.remove('zoom');
-      img.src = '';
-    }
   }
 
   window.addEventListener('beforeprint', forceCloseOverlaysForPrint);
