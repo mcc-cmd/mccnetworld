@@ -1759,7 +1759,7 @@
       ]
     },
     {
-      "bg": "images/adult-5.jpg",
+      "bg": "images/adult-5.jpg?v=2",
       "fields": [
         {
           "id": "아무나결합",
@@ -1821,7 +1821,7 @@
       ]
     },
     {
-      "bg": "images/adult-6.jpg?v=20260304",
+      "bg": "images/adult-6.jpg?v=2",
       "fields": [
         {
           "id": "baseFee",
