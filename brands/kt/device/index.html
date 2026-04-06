@@ -1734,15 +1734,15 @@ const EXTRA_SUBSIDY_OVERRIDES = {};
 // ✅ 이제 months 계산
 const months = numOnly(valuesById.installMonths ?? DEVICE_DB.defaultInstallmentMonths ?? 24);
 
-  if(!dv.id || !pl.id){
+if(!dv.id || !pl.id){
 [
   'deviceName','msrp','commonSubsidy','extraSubsidy','otherDiscount',
   'principal','monthlyInstall','monthlyFeeAvg','monthlyPayTotal',
   'baseFee','discountFee','totalFee','monthlyBasePay','planEcho','aprEcho',
-  'penalty12','penalty18','penaltyTotal','supportTotal'
+  'penalty12','penalty18','penaltyTotal','supportTotal','totalSubsidy'
 ].forEach(id => setValueById(id,''));
-    return;
-  }
+  return;
+}
   // ✅ 특정 단말+요금제 조합이면 추가지원금 강제 주입
 {
   const comboKey = `${String(dv.id).trim().toLowerCase()}|${String(pl.id).trim().toLowerCase()}`;
@@ -1810,16 +1810,11 @@ if (extraLimit.exceeded && !EXTRA_SUBSIDY_LIMIT_POPUP_LOCK) {
 const remain = getRemainAmount(msrp, commonSubsidy, otherDis);
 
 if (payType === '일시불') {
-  const split = clampSplitByLastEdited(
-    msrp,
-    commonSubsidy,
-    otherDis,
-    limitedExtra,
-    rawDown
-  );
-
-  extraSub = split.extra;
-  down = split.down;
+  // ✅ 일시불:
+  // 추가지원금은 공통지원금의 15%까지만 적용
+  // 남는 금액은 전부 고객수납금으로 자동 입력
+  extraSub = limitedExtra;
+  down = Math.max(0, remain - extraSub);
   principal = 0;
 
   valuesById.extraSubsidy = String(extraSub);
@@ -1829,6 +1824,8 @@ if (payType === '일시불') {
   setValueById('downPayment', won(down));
 }
 else {
+  // ✅ 할부:
+  // 기존처럼 추가지원금 / 고객수납금 수동 분배 유지
   const split = clampSplitByLastEdited(
     msrp,
     commonSubsidy,
@@ -1865,8 +1862,12 @@ setValueById('totalFeeByAvg', String(totalFeeByAvgWon));
   setValueById('otherDiscount',  won(otherDis));
   setValueById('principal',      won(principal));
 
-  const totalSupport = extraSub + down;
+const totalSupport = extraSub + down;
 setValueById('supportTotal', won(totalSupport));
+
+// ✅ 공통지원금 + 추가지원금 합계
+const totalSubsidy = commonSubsidy + extraSub;
+setValueById('totalSubsidy', won(totalSubsidy));
 
 if (payType === '일시불') {
   setValueById('monthlyInstall', '0');
@@ -2295,10 +2296,13 @@ sel.onchange = () => {
       requestAnimationFrame(() => setSelectDisplay(w, sel, f));
       ctrl = sel;
     }
-    else if (f.type === 'label') {
+else if (f.type === 'label') {
   ctrl = document.createElement('div');
   ctrl.className = 'fixed-label';
-  ctrl.textContent = f.value ?? '';
+
+  const labelText = String(f.value ?? f.id ?? '');
+  ctrl.textContent = labelText;
+
   ctrl.style.pointerEvents = 'none';
   ctrl.style.width = '100%';
   ctrl.style.height = '100%';
@@ -2780,10 +2784,21 @@ document.getElementById('addField').onclick=()=>{
         label=document.getElementById('newLabel').value.trim(),
         opts=document.getElementById('newOpts').value.split(',').map(s=>s.trim()).filter(Boolean),
         req=document.getElementById('newReq').checked;
+
   const base={id:(id||`${t}_${Date.now()}`),label,type:t,x:50,y:50,w:30,required:req};
+
   if(t==='select'||t==='radio') base.options=opts;
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
-  cur().fields.push(base); selected=cur().fields.length-1; render(); scheduleSave();
+
+  // ✅ 고정텍스트는 입력한 ID를 표시문구로도 같이 저장
+  if (t === 'label') {
+    base.value = id || '';
+  }
+
+  cur().fields.push(base);
+  selected=cur().fields.length-1;
+  render();
+  scheduleSave();
 };
 
 document.getElementById('applyProp').onclick = () => {
@@ -3237,10 +3252,13 @@ if (isDeviceSelect) {
 }
 });
     }
-    else if (f.type === 'label') {
+else if (f.type === 'label') {
   ctrl = document.createElement('div');
   ctrl.className = 'fixed-label';
-  ctrl.textContent = f.value ?? '';
+
+  const labelText = String(f.value ?? f.id ?? '');
+  ctrl.textContent = labelText;
+
   ctrl.style.width = '100%';
   ctrl.style.height = '100%';
   ctrl.style.display = 'flex';
@@ -3256,7 +3274,7 @@ if (isDeviceSelect) {
 
   const pv = document.createElement('div');
   pv.className = 'print-value';
-  pv.textContent = f.value ?? '';
+  pv.textContent = labelText;
   w.appendChild(pv);
 }
     else if (f.type === 'checkbox') {
