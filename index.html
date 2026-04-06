@@ -105,6 +105,88 @@ body{
   white-space:nowrap;
 }
 .hd-btn:hover{box-shadow:0 6px 18px rgba(2,6,23,.08)}
+.cs-box{
+  position:relative;
+  display:inline-block;
+}
+
+.cs-menu{
+  position:absolute;
+  top:44px;
+  right:0;
+  min-width:120px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(2,6,23,.12);
+  padding:6px;
+  z-index:2000;
+}
+
+.cs-menu button{
+  width:100%;
+  height:34px;
+  border:none;
+  background:#fff;
+  border-radius:8px;
+  text-align:left;
+  padding:0 10px;
+  cursor:pointer;
+  font-weight:800;
+  font-size:12px;
+}
+
+.cs-menu button:hover{
+  background:#f3f6fb;
+}
+
+.cs-info{
+  position:absolute;
+  top:44px;
+  right:132px;
+  min-width:280px;
+  max-width:360px;
+  max-height:340px;
+  overflow:auto;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(2,6,23,.12);
+  padding:12px 14px;
+  z-index:2000;
+}
+
+.cs-info-title{
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.cs-info-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:6px 0;
+  border-bottom:1px solid #eef2f7;
+}
+
+.cs-info-row:last-child{
+  border-bottom:none;
+}
+
+.cs-info-name{
+  font-weight:700;
+  color:#334155;
+}
+
+.cs-info-num{
+  font-weight:900;
+  color:#0f172a;
+  white-space:nowrap;
+}
+
+.hidden{
+  display:none !important;
+}
 
 /* ✅ 기본 모바일 */
 @media (max-width:720px){
@@ -773,12 +855,20 @@ body{
         <div class="hd-hint">※클릭 시 다운로드※</div>
       </div>
 
-<div class="hd-actions" style="display:none">
-  <button class="hd-btn" type="button" data-docs="sk">SK 구비서류</button>
-  <button class="hd-btn" type="button" data-docs="kt">KT 구비서류</button>
-  <button class="hd-btn" type="button" data-docs="lg">LG 구비서류</button>
-</div>
+<div class="hd-actions">
+  <div class="cs-box">
+    <button type="button" id="csToggle" class="hd-btn">고객센터</button>
+
+    <div id="csMenu" class="cs-menu hidden">
+      <button type="button" data-net="sk">SK</button>
+      <button type="button" data-net="kt">KT</button>
+      <button type="button" data-net="lg">LG</button>
     </div>
+
+    <div id="csInfo" class="cs-info hidden"></div>
+  </div>
+</div>
+</div>
 
     <div class="stack">
 <div class="section-title">구비 서류</div>
@@ -2508,7 +2598,88 @@ images: [
   });
 })();
 
+const CUSTOMER_CENTER_BY_NET = {
+  sk: {
+    title: 'SK망 고객센터',
+    items: [
+      { name: '프리티SK', number: '1661-2207' },
+      { name: '스테이지파이브SK', number: '1668-5730' },
+      { name: '스카이', number: '1588-3002' },
+      { name: '텔링크', number: '1599-0999' },
+      { name: '스노우맨', number: '1688-9300' }
+    ]
+  },
+  kt: {
+    title: 'KT망 고객센터',
+    items: [
+      { name: '프리티KT', number: '1577-4551' },
+      { name: '스테이지파이브KT', number: '1668-5730' },
+      { name: 'KTM', number: '1899-5000' },
+      { name: '헬로KT', number: '1855-1144' },
+      { name: '코드KT 선불', number: '1899-6120' },
+      { name: '코드KT 후불', number: '1588-6220' }
+    ]
+  },
+  lg: {
+    title: 'LG망 고객센터',
+    items: [
+      { name: '프리티LG', number: '1588-3615' },
+      { name: '스마텔LG', number: '1566-0212' },
+      { name: '미디어', number: '1644-5353' },
+      { name: '헬로LG', number: '1855-1140' },
+      { name: '코드LG 선후불', number: '1833-6886' },
+      { name: '밸류컴LG', number: '1668-3016' }
+    ]
+  }
+};
 
+function initCustomerCenter(){
+  const csToggle = document.getElementById('csToggle');
+  const csMenu = document.getElementById('csMenu');
+  const csInfo = document.getElementById('csInfo');
+
+  if (!csToggle || !csMenu || !csInfo) return;
+
+  function renderCustomerCenterByNet(net){
+    const data = CUSTOMER_CENTER_BY_NET[net];
+    if (!data) return;
+
+    csInfo.innerHTML = `
+      <div class="cs-info-title">${data.title}</div>
+      ${data.items.map(item => `
+        <div class="cs-info-row">
+          <div class="cs-info-name">${item.name}</div>
+          <div class="cs-info-num">${item.number}</div>
+        </div>
+      `).join('')}
+    `;
+
+    csInfo.classList.remove('hidden');
+  }
+
+  csToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    csMenu.classList.toggle('hidden');
+    if (!csMenu.classList.contains('hidden')) {
+      csInfo.classList.add('hidden');
+    }
+  });
+
+  csMenu.addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-net]');
+    if (!btn) return;
+
+    const net = btn.dataset.net;
+    renderCustomerCenterByNet(net);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.cs-box')) {
+      csMenu.classList.add('hidden');
+      csInfo.classList.add('hidden');
+    }
+  });
+}
 window.addEventListener('DOMContentLoaded', ()=>{
   wireKindTabs('joinTabs','joinTabsList',JOIN_DATA);
 
@@ -2518,6 +2689,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   wireTabs('changeTabs','changeTabsList',CHANGE_CARDS);
   wireTabs('cancelTabs','cancelTabsList',CANCEL_CARDS);
   updateDeviceLogosByAge();
+    initCustomerCenter();
 });
 </script>
 </body>
