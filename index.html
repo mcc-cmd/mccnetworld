@@ -43,7 +43,7 @@ body{
   background:var(--card);
   border:1px solid var(--line);
   border-radius:16px;
-  overflow:hidden;
+  overflow:visible;
   box-shadow:0 10px 30px rgba(16,24,40,.04);
 }
 
@@ -52,6 +52,8 @@ body{
 ========================================================= */
 .hd{
   position:relative;
+  z-index:3000;
+  overflow:visible;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -87,6 +89,7 @@ body{
   transform:translateY(-50%);
   display:flex;
   gap:8px;
+  z-index:3001;
 }
 
 /* 버튼 공통 */
@@ -112,9 +115,9 @@ body{
 
 .cs-menu{
   position:absolute;
-  top:44px;
+  top:46px;
   right:0;
-  min-width:120px;
+  width:110px;
   background:#fff;
   border:1px solid var(--line);
   border-radius:12px;
@@ -142,11 +145,11 @@ body{
 
 .cs-info{
   position:absolute;
-  top:44px;
-  right:132px;
-  min-width:280px;
-  max-width:360px;
-  max-height:340px;
+  top:46px;
+  right:118px;
+  width:280px;
+  max-width:280px;
+  max-height:320px;
   overflow:auto;
   background:#fff;
   border:1px solid var(--line);
@@ -190,6 +193,28 @@ body{
 
 /* ✅ 기본 모바일 */
 @media (max-width:720px){
+    .cs-box{
+    width:100%;
+  }
+
+  .cs-box > .hd-btn{
+    width:100%;
+    justify-content:center;
+  }
+
+  .cs-menu{
+    top:48px;
+    right:0;
+    width:100%;
+  }
+
+  .cs-info{
+    top:130px;
+    right:0;
+    width:100%;
+    max-width:none;
+  }
+
   .wrap{
     padding:10px;
   }
@@ -2602,20 +2627,21 @@ const CUSTOMER_CENTER_BY_NET = {
   sk: {
     title: 'SK망 고객센터',
     items: [
+      { name: '정규SK/SK브로드밴드', number: '106' },
       { name: '프리티SK', number: '1661-2207' },
       { name: '스테이지파이브SK', number: '1668-5730' },
-      { name: '스카이', number: '1588-3002' },
       { name: '텔링크', number: '1599-0999' },
-      { name: '스노우맨', number: '1688-9300' }
     ]
   },
   kt: {
     title: 'KT망 고객센터',
     items: [
+      { name: '정규KT', number: '100' },
       { name: '프리티KT', number: '1577-4551' },
       { name: '스테이지파이브KT', number: '1668-5730' },
-      { name: 'KTM', number: '1899-5000' },
+      { name: '엠모바일', number: '1899-5000' },
       { name: '헬로KT', number: '1855-1144' },
+      { name: '스노우맨', number: '1688-9300' },
       { name: '코드KT 선불', number: '1899-6120' },
       { name: '코드KT 후불', number: '1588-6220' }
     ]
@@ -2623,6 +2649,7 @@ const CUSTOMER_CENTER_BY_NET = {
   lg: {
     title: 'LG망 고객센터',
     items: [
+      { name: '정규LG', number: '101,1544-0010' },
       { name: '프리티LG', number: '1588-3615' },
       { name: '스마텔LG', number: '1566-0212' },
       { name: '미디어', number: '1644-5353' },
