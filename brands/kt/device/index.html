@@ -1783,11 +1783,8 @@ let rawExtra = numOnly(valuesById.extraSubsidy ?? 0);
 
 // ✅ 처음 진입 시 추가지원금 기본세팅
 if (String(valuesById.extraSubsidy ?? '').trim() === '') {
-  rawExtra = Math.min(
-    getRemainAmount(msrp, commonSubsidy, otherDis),
-    getExtraSubsidyMax(commonSubsidy)
-  );
-  valuesById.extraSubsidy = String(rawExtra);
+  rawExtra = 0;
+  valuesById.extraSubsidy = '0';
 }
 
 let extraSub = 0;
