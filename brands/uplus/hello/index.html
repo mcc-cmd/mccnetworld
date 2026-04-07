@@ -523,20 +523,45 @@
 
   #printAll .field{min-height:var(--ih, 28px) !important;}
 
-  #printAll .field .print-value{
-    display:block !important;
-    color:#000 !important;
-    position:absolute !important;
-    inset:0 !important;
-    padding:0 2px !important;
-    height:var(--ih, 28px) !important;
-    line-height:var(--ih, 28px) !important;
-    font:600 var(--fs,14px)/1.2 system-ui !important;
-    white-space:pre-wrap;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-    text-align:var(--ta, left) !important;
-  }
+/* ✅ 출력도 화면과 동일한 텍스트 박스 렌더링 */
+#printAll .field input[type="text"],
+#printAll .field textarea,
+#printAll .field select{
+  display:none !important;
+}
+
+#printAll .field .print-value{
+  display:flex !important;
+  align-items:center !important;   /* 기본 middle */
+  justify-content:flex-start !important;
+  color:#000 !important;
+  position:absolute !important;
+  inset:0 !important;
+  padding:0 1px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  height:100% !important;
+  min-height:var(--ih, 28px) !important;
+  font-size:var(--fs,14px) !important;
+  font-weight:700 !important;
+  font-family:"Noto Sans KR", system-ui, sans-serif !important;
+  line-height:1 !important;
+  white-space:pre-wrap !important;
+  word-break:break-word !important;
+  overflow-wrap:anywhere !important;
+  text-align:var(--ta,left) !important;
+}
+
+/* ✅ 세로 정렬도 화면과 동일 */
+#printAll .field[data-va="top"] .print-value{
+  align-items:flex-start !important;
+}
+#printAll .field[data-va="middle"] .print-value{
+  align-items:center !important;
+}
+#printAll .field[data-va="bottom"] .print-value{
+  align-items:flex-end !important;
+}
 
   #printAll textarea{
     height:auto !important;
@@ -2552,41 +2577,52 @@ if (f.inputHeight) {
     const isHandSign = /(자필|싸인|서명)/.test(String(f.placeholder || '') + String(f.label || ''));
     const isNameBox = isNameField(f);
 
-    const treatAsTextarea =
-      f.type === 'textarea' ||
-      (f.type === 'text' && (f.wrap || isNameBox));
+const treatAsTextarea =
+  f.type === 'textarea' ||
+  (f.type === 'text' && (f.wrap || isNameBox));
 
-    if (treatAsTextarea) {
-      ctrl = document.createElement('textarea');
-      ctrl.spellcheck = false;
-      ctrl.style.resize = 'none';
+if (treatAsTextarea) {
+  ctrl = document.createElement('textarea');
+  ctrl.spellcheck = false;
+  ctrl.style.resize = 'none';
 
-      if (isHandSign) ctrl.value = '';
-      else ctrl.value = f.value ?? '';
+  const textValue = isHandSign ? '' : (f.value ?? '');
+  ctrl.value = textValue;
 
-      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+  if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
 
-      if (isNameBox && pageIdx === pageIndex) {
-        const live = overlay.querySelector(`.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"]`);
-        if (live) {
-          const cs = getComputedStyle(live);
-          ctrl.style.fontSize   = cs.fontSize;
-          ctrl.style.whiteSpace = cs.whiteSpace;
-          ctrl.style.overflow   = cs.overflow;
-          ctrl.style.lineHeight = cs.lineHeight;
-        }
-      }
+  if (f.inputHeight) {
+    ctrl.style.minHeight = f.inputHeight + 'px';
+    ctrl.style.height = f.inputHeight + 'px';
+  } else {
+    ctrl.style.minHeight = '5px';
+    ctrl.style.height = 'auto';
+  }
 
-      if (f.inputHeight) {
-        ctrl.style.minHeight = f.inputHeight + 'px';
-        ctrl.style.height    = f.inputHeight + 'px';
-      } else {
-        ctrl.style.minHeight = '5px';
-        ctrl.style.height    = 'auto';
-      }
+  if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
 
-      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+  pv.textContent = textValue;
+  pv.style.textAlign = f.textAlign || '';
+
+  if (f.id && pageIdx === pageIndex) {
+    const live = overlay.querySelector(
+      `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"], .field[data-id="${f.id}"] select`
+    );
+    if (live) {
+      const cs = getComputedStyle(live);
+      pv.style.fontSize = cs.fontSize;
+      pv.style.fontWeight = cs.fontWeight;
+      pv.style.lineHeight = cs.lineHeight;
+      pv.style.letterSpacing = cs.letterSpacing;
+      pv.style.textAlign = cs.textAlign;
     }
+  }
+
+  w.appendChild(ctrl);
+  w.appendChild(pv);
+}
 
     else if (f.type === 'select') {
       ctrl = document.createElement('select');
@@ -2697,17 +2733,39 @@ else if (f.type === 'radio') {
 }
 
 
-    else {
-      ctrl = document.createElement('input');
-      ctrl.type = 'text';
+else {
+  ctrl = document.createElement('input');
+  ctrl.type = 'text';
 
-      if (isHandSign) ctrl.value = '';
-      else ctrl.value = f.value ?? '';
+  const textValue = isHandSign ? '' : (f.value ?? '');
+  ctrl.value = textValue;
 
-      if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
-      if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
-      if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
+  if (f.placeholder && lockByPlaceholder) ctrl.placeholder = f.placeholder;
+  if (f.locked || lockByPlaceholder) ctrl.readOnly = true;
+  if (f.inputHeight) ctrl.style.height = f.inputHeight + 'px';
+
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+  pv.textContent = textValue;
+  pv.style.textAlign = f.textAlign || '';
+
+  if (f.id && pageIdx === pageIndex) {
+    const live = overlay.querySelector(
+      `.field[data-id="${f.id}"] textarea, .field[data-id="${f.id}"] input[type="text"], .field[data-id="${f.id}"] select`
+    );
+    if (live) {
+      const cs = getComputedStyle(live);
+      pv.style.fontSize = cs.fontSize;
+      pv.style.fontWeight = cs.fontWeight;
+      pv.style.lineHeight = cs.lineHeight;
+      pv.style.letterSpacing = cs.letterSpacing;
+      pv.style.textAlign = cs.textAlign;
     }
+  }
+
+  w.appendChild(ctrl);
+  w.appendChild(pv);
+}
 
     if (f.color) ctrl.style.color = f.color;
     if (f.textAlign) { ctrl.style.textAlign = f.textAlign; w.style.setProperty('--ta', f.textAlign); }
@@ -2722,7 +2780,7 @@ else if (f.type === 'radio') {
       w.style.setProperty('--bgc', f.bgTransparent ? 'transparent' : (f.bgColor || 'transparent'));
     }
 
-w.appendChild(ctrl);
+if (!w.contains(ctrl)) w.appendChild(ctrl);
 bindRequiredFieldVisual(f, w, ctrl);
 ov.appendChild(w);
   });
