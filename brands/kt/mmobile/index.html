@@ -540,6 +540,91 @@ html.is-prod.force-builder .wrap > .panel{
   .wrap{max-width:none !important; padding:0 !important;}
 }
 
+#printNoticeModal{
+  position:fixed;
+  inset:0;
+  z-index:100000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.45);
+}
+
+#printNoticeModal.open{
+  display:flex;
+}
+
+#printNoticeModal .pnm-card{
+  width:min(92vw, 520px);
+  background:#ffffff;
+  color:#111827;
+  border-radius:14px;
+  padding:20px 18px 16px;
+  box-shadow:0 20px 50px rgba(0,0,0,.28);
+  border:1px solid #d1d5db;
+}
+
+#printNoticeModal .pnm-title{
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+#printNoticeModal .pnm-body{
+  white-space:pre-line;
+  line-height:1.6;
+  font-size:14px;
+  color:#111827;
+}
+
+#printNoticeModal .pnm-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:16px;
+  font-size:14px;
+  font-weight:700;
+  color:#374151;
+}
+
+#printNoticeModal .pnm-check input{
+  width:16px;
+  height:16px;
+}
+
+#printNoticeModal .pnm-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+}
+
+#printNoticeModal .pnm-btn{
+  min-width:92px;
+  padding:9px 14px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  background:#fff;
+  color:#111827;
+  font-weight:800;
+  cursor:pointer;
+}
+
+#printNoticeModal .pnm-btn--primary{
+  border-color:#7c3aed;
+  background:linear-gradient(90deg,#e6007e,#6a35ff);
+  color:#fff;
+}
+
+@media print{
+  #printNoticeModal{
+    display:none !important;
+  }
+}
+.notice-danger{
+  color:#ff3b3b;
+  font-weight:800;
+}
 </style>
 
 <script>
@@ -877,6 +962,28 @@ try {
 
 <div id="affPopup"><div class="card">⚠️ <b>제휴 요금제</b>입니다. <b> C-1 성함·동의 체크</b>가 모두 완료되어야 진행됩니다.</div></div>
 
+<div id="printNoticeModal" aria-hidden="true">
+  <div class="pnm-card" role="dialog" aria-modal="true" aria-labelledby="printNoticeTitle">
+    <div class="pnm-title" id="printNoticeTitle">필수 확인 안내</div>
+
+    <div class="pnm-body" id="printNoticeText">
+부가서비스(캐치콜플러스) 가입 여부를 반드시 확인 후 진행해 주세요.
+
+<span class="notice-danger">※ 정책 미확인으로 인한 문제는 책임지지 않습니다.</span>
+    </div>
+
+    <label class="pnm-check">
+      <input type="checkbox" id="printNoticeHideToday">
+      <span>오늘 하루 동안 보지 않기</span>
+    </label>
+
+    <div class="pnm-actions">
+      <button type="button" class="pnm-btn" id="printNoticeCancel">취소</button>
+      <button type="button" class="pnm-btn pnm-btn--primary" id="printNoticeConfirm">확인 후 진행</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =========================
    ✅ 전역 값 저장/동기화
@@ -884,6 +991,13 @@ try {
 const valuesById = Object.create(null);
 const elById = Object.create(null);
 const CHECK_IMAGE_SRC = new URL('images/check_on.png', window.location.href).href;
+
+const USE_PRINT_POLICY_NOTICE = true;
+const PRINT_NOTICE_HIDE_KEY = 'mmobile_print_notice_hide_until';
+
+const PRE_PRINT_NOTICE = `부가서비스(캐치콜플러스) 가입 여부를 반드시 확인 후 진행해 주세요.
+
+※ 정책 미확인으로 인한 문제는 책임지지 않습니다.`;
 
 // ✅ 조건부 필수 규칙 (신규/번이에 따라)
 const CONDITIONAL_REQUIRED = [
@@ -2892,12 +3006,107 @@ function buildPrintAll(){
   return container;
 }
 
+function isPrintNoticeHiddenToday(){
+  try{
+    const saved = localStorage.getItem(PRINT_NOTICE_HIDE_KEY);
+    if (!saved) return false;
+
+    const expireAt = Number(saved);
+    if (!Number.isFinite(expireAt)) {
+      localStorage.removeItem(PRINT_NOTICE_HIDE_KEY);
+      return false;
+    }
+
+    if (Date.now() > expireAt) {
+      localStorage.removeItem(PRINT_NOTICE_HIDE_KEY);
+      return false;
+    }
+
+    return true;
+  }catch(_){
+    return false;
+  }
+}
+
+function hidePrintNoticeForToday(){
+  try{
+    const now = new Date();
+    const expire = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + 1,
+      0, 0, 0, 0
+    ).getTime();
+
+    localStorage.setItem(PRINT_NOTICE_HIDE_KEY, String(expire));
+  }catch(_){}
+}
+
+function showPrintNoticeModal(){
+  return new Promise((resolve) => {
+    const modal  = document.getElementById('printNoticeModal');
+    const textEl = document.getElementById('printNoticeText');
+    const chkEl  = document.getElementById('printNoticeHideToday');
+    const btnOk  = document.getElementById('printNoticeConfirm');
+    const btnNo  = document.getElementById('printNoticeCancel');
+
+    if (!modal || !textEl || !chkEl || !btnOk || !btnNo) {
+      resolve(false);
+      return;
+    }
+
+    textEl.innerHTML = `부가서비스(캐치콜플러스) 가입 여부를 반드시 확인 후 진행해 주세요.
+
+<span class="notice-danger">※ 정책 미확인으로 인한 문제는 책임지지 않습니다.</span>`;
+    chkEl.checked = false;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+
+    const close = (result) => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+
+      btnOk.removeEventListener('click', onOk);
+      btnNo.removeEventListener('click', onCancel);
+      modal.removeEventListener('click', onBackdrop);
+      document.removeEventListener('keydown', onEsc, true);
+
+      if (result && chkEl.checked) {
+        hidePrintNoticeForToday();
+      }
+
+      resolve(result);
+    };
+
+    const onOk = () => close(true);
+    const onCancel = () => close(false);
+    const onBackdrop = (e) => {
+      if (e.target === modal) close(false);
+    };
+    const onEsc = (e) => {
+      if (e.key === 'Escape') close(false);
+    };
+
+    btnOk.addEventListener('click', onOk);
+    btnNo.addEventListener('click', onCancel);
+    modal.addEventListener('click', onBackdrop);
+    document.addEventListener('keydown', onEsc, true);
+  });
+}
+
 async function printAllNow(){
-  const container=buildPrintAll();
-  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch{} }
+  if (USE_PRINT_POLICY_NOTICE && !isPrintNoticeHiddenToday()) {
+    const agreed = await showPrintNoticeModal();
+    if (!agreed) return;
+  }
+
+  const container = buildPrintAll();
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch {}
+  }
   await waitForImages(container);
-  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-  setTimeout(()=>window.print(),0);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  setTimeout(() => window.print(), 0);
 }
 
 /* ===== 인쇄 버튼 ===== */
