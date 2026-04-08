@@ -442,6 +442,30 @@ html.is-prod.force-builder .wrap > .panel{
 }
   .env-badge{display:none !important;}
 
+.field .fixed-label{
+  width:100%;
+  height:100%;
+  box-sizing:border-box;
+  padding:0 2px;
+  font-size:var(--fs);
+  font-weight:700;
+  font-family:"Noto Sans KR", system-ui, sans-serif;
+  color:var(--fgc,#000);
+  line-height:1;
+  display:flex;
+  align-items:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+}
+
+@media print{
+  #printAll .field .fixed-label{
+    display:none !important;
+  }
+}
+
+
 .field.hasBorder input[type="text"],
 .field.hasBorder textarea{
   border:var(--bdw,2px) solid var(--bdc,#ff3b3b) !important;
@@ -820,6 +844,7 @@ try {
             <option value="radio">라디오(단일선택)</option>
             <option value="checkbox">체크박스</option>
             <option value="imagecheck">체크이미지</option>
+            <option value="label">고정텍스트</option>
           </select>
         </div>
         <div class="row"><div>새 필드 ID</div><input id="newId" placeholder="예: applyYear / applyMonth / applyDay 등"></div>
@@ -1800,6 +1825,31 @@ sel.onchange = () => {
       requestAnimationFrame(() => fitSelectText(sel, (f.fontSize ?? 16), 5));
       ctrl = sel;
     }
+
+else if (f.type === 'label') {
+  ctrl = document.createElement('div');
+  ctrl.className = 'fixed-label';
+
+  const labelText = String(f.value ?? f.id ?? '');
+  ctrl.textContent = labelText;
+
+  ctrl.style.pointerEvents = 'none';
+  ctrl.style.width = '100%';
+  ctrl.style.height = '100%';
+  ctrl.style.display = 'flex';
+  ctrl.style.alignItems = 'center';
+  ctrl.style.whiteSpace = 'nowrap';
+  ctrl.style.overflow = 'hidden';
+  ctrl.style.textOverflow = 'clip';
+
+  if (f.color) ctrl.style.color = f.color;
+  if (f.textAlign) ctrl.style.justifyContent =
+    f.textAlign === 'center' ? 'center' :
+    f.textAlign === 'right' ? 'flex-end' : 'flex-start';
+
+  if (f.id) elById[f.id] = ctrl;
+}
+
     else if (f.type === 'imagecheck') {
   ctrl = document.createElement('div');
   ctrl.dataset.type = 'imagecheck';
@@ -2304,6 +2354,11 @@ const base = {
   radioOuterBorderColor: 'rgba(0,0,0,.25)',
   radioOuterBorderWidth: 1
 };
+
+if (t === 'label') {
+  base.value = id || '';
+}
+
 if (t === 'select') {
   base.options = opts.length ? opts : ['선택'];
 }
@@ -2834,6 +2889,33 @@ requestAnimationFrame(() => {
   w.appendChild(ctrl);
   w.appendChild(pv);
 }
+
+else if (f.type === 'label') {
+  ctrl = document.createElement('div');
+  ctrl.className = 'fixed-label';
+
+  const labelText = String(f.value ?? f.id ?? '');
+  ctrl.textContent = labelText;
+
+  ctrl.style.width = '100%';
+  ctrl.style.height = '100%';
+  ctrl.style.display = 'flex';
+  ctrl.style.alignItems = 'center';
+  ctrl.style.whiteSpace = 'nowrap';
+  ctrl.style.overflow = 'hidden';
+  ctrl.style.textOverflow = 'clip';
+
+  if (f.color) ctrl.style.color = f.color;
+  if (f.textAlign) ctrl.style.justifyContent =
+    f.textAlign === 'center' ? 'center' :
+    f.textAlign === 'right' ? 'flex-end' : 'flex-start';
+
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
+  pv.textContent = labelText;
+  w.appendChild(pv);
+}
+
     else if (f.type === 'imagecheck') {
   ctrl = document.createElement('div');
   ctrl.style.width = '100%';
