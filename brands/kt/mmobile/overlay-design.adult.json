@@ -687,19 +687,19 @@
           "id": "결합",
           "label": "",
           "type": "checkbox",
-          "x": 25.979670587761266,
-          "y": 54.68327346840242,
-          "w": 5,
+          "x": 24.462834297423345,
+          "y": 54.189785344787644,
+          "w": 2.8,
           "required": false,
           "radioSize": 18,
-          "radioGap": 12,
+          "radioGap": 2,
           "color": "#000000",
           "wrap": true,
           "borderTransparent": true,
-          "borderColor": "transparent",
+          "borderColor": "#000000",
           "borderWidth": 2,
           "bgTransparent": true,
-          "bgColor": "transparent",
+          "bgColor": "#000000",
           "fontSize": 14,
           "mask": "",
           "maskRe": "",
@@ -707,9 +707,13 @@
           "autoDate": "",
           "locked": false,
           "checkSize": 18,
-          "textAlign": "",
+          "textAlign": "center",
           "lockOnPh": false,
-          "value": false
+          "value": false,
+          "checkStyle": "tick",
+          "inputHeight": 25,
+          "verticalAlign": "middle",
+          "autoShrink": true
         },
         {
           "id": "extraData",
@@ -825,7 +829,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "08"
+          "value": "15"
         },
         {
           "id": "성함싸인",
@@ -1385,8 +1389,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 33,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1415,8 +1418,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 37,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -1446,8 +1448,7 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true,
-          "value": ""
+          "locked": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1477,8 +1478,7 @@
           "textAlign": "",
           "inputHeight": 24,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1508,8 +1508,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1539,8 +1538,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1570,8 +1568,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "affiliate_millie",
@@ -1722,8 +1719,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1753,8 +1749,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -1784,8 +1779,7 @@
           "placeholder": "미결합 요금제 상관없이 필수 첨부 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1815,8 +1809,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         }
       ]
     },
@@ -1846,8 +1839,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -1873,7 +1865,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "checkSize": 18,
           "inputHeight": 19,
           "textAlign": "center",
@@ -1904,7 +1895,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "checkSize": 18,
           "inputHeight": 19,
           "textAlign": "center",
@@ -1935,7 +1925,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "checkSize": 18,
           "inputHeight": 19,
           "textAlign": "center",
@@ -1998,8 +1987,7 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "상담사",
@@ -2029,8 +2017,7 @@
           "inputHeight": 18,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "번호이동 번호",
@@ -2060,8 +2047,7 @@
           "inputHeight": 24,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2091,8 +2077,7 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "0",
@@ -2114,7 +2099,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "0",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
