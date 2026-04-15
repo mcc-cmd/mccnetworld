@@ -504,6 +504,52 @@
   }
 
   .env-badge{display:none !important;}
+
+  .field.is-missing{
+  outline:2px solid #ff3b3b !important;
+  outline-offset:1px;
+  border-radius:6px;
+}
+
+.field.is-missing input,
+.field.is-missing textarea,
+.field.is-missing select{
+  box-shadow:none !important;
+}
+
+#missingGuideToast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  transform:translateX(-50%);
+  z-index:99999;
+  min-width:280px;
+  max-width:calc(100vw - 32px);
+  padding:12px 16px;
+  border-radius:12px;
+  background:rgba(17,24,39,.96);
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.45;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+  display:none;
+}
+
+#missingGuideToast.show{
+  display:block;
+}
+
+@media print{
+  .field.is-missing{
+    outline:none !important;
+    box-shadow:none !important;
+  }
+
+  #missingGuideToast{
+    display:none !important;
+  }
+}
 }
 
 .field.hasBorder input[type="text"],
@@ -743,7 +789,10 @@ body > [style*="position: fixed"]:not(#printAll){
   background:linear-gradient(90deg,#e6007e,#6a35ff);
   color:#fff;
 }
-
+/* 필수 안내 토스트 제거 */
+#toast{
+  display:none !important;
+}
 @media print{
   #printNoticeModal{
     display:none !important;
@@ -833,13 +882,62 @@ body > [style*="position: fixed"]:not(#printAll){
     const t = e.target;
     if (!t) return;
 
-    const isInputLike =
+    // 입력 가능한 요소만 처리
+    const isInput =
+      t.tagName === 'INPUT' ||
       t.tagName === 'TEXTAREA' ||
-      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
-      t.isContentEditable;
+      t.tagName === 'SELECT';
 
-    if (!isInputLike) return;
+    if (!isInput) return;
 
+    // 체크박스/라디오/버튼류 제외
+    if (
+      t.tagName === 'INPUT' &&
+      ['checkbox', 'radio', 'button', 'submit', 'file'].includes((t.type || '').toLowerCase())
+    ) {
+      return;
+    }
+
+    // 현재 보이는 입력 필드 목록
+const fields = Array.from(document.querySelectorAll(
+  'input[type="text"], input[type="search"], input[type="tel"], input[type="number"], textarea, select'
+)).filter(el => {
+  if (!el) return false;
+  if (el.disabled) return false;
+  if (el.offsetParent === null) return false;
+  if (el.readOnly) return false;
+  if (el.dataset.locked === '1') return false;
+
+  const wrap = el.closest('.field');
+  if (!wrap) return false;
+
+  const idx = Number(wrap.dataset.i);
+  const f = cur()?.fields?.[idx];
+  if (!f) return false;
+
+  // ✅ 필수 입력칸만 이동
+  if (!f.required) return false;
+
+  return true;
+});
+
+    const idx = fields.indexOf(t);
+    if (idx === -1) return;
+
+    // 마지막 필드가 아니면 다음 필드로 이동
+    const next = fields[idx + 1];
+    if (next) {
+      e.preventDefault();
+      next.focus();
+
+      // select는 열지 않고 focus만
+      if (typeof next.select === 'function' && next.tagName !== 'SELECT') {
+        next.select();
+      }
+      return;
+    }
+
+    // 마지막 필드는 Enter 입력만 막기
     e.preventDefault();
   }, true);
 })();
@@ -3166,6 +3264,146 @@ async function waitForImages(root){
 }
 
 /* ===== 인쇄 DOM ===== */
+function isFieldEffectivelyEmpty(f){
+  if (!f) return true;
+
+  const type = String(f.type || '').toLowerCase();
+  const val = f.value;
+
+  if (type === 'radio') {
+    return !val || String(val).trim() === '';
+  }
+
+  if (type === 'checkbox') {
+    return !val;
+  }
+
+  if (Array.isArray(val)) {
+    return val.length === 0;
+  }
+
+  return String(val ?? '').trim() === '';
+}
+
+function getRequiredTargetFields(){
+  if (!Array.isArray(fields)) return [];
+
+  return fields.filter(f => {
+    if (!f) return false;
+    if (!f.required) return false;
+    if (f.hidden) return false;
+    if (f.printOnly) return false;
+    return true;
+  });
+}
+
+function collectMissingRequiredFields(){
+  const requiredFields = getRequiredTargetFields();
+  return requiredFields.filter(f => isFieldEffectivelyEmpty(f));
+}
+
+function clearMissingFieldMarks(){
+  document.querySelectorAll('.field.is-missing').forEach(el => {
+    el.classList.remove('is-missing');
+  });
+}
+
+function findFieldElementById(fieldId){
+  if (!fieldId) return null;
+
+  const all = Array.from(document.querySelectorAll('.field'));
+  return all.find(el => {
+    return (
+      el.dataset?.id === fieldId ||
+      el.getAttribute('data-id') === fieldId ||
+      el.dataset?.fieldId === fieldId ||
+      el.getAttribute('data-field-id') === fieldId
+    );
+  }) || null;
+}
+
+function markMissingFields(missingFields){
+  clearMissingFieldMarks();
+
+  missingFields.forEach(f => {
+    const el = findFieldElementById(f.id);
+    if (el) el.classList.add('is-missing');
+  });
+}
+
+function focusFirstMissingField(missingFields){
+  if (!missingFields || !missingFields.length) return;
+
+  const wrap = findFieldElementById(missingFields[0].id);
+  if (!wrap) return;
+
+  const ctrl = wrap.querySelector('input, textarea, select, button');
+  if (ctrl && !ctrl.disabled && typeof ctrl.focus === 'function') {
+    ctrl.focus({ preventScroll:false });
+    if (typeof ctrl.scrollIntoView === 'function') {
+      ctrl.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+    return;
+  }
+
+  if (typeof wrap.scrollIntoView === 'function') {
+    wrap.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+}
+
+function ensureMissingGuideToast(){
+  let el = document.getElementById('missingGuideToast');
+  if (el) return el;
+
+  el = document.createElement('div');
+  el.id = 'missingGuideToast';
+  document.body.appendChild(el);
+  return el;
+}
+
+let missingGuideToastTimer = null;
+
+function showMissingGuideToast(message){
+  const el = ensureMissingGuideToast();
+  el.textContent = message;
+  el.classList.add('show');
+
+  if (missingGuideToastTimer) clearTimeout(missingGuideToastTimer);
+  missingGuideToastTimer = setTimeout(() => {
+    el.classList.remove('show');
+  }, 2600);
+}
+
+function validateRequiredBeforePrint(){
+  const missingFields = collectMissingRequiredFields();
+
+  if (!missingFields.length) {
+    clearMissingFieldMarks();
+    return {
+      ok: true,
+      missingFields: []
+    };
+  }
+
+  markMissingFields(missingFields);
+  focusFirstMissingField(missingFields);
+
+  const names = missingFields
+    .slice(0, 5)
+    .map(f => f.label || f.id)
+    .filter(Boolean);
+
+  const summary = names.length
+    ? `필수 입력 누락: ${names.join(', ')}${missingFields.length > 5 ? ` 외 ${missingFields.length - 5}건` : ''}`
+    : `필수 입력 누락 항목이 있습니다.`;
+
+  showMissingGuideToast(summary);
+
+  return {
+    ok: false,
+    missingFields
+  };
+}
 function createPrintDOM(page){
   const wrap = document.createElement('div');
   wrap.className = 'paper';
@@ -3185,12 +3423,27 @@ function createPrintDOM(page){
   wrap.appendChild(st);
 
   (page.fields || []).forEach(f => {
+      // ✅ 요금제명 / 유심모델명은 값이 없을 때만 출력 제외
+  const idText = String(f.id || '').toLowerCase().trim();
+  const labelText = String(f.label || '').trim();
+  const valueText = String(f.value ?? '').trim();
+
+    const isPlanField =
+    ['plan', 'planecho', 'plan_echo', 'planname','deviceId'].includes(idText) ||
+    /요금제.*단말|/.test(labelText);
+
+      const isSimField =
+    ['usim', 'sim', 'simmodel', '부가서비스','0'].includes(idText) ||
+    /유심.*모델|유심모델/.test(labelText);
+
+  if ((isPlanField || isSimField) && !valueText) return;
+    
     const w = document.createElement('div');
     w.className =
       'field ' +
       (f.type === 'radio' ? 'radio ' : '') +
       (f.type === 'checkbox' ? 'checkbox ' : '');
-
+w.dataset.id = f.id || '';
     w.style.left = `${f.x}%`;
     w.style.top  = `${f.y}%`;
     w.style.width = `${(f.w ?? 24)}%`;

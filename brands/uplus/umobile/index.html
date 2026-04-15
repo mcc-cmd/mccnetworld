@@ -366,7 +366,25 @@
 #printAll .field{min-height:var(--ih, 28px) !important;}
 
 #printAll .field .print-value{
-  display:none !important;
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  color:#000 !important;
+  background:transparent !important;
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
+  white-space:pre-wrap !important;
+  word-break:break-word !important;
+  overflow-wrap:anywhere !important;
+  padding:0 1px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  line-height:1 !important;
+  font-size:var(--fs) !important;
+  font-weight:700 !important;
+  font-family:"Noto Sans KR", system-ui, sans-serif !important;
+  text-align:var(--ta,left) !important;
 }
   #printAll .field textarea{
     min-height:5px !important;
@@ -375,7 +393,6 @@
     max-height:none !important;
   }
 #printAll .field input[type="text"],
-#printAll .field select,
 #printAll .field textarea{
   display:block !important;
   width:100% !important;
@@ -385,6 +402,10 @@
   border:none !important;
   outline:none !important;
   box-shadow:none !important;
+}
+
+#printAll .field select{
+  display:none !important;
 }
   #printAll .field.radio.noText .radio-item span{display:none !important;}
   #printAll .field.radio.noText .radio-item{
@@ -402,12 +423,31 @@
     background:transparent !important;
     box-shadow:none !important;
   }
+  /* 필수 안내 토스트 제거 */
+#toast{
+  display:none !important;
 }
-  #printAll textarea{
-    height:auto !important;
-    resize:none !important;
-    max-height:none !important;
+#printAll textarea{
+  height:auto !important;
+  resize:none !important;
+  max-height:none !important;
+  overflow:visible !important;
+}
+    /* E단계 추가 안정화 */
+  #toast{
+    display:none !important;
   }
+
+  input::placeholder,
+  textarea::placeholder{
+    color:transparent !important;
+  }
+
+  #printAll .field{
+    overflow:visible !important;
+  }
+}
+
 
   .env-badge{display:none !important;}
 
@@ -665,15 +705,62 @@
     const t = e.target;
     if (!t) return;
 
-    // 입력 요소에서만 막기
-    const isInputLike =
+    // 입력 가능한 요소만 처리
+    const isInput =
+      t.tagName === 'INPUT' ||
       t.tagName === 'TEXTAREA' ||
-      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
-      t.isContentEditable;
+      t.tagName === 'SELECT';
 
-    if (!isInputLike) return;
+    if (!isInput) return;
 
-    // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
+    // 체크박스/라디오/버튼류 제외
+    if (
+      t.tagName === 'INPUT' &&
+      ['checkbox', 'radio', 'button', 'submit', 'file'].includes((t.type || '').toLowerCase())
+    ) {
+      return;
+    }
+
+    // 현재 보이는 입력 필드 목록
+const fields = Array.from(document.querySelectorAll(
+  'input[type="text"], input[type="search"], input[type="tel"], input[type="number"], textarea, select'
+)).filter(el => {
+  if (!el) return false;
+  if (el.disabled) return false;
+  if (el.offsetParent === null) return false;
+  if (el.readOnly) return false;
+  if (el.dataset.locked === '1') return false;
+
+  const wrap = el.closest('.field');
+  if (!wrap) return false;
+
+  const idx = Number(wrap.dataset.i);
+  const f = cur()?.fields?.[idx];
+  if (!f) return false;
+
+  // 실제 입력받는 필드만 이동 대상
+  if (!f.required) return false;
+
+  return true;
+});
+
+    const idx = fields.indexOf(t);
+    if (idx === -1) return;
+
+    // 마지막 필드가 아니면 다음 필드로 이동
+    const next = fields[idx + 1];
+    if (next) {
+      e.preventDefault();
+      next.focus();
+
+      // select는 열지 않고 focus만
+      if (typeof next.select === 'function' && next.tagName !== 'SELECT') {
+        next.select();
+      }
+      return;
+    }
+
+    // 마지막 필드는 Enter 입력만 막기
     e.preventDefault();
   }, true);
 })();
@@ -1628,15 +1715,29 @@ const treatAsTextarea =
 ctrl.oninput = () => {
   if (f.locked || lockByPlaceholder) return;
 
+  const pos = ctrl.selectionStart;
+
   let v = ctrl.value;
   v = applyMask(v, f.mask, f.maskRe);
+
+  if (f.mask === 'number') {
+    v = v.replace(/[^\d]/g, '');
+  }
+
   if (f.maxLength) v = v.slice(0, f.maxLength);
-  if (ctrl.value !== v) ctrl.value = v;
+
+  ctrl.value = v;
+
+  if (typeof pos === 'number') {
+    const safePos = Math.min(pos, v.length);
+    ctrl.setSelectionRange(safePos, safePos);
+  }
 
   f.value = v;
   setValueById(f.id, v);
   applyMirror(f, v);
 
+  // ✅ 이름칸 입력 중 재축소
   if (isNameField(f) && f.autoShrink !== false) {
     const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
     const minFs = getNameFieldMinFont(f);
@@ -2471,8 +2572,26 @@ img.src = page.bg ? new URL(page.bg, location.href).href : '';
   st.appendChild(ov);
   wrap.appendChild(st);
 
-  (page.fields || []).forEach(f => {
-    const w = document.createElement('div');
+(page.fields || []).forEach(f => {
+
+  // ✅ 요금제명 / 유심모델명은 값이 없을 때만 출력 제외
+  const idText = String(f.id || '').toLowerCase().trim();
+  const labelText = String(f.label || '').trim();
+  const valueText = String(f.value ?? '').trim();
+
+  const isPlanField =
+    ['plan', 'planecho', 'plan_echo', 'planname'].includes(idText) ||
+    /요금제/.test(labelText);
+
+  const isSimField =
+    ['usim', 'sim', 'simmodel', '유심'].includes(idText) ||
+    /유심.*모델|유심모델/.test(labelText);
+
+  if ((isPlanField || isSimField) && !valueText) {
+    return;
+  }
+
+  const w = document.createElement('div');
     w.className =
       'field ' +
       (f.type === 'radio' ? 'radio ' : '') +
@@ -2773,11 +2892,47 @@ async function printAllNow(){
   setTimeout(() => window.print(), 0);
 }
 async function forcePrintBlankForm(){
-  overlay.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
-  overlay.querySelectorAll('.field.required-pending').forEach(el => el.classList.remove('required-pending'));
+  applyConditionalRequired();
 
-  const toast = document.getElementById('toast');
-  if (toast) toast.style.display = 'none';
+  const miss = findMissingAll();
+
+  overlay.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
+
+  if (miss.length) {
+    const currentPageMiss = miss.filter(m => m.page === pageIndex);
+
+    markInvalidForPage(pageIndex, currentPageMiss);
+    showToast(miss.map(m => `[${m.page + 1}페이지] ${m.label}`));
+
+    const first = miss[0];
+    if (typeof first?.page === 'number' && first.page !== pageIndex) {
+      pageIndex = first.page;
+      selected = -1;
+      render();
+
+      requestAnimationFrame(() => {
+        markInvalidForPage(pageIndex, miss.filter(m => m.page === pageIndex));
+
+        const target = overlay.querySelector(`.field[data-i="${first.idx}"] input, .field[data-i="${first.idx}"] textarea, .field[data-i="${first.idx}"] select`);
+        if (target) {
+          target.focus();
+          target.scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+      });
+    } else if (typeof first?.idx === 'number') {
+      requestAnimationFrame(() => {
+        const target = overlay.querySelector(`.field[data-i="${first.idx}"] input, .field[data-i="${first.idx}"] textarea, .field[data-i="${first.idx}"] select`);
+        if (target) {
+          target.focus();
+          target.scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+      });
+    }
+  } else {
+    overlay.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
+    const toast = document.getElementById('toast');
+    if (toast) toast.style.display = 'none';
+  }
 
   await printAllNow();
 }

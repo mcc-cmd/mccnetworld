@@ -1390,23 +1390,40 @@ function render(){
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
+ctrl.oninput = () => {
+  if (f.locked || lockByPlaceholder) return;
 
-        let v = ctrl.value;
-        v = applyMask(v, f.mask, f.maskRe);
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+  const pos = ctrl.selectionStart;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  let v = ctrl.value;
+  v = applyMask(v, f.mask, f.maskRe);
 
-        autosizeTA(ctrl);
-        scheduleSave();
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
+  if (f.mask === 'number') {
+    v = v.replace(/[^\d]/g, '');
+  }
+
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+
+  ctrl.value = v;
+
+  if (typeof pos === 'number') {
+    const safePos = Math.min(pos, v.length);
+    ctrl.setSelectionRange(safePos, safePos);
+  }
+
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
+
+  // ✅ 이름칸 입력 중 재축소
+if (isNameField(f) && f.autoShrink !== false) {
+  const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+  autoShrinkTextareaFont(ctrl, 5, baseFs);
+}
+  scheduleSave();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
     }
 
     /* ===== ✅ select (오류났던 부분 전면 복구) ===== */
@@ -1578,21 +1595,41 @@ ctrl.appendChild(it);
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
-        let v = ctrl.value;
-        v = applyMask(v, f.mask, f.maskRe);
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+ctrl.oninput = () => {
+  if (f.locked || lockByPlaceholder) return;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  const pos = ctrl.selectionStart;
 
-        scheduleSave();
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
+  let v = ctrl.value;
+  v = applyMask(v, f.mask, f.maskRe);
+
+  if (f.mask === 'number') {
+    v = v.replace(/[^\d]/g, '');
+  }
+
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+
+  ctrl.value = v;
+
+  if (typeof pos === 'number') {
+    const safePos = Math.min(pos, v.length);
+    ctrl.setSelectionRange(safePos, safePos);
+  }
+
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
+
+  if (isNameField(f) && f.autoShrink !== false) {
+    const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+    const minFs = getNameFieldMinFont(f);
+    autoShrinkNameFont(ctrl, minFs, baseFs);
+  }
+
+  scheduleSave();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
     }
 
     if (f.color) ctrl.style.color = f.color;
@@ -2083,9 +2120,9 @@ function isRequiredFieldFilled(f, ctrl){
 
   if (f.type === 'checkbox') return !!ctrl.checked;
 
-  if (f.type === 'radio') {
-    return !!ctrl.querySelector('input[type="radio"]:checked');
-  }
+if (f.type === 'radio') {
+  return !!ctrl.querySelector('input[type="checkbox"]:checked');
+}
 
   return String(ctrl.value ?? '').trim() !== '';
 }
@@ -2109,11 +2146,12 @@ function bindRequiredFieldVisual(f, wrap, ctrl){
 
   const apply = () => updateRequiredFieldVisual(f, wrap, ctrl);
 
-  if (f.type === 'radio') {
-    ctrl.querySelectorAll('input[type="radio"]').forEach(r => {
-      r.addEventListener('change', apply);
-    });
-  } else if (f.type === 'checkbox' || f.type === 'select') {
+if (f.type === 'radio') {
+  ctrl.querySelectorAll('input[type="checkbox"]').forEach(r => {
+    r.addEventListener('change', apply);
+  });
+}
+  else if (f.type === 'checkbox' || f.type === 'select') {
     ctrl.addEventListener('change', apply);
     ctrl.addEventListener('input', apply);
   } else {
@@ -2152,7 +2190,66 @@ function showToast(items){
   toast.style.display='flex';
   document.getElementById('tClose').onclick=()=>toast.style.display='none';
 }
+function clearInvalidMarks(){
+  overlay.querySelectorAll('.field.invalid').forEach(el => {
+    el.classList.remove('invalid');
+  });
+}
 
+function focusFirstMissingField(missingList){
+  if (!missingList || !missingList.length) return;
+
+  const first = missingList[0];
+  if (typeof first.page !== 'number') return;
+
+  if (pageIndex !== first.page) {
+    pageIndex = first.page;
+    render();
+  }
+
+  requestAnimationFrame(() => {
+    const wrap = overlay.querySelector(`.field[data-i="${first.idx}"]`);
+    if (!wrap) return;
+
+    const ctrl = wrap.querySelector('input, textarea, select, button');
+    if (ctrl && !ctrl.disabled && typeof ctrl.focus === 'function') {
+      ctrl.focus({ preventScroll:false });
+    }
+
+    if (typeof wrap.scrollIntoView === 'function') {
+      wrap.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  });
+}
+
+function validateRequiredBeforePrintSoft(){
+  const all = findMissingAll();
+
+  if (!all.length) {
+    clearInvalidMarks();
+    return { ok:true, missingFields:[] };
+  }
+
+  const firstPage = all[0].page;
+  const listForPage = all.filter(m => m.page === firstPage);
+
+  pageIndex = firstPage;
+  render();
+
+  requestAnimationFrame(() => {
+    markInvalidForPage(firstPage, listForPage);
+    focusFirstMissingField(all);
+  });
+
+  showToast(
+    all.slice(0, 5).map(m => `p${m.page+1} - ${m.label}`)
+  );
+
+  return {
+    ok:false,
+    missingFields:all
+  };
+}
 /* ===== 이미지/폰트 대기 ===== */
 async function waitForImages(root){
   const imgs=Array.from(root.querySelectorAll('img'));
@@ -2422,14 +2519,13 @@ async function printAllNow(){
 
 /* ===== 인쇄 버튼 ===== */
 document.getElementById('btnPdf').onclick=async ()=>{
-  const all=findMissingAll();
-  if(all.length){
-    const first=all[0].page; pageIndex=first; render();
-    const listForPage=all.filter(m=>m.page===first);
-    markInvalidForPage(first,listForPage);
-    showToast(listForPage.map(m=>`p${m.page+1} - ${m.label}`));
-    return;
+  const result = validateRequiredBeforePrintSoft();
+
+  if (!result.ok) {
+    const go = confirm('필수 입력 누락 항목이 있습니다.\n그래도 출력하시겠습니까?');
+    if (!go) return;
   }
+
   await printAllNow();
 };
 

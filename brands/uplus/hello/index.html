@@ -531,24 +531,24 @@
 }
 
 #printAll .field .print-value{
-  display:flex !important;
-  align-items:center !important;   /* 기본 middle */
-  justify-content:flex-start !important;
-  color:#000 !important;
-  position:absolute !important;
-  inset:0 !important;
-  padding:0 1px !important;
-  margin:0 !important;
-  box-sizing:border-box !important;
+  display:block !important;
+  width:100% !important;
   height:100% !important;
-  min-height:var(--ih, 28px) !important;
-  font-size:var(--fs,14px) !important;
-  font-weight:700 !important;
-  font-family:"Noto Sans KR", system-ui, sans-serif !important;
-  line-height:1 !important;
+  color:#000 !important;
+  background:transparent !important;
+  border:none !important;
+  outline:none !important;
+  box-shadow:none !important;
   white-space:pre-wrap !important;
   word-break:break-word !important;
   overflow-wrap:anywhere !important;
+  padding:0 1px !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  line-height:1 !important;
+  font-size:var(--fs) !important;
+  font-weight:700 !important;
+  font-family:"Noto Sans KR", system-ui, sans-serif !important;
   text-align:var(--ta,left) !important;
 }
 
@@ -657,6 +657,11 @@
 }
 
   .field.checkbox .label{top:0;left:24px}
+
+  /* 필수 안내 토스트 제거 */
+#toast{
+  display:none !important;
+}
 }
 
 
@@ -886,19 +891,64 @@
     const t = e.target;
     if (!t) return;
 
-    // 입력 요소에서만 막기
-    const isInputLike =
+    // 입력 가능한 요소만 처리
+    const isInput =
+      t.tagName === 'INPUT' ||
       t.tagName === 'TEXTAREA' ||
-      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
-      t.isContentEditable;
+      t.tagName === 'SELECT';
 
-    if (!isInputLike) return;
+    if (!isInput) return;
 
-    // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
+    // 체크박스/라디오/버튼류 제외
+    if (
+      t.tagName === 'INPUT' &&
+      ['checkbox', 'radio', 'button', 'submit', 'file'].includes((t.type || '').toLowerCase())
+    ) {
+      return;
+    }
+
+    // 현재 보이는 입력 필드 목록
+const fields = Array.from(document.querySelectorAll(
+  'input[type="text"], input[type="search"], input[type="tel"], input[type="number"], textarea, select'
+)).filter(el => {
+  if (!el) return false;
+  if (el.disabled) return false;
+  if (el.offsetParent === null) return false;
+  if (el.readOnly) return false;
+  if (el.dataset.locked === '1') return false;
+
+  const wrap = el.closest('.field');
+  if (!wrap) return false;
+
+  const idx = Number(wrap.dataset.i);
+  const f = cur()?.fields?.[idx];
+  if (!f) return false;
+
+  // 실제 입력받는 필드만 이동 대상
+  if (!f.required) return false;
+
+  return true;
+});
+    const idx = fields.indexOf(t);
+    if (idx === -1) return;
+
+    // 마지막 필드가 아니면 다음 필드로 이동
+    const next = fields[idx + 1];
+    if (next) {
+      e.preventDefault();
+      next.focus();
+
+      // select는 열지 않고 focus만
+      if (typeof next.select === 'function' && next.tagName !== 'SELECT') {
+        next.select();
+      }
+      return;
+    }
+
+    // 마지막 필드는 Enter 입력만 막기
     e.preventDefault();
   }, true);
 })();
-
 
 </script>
 </head>
@@ -1685,23 +1735,43 @@ if (f.inputHeight) {
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
+ctrl.oninput = () => {
+  if (f.locked || lockByPlaceholder) return;
 
-        let v = ctrl.value;
-        v = applyMask(v, f.mask, f.maskRe);
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+  const pos = ctrl.selectionStart;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  let v = ctrl.value;
+  v = applyMask(v, f.mask, f.maskRe);
 
-        autosizeTA(ctrl);
-        scheduleSave();
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
+  if (f.mask === 'number') {
+    v = v.replace(/[^\d]/g, '');
+  }
+
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+
+  ctrl.value = v;
+
+  if (typeof pos === 'number') {
+    const safePos = Math.min(pos, v.length);
+    ctrl.setSelectionRange(safePos, safePos);
+  }
+
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
+
+  // ✅ 이름칸 입력 중 재축소
+  if (isNameField(f) && f.autoShrink !== false) {
+    const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+    const minFs = getNameFieldMinFont(f);
+    autoShrinkNameFont(ctrl, minFs, baseFs);
+  }
+
+  scheduleSave();
+  autosizeTA(ctrl);
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
     }
 
     /* ===== ✅ select (오류났던 부분 전면 복구) ===== */
@@ -1891,21 +1961,41 @@ else if (f.type === 'radio') {
         blockTyping(ctrl);
       }
 
-      ctrl.oninput = () => {
-        if (f.locked || lockByPlaceholder) return;
-        let v = ctrl.value;
-        v = applyMask(v, f.mask, f.maskRe);
-        if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+ctrl.oninput = () => {
+  if (f.locked || lockByPlaceholder) return;
 
-        f.value = v;
-        setValueById(f.id, v);
-        applyMirror(f, v);
+  const pos = ctrl.selectionStart;
 
-        scheduleSave();
-        evaluateAffBanner();
-        evaluateExtraDataAndBar();
-      };
+  let v = ctrl.value;
+  v = applyMask(v, f.mask, f.maskRe);
+
+  if (f.mask === 'number') {
+    v = v.replace(/[^\d]/g, '');
+  }
+
+  if (f.maxLength) v = v.slice(0, f.maxLength);
+
+  ctrl.value = v;
+
+  if (typeof pos === 'number') {
+    const safePos = Math.min(pos, v.length);
+    ctrl.setSelectionRange(safePos, safePos);
+  }
+
+  f.value = v;
+  setValueById(f.id, v);
+  applyMirror(f, v);
+
+  if (isNameField(f) && f.autoShrink !== false) {
+    const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+    const minFs = getNameFieldMinFont(f);
+    autoShrinkNameFont(ctrl, minFs, baseFs);
+  }
+
+  scheduleSave();
+  evaluateAffBanner();
+  evaluateExtraDataAndBar();
+};
     }
 
     if (f.color) ctrl.style.color = f.color;
@@ -2508,10 +2598,19 @@ function createPrintDOM(page, pageIdx){
   wrap.appendChild(st);
 
 (page.fields || []).forEach(f => {
-  const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
+  // ✅ 요금제명 / 유심모델명은 값이 없을 때만 출력 제외
+  const idText = String(f.id || '').toLowerCase().trim();
+  const labelText = String(f.label || '').trim();
+  const valueText = String(f.value ?? '').trim();
 
-  if (f.locked) return;
-  if (lockByPlaceholder) return;
+  const isPlanField =
+    ['plan', 'planecho', 'plan_echo', 'planname'].includes(idText) ||
+    /요금제/.test(labelText);  
+  const isSimField =
+    ['usim', 'sim', 'simmodel', '유심'].includes(idText) ||
+    /유심.*모델|유심모델/.test(labelText);
+
+  if ((isPlanField || isSimField) && !valueText) return;
 
   const w = document.createElement('div');
     w.className =
@@ -2580,6 +2679,8 @@ if (f.inputHeight) {
 const treatAsTextarea =
   f.type === 'textarea' ||
   (f.type === 'text' && (f.wrap || isNameBox));
+
+  const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
 if (treatAsTextarea) {
   ctrl = document.createElement('textarea');
@@ -2814,10 +2915,47 @@ async function printAllNow(){
   setTimeout(()=>window.print(),0);
 }
 async function forcePrintBlankForm(){
+  applyConditionalRequired();
+
+  const miss = findMissingAll();
+
   overlay.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
 
-  const toast = document.getElementById('toast');
-  if (toast) toast.style.display = 'none';
+  if (miss.length) {
+    const currentPageMiss = miss.filter(m => m.page === pageIndex);
+
+    markInvalidForPage(pageIndex, currentPageMiss);
+    showToast(miss.map(m => `[${m.page + 1}페이지] ${m.label}`));
+
+    const first = miss[0];
+    if (typeof first?.page === 'number' && first.page !== pageIndex) {
+      pageIndex = first.page;
+      selected = -1;
+      render();
+
+      requestAnimationFrame(() => {
+        markInvalidForPage(pageIndex, miss.filter(m => m.page === pageIndex));
+
+        const target = overlay.querySelector(`.field[data-i="${first.idx}"] input, .field[data-i="${first.idx}"] textarea, .field[data-i="${first.idx}"] select`);
+        if (target) {
+          target.focus();
+          target.scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+      });
+    } else if (typeof first?.idx === 'number') {
+      requestAnimationFrame(() => {
+        const target = overlay.querySelector(`.field[data-i="${first.idx}"] input, .field[data-i="${first.idx}"] textarea, .field[data-i="${first.idx}"] select`);
+        if (target) {
+          target.focus();
+          target.scrollIntoView({ behavior:'smooth', block:'center' });
+        }
+      });
+    }
+  } else {
+    overlay.querySelectorAll('.field.invalid').forEach(el => el.classList.remove('invalid'));
+    const toast = document.getElementById('toast');
+    if (toast) toast.style.display = 'none';
+  }
 
   await printAllNow();
 }

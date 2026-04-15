@@ -736,6 +736,7 @@ if (DESIGN) {
 
   window.addEventListener('beforeprint', closeAllOverlays);
 })();
+
 /* ✅ 모든 입력에서 Enter 줄바꿈/제출 방지(동적 생성 포함) */
 (function blockEnterEverywhere(){
   document.addEventListener('keydown', (e) => {
@@ -744,15 +745,61 @@ if (DESIGN) {
     const t = e.target;
     if (!t) return;
 
-    // 입력 요소에서만 막기
-    const isInputLike =
+    // 입력 가능한 요소만 처리
+    const isInput =
+      t.tagName === 'INPUT' ||
       t.tagName === 'TEXTAREA' ||
-      (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'search' || t.type === 'tel' || t.type === 'number')) ||
-      t.isContentEditable;
+      t.tagName === 'SELECT';
 
-    if (!isInputLike) return;
+    if (!isInput) return;
+    if (
+      t.tagName === 'INPUT' &&
+      ['checkbox', 'radio', 'button', 'submit', 'file'].includes((t.type || '').toLowerCase())
+    ) {
+      return;
+    }
 
-    // (선택) Shift+Enter도 막기: 현재는 Enter면 전부 막음
+    // 필수 입력칸만 이동 대상으로 제한
+    const fields = Array.from(document.querySelectorAll(
+      'input[type="text"], input[type="search"], input[type="tel"], input[type="number"], textarea, select'
+    )).filter(el => {
+      if (!el) return false;
+      if (el.disabled) return false;
+      if (el.offsetParent === null) return false;
+      if (el.readOnly) return false;
+      if (el.dataset.locked === '1') return false;
+
+      const wrap = el.closest('.field');
+      if (!wrap) return false;
+
+      const idx = Number(wrap.dataset.i);
+      const f = cur()?.fields?.[idx];
+      if (!f) return false;
+
+      // 실제 필수 입력칸만 이동
+      if (!f.required) return false;
+
+      return true;
+    });
+
+    const idx = fields.indexOf(t);
+    if (idx === -1) {
+      e.preventDefault();
+      return;
+    }
+
+    const next = fields[idx + 1];
+    if (next) {
+      e.preventDefault();
+      next.focus();
+
+      if (typeof next.select === 'function' && next.tagName !== 'SELECT') {
+        next.select();
+      }
+      return;
+    }
+
+    // 마지막 필드는 Enter만 막기
     e.preventDefault();
   }, true);
 })();
