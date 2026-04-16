@@ -1684,7 +1684,7 @@ if (f.inputHeight) {
 const isName = isNameField(f);
 const treatAsTextarea =
   (f.type === 'textarea') ||
-  (f.type === 'text' && f.wrap && !isName);
+  (f.type === 'text' && f.wrap && !isName && f.mask !== 'tel');
 
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
@@ -1860,26 +1860,26 @@ ctrl.oninput = () => {
         const it = document.createElement('label');
         it.className = 'radio-item';
 
-const cb = document.createElement('input');
-cb.type = 'radio';
-cb.name = 'r_' + String(f.id || ('radio_' + i));   // ✅ 같은 그룹으로 묶기
-cb.value = o;
-cb.checked = (f.value === o);
-if (f.locked || lockByPlaceholder) cb.disabled = true;
+        const cb = document.createElement('input');
+        cb.type = 'radio';
+        cb.name = 'r_' + String(f.id || ('radio_' + i));
+        cb.value = o;
+        cb.checked = (f.value === o);
+        if (f.locked || lockByPlaceholder) cb.disabled = true;
 
-cb.onchange = () => {
-  if (!cb.checked) return;
+        cb.onchange = () => {
+          if (!cb.checked) return;
 
-  f.value = o;
-  setValueById(f.id, o);
-  applyMirror(f, o);
+          f.value = o;
+          setValueById(f.id, o);
+          applyMirror(f, o);
 
-    applyConditionalRequired();   // ✅ 추가
+          applyConditionalRequired();
 
-  scheduleSave();
-  evaluateAffBanner();
-  evaluateExtraDataAndBar();
-};
+          scheduleSave();
+          evaluateAffBanner();
+          evaluateExtraDataAndBar();
+        };
 
         const hideText = (f.radioShowText === false) || /^\d+$/.test(String(o).trim());
         it.appendChild(cb);
@@ -1915,28 +1915,92 @@ cb.onchange = () => {
       ctrl.oninput = () => {
         if (f.locked || lockByPlaceholder) return;
 
+        // ✅ 전화번호는 공통 setValueById를 타지 않도록 완전 분리
+        if (f.mask === 'tel') {
+          const digits = String(ctrl.value || '').replace(/[^\d]/g, '').slice(0, 11);
+          const v = formatPhone(digits);
+
+          if (ctrl.value !== v) {
+            ctrl.value = v;
+          }
+
+          // 현재 필드 값 직접 반영
+          f.value = v;
+
+          // valuesById 직접 저장
+          if (f.id) {
+            valuesById[f.id] = v;
+            valuesById[String(f.id).toLowerCase()] = v;
+          }
+
+          // pages 내부 같은 id 필드들도 직접 반영
+          try {
+            const key = String(f.id || '').toLowerCase();
+            pages.forEach(pg => {
+              (pg.fields || []).forEach(ff => {
+                if (String(ff.id || '').toLowerCase() === key) {
+                  ff.value = v;
+                }
+              });
+            });
+          } catch (_) {}
+
+          // mirror 대상만 반영
+          applyMirror(f, v);
+
+          // 커서는 항상 맨 끝
+          requestAnimationFrame(() => {
+            try {
+              const end = ctrl.value.length;
+              ctrl.setSelectionRange(end, end);
+            } catch (_) {}
+          });
+
+          if (isNameField(f) && f.autoShrink !== false) {
+            const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+            const minFs = getNameFieldMinFont(f);
+            autoShrinkNameFont(ctrl, minFs, baseFs);
+          }
+
+          scheduleSave();
+          evaluateAffBanner();
+          evaluateExtraDataAndBar();
+          return;
+        }
+
+        // ✅ 일반 input 처리
         let v = ctrl.value;
         v = applyMask(v, f.mask, f.maskRe);
         if (f.maxLength) v = v.slice(0, f.maxLength);
-        if (ctrl.value !== v) ctrl.value = v;
+
+        if (ctrl.value !== v) {
+          ctrl.value = v;
+        }
+
+        const pos = ctrl.selectionStart ?? v.length;
 
         f.value = v;
         setValueById(f.id, v);
         applyMirror(f, v);
-          // ✅ 이름칸 입력 중 재축소
-  if (isNameField(f) && f.autoShrink !== false) {
-    const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
-    const minFs = getNameFieldMinFont(f);
-    autoShrinkNameFont(ctrl, minFs, baseFs);
-  }
 
+        requestAnimationFrame(() => {
+          try {
+            const safePos = Math.min(pos, ctrl.value.length);
+            ctrl.setSelectionRange(safePos, safePos);
+          } catch (_) {}
+        });
+
+        if (isNameField(f) && f.autoShrink !== false) {
+          const baseFs = f.fontSize || parseFloat(getComputedStyle(ctrl).fontSize) || 14;
+          const minFs = getNameFieldMinFont(f);
+          autoShrinkNameFont(ctrl, minFs, baseFs);
+        }
 
         scheduleSave();
         evaluateAffBanner();
         evaluateExtraDataAndBar();
       };
-    }
-
+}
     if (f.color) ctrl.style.color = f.color;
 
     if (f.textAlign) {
