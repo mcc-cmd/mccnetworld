@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "bg": "images/teen-1.jpg",
+      "bg": "images/adult-1.jpg",
       "fields": [
         {
           "id": "plan",
@@ -1132,7 +1132,7 @@
       ]
     },
     {
-      "bg": "images/teen-2.jpg",
+      "bg": "images/adult-2.jpg",
       "fields": [
         {
           "id": "성함/싸인자필기재",
@@ -1213,7 +1213,7 @@
       ]
     },
     {
-      "bg": "images/teen-3.jpg",
+      "bg": "images/adult-3.jpg",
       "fields": [
         {
           "id": "성함/싸인자필기재",
@@ -1408,7 +1408,7 @@
       ]
     },
     {
-      "bg": "images/teen-4.jpg",
+      "bg": "images/adult-4.jpg",
       "fields": [
         {
           "id": "성함/싸인자필기재",
@@ -1487,7 +1487,7 @@
       ]
     },
     {
-      "bg": "images/teen-5.jpg",
+      "bg": "images/adult-5.jpg",
       "fields": [
         {
           "id": "판매점명",
