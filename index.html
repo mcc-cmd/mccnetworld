@@ -1330,15 +1330,17 @@ function renderJoinGrouped(listEl, items){
   const ktSpecialItems = items.filter(x => x.special === true && !x.skLink);
   const normalItems = items.filter(x => !x.special && !x.skLink);
 
-  const groups = [
-    { key:'uplus', title:'LG', sub:'' },
-    { key:'sk', title:'SK', sub:'' }
-  ];
+const groups = [
+  { key:'uplus', title:'LG', sub:'' },
+  { key:'kt', title:'KT', sub:'' },
+  { key:'sk', title:'SK', sub:'' }
+];
 
-  const by = {
-    uplus: normalItems.filter(x => x.carrier === 'uplus'),
-    sk: normalItems.filter(x => x.carrier === 'sk')
-  };
+const by = {
+  uplus: normalItems.filter(x => x.carrier === 'uplus'),
+  kt: normalItems.filter(x => x.carrier === 'kt'),
+  sk: normalItems.filter(x => x.carrier === 'sk')
+};
 
   const normalHTML = groups.map(g => {
     const arr = by[g.key] || [];
@@ -2613,7 +2615,7 @@ IMEI :
 IMEI2: 
 EID : 
 <span class="warn"><strong>※ 개통방에 요청서 접수(카톡접수)※
-   ☆내국인 MNP 진행시 별도문의 </strong></span>`
+   ☆내국인 MNP 진행시 별도문의 </strong></span>`,
   },
 
   skusim_foreign: {
@@ -2663,25 +2665,32 @@ function openForm(key){
   ta.scrollTop = 0;
 }
 
-  function closeForm(){
-    modal.setAttribute('aria-hidden','true');
-    ta.value = '';
-    toast.classList.remove('show');
-  }
+function closeForm(){
+  modal.setAttribute('aria-hidden','true');
+  ta.innerHTML = '';
+  toast.classList.remove('show');
+}
 
-  async function copyText(text){
-    try{
-      await navigator.clipboard.writeText(text);
-      showToast();
-      return;
-    }catch(_){}
-    try{
-      ta.focus();
-      ta.select();
-      document.execCommand('copy');
-      showToast();
-    }catch(_){}
-  }
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    showToast();
+    return;
+  }catch(_){}
+
+  try{
+    const range = document.createRange();
+    range.selectNodeContents(ta);
+
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    document.execCommand('copy');
+    sel.removeAllRanges();
+    showToast();
+  }catch(_){}
+}
 
   document.addEventListener('click', (e)=>{
     const btn = e.target.closest('[data-form]');
@@ -2705,10 +2714,14 @@ function openForm(key){
   });
 
   xBtn?.addEventListener('click', closeForm);
-  selBtn?.addEventListener('click', ()=>{
-    ta.focus();
-    ta.select();
-  });
+selBtn?.addEventListener('click', ()=>{
+  const range = document.createRange();
+  range.selectNodeContents(ta);
+
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+});
   copyBtn?.addEventListener('click', ()=> copyText(ta.innerText));
 })();
 /* =========================
