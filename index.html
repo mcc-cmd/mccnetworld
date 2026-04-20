@@ -497,6 +497,9 @@ body{
   grid-template-columns:1fr 1fr;
   gap:12px;
 }
+.form-duo-single{
+  grid-template-columns:1fr;
+}
 .form-duo .form-half{
   border:1px solid var(--line);
   background:#fff;
@@ -562,11 +565,17 @@ body{
   font-weight:800;
   font-size:12px;
 }
-.form-body{padding:14px;}
+.form-body{
+  padding:14px;
+  max-height:calc(90vh - 140px);
+  overflow:auto;
+}
 .form-textarea{
   width:100%;
-  height:420px;
+  min-height:420px;
+  max-height:calc(90vh - 220px);
   resize:none;
+  overflow:auto;
   border:1px solid var(--line);
   border-radius:12px;
   padding:12px;
@@ -837,7 +846,15 @@ body{
     max-width:100%;
   }
 }
+.form-rich{
+  white-space:pre-wrap;
+  font:13px/1.6 ui-monospace, Consolas, "Noto Sans KR", monospace;
+}
 
+.warn{
+  color:#ff3b3b;
+  font-weight:800;
+}
 @media (max-width:720px){
   .required-topbar{
     justify-content:flex-start;
@@ -1003,7 +1020,7 @@ body{
         <button class="form-x" id="formCloseX" type="button">닫기</button>
       </div>
       <div class="form-body">
-        <textarea class="form-textarea" id="formTextarea" readonly></textarea>
+        <div class="form-textarea form-rich" id="formTextarea"></div>
         <div class="form-toast" id="formToast">복사되었습니다.</div>
       </div>
       <div class="form-actions">
@@ -1066,14 +1083,21 @@ const JOIN_ONLY = [
   { carrier:'kt', theme:'theme-mm', name:'웰컴 요금제 번이', cap:'', special:true,
     logoAdult:'./assets/logos/WELCOMEMNP.png', logoTeen:'./assets/logos/WELCOMEMNPTEEN.png' }
 ];
-
+const SK_LINK_ONLY = [
+  { carrier:'sk', theme:'theme-s7', name:'SK 내국인', cap:'', special:true, skLink:true,
+    logoAdult:'./assets/logos/SK_NEW.png', logoTeen:'./assets/logos/SK_NEW.png' },
+  { carrier:'sk', theme:'theme-s7', name:'SK 외국인', cap:'', special:true, skLink:true,
+    logoAdult:'./assets/logos/SK_MNP.png', logoTeen:'./assets/logos/SK_MNP.png' }
+];
 const JOIN_DATA = {
   adult: [
     ...BRANDS.map(b => ({...b, doc:'join', age:'adult'})),
+    ...SK_LINK_ONLY.map(b => ({...b, doc:'join', age:'adult'})),
     ...JOIN_ONLY.map(b => ({...b, doc:'join', age:'adult'})),
   ],
   teen : [
     ...BRANDS.map(b => ({...b, doc:'join', age:'teen'})),
+    ...SK_LINK_ONLY.map(b => ({...b, doc:'join', age:'teen'})),
     ...JOIN_ONLY.map(b => ({...b, doc:'join', age:'teen'})),
   ]
 };
@@ -1096,6 +1120,9 @@ const BRAND_ROUTE = {
   '웰컴 요금제 신규': { external: 'https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0' },
   '웰컴 요금제 번이': { external: 'https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF' },
   'KT 유선 동판':  { external: 'https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=DA0D973B-4AD8-4E7C-B301-63392D31EAA2' },
+
+  'SK 내국인': { external: 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1' },
+  'SK 외국인': { external: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149' },
 
   'SK텔링크': {
     carrier: 'sk',
@@ -1158,6 +1185,20 @@ function formDuoCard(){
         </div>
         <div class="form-half" data-form="dongpan" role="button" tabindex="0" aria-label="동판양식 열기">
           <div class="form-text">동판양식</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function formSKDualCard(){
+  return `
+    <div class="form-duo-wrap" aria-label="SK 유심양식 묶음">
+      <div class="form-duo">
+        <div class="form-half" data-form="skusim_local" role="button" tabindex="0" aria-label="내국인 전용 열기">
+          <div class="form-text">내국인전용</div>
+        </div>
+        <div class="form-half" data-form="skusim_foreign" role="button" tabindex="0" aria-label="외국인 전용 열기">
+          <div class="form-text">외국인전용</div>
         </div>
       </div>
     </div>
@@ -1285,19 +1326,18 @@ function renderPrepaid(listEl){
 }
 
 function renderJoinGrouped(listEl, items){
-  const specialItems = items.filter(x => x.special === true);
-  const normalItems  = items.filter(x => !x.special);
+  const skLinkItems = items.filter(x => x.skLink === true);
+  const ktSpecialItems = items.filter(x => x.special === true && !x.skLink);
+  const normalItems = items.filter(x => !x.special && !x.skLink);
 
   const groups = [
     { key:'uplus', title:'LG', sub:'' },
-    { key:'kt',    title:'KT', sub:'' },
-    { key:'sk',    title:'SK', sub:'' },
+    { key:'sk', title:'SK', sub:'' }
   ];
 
   const by = {
     uplus: normalItems.filter(x => x.carrier === 'uplus'),
-    kt:    normalItems.filter(x => x.carrier === 'kt'),
-    sk:    normalItems.filter(x => x.carrier === 'sk'),
+    sk: normalItems.filter(x => x.carrier === 'sk')
   };
 
   const normalHTML = groups.map(g => {
@@ -1308,7 +1348,7 @@ function renderJoinGrouped(listEl, items){
         <div class="group-head">
           <span class="group-dot"></span>
           <span class="group-title">${g.title}</span>
-          <span class="group-sub">${g.sub}</span>
+          <span class="group-sub"></span>
         </div>
         <div class="brand-grid">
           ${arr.map(card).join('')}
@@ -1317,7 +1357,21 @@ function renderJoinGrouped(listEl, items){
     `;
   }).join('');
 
-  const specialHTML = specialItems.length ? `
+const skLinkHTML = skLinkItems.length ? `
+  <section class="group" data-carrier="sk">
+    <div class="group-head">
+      <span class="group-dot"></span>
+      <span class="group-title">SK 링크</span>
+      <span class="group-sub"></span>
+    </div>
+    <div class="brand-grid">
+      ${skLinkItems.map(card).join('')}
+      ${formSKDualCard()}
+    </div>
+  </section>
+` : '';
+
+  const ktLinkHTML = ktSpecialItems.length ? `
     <section class="group" data-carrier="kt">
       <div class="group-head">
         <span class="group-dot"></span>
@@ -1325,16 +1379,15 @@ function renderJoinGrouped(listEl, items){
         <span class="group-sub"></span>
       </div>
       <div class="brand-grid">
-        ${specialItems.map(card).join('')}
+        ${ktSpecialItems.map(card).join('')}
         ${formDuoCard()}
       </div>
     </section>
   ` : '';
 
-  listEl.innerHTML = normalHTML + specialHTML + deviceSectionHTML();
+  listEl.innerHTML = normalHTML + skLinkHTML + ktLinkHTML + deviceSectionHTML();
   attachNavigateHandlers(listEl);
 }
-
 function wireKindTabs(containerId, listId, dataObj){
   const container = document.getElementById(containerId);
   const list = document.getElementById(listId);
@@ -2536,23 +2589,79 @@ images: [
 
 ✅사전안내
 접수 전 고객 본인확인차 인증번호 확인 필요하며, 원스톱 진행 시에는 접수 후 원스톱 URL 인증절차까지 진행되어야 최종 접수완료됩니다.`
-    }
-  };
+    },
+
+  skusim_local: {
+    title: 'SK 내국인 전용 유심 개통 양식',
+    text:
+`★1703코드 / 개통요청 양식★
+★요청사항 : 
+1. 개통유형(전사업자) :
+2. 고객명 :
+3. 주민번호(13자리) :
+4. 개통번호 : 010-
+5. 유심일련번호/선후납선택 :
+6. 요금제/★혜택필수:
+7. 선약12 or 24 : 선약12
+8. 부가서비스 : 
+9. 비고(복지):
+10. 판매자 성함/연락처 :
+
+*ESIM 개통 시 단말정보
+Model: 
+IMEI : 
+IMEI2: 
+EID : 
+<span class="warn"><strong>※ 개통방에 요청서 접수(카톡접수)※
+   ☆내국인 MNP 진행시 별도문의 </strong></span>`
+  },
+
+  skusim_foreign: {
+    title: 'SK 외국인 전용 유심 개통 양식',
+    text:
+`★1508코드 / 개통요청 양식★
+★요청사항 : 
+1. 개통유형(전사업자) : 
+2. 고객명 :
+3. 외국인등록번호 : 
+4. 개통번호 : 010-
+5. 유심일련번호/선후납선택 : 
+6. 요금제 : 
+7. 선약12 or 24 : 선약12
+8. 부가서비스 : 국제전화 발신금지
+9. 메모 : 
+
+*ESIM 개통 시 단말정보
+Model: 
+IMEI : 
+IMEI2: 
+EID : 
+
+1. 신청서 작성
+2. 신청서 출력 하여 자필 서명
+3. 개통방에 요청서 접수(카톡접수)
+<span class="warn"><strong>★필요 서류
+☆여권 개통 : 여권 사본 + 신청서(URL 접수 후 출력) +카톡접수
+  E7,E9,D2,D4비자만 개통가능
+☆외국인등록증 : 외국인등록증 앞/뒤 사본 + 머그샷 + 신청서(URL 접수 후 출력) + 카톡접수
+*여권 3개월 이내 ID카드로 명변 필수
+ 명변 미진행시(전액 환수)*</strong></span>`
+  }
+};
 
   function showToast(){
     toast.classList.add('show');
     setTimeout(()=>toast.classList.remove('show'), 1200);
   }
 
-  function openForm(key){
-    const f = FORMS[key];
-    if (!f) return;
-    title.textContent = f.title;
-    ta.value = f.text;
-    modal.setAttribute('aria-hidden','false');
-    ta.scrollTop = 0;
-    ta.focus();
-  }
+function openForm(key){
+  const f = FORMS[key];
+  if (!f) return;
+  title.textContent = f.title;
+  ta.innerHTML = f.text;
+  modal.setAttribute('aria-hidden','false');
+  ta.scrollTop = 0;
+}
 
   function closeForm(){
     modal.setAttribute('aria-hidden','true');
@@ -2600,7 +2709,7 @@ images: [
     ta.focus();
     ta.select();
   });
-  copyBtn?.addEventListener('click', ()=> copyText(ta.value));
+  copyBtn?.addEventListener('click', ()=> copyText(ta.innerText));
 })();
 /* =========================
    ✅ 인쇄 직전 검정화면 방지: 모달/오버레이 강제 닫기
