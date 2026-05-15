@@ -50,7 +50,7 @@
             "모두 충분 11GB+(밀리의서재)",
             "모두 충분 11GB+(Pay_5000)",
             "모두 충분 11GB+(다이소_5000)",
-            "모두 충분 11GB+(배달의 민족)",
+            "모두 충분 11GB+(배달의민족)",
             "SKY 모두 충분 11GB+(CU)",
             "SKY 모두 충분 11GB+(밀리의서재)",
             "SKY 모두 충분 11GB+(모아진)",
@@ -62,6 +62,10 @@
             "모두 충분 100GB+(Pay_5000)",
             "SKY 모두 충분 100GB+(CU)",
             "모두 충분 100GB+(CU)",
+            "5G 슬림 10GB/200분",
+            "5G 통화 충분 3GB",
+            "5G 통화 충분 6GB",
+            "5G 통화 충분 10GB",
             "5G 통화 충분 20GB",
             "5G 통화 충분 30GB",
             "5G 모두 충분 50GB+",
@@ -780,7 +784,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "04"
+          "value": "05"
         },
         {
           "id": "일",
@@ -818,7 +822,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "02"
+          "value": "15"
         },
         {
           "id": "IMEI 1",
@@ -1128,6 +1132,44 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "비상연락처",
+          "label": "",
+          "type": "text",
+          "x": 23.853270054811514,
+          "y": 33.33951843366169,
+          "w": 25.96222664015905,
+          "required": true,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 18,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "fontSize": 14,
+          "textAlign": "center",
+          "mask": "tel",
+          "maskRe": "010-0000-0000",
+          "placeholder": "비상연락처",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1169,8 +1211,7 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
@@ -1207,8 +1248,7 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
@@ -1250,8 +1290,7 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
@@ -1288,8 +1327,7 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
@@ -1326,8 +1364,7 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
@@ -1364,8 +1401,7 @@
           "placeholder": "제휴 요금제 선택시 성함/싸인 필수 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
@@ -1402,8 +1438,7 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
@@ -1790,7 +1825,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "04"
+          "value": "05"
         },
         {
           "id": "월",
@@ -1828,7 +1863,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "02"
+          "value": "15"
         }
       ]
     }

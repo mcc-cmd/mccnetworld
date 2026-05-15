@@ -801,14 +801,13 @@ function setValueById(id, value) {
   }
 
   // input/textarea/select
-  if ('value' in el) {
-    el.value = v;
-    
-  } else {
-    el.textContent = v;
-  }
+if ('value' in el) {
+  el.value = v;
+} else {
+  el.textContent = v;
 }
-
+__programmaticUpdate = false;
+}
 function applyAutoDateAll(){
   const d = new Date();
   const YYYY = String(d.getFullYear());
@@ -1870,7 +1869,7 @@ ctrl.oninput = () => {
     }
 w.appendChild(ctrl);
 bindRequiredFieldVisual(f, w, ctrl);
-overlay.appendChild(w);overlay.appendChild(w);
+overlay.appendChild(w);
 
     if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
       const rh = document.createElement('div');
