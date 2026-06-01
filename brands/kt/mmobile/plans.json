@@ -94,13 +94,13 @@
       "extraDataGb": 10,
       "bundleAnyone": true
     },
-        "M 스페셜 15GB(밀리의서재)": {
+    "M 스페셜 15GB(밀리의서재)": {
       "base": 43000,
       "discount": 20600,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
-        "M 프리미엄 15GB 100분": {
+    "M 프리미엄 15GB 100분": {
       "base": 36300,
       "discount": 10400,
       "extraDataGb": 10,

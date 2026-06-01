@@ -1,29 +1,6 @@
  {
          "plans": {
- "이동의즐거움 K-패스 (100GB+/통화기본)": {
-    "base": 47600,
-    "discount": 5700,
-    "extraDataGb": 20,
-    "bundleAnyone": false
-  },
-  "이동의즐거움 K-패스 (71GB+/통화기본)": {
-    "base": 50390,
-    "discount": 15490,
-    "extraDataGb": 20,
-    "bundleAnyone": false
-  },
-  "이동의즐거움 K-패스 (7GB+/통화기본)": {
-    "base": 40800,
-    "discount": 22200,
-    "extraDataGb": 5,
-    "bundleAnyone": false
-  },
-  "이동의즐거움 K-패스 (1GB+/통화기본)": {
-    "base": 26300,
-    "discount": 12900,
-    "extraDataGb": 0,
-    "bundleAnyone": false
-  },
+
   "LTE 스페셜 [약정형1]": {
     "base": 43800,
     "discount": 9900,
@@ -42,7 +19,7 @@
     "extraDataGb": 0,
     "bundleAnyone": false
   },
-  "LTE 스페셜 플러스 [약정형]": {
+  "LTE 스페셜 플러스 [약정형1]": {
     "base": 50800,
     "discount": 9900,
     "extraDataGb": 20,
@@ -90,15 +67,27 @@
     "extraDataGb": 20,
     "bundleAnyone": false
   },
-  "LTE (15GB+/100분)": {
+     "다성비 (71GB+/통화기본)": {
+    "base": 50390,
+    "discount": 14790,
+    "extraDataGb": 10,
+    "bundleAnyone": false
+  },
+    "다성비 (7GB+/통화기본)": {
+    "base": 40800,
+    "discount": 21500,
+    "extraDataGb": 10,
+    "bundleAnyone": false
+  }, 
+    "LTE (15GB+/100분)": {
     "base": 47300,
     "discount": 20100,
     "extraDataGb": 10,
     "bundleAnyone": false
   },
-  "데이터플러스 (15GB+/100분)": {
-    "base": 51550,
-    "discount": 22050,
+    "데이터플러스 (17GB+/통화기본)": {
+    "base": 32600,
+    "discount": 9700,
     "extraDataGb": 10,
     "bundleAnyone": false
   },  
@@ -108,6 +97,12 @@
     "extraDataGb": 10,
     "bundleAnyone": false
   },
+  "데이터플러스 (15GB+/100분)": {
+    "base": 51550,
+    "discount": 22050,
+    "extraDataGb": 10,
+    "bundleAnyone": false
+  },  
   "LTE (10GB+/통화기본)": {
     "base": 41950,
     "discount": 19050,
@@ -126,25 +121,19 @@
     "extraDataGb": 0,
     "bundleAnyone": false
   },
-  "LTE (1GB+/통화기본)": {
-    "base": 25300,
-    "discount": 11900,
-    "extraDataGb": 0,
-    "bundleAnyone": false
-  },
-  "LTE (9GB/3000분)": {
+    "LTE (9GB/3000분)": {
     "base": 37800,
     "discount": 21900,
     "extraDataGb": 0,
     "bundleAnyone": false
   },
-  "LTE (5GB+/200분)": {
+    "LTE (5GB+/200분)": {
     "base": 28200,
     "discount": 13300,
     "extraDataGb": 0,
     "bundleAnyone": false
   },
-  "LTE (1GB+/통화기본) ": {
+  "LTE (1GB+/통화기본)": {
     "base": 25300,
     "discount": 11900,
     "extraDataGb": 0,
@@ -219,24 +208,6 @@
   "5G (31GB+/통화기본)": {
     "base": 48300,
     "discount": 11650,
-    "extraDataGb": 10,
-    "bundleAnyone": false
-  }, 
-  "데이터플러스 (17GB+/통화기본)": {
-    "base": 32600,
-    "discount": 9700,
-    "extraDataGb": 10,
-    "bundleAnyone": false
-  },  
-  "다성비 (7GB+/통화기본)": {
-    "base": 40800,
-    "discount": 21500,
-    "extraDataGb": 10,
-    "bundleAnyone": false
-  }, 
-   "다성비 (71GB+/통화기본)": {
-    "base": 50390,
-    "discount": 14790,
     "extraDataGb": 10,
     "bundleAnyone": false
   }
