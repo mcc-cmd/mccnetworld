@@ -7,8 +7,8 @@
           "id": "비상연락처",
           "label": "",
           "type": "text",
-          "x": 18.873887952867445,
-          "y": 35.22247710903345,
+          "x": 19.07485473987668,
+          "y": 36.29364460736806,
           "w": 18,
           "required": true,
           "radioSize": 18,
@@ -38,8 +38,8 @@
           "id": "plan",
           "label": "",
           "type": "select",
-          "x": 7.570129468250799,
-          "y": 24.923094368163902,
+          "x": 7.97274958858355,
+          "y": 26.066174426750393,
           "w": 14.0180582786583,
           "required": true,
           "options": [
@@ -339,8 +339,8 @@
           "id": "이름",
           "label": "",
           "type": "textarea",
-          "x": 18.910032838255493,
-          "y": 32.989907184146965,
+          "x": 18.909814504810484,
+          "y": 33.990374247615485,
           "w": 17.890109890109887,
           "required": true,
           "radioSize": 18,
@@ -374,8 +374,8 @@
           "id": "주민번호",
           "label": "",
           "type": "textarea",
-          "x": 53.3664074572888,
-          "y": 32.80110377813579,
+          "x": 53.36527106012203,
+          "y": 34.230643332233996,
           "w": 17,
           "required": true,
           "radioSize": 15,
@@ -406,8 +406,8 @@
           "id": "성별",
           "label": "",
           "type": "radio",
-          "x": 78.9967295887706,
-          "y": 32.513466920326785,
+          "x": 79.19691054958425,
+          "y": 33.79998558699672,
           "w": 11.096645657649077,
           "required": true,
           "options": [
@@ -443,8 +443,8 @@
           "id": "text_1761296387352",
           "label": "",
           "type": "text",
-          "x": 36.12292279253949,
-          "y": 51.298006818016695,
+          "x": 34.504435783208805,
+          "y": 50.29438766466845,
           "w": 17.362637362637365,
           "required": false,
           "radioSize": 18,
@@ -476,8 +476,8 @@
           "id": "자동이체/계좌",
           "label": "",
           "type": "checkbox",
-          "x": 26.969868248888773,
-          "y": 42.99555942409711,
+          "x": 25.204442991405212,
+          "y": 43.71977109288267,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -504,8 +504,8 @@
           "id": "카드/계좌",
           "label": "",
           "type": "text",
-          "x": 49.72781003176511,
-          "y": 44.601660475971244,
+          "x": 49.828786724619,
+          "y": 45.67390902990582,
           "w": 27.107420267029397,
           "required": true,
           "radioSize": 18,
@@ -629,8 +629,8 @@
           "id": "주소",
           "label": "",
           "type": "text",
-          "x": 18.718008523458963,
-          "y": 37.431275882693384,
+          "x": 18.717326963634896,
+          "y": 38.64520703714122,
           "w": 75,
           "required": true,
           "radioSize": 18,
@@ -709,11 +709,11 @@
           "checkSize": 18,
           "textAlign": "center",
           "lockOnPh": false,
-          "value": false,
           "checkStyle": "tick",
           "inputHeight": 25,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": false
         },
         {
           "id": "extraData",
@@ -748,8 +748,8 @@
           "id": "부가서비스",
           "label": "",
           "type": "select",
-          "x": 23.74005831204928,
-          "y": 55.805183073669376,
+          "x": 24.14397720861483,
+          "y": 54.8001988147912,
           "w": 30,
           "required": true,
           "options": [
@@ -803,7 +803,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "04"
+          "value": "06"
         },
         {
           "id": "일",
@@ -829,7 +829,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "15"
+          "value": "01"
         },
         {
           "id": "성함싸인",
@@ -866,8 +866,8 @@
           "id": "번호이동",
           "label": "",
           "type": "text",
-          "x": 22.98634791112208,
-          "y": 72.46280129015345,
+          "x": 22.681548019270323,
+          "y": 71.38842995834585,
           "w": 22.58923850346495,
           "required": false,
           "radioSize": 18,
@@ -900,8 +900,8 @@
           "id": "전통신사",
           "label": "",
           "type": "radio",
-          "x": 64.5759532215831,
-          "y": 71.93714229456177,
+          "x": 64.97998975285142,
+          "y": 71.36457410338946,
           "w": 19.67032967032967,
           "required": false,
           "options": [
@@ -995,8 +995,8 @@
           "id": "유심 번호",
           "label": "",
           "type": "text",
-          "x": 64.58972972827954,
-          "y": 65.27837926891937,
+          "x": 64.6897796191147,
+          "y": 64.34889748597601,
           "w": 28.663458391073483,
           "required": true,
           "radioSize": 18,
@@ -1026,8 +1026,8 @@
           "id": "IMEI 1",
           "label": "",
           "type": "text",
-          "x": 25.460205740830276,
-          "y": 66.81097788633686,
+          "x": 26.06547377830328,
+          "y": 66.09453778157392,
           "w": 24.67969598262758,
           "required": false,
           "radioSize": 18,
@@ -1055,8 +1055,8 @@
           "id": "IMEI 2",
           "label": "",
           "type": "text",
-          "x": 25.4614549402823,
-          "y": 67.96373392231129,
+          "x": 25.76432483622953,
+          "y": 67.53429339149618,
           "w": 25.00542888165038,
           "required": false,
           "radioSize": 18,
@@ -1084,8 +1084,8 @@
           "id": "EID",
           "label": "",
           "type": "text",
-          "x": 63.57220412595005,
-          "y": 67.7334207503771,
+          "x": 64.78269623311876,
+          "y": 66.66040197748325,
           "w": 30,
           "required": false,
           "radioSize": 18,
@@ -1141,8 +1141,8 @@
           "id": "자동이체/카드",
           "label": "",
           "type": "checkbox",
-          "x": 43.58020828031691,
-          "y": 42.79726386902138,
+          "x": 41.58546738966893,
+          "y": 43.65820492175044,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -1170,8 +1170,8 @@
           "id": "통신사명",
           "label": "",
           "type": "text",
-          "x": 86.04777415852335,
-          "y": 72.10937101712655,
+          "x": 85.94565232434095,
+          "y": 71.17878032392471,
           "w": 8.695159346625147,
           "required": false,
           "radioSize": 18,
@@ -1201,8 +1201,8 @@
           "id": "예금주 생년월일",
           "label": "",
           "type": "text",
-          "x": 72.26556463555976,
-          "y": 51.36660052002979,
+          "x": 73.47749675368877,
+          "y": 50.07955842537568,
           "w": 15.385501601839117,
           "required": true,
           "radioSize": 18,
@@ -1232,8 +1232,8 @@
           "id": "은행/카드사명",
           "label": "",
           "type": "text",
-          "x": 31.319396925770565,
-          "y": 44.471820167170996,
+          "x": 31.723213677941487,
+          "y": 45.75847578846721,
           "w": 11.48212193897473,
           "required": true,
           "radioSize": 18,
@@ -1324,8 +1324,8 @@
           "id": "신규/번이",
           "label": "",
           "type": "radio",
-          "x": 50.83577585744333,
-          "y": 4.3155867047346534,
+          "x": 51.23892717583235,
+          "y": 4.529558460284561,
           "w": 8.238411334858034,
           "required": true,
           "options": [
@@ -1366,8 +1366,8 @@
           "id": "법대 성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 69.18458058959276,
-          "y": 11.487869474840085,
+          "x": 68.67876959280973,
+          "y": 10.843327708931167,
           "w": 22.29119620165659,
           "required": false,
           "radioSize": 18,
@@ -1389,14 +1389,15 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 33,
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 71.23134578464384,
-          "y": 50.80384870091878,
+          "x": 72.24064307217651,
+          "y": 50.30146543981739,
           "w": 22.06546255179464,
           "required": false,
           "radioSize": 18,
@@ -1418,7 +1419,8 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 37,
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         }
       ]
     },
@@ -1448,14 +1450,15 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true
+          "locked": true,
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 76.54062124399039,
-          "y": 48.03220868875058,
+          "x": 76.7426801282306,
+          "y": 48.74685089187385,
           "w": 15.252275738607826,
           "required": false,
           "radioSize": 18,
@@ -1478,14 +1481,15 @@
           "textAlign": "",
           "inputHeight": 24,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 76.7696305159684,
-          "y": 57.47971544236583,
+          "x": 76.26237849977066,
+          "y": 58.1936254554845,
           "w": 16.125443187646972,
           "required": false,
           "radioSize": 18,
@@ -1508,14 +1512,15 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 76.33882292024381,
-          "y": 66.93734716513194,
+          "x": 76.23592170352762,
+          "y": 67.50823609537908,
           "w": 15.691836178168264,
           "required": false,
           "radioSize": 18,
@@ -1538,14 +1543,15 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 77.49639825506524,
-          "y": 91.31858113472117,
+          "x": 76.48521544839302,
+          "y": 91.67317208165919,
           "w": 14.35730718354371,
           "required": false,
           "radioSize": 18,
@@ -1568,14 +1574,15 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "affiliate_millie",
           "label": "",
           "type": "imagecheck",
-          "x": 89.3,
-          "y": 79.23,
+          "x": 89.19827689777371,
+          "y": 79.65781095323668,
           "w": 8,
           "required": false,
           "inputHeight": 24,
@@ -1603,8 +1610,8 @@
           "id": "affiliate_genie",
           "label": "",
           "type": "imagecheck",
-          "x": 89.3,
-          "y": 72.75749288575155,
+          "x": 89.40050136693446,
+          "y": 73.11370092324384,
           "w": 8,
           "required": false,
           "inputHeight": 24,
@@ -1632,8 +1639,8 @@
           "id": "affiliate_megabox",
           "label": "",
           "type": "imagecheck",
-          "x": 89.3,
-          "y": 86.85054151139136,
+          "x": 89.2993891323541,
+          "y": 87.0635331991727,
           "w": 8,
           "required": false,
           "inputHeight": 24,
@@ -1661,8 +1668,8 @@
           "id": "affiliate_cu",
           "label": "",
           "type": "imagecheck",
-          "x": 89.3,
-          "y": 81.85814562787252,
+          "x": 89.2993891323541,
+          "y": 82.2870647855552,
           "w": 8,
           "required": false,
           "inputHeight": 24,
@@ -1719,7 +1726,8 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1749,7 +1757,8 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         }
       ]
     },
@@ -1779,7 +1788,8 @@
           "placeholder": "미결합 요금제 상관없이 필수 첨부 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1809,7 +1819,8 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         }
       ]
     },
@@ -1839,7 +1850,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "discountFee",
@@ -1869,7 +1881,8 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -1899,7 +1912,8 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "totalFee",
@@ -1929,7 +1943,8 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "planEcho",
@@ -1987,7 +2002,8 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "상담사",
@@ -2017,7 +2033,8 @@
           "inputHeight": 18,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "번호이동 번호",
@@ -2047,7 +2064,8 @@
           "inputHeight": 24,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2077,7 +2095,8 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle"
+          "verticalAlign": "middle",
+          "value": ""
         },
         {
           "id": "0",
