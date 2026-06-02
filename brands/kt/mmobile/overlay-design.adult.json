@@ -1324,18 +1324,18 @@
           "id": "신규/번이",
           "label": "",
           "type": "radio",
-          "x": 51.23892717583235,
-          "y": 4.529558460284561,
+          "x": 50.440146058679105,
+          "y": 4.317236098037953,
           "w": 8.238411334858034,
           "required": true,
           "options": [
             "신규",
             "번이"
           ],
-          "radioSize": 17,
+          "radioSize": 15,
           "radioGap": 0,
           "radioStyle": "tick",
-          "checkSize": 17,
+          "checkSize": 15,
           "color": "#000000",
           "inputHeight": 19,
           "wrap": true,
@@ -1389,8 +1389,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 33,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1419,8 +1418,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 37,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -1450,8 +1448,7 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true,
-          "value": ""
+          "locked": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1481,8 +1478,7 @@
           "textAlign": "",
           "inputHeight": 24,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1512,8 +1508,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1543,8 +1538,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1574,8 +1568,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "affiliate_millie",
@@ -1726,8 +1719,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1757,8 +1749,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
