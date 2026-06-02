@@ -521,6 +521,12 @@ body{
   letter-spacing:-0.2px;
   color:#0b1220;
 }
+.form-text-sk{
+  font-size:18px;
+  font-weight:800;
+  line-height:1.35;
+  text-align:center;
+}
 @media (max-width:720px){
   .form-duo{grid-template-columns:1fr;}
   .form-duo .form-text{font-size:22px}
@@ -1201,11 +1207,12 @@ function formSKDualCard(){
   return `
     <div class="form-duo-wrap" aria-label="SK 유심양식 묶음">
       <div class="form-duo">
-        <div class="form-half" data-form="skusim_local" role="button" tabindex="0" aria-label="내국인 전용 열기">
-          <div class="form-text">내국인전용</div>
+        <div class="form-half" data-form="skusim_local">
+          <div class="form-text form-text-sk">T-gate<br>접수양식 </div>
         </div>
-        <div class="form-half" data-form="skusim_foreign" role="button" tabindex="0" aria-label="외국인 전용 열기">
-          <div class="form-text">외국인전용</div>
+
+        <div class="form-half" data-form="skusim_foreign">
+          <div class="form-text form-text-sk">외국인 여권<br>접수 양식</div>
         </div>
       </div>
     </div>
@@ -2633,6 +2640,7 @@ IMEI :
 IMEI2: 
 EID : 
 <span class="warn"><strong>※ 개통방에 요청서 접수(카톡접수)※
+☆외국인등록증 : 외국인등록증 앞/뒤 사본 + 머그샷 + 카톡접수
    ☆내국인 MNP 진행시 별도문의 </strong></span>`,
   },
 
