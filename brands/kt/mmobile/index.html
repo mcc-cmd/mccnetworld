@@ -73,6 +73,31 @@ html.fill .wrap{
   align-items:flex-end;
 }
   .field.checkbox{transform:translate(-50%,-50%)}
+  .field.checkmark{transform:translate(-50%,-50%)}
+
+  .field.checkmark .checkmark-symbol{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:var(--fs,18px);
+    font-weight:900;
+    color:var(--fgc,#000);
+    line-height:1;
+    pointer-events:none;
+  }
+
+  .field.checkmark .label{
+    display:none;
+  }
+
+  html.force-builder .field.checkmark{
+    outline:1px dashed #ff3b3b;
+    background:rgba(255,59,59,.08);
+    min-height:16px;
+  }
+
   .label{position:absolute;top:-16px;left:0;font-size:12px;font-weight:800;text-shadow:0 1px 2px #0009}
 .field input[type="text"],
 .field select{
@@ -891,6 +916,7 @@ try {
             <option value="radio">라디오(단일선택)</option>
             <option value="checkbox">체크박스</option>
             <option value="imagecheck">체크이미지</option>
+            <option value="checkmark">체크표시(✓)</option>
             <option value="label">고정텍스트</option>
           </select>
         </div>
@@ -907,6 +933,8 @@ try {
 
         <div class="row"><div>라벨(선택)</div><input id="p_label" type="text" placeholder="라벨"></div>
         <div class="row"><div>필드 ID</div><input id="p_id" type="text" placeholder="예: plan / baseFee / applyYear 등"></div>
+        <div class="row" id="row_checkGroup"><div>체크 그룹명</div><input id="p_groupId" type="text" placeholder="예: 전통신사 / 성별 / 신규/번이"></div>
+        <div class="row" id="row_checkValue"><div>체크 값</div><input id="p_checkValue" type="text" placeholder="예: SK / KT / LG / MVNO / 남 / 여"></div>
 
         <div class="row" id="row_opts"><div>옵션(콤마)</div><input id="p_options" type="text" placeholder="예: 남, 여 / 또는 옵션 목록"></div>
         <div class="row" id="row_req"><div>필수</div><label><input type="checkbox" id="p_required"> 반드시 작성</label></div>
@@ -1078,11 +1106,79 @@ const CONDITIONAL_REQUIRED = [
   { sourceId: '전통신사', whenValue: 'MVNO', requiredOn: ['통신사명'] },
 ];
 
+// ✅ checkmark 그룹/값 자동 판정
+function getCheckmarkGroupId(f){
+  if (!f || f.type !== 'checkmark') return '';
+  if (f.groupId) return String(f.groupId);
+
+  const text = [f.id, f.label, f.checkValue].map(v => String(v || '')).join(' ');
+
+  // 신규/번호이동 체크표시는 기존 조건부 필수 규칙과 연결
+  if (/신규|번이|번호\s*이동|mnp|new/i.test(text)) return '신규/번이';
+
+  return '';
+}
+
+function getCheckmarkValue(f){
+  if (!f || f.type !== 'checkmark') return '';
+  if (f.checkValue) return String(f.checkValue);
+
+  const text = [f.id, f.label].map(v => String(v || '')).join(' ');
+  if (/번호\s*이동|번이|mnp/i.test(text)) return '번이';
+  if (/신규|new/i.test(text)) return '신규';
+
+  return f.id || 'Y';
+}
+
+function getCheckmarkGroupValue(groupId){
+  const key = String(groupId || '').toLowerCase();
+  if (!key) return '';
+
+  const direct = valuesById[groupId] ?? valuesById[key];
+  if (direct != null && String(direct).trim() !== '') return String(direct);
+
+  for (const pg of pages){
+    for (const f of (pg.fields || [])){
+      if (f.type !== 'checkmark') continue;
+      if (String(getCheckmarkGroupId(f)).toLowerCase() === key && !!f.value){
+        return getCheckmarkValue(f);
+      }
+    }
+  }
+  return '';
+}
+
+function isCheckmarkGroupChecked(groupId){
+  return !!getCheckmarkGroupValue(groupId);
+}
+
+function setCheckmarkGroupValue(groupId, checkValue){
+  const groupKey = String(groupId || '').toLowerCase();
+  const wanted = String(checkValue || '');
+  if (!groupKey) return;
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (f.type !== 'checkmark') return;
+      if (String(getCheckmarkGroupId(f)).toLowerCase() !== groupKey) return;
+      f.value = (getCheckmarkValue(f) === wanted);
+      if (f.id) valuesById[f.id] = !!f.value;
+    });
+  });
+
+  valuesById[groupId] = wanted;
+}
+
 // ✅ 현재 값 읽기(전역값 → 설계값 순)
 function getValueById(id){
   if (!id) return '';
-  const v1 = valuesById[id];
+
+  const v1 = valuesById[id] ?? valuesById[String(id).toLowerCase()];
   if (v1 != null && String(v1).trim() !== '') return String(v1);
+
+  // checkmark 그룹값 우선 확인: 예) 신규/번이 → 신규 또는 번이
+  const groupValue = getCheckmarkGroupValue(id);
+  if (groupValue) return groupValue;
 
   // pages 설계값에서도 찾아봄
   try{
@@ -1091,6 +1187,7 @@ function getValueById(id){
       for (const f of (pg.fields||[])){
         if (String(f.id||'').toLowerCase() === key){
           if (f.type === 'checkbox') return f.value ? 'Y' : '';
+          if (f.type === 'checkmark') return f.value ? getCheckmarkValue(f) : '';
           return (f.value ?? '').toString();
         }
       }
@@ -1120,11 +1217,23 @@ function setValueById(id, value) {
 
   try {
     const key = String(id).toLowerCase();
+
+    // checkmark 그룹값 세팅: 예) setValueById('신규/번이','신규')
+    const hasCheckmarkGroup = pages.some(pg =>
+      (pg.fields || []).some(f =>
+        f.type === 'checkmark' && String(getCheckmarkGroupId(f)).toLowerCase() === key
+      )
+    );
+    if (hasCheckmarkGroup && typeof value === 'string') {
+      setCheckmarkGroupValue(id, value);
+    }
+
     pages.forEach(pg => {
       (pg.fields || []).forEach(f => {
         if (String(f.id || '').toLowerCase() === key) {
           if (f.type === 'checkbox') f.value = !!value;
           else if (f.type === 'imagecheck') f.value = !!value;
+          else if (f.type === 'checkmark') f.value = !!value;
           else f.value = (value ?? "");
         }
       });
@@ -1148,6 +1257,8 @@ function setValueById(id, value) {
       img.style.pointerEvents = 'none';
       el.appendChild(img);
     }
+  } else if (el.dataset && el.dataset.type === 'checkmark') {
+    el.textContent = value ? '✓' : '';
   } else {
     if (typeof el === 'object' && el.type === 'radio') {
       el.value = (value ?? "");
@@ -1365,6 +1476,7 @@ function getValueByIdAllPages(id){
 function isEmptyFieldValue(f){
   if (!f) return true;
   if (f.type === 'checkbox') return !f.value;
+  if (f.type === 'checkmark') return !f.value;
   return !(String(f.value ?? '').trim());
 }
 
@@ -1702,6 +1814,7 @@ function render(){
     w.className = 'field '
       + (f.type === 'radio'    ? 'radio '    : '')
       + (f.type === 'checkbox' ? 'checkbox ' : '')
+      + (f.type === 'checkmark' ? 'checkmark ' : '')
       + (i === selected        ? ' sel'      : '');
       // ⬇️ 여기 추가
 if (f.type === 'checkbox' || f.type === 'radio') {
@@ -1896,7 +2009,61 @@ else if (f.type === 'label') {
 
   if (f.id) elById[f.id] = ctrl;
 }
+else if (f.type === 'checkmark') {
+  ctrl = document.createElement('div');
+  ctrl.className = 'checkmark-symbol';
+  ctrl.dataset.type = 'checkmark';
+  ctrl.textContent = f.value ? '✓' : '';
+  ctrl.style.width = '100%';
+  ctrl.style.height = '100%';
 
+  if (f.id) elById[f.id] = ctrl;
+
+  lab.style.display = 'none';
+
+  const toggleCheckmark = () => {
+    const groupId = getCheckmarkGroupId(f);
+    const checkValue = getCheckmarkValue(f);
+
+    if (groupId) {
+      // 같은 그룹은 하나만 선택되도록 처리
+      pages.forEach(pg => {
+        (pg.fields || []).forEach(x => {
+          if (x.type === 'checkmark' && getCheckmarkGroupId(x) === groupId) {
+            x.value = false;
+            if (x.id) valuesById[x.id] = false;
+          }
+        });
+      });
+
+      f.value = true;
+      if (f.id) valuesById[f.id] = true;
+      valuesById[groupId] = checkValue;
+      valuesById[String(groupId).toLowerCase()] = checkValue;
+    } else {
+      f.value = !f.value;
+      if (f.id) valuesById[f.id] = !!f.value;
+    }
+
+    applyConditionalRequired();
+    render();
+    scheduleSave();
+    evaluateAffBanner();
+    evaluateExtraDataAndBar();
+  };
+
+  if (FILL) {
+    w.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleCheckmark();
+    });
+  } else {
+    w.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      toggleCheckmark();
+    });
+  }
+}
     else if (f.type === 'imagecheck') {
   ctrl = document.createElement('div');
   ctrl.dataset.type = 'imagecheck';
@@ -2095,7 +2262,7 @@ if (FILL && ctrl && ctrl.addEventListener) {
 
 w.appendChild(ctrl);
 
-if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio' || f.type === 'checkmark')) {
   const rh = document.createElement('div');
   rh.className = 'resize-handle';
   rh.addEventListener('mousedown', (e) => startResize(e, i, w));
@@ -2204,6 +2371,8 @@ const pLabel=document.getElementById('p_label'),
       pAutoDate=document.getElementById('p_autoDate'),
       pLocked=document.getElementById('p_locked'),
       pLockOnPh=document.getElementById('p_lockOnPh'),
+pGroupId=document.getElementById('p_groupId'),
+pCheckValue=document.getElementById('p_checkValue'),
 pCheckStyle=document.getElementById('p_checkStyle'),
 pAutoShrink=document.getElementById('p_autoShrink'),
 pVerticalAlign=document.getElementById('p_verticalAlign'),
@@ -2216,6 +2385,8 @@ const info=document.getElementById('selInfo'),
       pw=document.getElementById('p_w'),
       rowOpts=document.getElementById('row_opts'),
       rowReq=document.getElementById('row_req'),
+      rowCheckGroup=document.getElementById('row_checkGroup'),
+      rowCheckValue=document.getElementById('row_checkValue'),
       rowRadioShowText=document.getElementById('row_radioShowText'),
       rowCheckStyle=document.getElementById('row_checkStyle');
 
@@ -2223,6 +2394,8 @@ const info=document.getElementById('selInfo'),
     info.textContent='없음'; px.value=py.value=pw.value='';
     pLabel.value=''; pRadioSize.value='18'; pRadioGap.value='12';pOptions.value='';
 pColor.value='#000000'; pHeight.value=''; pId.value='';
+if (pGroupId) pGroupId.value='';
+if (pCheckValue) pCheckValue.value='';
 pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=true;
 pBgColor.value='#000000'; pBgTransparent.checked=true;
 
@@ -2238,6 +2411,8 @@ pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;pRequired.che
 
 if(rowOpts) rowOpts.style.display='none';
 if(rowReq) rowReq.style.display='none';
+if(rowCheckGroup) rowCheckGroup.style.display='none';
+if(rowCheckValue) rowCheckValue.style.display='none';
 if(rowRadioShowText) rowRadioShowText.style.display='none';
 if(rowCheckStyle) rowCheckStyle.style.display='none';
 if (pCheckStyle) pCheckStyle.value = 'tick';
@@ -2260,6 +2435,8 @@ if (pRadioShowText) pRadioShowText.checked = (f.radioShowText !== false);
 pColor.value=(f.color || '#000000');
 pHeight.value=(f.inputHeight ?? '');
 pId.value=f.id || '';
+if (pGroupId) pGroupId.value = f.groupId || '';
+if (pCheckValue) pCheckValue.value = f.checkValue || '';
 pBorderColor.value = (f.borderColor || '#ff3b3b');
 pBorderWidth.value = (f.borderWidth ?? 2);
 pBorderTransparent.checked = (f.borderTransparent !== false);
@@ -2271,6 +2448,8 @@ pBgTransparent.checked = (f.bgTransparent !== false);
   if(pRequired) pRequired.checked=!!f.required;
 
 if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
+if(rowCheckGroup) rowCheckGroup.style.display=(f.type==='checkmark') ? '' : 'none';
+if(rowCheckValue) rowCheckValue.style.display=(f.type==='checkmark') ? '' : 'none';
 if(rowRadioShowText) rowRadioShowText.style.display=(f.type==='radio') ? '' : 'none';
 if(rowCheckStyle) rowCheckStyle.style.display=(f.type==='checkbox' || f.type==='radio') ? '' : 'none';
 if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
@@ -2415,6 +2594,7 @@ if (t === 'radio') {
 }
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
   if(t==='imagecheck'){ base.inputHeight = 24; base.value = false; }
+  if(t==='checkmark'){ base.inputHeight = 18; base.fontSize = 18; base.value = false; base.w = 2; }
 
   cur().fields.push(base);
   selected=cur().fields.length-1;
@@ -2461,6 +2641,10 @@ document.getElementById('applyProp').onclick = () => {
 // ✅ 기타 속성
 f.wrap = !!pWrap.checked;
 f.id = (pId.value || '').trim() || f.id;
+if (f.type === 'checkmark') {
+  f.groupId = (pGroupId?.value || '').trim();
+  f.checkValue = (pCheckValue?.value || '').trim();
+}
 f.required = !!pRequired?.checked;
 
 f.borderTransparent = !!pBorderTransparent?.checked;
@@ -2599,7 +2783,8 @@ function getValueByIdSafe(id){
   if(!id) return '';
   const key = String(id);
   const v = (valuesById[key] ?? valuesById[key.toLowerCase()]);
-  return (v == null) ? '' : String(v);
+  if (v != null && String(v).trim() !== '') return String(v);
+  return getValueById(id);
 }
 
 function setRequiredAllPages(targetId, on){
@@ -2656,6 +2841,11 @@ function isRequiredFieldFilled(f, ctrl){
   if (!ctrl) return false;
 
   if (f.type === 'checkbox') return !!ctrl.checked;
+  if (f.type === 'checkmark') {
+    const groupId = getCheckmarkGroupId(f);
+    if (groupId) return isCheckmarkGroupChecked(groupId);
+    return !!f.value;
+  }
   if (f.type === 'radio') return !!ctrl.querySelector('input[type="checkbox"]:checked');
 
   return String(ctrl.value ?? '').trim() !== '';
@@ -2686,6 +2876,9 @@ function bindRequiredFieldVisual(f, wrap, ctrl){
   } else if (f.type === 'checkbox' || f.type === 'select') {
     ctrl.addEventListener('change', apply);
     ctrl.addEventListener('input', apply);
+  } else if (f.type === 'checkmark') {
+    ctrl.addEventListener('click', apply);
+    ctrl.addEventListener('dblclick', apply);
   } else {
     ctrl.addEventListener('input', apply);
     ctrl.addEventListener('change', apply);
@@ -2697,7 +2890,8 @@ function bindRequiredFieldVisual(f, wrap, ctrl){
 /* ===== 필수 검증/토스트 ===== */
 function findMissingAll(){
   const miss = [];
-  const condSet = getConditionalRequiredSet(); // ✅ 추가
+  const condSet = getConditionalRequiredSet();
+  const checkedRequiredGroups = new Set();
 
   pages.forEach((pg, pi) => {
     (pg.fields || []).forEach((f, fi) => {
@@ -2709,15 +2903,31 @@ function findMissingAll(){
       // placeholder 잠금 + 값 없으면 제외(기존 로직 유지)
       if (f.locked && f.lockOnPh && !f.value) return;
 
-      const v = (f.type === 'checkbox')
-        ? (!!f.value ? 'Y' : '')
-        : (f.value ?? '').toString().trim();
+      let v = '';
+
+      if (f.type === 'checkbox') {
+        v = !!f.value ? 'Y' : '';
+      } else if (f.type === 'checkmark') {
+        const groupId = getCheckmarkGroupId(f);
+
+        // 같은 그룹은 “둘 중 하나” 기준으로 한 번만 검사
+        if (groupId) {
+          const groupKey = String(groupId).toLowerCase();
+          if (checkedRequiredGroups.has(groupKey)) return;
+          checkedRequiredGroups.add(groupKey);
+          v = getCheckmarkGroupValue(groupId);
+        } else {
+          v = !!f.value ? 'Y' : '';
+        }
+      } else {
+        v = (f.value ?? '').toString().trim();
+      }
 
       if(!v){
         miss.push({
           page: pi,
           idx: fi,
-          label: (f.label || f.id || `필드${fi+1}`)
+          label: (f.label || f.id || getCheckmarkGroupId(f) || `필드${fi+1}`)
         });
       }
     });
@@ -2786,7 +2996,8 @@ img.src = page.bg ? new URL(page.bg, location.href).href : '';
     w.className =
       'field ' +
       (f.type === 'radio' ? 'radio ' : '') +
-      (f.type === 'checkbox' ? 'checkbox ' : '');
+      (f.type === 'checkbox' ? 'checkbox ' : '') +
+      (f.type === 'checkmark' ? 'checkmark ' : '');
 
 w.style.left = `${f.x}%`;
 w.style.top  = `${f.y}%`;
@@ -2962,7 +3173,15 @@ else if (f.type === 'label') {
   pv.textContent = labelText;
   w.appendChild(pv);
 }
+else if (f.type === 'checkmark') {
+  ctrl = document.createElement('div');
+  ctrl.className = 'checkmark-symbol';
+  ctrl.textContent = f.value ? '✓' : '';
+  ctrl.style.width = '100%';
+  ctrl.style.height = '100%';
 
+  lab.style.display = 'none';
+}
     else if (f.type === 'imagecheck') {
   ctrl = document.createElement('div');
   ctrl.style.width = '100%';
@@ -3283,7 +3502,7 @@ function evaluateAffBanner(){
   try{
     const values=[];
     pages.forEach(pg=>(pg.fields||[]).forEach(f=>{
-      const v=(f.type==='checkbox')?(f.value?'Y':''):(f.value||'');
+      const v=(f.type==='checkbox'||f.type==='checkmark')?(f.value?'Y':''):(f.value||'');
       if(typeof v==='string') values.push(v);
     }));
     overlay.querySelectorAll('input,select,textarea').forEach(el=>{
@@ -3316,7 +3535,7 @@ function computeExtraDataText(){
     if(!(idHit||labelHit)) return;
 
     let v = '';
-    if (f.type==='checkbox') v = f.value ? 'Y' : '';
+    if (f.type==='checkbox' || f.type==='checkmark') v = f.value ? 'Y' : '';
     else v = (f.value||'').toString().trim();
     if(v) pick.push(v);
   }));
