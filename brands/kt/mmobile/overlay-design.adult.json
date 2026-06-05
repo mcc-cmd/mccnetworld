@@ -436,41 +436,13 @@
           "value": ""
         },
         {
-          "id": "자동이체/계좌",
-          "label": "",
-          "type": "checkbox",
-          "x": 25.372803733643305,
-          "y": 43.826874503156716,
-          "w": 5,
-          "required": false,
-          "radioSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 14,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "checkSize": 18,
-          "textAlign": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
-          "value": false
-        },
-        {
           "id": "카드/계좌",
           "label": "",
           "type": "text",
-          "x": 49.828786724619,
-          "y": 45.67390902990582,
+          "x": 49.828292934068166,
+          "y": 45.673325652635114,
           "w": 27.107420267029397,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "radioGap": 12,
           "color": "#000000",
@@ -492,36 +464,6 @@
           "lockOnPh": false,
           "autoShrink": true,
           "verticalAlign": "middle",
-          "value": ""
-        },
-        {
-          "id": "text_1761545998838",
-          "label": "",
-          "type": "text",
-          "x": 73.29514035872515,
-          "y": 47.63511775370775,
-          "w": 23,
-          "required": false,
-          "radioSize": 18,
-          "radioGap": 12,
-          "color": "#ff0000",
-          "inputHeight": 22,
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 10,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "카드 납부시 유효 기간 필수 입력",
-          "lockInput": true,
-          "autoDate": "",
-          "locked": true,
-          "lockOnPh": false,
-          "checkSize": 18,
-          "textAlign": "",
           "value": ""
         },
         {
@@ -792,7 +734,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "04"
+          "value": "05"
         },
         {
           "id": "성함싸인",
@@ -1159,7 +1101,7 @@
           "x": 31.723213677941487,
           "y": 45.75847578846721,
           "w": 11.48212193897473,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1573,8 +1515,7 @@
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
           "inputHeight": 18,
-          "fontSize": 18,
-          "value": false
+          "fontSize": 18
         },
         {
           "id": "checkmark_1780562556643",
@@ -1598,7 +1539,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 18,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1637,8 +1577,87 @@
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
           "inputHeight": 29,
+          "fontSize": 18
+        },
+        {
+          "id": "계좌",
+          "label": "",
+          "type": "checkmark",
+          "x": 24.99110907672411,
+          "y": 43.95966442773583,
+          "w": 2,
+          "required": true,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 18,
           "fontSize": 18,
-          "value": false
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "자동납부",
+          "checkValue": "계좌",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "카드",
+          "label": "",
+          "type": "checkmark",
+          "x": 42.02716407547909,
+          "y": 43.91618432695686,
+          "w": 2,
+          "required": true,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 18,
+          "fontSize": 18,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "자동납부",
+          "checkValue": "카드",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1672,8 +1691,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 33,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1702,8 +1720,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 37,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -1733,8 +1750,7 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true,
-          "value": ""
+          "locked": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1764,8 +1780,7 @@
           "textAlign": "",
           "inputHeight": 24,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1795,8 +1810,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1826,8 +1840,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1857,8 +1870,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "affiliate_millie",
@@ -1886,8 +1898,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         },
         {
           "id": "affiliate_genie",
@@ -1915,8 +1926,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         },
         {
           "id": "affiliate_megabox",
@@ -1944,8 +1954,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         },
         {
           "id": "affiliate_cu",
@@ -1973,8 +1982,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         }
       ]
     },
@@ -2009,8 +2017,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2040,8 +2047,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -2071,8 +2077,7 @@
           "placeholder": "미결합 요금제 상관없이 필수 첨부 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2102,8 +2107,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         }
       ]
     },
@@ -2133,8 +2137,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -2164,8 +2167,7 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "totalFee",
@@ -2195,8 +2197,7 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "totalFee",
@@ -2226,8 +2227,7 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "planEcho",
@@ -2285,8 +2285,7 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "상담사",
@@ -2316,8 +2315,7 @@
           "inputHeight": 18,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "번호이동 번호",
@@ -2347,8 +2345,7 @@
           "inputHeight": 24,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2378,8 +2375,7 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "0",
@@ -2418,6 +2414,48 @@
           "locked": false,
           "lockOnPh": false
         }
+      ]
+    }
+  ],
+  "conditionalRequired": [
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "신규",
+      "requiredOn": [
+        "희망번호"
+      ]
+    },
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "번이",
+      "requiredOn": [
+        "번호이동",
+        "전통신사"
+      ]
+    },
+    {
+      "sourceId": "전통신사",
+      "whenValue": "MVNO",
+      "requiredOn": [
+        "통신사명"
+      ]
+    },
+    {
+      "sourceId": "자동납부",
+      "whenValue": "계좌",
+      "requiredOn": [
+        "은행/카드사명",
+        "카드/계좌"
+      ]
+    },
+    {
+      "sourceId": "자동납부",
+      "whenValue": "카드",
+      "requiredOn": [
+        "은행/카드사명",
+        "카드/계좌",
+        "유효기간/년",
+        "유효기간/월"
       ]
     }
   ]
