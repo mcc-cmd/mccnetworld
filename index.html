@@ -521,12 +521,6 @@ body{
   letter-spacing:-0.2px;
   color:#0b1220;
 }
-.form-text-sk{
-  font-size:18px;
-  font-weight:800;
-  line-height:1.35;
-  text-align:center;
-}
 @media (max-width:720px){
   .form-duo{grid-template-columns:1fr;}
   .form-duo .form-text{font-size:22px}
@@ -884,6 +878,107 @@ body{
   }
 }
 
+
+/* =========================================================
+  ✅ eSIM 가능 여부 + 공지/안내 팝업
+========================================================= */
+.esim-badge{
+  position:absolute;
+  right:12px;
+  bottom:10px;
+  z-index:6;
+  padding:4px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:900;
+  line-height:1;
+  border:1px solid transparent;
+  pointer-events:none;
+  box-shadow:0 2px 8px rgba(15,23,42,.06);
+}
+.esim-ok{background:#dcfce7;color:#166534;border-color:#86efac}
+.esim-no{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+.guide-btn{
+  position:absolute;
+  left:12px;
+  bottom:8px;
+  z-index:7;
+  border:1px solid #dbe2ea;
+  background:#fff;
+  color:#0f172a;
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+  line-height:1;
+  box-shadow:0 2px 8px rgba(15,23,42,.06);
+}
+.guide-btn:hover{background:#111827;color:#fff;border-color:#111827}
+.brand.has-meta .logo-frame{margin-bottom:22px}
+.guide-modal{position:fixed;inset:0;display:none;z-index:12000}
+.guide-modal[aria-hidden="false"]{display:block}
+.guide-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.guide-panel{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(620px, calc(100% - 32px));max-height:min(760px, 92vh);
+  background:#fff;color:#0f172a;border-radius:16px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);display:flex;flex-direction:column;
+}
+.guide-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.guide-head strong{font-weight:900}
+.guide-close{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font-weight:800;font-size:12px}
+.guide-body{padding:16px;overflow:auto}
+.guide-list{margin:0;padding-left:22px}
+.guide-list li{margin:0 0 10px;font-weight:700}
+.guide-list a{color:#2563eb;font-weight:900;text-decoration:none;word-break:break-all}
+.guide-note{margin-top:12px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;font-size:13px;font-weight:800;color:#334155}
+
+/* =========================================================
+  ✅ SK 링크 2행 3열 전용 구조
+========================================================= */
+.sk-link-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:18px;
+  margin:6px 0 20px;
+}
+.sk-link-card{
+  min-height:104px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:18px 12px 34px;
+}
+.sk-link-card .sk-link-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1.25;
+  letter-spacing:-0.4px;
+  color:#0b1220;
+}
+.sk-link-img-frame{
+  width:190px;
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto;
+}
+.sk-link-img-frame img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+}
+.sk-link-card.has-img .sk-link-title{display:none}
+.sk-link-card.has-meta{padding-bottom:38px}
+@media (max-width:720px){
+  .sk-link-grid{grid-template-columns:1fr;gap:12px}
+  .sk-link-card .sk-link-title{font-size:20px}
+}
+
 </style>
 </head>
 
@@ -897,7 +992,7 @@ body{
 
 <div class="hd-left">
   <!-- KT -->
-  <a class="hd-btn" href="./assets/files/URL_260527.xlsx" download>
+  <a class="hd-btn" href="./assets/files/URL_260414.xlsx" download>
     KT 요금제 구간표
   </a>
 
@@ -1042,6 +1137,19 @@ body{
     </div>
   </div>
 
+
+<!-- eSIM/공지 안내 팝업 -->
+<div class="guide-modal" id="guideModal" aria-hidden="true">
+  <div class="guide-backdrop" data-guide-close="1"></div>
+  <div class="guide-panel" role="dialog" aria-modal="true" aria-label="공지 및 안내사항">
+    <div class="guide-head">
+      <strong id="guideTitle">공지/안내</strong>
+      <button type="button" class="guide-close" id="guideClose">닫기</button>
+    </div>
+    <div class="guide-body" id="guideBody"></div>
+  </div>
+</div>
+
 </div>
 
 <script>
@@ -1144,6 +1252,127 @@ const BRAND_ROUTE = {
   }
 };
 
+/* ✅ SK 링크 2행 3열: 실제 이동 URL 관리
+   - 아래 4개 주소만 교체하면 화면의 4개 이미지 카드 링크가 각각 변경됩니다.
+   - T-GATE 접수양식 / 여권접수양식은 팝업 양식 버튼이므로 URL을 사용하지 않습니다. */
+const SK_LINK_URLS = {
+  foreignId: 'https://tgateplus.sktelecom.com/main/main.do?p=ddd6d3e00013df63dcb2543d917fb82ef5415f2e0c93820d11d3fec6437f9136',
+  foreignApply: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149',
+  foreignPassport: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149',
+  local: 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1'
+};
+
+/* ✅ SK 링크 공지/안내 내용 관리
+   - guideSteps 배열 안의 문구를 원하는 내용으로 수정하면 팝업 내용이 바뀝니다.
+   - 링크가 필요한 항목은 { label:'표시문구', url:'주소' } 형태로 넣으면 됩니다. */
+const SK_GUIDE_META = {
+  '외국인등록증': {
+    guideTitle: 'SK 외국인등록증 접수 안내',
+    guideSteps: [
+      { label:'외국인등록증 접수 페이지 작성', url: SK_LINK_URLS.foreignId },
+      '외국인 접수 신청 페이지 추가 작성',
+      'T-GATE 양식 카톡 접수 + 외국인등록증 앞/뒷면 발송'
+
+    ]
+  },
+  '외국인접수신청': {
+    guideTitle: 'SK 외국인 접수신청 안내',
+    guideSteps: [
+      { label:'외국인등록증 접수 페이지 작성', url: SK_LINK_URLS.foreignId },
+      '외국인 접수 신청 페이지 추가 작성',
+      'T-GATE 양식 카톡 접수 + 외국인등록증 앞/뒷면 발송'
+
+    ]
+  },
+  '외국인여권': {
+    guideTitle: 'SK 외국인 여권 접수 안내',
+  guideSteps: [
+    { label:' 외국인 여권 URL 작성', url: SK_LINK_URLS.local },
+    '서식지 출력',
+    '여권접수 양식 작성 카톡방 접수',
+    `<span class="warn"><strong>★필요 서류<br>
+☆여권 개통 : 여권 사본 + 신청서(URL 접수 후 출력) + 카톡접수<br>
+E7, E9, D2, D4 비자만 개통가능<br>
+외국인등록증 발급된 고객 대상으로 여권 사본 개통을 진행할 경우 비정상영업으로 간주 정책 미적용 또는 정책 전액 환수됩니다.<br>
+★여권 개통 후, 여권→외국인등록증 명의변경 시 개통일보다 외국인등록증 발급일자가 빠를 경우 전액 환수입니다.<br>
+*여권 3개월 이내 ID카드로 명변 필수<br>
+명변 미진행시(전액 환수)*</strong></span>`
+  ]
+
+  },
+  '내국인': {
+    guideTitle: 'SK 내국인 접수 안내',
+    guideSteps: [
+      { label:'T-GATE 작성', url: SK_LINK_URLS.local },
+      'T-GATE 접수 양식 작성',
+      '양식 작성 카톡방 접수',
+      `<span class="warn"><strong>★참고 사항<br>
+        일반 USIM과 eSIM은 단말기 선택 항목의 "모델명"이 다르므로 접수 시 아래 내용을 확인하여 선택해 주시기 바랍니다.<br>
+        일반 USIM 개통: SKT-USIM4 선택<br>
+        eSIM 개통: SKT-ESIM1 선택</strong></span>`
+      
+    ]
+  }
+};
+
+
+
+/* ✅ 일반 가입 카드 eSIM/공지 내용 관리
+   - SK 2행 3열 전용 공지는 SK_GUIDE_META에서 관리합니다.
+   - 일반 카드 공지/eSIM은 아래 CARD_META에서 관리합니다. */
+const CARD_META = {
+  '미디어로그': { esim: true, guideTitle: '미디어로그 안내', guideSteps: ['미디어로그 신청서 작성', '본인확인 및 구비서류 확인', '미디어로그 마당 접수'] },
+  '헬로LG': { esim: false, guideTitle: '헬로모바일 안내', guideSteps: ['헬로모바일 신청서 작성', '본인확인 및 구비서류 확인', '헬로모바일 마당 접수'] },
+  '프리티LG': { esim: true, guideTitle: '프리티LG 안내', guideSteps: ['프리티LG 신청서 작성', '본인확인 및 구비서류 확인', '인스코브 마당 접수'] },
+  '엠모바일': { esim: true, guideTitle: '엠모바일 안내', guideSteps: ['엠모바일 신청서 작성', '본인확인 및 구비서류 확인', '엠모바일 케이노트 접수'] },
+  '스테이지파이브(KT)': { esim: false, guideTitle: '스테이지파이브 KT 안내', guideSteps: ['스테이지파이브 KT 신청서 작성', '본인확인 및 구비서류 확인', '스테이지파이브 케이노트 접수'] },
+  '스카이라이프': { esim: true, guideTitle: '스카이라이프 안내', guideSteps: ['스카이라이프 컬러 신청서 작성', '본인확인 및 구비서류 확인', '스카이라이프 케이노트 접수'] },
+  'SK텔링크': { esim: true, guideTitle: 'SK텔링크 안내', guideSteps: ['SK텔링크 접수 페이지 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 스캔 접수'] },
+  '스테이지파이브(SK)': { esim: false, guideTitle: '스테이지파이브 SK 안내', guideSteps: ['스테이지파이브 SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 스캔 접수'] },
+  '프리티SK': { esim: true, guideTitle: '프리티SK 안내', guideSteps: ['프리티SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 스캔 접수'] },
+  'SK 내국인': { esim: true, guideTitle: 'SK 내국인 접수 순서', guideSteps: ['티게이트 작성', 'T-GATE 접수양식 작성' ,'양식 카톡방 접수 '] },
+  'SK 외국인': { esim: true, guideTitle: 'SK 외국인 접수 순서', guideSteps: ['티게이트 작성', '어드민 등록', '개통방에 요청서 접수(카톡접수) + 외국인등록증 앞/뒷면 발송'] },
+  '정규KT신규': { esim: true, guideTitle: '정규KT 신규 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
+  '정규KT번이': { esim: true, guideTitle: '정규KT 번호이동 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
+  'KT 유선 동판': { esim: null, guideTitle: 'KT 유선 동판 안내', guideSteps: ['KT 유선 접수 URL 작성', '양식 작성 후 카톡 전달', '접수 완료 확인'] },
+  '웰컴 요금제 신규': { esim: true, guideTitle: '웰컴 요금제 신규 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
+  '웰컴 요금제 번이': { esim: true, guideTitle: '웰컴 요금제 번호이동 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
+  '스마텔LG': { esim: null, guideTitle: '스마텔LG 선불 안내', guideSteps: [''] },
+  'LG프리티': { esim: null, guideTitle: 'LG프리티 선불 안내', guideSteps: ['선불 신청서 작성', '마당 접수'] },
+  '밸류컴': { esim: null, guideTitle: '밸류컴 안내', guideSteps: ['신청서 작성', '마당 접수'] },
+  'SK프리티': { esim: null, guideTitle: 'SK프리티 선불 안내', guideSteps: ['선불 신청서 작성', '서류 카톡 스캔본 접수', '포털신분증 스캔 접수'] },
+  '코드모바일': { esim: null, guideTitle: '코드모바일 안내', guideSteps: ['신청서 작성', '케이노트 접수'] }
+};
+
+function escHtml(v){
+  return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function getCardMeta(item){ return CARD_META[item.name] || null; }
+function isJoinMetaTarget(item){ return (item && (item.doc || 'join') === 'join'); }
+function cardMetaAttr(item){
+  const meta = getCardMeta(item);
+  return (meta && isJoinMetaTarget(item)) ? ` data-guide-key="${escHtml(item.name)}"` : '';
+}
+function cardBadgesHtml(item){
+  // 변경 서류 / 해지 서류에는 eSIM·공지 버튼을 표시하지 않습니다.
+  if (!isJoinMetaTarget(item)) return '';
+
+  const meta = getCardMeta(item);
+  if (!meta) return '';
+
+  const esimHtml = (typeof meta.esim === 'boolean')
+    ? `<span class="esim-badge ${meta.esim ? 'esim-ok' : 'esim-no'}">${meta.esim ? 'eSIM 가능' : 'eSIM 불가'}</span>`
+    : '';
+
+  const guideHtml = (Array.isArray(meta.guideSteps) && meta.guideSteps.length)
+    ? `<button type="button" class="guide-btn" data-guide-key="${escHtml(item.name)}">공지/안내</button>`
+    : '';
+
+  return `${guideHtml}${esimHtml}`;
+}
+
+
 function buildBrandUrl(route, doc, age){
   if (!route || !route.carrier || !route.brand) return '#';
   const base = `brands/${route.carrier}/${route.brand}/index.html`;
@@ -1172,7 +1401,9 @@ function card(item){
   const ageAttr  = (docAttr==='join' && age) ? ` data-age="${age}"` : '';
   const keyAttr  = item.brandKey ? ` data-brandkey="${item.brandKey}"` : '';
   const isLong   = name.length >= 9;
-  const longCls  = isLong ? 'long-name' : '';
+  const meta = getCardMeta(item);
+  const longCls  = `${isLong ? 'long-name' : ''} ${meta && isJoinMetaTarget(item) ? 'has-meta' : ''}`.trim();
+  const guideAttr = cardMetaAttr(item);
 
   const logo = pickLogo(item);
   const logoHtml = logo
@@ -1180,8 +1411,9 @@ function card(item){
     : '';
 
   return `
-    <div class="brand ${theme} ${longCls}" data-name="${dataName}" data-doc="${docAttr}"${ageAttr}${keyAttr}>
+    <div class="brand ${theme} ${longCls}" data-name="${dataName}" data-doc="${docAttr}"${ageAttr}${keyAttr}${guideAttr}>
       ${logoHtml}
+      ${cardBadgesHtml(item)}
       <div class="name">${name}</div>
       ${cap ? `<div class="cap">${cap}</div>` : ``}
     </div>
@@ -1207,14 +1439,92 @@ function formSKDualCard(){
   return `
     <div class="form-duo-wrap" aria-label="SK 유심양식 묶음">
       <div class="form-duo">
-        <div class="form-half" data-form="skusim_local">
-          <div class="form-text form-text-sk">T-gate<br>접수양식 </div>
+        <div class="form-half" data-form="skusim_local" role="button" tabindex="0" aria-label="T-GATE 접수양식 열기">
+          <div class="form-text">T-GATE 접수양식</div>
         </div>
-
-        <div class="form-half" data-form="skusim_foreign">
-          <div class="form-text form-text-sk">외국인 여권<br>접수 양식</div>
+        <div class="form-half" data-form="skusim_foreign" role="button" tabindex="0" aria-label="여권접수양식 열기">
+          <div class="form-text">여권접수양식</div>
         </div>
       </div>
+    </div>
+  `;
+}
+
+function skLinkCard({title, img='', url='', form='', guideKey='', esim=true}){
+  const urlAttr = url ? ` data-url="${escHtml(url)}"` : '';
+  const formAttr = form ? ` data-form="${escHtml(form)}"` : '';
+  const guideAttr = guideKey ? ` data-guide-key="${escHtml(guideKey)}"` : '';
+  const hasImg = !!String(img || '').trim();
+
+  const esimHtml = (typeof esim === 'boolean')
+    ? `<span class="esim-badge ${esim ? 'esim-ok' : 'esim-no'}">${esim ? 'eSIM 가능' : 'eSIM 불가'}</span>`
+    : '';
+
+  const guideHtml = guideKey
+    ? `<button type="button" class="guide-btn" data-guide-key="${escHtml(guideKey)}">공지/안내</button>`
+    : '';
+
+  const contentHtml = hasImg
+    ? `<div class="sk-link-img-frame"><img src="${escHtml(img)}" alt="${escHtml(title)}"></div>`
+    : `<div class="sk-link-title">${escHtml(title)}</div>`;
+
+  const metaClass = [
+    (guideHtml || esimHtml) ? 'has-meta' : '',
+    hasImg ? 'has-img' : ''
+  ].filter(Boolean).join(' ');
+
+  return `
+    <div class="brand theme-s7 sk-link-card ${metaClass}" data-name="${escHtml(title)}" data-doc="join"${urlAttr}${formAttr}${guideAttr} role="button" tabindex="0">
+      ${contentHtml}
+      ${guideHtml}
+      ${esimHtml}
+    </div>
+  `;
+}
+
+function skLinkGridCard(){
+  return `
+    <div class="sk-link-grid" aria-label="SK 링크 2행 3열">
+      ${skLinkCard({
+        title:'외국인등록증',
+        img:'./assets/logos/SK_외국인등록증.png',
+        url:SK_LINK_URLS.foreignId,
+        guideKey:'외국인등록증',
+        esim:true
+      })}
+      ${skLinkCard({
+        title:'외국인접수신청',
+        img:'./assets/logos/SK_접수.png',
+        url:SK_LINK_URLS.foreignApply,
+        guideKey:'외국인접수신청',
+        esim:true
+      })}
+      ${skLinkCard({
+        title:'외국인여권',
+        img:'./assets/logos/SK_외국인 여권.png',
+        url:SK_LINK_URLS.foreignPassport,
+        guideKey:'외국인여권',
+        esim:true
+      })}
+      ${skLinkCard({
+        title:'내국인',
+        img:'./assets/logos/SK_내국인.png',
+        url:SK_LINK_URLS.local,
+        guideKey:'내국인',
+        esim:true
+      })}
+      ${skLinkCard({
+        title:'T-GATE 접수양식',
+        form:'skusim_local',
+        guideKey:'',
+        esim:null
+      })}
+      ${skLinkCard({
+        title:'여권접수양식',
+        form:'skusim_foreign',
+        guideKey:'',
+        esim:null
+      })}
     </div>
   `;
 }
@@ -1261,25 +1571,36 @@ function deviceSectionHTML(){
 function attachNavigateHandlers(scope){
   scope.querySelectorAll('.brand').forEach(cardEl=>{
     cardEl.addEventListener('click', (e)=>{
+      if (e.target.closest('.guide-btn')) return;
+
+      const directUrl = cardEl.getAttribute('data-url') || '';
+      const formKey = cardEl.getAttribute('data-form') || '';
+
+      // ✅ 양식 카드(T-GATE/여권접수양식)는 전역 data-form 팝업 핸들러가 처리하도록 둡니다.
+      if (formKey && !directUrl) return;
+
       e.preventDefault();
       e.stopPropagation();
-if (cardEl.classList.contains('device-link')) {
-  const raw = cardEl.getAttribute('data-url') || '';
-  if (!raw) return;
 
-  // ✅ 어떤 경로로 index.html을 열었든 항상 정상 이동 (로컬/깃헙 모두)
-  const url = new URL(raw, location.href).href;
-  location.href = url;
-  return;
-}
+      if (directUrl && !cardEl.classList.contains('device-link')) {
+        location.href = new URL(directUrl, location.href).href;
+        return;
+      }
 
+      if (cardEl.classList.contains('device-link')) {
+        const raw = cardEl.getAttribute('data-url') || '';
+        if (!raw) return;
+        const url = new URL(raw, location.href).href;
+        location.href = url;
+        return;
+      }
 
       if (cardEl.classList.contains('device-comingsoon')) return;
 
       const nm = (cardEl.getAttribute('data-name') || '').replace(/\s+/g, ' ').trim();
       const doc = cardEl.getAttribute('data-doc') || 'join';
       const age = cardEl.getAttribute('data-age') || '';
-      // ✅ 선불: 전용 뷰어 페이지로 이동
+
       if (doc === 'prepaid') {
         const key = cardEl.getAttribute('data-brandkey') || '';
         if (key) location.href = `./brands/prepaid/index.html?brand=${encodeURIComponent(key)}`;
@@ -1380,10 +1701,7 @@ const skLinkHTML = skLinkItems.length ? `
       <span class="group-title">SK 링크</span>
       <span class="group-sub"></span>
     </div>
-    <div class="brand-grid">
-      ${skLinkItems.map(card).join('')}
-      ${formSKDualCard()}
-    </div>
+    ${skLinkGridCard()}
   </section>
 ` : '';
 
@@ -2632,7 +2950,6 @@ images: [
 7. 선약12 or 24 : 선약12
 8. 부가서비스 : 
 9. 비고(복지):
-9. 메모 (1안/2안) : (외국인전용)
 10. 판매자 성함/연락처 :
 
 *ESIM 개통 시 단말정보
@@ -2856,6 +3173,63 @@ function initCustomerCenter(){
     }
   });
 }
+
+/* =========================
+   ✅ eSIM/공지 안내 팝업
+========================= */
+(function(){
+  const modal = document.getElementById('guideModal');
+  const title = document.getElementById('guideTitle');
+  const body = document.getElementById('guideBody');
+  const closeBtn = document.getElementById('guideClose');
+
+  function closeGuide(){
+    if (!modal) return;
+    modal.setAttribute('aria-hidden','true');
+    if (body) body.innerHTML = '';
+  }
+
+  function openGuide(key){
+    const meta = SK_GUIDE_META[key] || CARD_META[key];
+    if (!modal || !title || !body || !meta) return;
+    title.textContent = meta.guideTitle || `${key} 안내`;
+
+    const steps = Array.isArray(meta.guideSteps) ? meta.guideSteps : [];
+    const listHtml = steps.map(step => {
+      if (step && typeof step === 'object') {
+        const label = escHtml(step.label || step.text || '');
+        const url = escHtml(step.url || '');
+        return `<li>${url ? `<a href="${url}" target="_blank" rel="noopener">${label}</a>` : label}</li>`;
+      }
+      return `<li>${step}</li>`;
+    }).join('');
+
+    body.innerHTML = `
+      <ol class="guide-list">${listHtml}</ol>
+      <div class="guide-note">접수 방식 확인하시어 순차대로 진행해주세요</div>
+    `;
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  document.addEventListener('click', (e)=>{
+    const guideBtn = e.target.closest('.guide-btn');
+    if (guideBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      openGuide(guideBtn.dataset.guideKey || '');
+      return;
+    }
+
+    if (e.target && e.target.dataset && e.target.dataset.guideClose === '1') closeGuide();
+  });
+
+  closeBtn?.addEventListener('click', closeGuide);
+
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape' && modal?.getAttribute('aria-hidden') === 'false') closeGuide();
+  });
+})();
+
 window.addEventListener('DOMContentLoaded', ()=>{
   wireKindTabs('joinTabs','joinTabsList',JOIN_DATA);
 
