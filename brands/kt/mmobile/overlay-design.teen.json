@@ -475,41 +475,13 @@
           "value": ""
         },
         {
-          "id": "자동이체/계좌",
-          "label": "",
-          "type": "checkbox",
-          "x": 25.863437633590397,
-          "y": 43.8288850877509,
-          "w": 5,
-          "required": false,
-          "radioSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 14,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "checkSize": 18,
-          "textAlign": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
-          "value": false
-        },
-        {
           "id": "카드/계좌",
           "label": "",
           "type": "text",
           "x": 49.52545002087785,
           "y": 45.50602350519527,
           "w": 32.601925761534886,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "radioGap": 12,
           "color": "#000000",
@@ -531,36 +503,6 @@
           "lockOnPh": false,
           "autoShrink": true,
           "verticalAlign": "middle",
-          "value": ""
-        },
-        {
-          "id": "text_1761545998838",
-          "label": "",
-          "type": "text",
-          "x": 73.29514035872515,
-          "y": 47.63511775370775,
-          "w": 23,
-          "required": false,
-          "radioSize": 18,
-          "radioGap": 12,
-          "color": "#ff0000",
-          "inputHeight": 22,
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 10,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "카드 납부시 유효 기간 필수 입력",
-          "lockInput": true,
-          "autoDate": "",
-          "locked": true,
-          "lockOnPh": false,
-          "checkSize": 18,
-          "textAlign": "",
           "value": ""
         },
         {
@@ -831,7 +773,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "04"
+          "value": "05"
         },
         {
           "id": "성함싸인",
@@ -1104,35 +1046,6 @@
           "value": false
         },
         {
-          "id": "자동이체/카드",
-          "label": "",
-          "type": "checkbox",
-          "x": 42.553829386889696,
-          "y": 44.09763716872207,
-          "w": 5,
-          "required": false,
-          "radioSize": 18,
-          "checkSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "inputHeight": 24,
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 12,
-          "textAlign": "",
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "",
-          "autoDate": "",
-          "locked": false,
-          "lockOnPh": false,
-          "value": false
-        },
-        {
           "id": "통신사명",
           "label": "",
           "type": "text",
@@ -1196,10 +1109,10 @@
           "id": "은행/카드사명",
           "label": "",
           "type": "text",
-          "x": 31.318764739619947,
-          "y": 45.54399563796107,
+          "x": 31.318764762574457,
+          "y": 45.543407607974736,
           "w": 11.48212193897473,
-          "required": true,
+          "required": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1381,7 +1294,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 23,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1421,7 +1333,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 26,
           "fontSize": 18,
-          "value": true,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1461,7 +1372,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 28,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1501,7 +1411,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 27,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1541,7 +1450,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 27,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1581,13 +1489,92 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 27,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
           "groupId": "전통신사",
           "checkValue": "MVNO",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "계좌",
+          "label": "",
+          "type": "checkmark",
+          "x": 25.094893159144426,
+          "y": 44.057036470091745,
+          "w": 2,
+          "required": true,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 18,
+          "fontSize": 18,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "자동납부",
+          "checkValue": "계좌",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "카드",
+          "label": "",
+          "type": "checkmark",
+          "x": 42.12295097183896,
+          "y": 44.029195622595196,
+          "w": 2,
+          "required": true,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 18,
+          "fontSize": 18,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "자동납부",
+          "checkValue": "카드",
           "borderColor": "#ff3b3b",
           "borderWidth": 2,
           "bgColor": "#000000",
@@ -1840,8 +1827,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         },
         {
           "id": "affiliate_genie",
@@ -1869,8 +1855,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         },
         {
           "id": "affiliate_megabox",
@@ -1898,8 +1883,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         },
         {
           "id": "affiliate_cu",
@@ -1927,8 +1911,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": false
+          "lockOnPh": false
         }
       ]
     },
@@ -2578,6 +2561,48 @@
           "locked": false,
           "lockOnPh": false
         }
+      ]
+    }
+  ],
+  "conditionalRequired": [
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "신규",
+      "requiredOn": [
+        "희망번호"
+      ]
+    },
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "번이",
+      "requiredOn": [
+        "번호이동",
+        "전통신사"
+      ]
+    },
+    {
+      "sourceId": "전통신사",
+      "whenValue": "MVNO",
+      "requiredOn": [
+        "통신사명"
+      ]
+    },
+    {
+      "sourceId": "자동납부",
+      "whenValue": "계좌",
+      "requiredOn": [
+        "은행/카드사명",
+        "카드/계좌"
+      ]
+    },
+    {
+      "sourceId": "자동납부",
+      "whenValue": "카드",
+      "requiredOn": [
+        "은행/카드사명",
+        "카드/계좌",
+        "유효기간/년",
+        "유효기간/월"
       ]
     }
   ]
