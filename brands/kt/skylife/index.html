@@ -735,18 +735,13 @@ if (DESIGN) {
     printing = true;
 
 try {
-  applyConditionalRequired();
-  const all = findMissingAll();
-  if (all.length) {
-    const first = all[0].page;
-    pageIndex = first;
-    render();
-    const listForPage = all.filter(m => m.page === first);
-    markInvalidForPage(first, listForPage);
-    showToast(listForPage.map(m => `p${m.page + 1} - ${m.label}`));
-    return;
+  if (typeof forcePrintBlankForm === 'function') {
+    await forcePrintBlankForm();
+  } else if (typeof printAllNow === 'function') {
+    await printAllNow();
+  } else {
+    window.print();
   }
-  await printAllNow();
 } catch (err) {
   console.error('[Ctrl+P print error]', err);
     } finally {
@@ -3218,6 +3213,40 @@ async function printAllNow(){
   await waitForImages(container);
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
   setTimeout(()=>window.print(),0);
+}
+
+/* ✅ Ctrl+P 전용: 필수값 검증 없이 빈 서식지 출력 */
+async function forcePrintBlankForm(){
+  try {
+    const toast = document.getElementById('toast');
+    if (toast) toast.style.display = 'none';
+
+    document.querySelectorAll('.field.invalid, .field.required-pending').forEach(el => {
+      el.classList.remove('invalid');
+      el.classList.remove('required-pending');
+    });
+
+    if (typeof forceMirrorPlan === 'function') {
+      try { forceMirrorPlan(); } catch (_) {}
+    }
+  } catch (_) {}
+
+  const container = buildPrintAll();
+
+  try {
+    container.querySelectorAll('.field.invalid, .field.required-pending').forEach(el => {
+      el.classList.remove('invalid');
+      el.classList.remove('required-pending');
+    });
+  } catch (_) {}
+
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch (_) {}
+  }
+
+  await waitForImages(container);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  setTimeout(() => window.print(), 0);
 }
 
 /* ===== 인쇄 버튼 ===== */

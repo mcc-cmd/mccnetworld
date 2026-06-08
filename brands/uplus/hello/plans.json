@@ -59,7 +59,7 @@
     "DATA 걱정없는 유심 7GB": {
       "baseFee": 45100,
       "discountFee": 26600,
-      "totalFee": 18550,
+      "totalFee": 18500,
       "extraDataGb": 5,
       "bundleAnyone": false
     },

@@ -1322,15 +1322,23 @@ E7, E9, D2, D4 비자만 개통가능<br>
    - SK 2행 3열 전용 공지는 SK_GUIDE_META에서 관리합니다.
    - 일반 카드 공지/eSIM은 아래 CARD_META에서 관리합니다. */
 const CARD_META = {
-  '미디어로그': { esim: true, guideTitle: '미디어로그 안내', guideSteps: ['미디어로그 신청서 작성', '본인확인 및 구비서류 확인', '미디어로그 마당 접수'] },
-  '헬로LG': { esim: false, guideTitle: '헬로모바일 안내', guideSteps: ['헬로모바일 신청서 작성', '본인확인 및 구비서류 확인', '헬로모바일 마당 접수'] },
-  '프리티LG': { esim: true, guideTitle: '프리티LG 안내', guideSteps: ['프리티LG 신청서 작성', '본인확인 및 구비서류 확인', '인스코브 마당 접수'] },
-  '엠모바일': { esim: true, guideTitle: '엠모바일 안내', guideSteps: ['엠모바일 신청서 작성', '본인확인 및 구비서류 확인', '엠모바일 케이노트 접수'] },
-  '스테이지파이브(KT)': { esim: false, guideTitle: '스테이지파이브 KT 안내', guideSteps: ['스테이지파이브 KT 신청서 작성', '본인확인 및 구비서류 확인', '스테이지파이브 케이노트 접수'] },
-  '스카이라이프': { esim: true, guideTitle: '스카이라이프 안내', guideSteps: ['스카이라이프 컬러 신청서 작성', '본인확인 및 구비서류 확인', '스카이라이프 케이노트 접수'] },
-  'SK텔링크': { esim: true, guideTitle: 'SK텔링크 안내', guideSteps: ['SK텔링크 접수 페이지 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 스캔 접수'] },
-  '스테이지파이브(SK)': { esim: false, guideTitle: '스테이지파이브 SK 안내', guideSteps: ['스테이지파이브 SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 스캔 접수'] },
-  '프리티SK': { esim: true, guideTitle: '프리티SK 안내', guideSteps: ['프리티SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 스캔 접수'] },
+  '미디어로그': {
+  esim: true,
+  guideTitle: '미디어로그 안내 <span class="warn"><strong>미디어로그 코드 331674</strong></span>',
+  guideSteps: [
+    '미디어로그 신청서 작성',
+    '본인확인 및 구비서류 확인',
+    '[LG알뜰폰] 미디어로그 331674 마당 접수'
+  ]
+},
+  '헬로LG': { esim: false, guideTitle: '헬로모바일 안내 <span class="warn"><strong>헬로모바일 코드 316829</strong></span>', guideSteps: ['헬로모바일 신청서 작성', '본인확인 및 구비서류 확인', '[LG알뜰폰] LG헬로 316829 마당 접수'] },
+  '프리티LG': { esim: true, guideTitle: '프리티LG 안내 <span class="warn"><strong>인스코비 332109</strong></span>', guideSteps: ['프리티LG 신청서 작성', '본인확인 및 구비서류 확인', '[LG알뜰폰] 인스코비 332109 마당 접수'] },
+  '엠모바일': { esim: true, guideTitle: '엠모바일 안내 <span class="warn"><strong>엠모바일 VKI1100</strong></span>', guideSteps: ['엠모바일 신청서 작성', '본인확인 및 구비서류 확인', '[KT알뜰폰] 엠모바일 VKI1100 케이노트 접수'] },
+  '스테이지파이브(KT)': { esim: false, guideTitle: '스테이지파이브 KT 안내 <span class="warn"><strong>스테이지파이브 VPI0001</strong></span>', guideSteps: ['스테이지파이브 KT 신청서 작성', '본인확인 및 구비서류 확인', '[KT알뜰폰] 스테이지파이브 VPI0001 케이노트 접수'] },
+  '스카이라이프': { esim: true, guideTitle: '스카이라이프 안내 <span class="warn"><strong>스카이라이프 VSK0439</strong></span>', guideSteps: ['스카이라이프 컬러 신청서 작성', '본인확인 및 구비서류 확인', '[KT알뜰폰] 스카이라이프 VSK0439 케이노트 접수'] },
+  'SK텔링크': { esim: true, guideTitle: 'SK텔링크 안내 <span class="warn"><strong>SK텔링크 STD0913</strong></span>', guideSteps: ['SK텔링크 접수 페이지 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 [SK알뜰폰] SK텔링크 STD0913 스캔 접수'] },
+  '스테이지파이브(SK)': { esim: false, guideTitle: '스테이지파이브 SK 안내 <span class="warn"><strong>스테이지파이브 SFD0004</strong></span>', guideSteps: ['스테이지파이브 SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 [SK알뜰폰] 스테이지파이브 SFD0004 스캔 접수'] },
+  '프리티SK': { esim: true, guideTitle: '프리티SK 안내 <span class="warn"><strong>프리텔레콤 FRD3204</strong></span>', guideSteps: ['프리티SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 [SK알뜰폰] 프리텔레콤 FRD3204 스캔 접수'] },
   'SK 내국인': { esim: true, guideTitle: 'SK 내국인 접수 순서', guideSteps: ['티게이트 작성', 'T-GATE 접수양식 작성' ,'양식 카톡방 접수 '] },
   'SK 외국인': { esim: true, guideTitle: 'SK 외국인 접수 순서', guideSteps: ['티게이트 작성', '어드민 등록', '개통방에 요청서 접수(카톡접수) + 외국인등록증 앞/뒷면 발송'] },
   '정규KT신규': { esim: true, guideTitle: '정규KT 신규 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
@@ -2950,7 +2958,7 @@ images: [
 6. 요금제/★혜택필수:
 7. 선약12 or 24 : 선약12
 8. 부가서비스 : 
-9. 메모 (1안/2안) : (외국인만 해당)
+9. 메모 (1안/2안/4안/7안) : (외국인만 해당)
 9. 비고(복지):
 10. 판매자 성함/연락처 :
 
@@ -2959,6 +2967,7 @@ Model:
 IMEI : 
 IMEI2: 
 EID : 
+<span class="warn"><strong>외국인등록증 앞/뒷면 발송</strong></span>
 `,
   },
 
@@ -3192,7 +3201,7 @@ function initCustomerCenter(){
   function openGuide(key){
     const meta = SK_GUIDE_META[key] || CARD_META[key];
     if (!modal || !title || !body || !meta) return;
-    title.textContent = meta.guideTitle || `${key} 안내`;
+    title.innerHTML = meta.guideTitle || `${key} 안내`;
 
     const steps = Array.isArray(meta.guideSteps) ? meta.guideSteps : [];
     const listHtml = steps.map(step => {
