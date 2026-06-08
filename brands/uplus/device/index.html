@@ -456,6 +456,107 @@
 
   /* ✅ (원하시면) 평상시에도 msgModal 자체를 사용 안 할 경우 */
   /* #msgModal{ display:none !important; } */
+
+/* =========================================================
+   ✅ checkmark / 조건부 필수 도구 / 양식 팝업
+========================================================= */
+.field.checkmark{transform:translate(-50%,-50%)}
+.field.checkmark .checkmark-symbol{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:var(--fs,18px);
+  font-weight:900;
+  color:var(--fgc,#000);
+  line-height:1;
+  pointer-events:none;
+}
+.field.checkmark .label{display:none}
+html:not(.fill) .field.checkmark{
+  outline:1px dashed rgba(255,59,59,.7);
+  background:rgba(255,59,59,.08);
+  min-height:16px;
+}
+.cond-rule-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  max-height:160px;
+  overflow:auto;
+}
+.cond-rule-item{
+  border:1px solid #2b3a54;
+  border-radius:10px;
+  padding:8px;
+  background:#111a28;
+  cursor:pointer;
+  font-size:12px;
+  color:#dfe9ff;
+}
+.cond-rule-item.active{outline:2px solid #00d2ff66}
+.form-modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:11000;
+}
+.form-modal[aria-hidden="false"]{display:block}
+.form-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.form-panel{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(760px, calc(100% - 32px));
+  background:#fff;
+  color:#111827;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.form-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 14px;
+  border-bottom:1px solid #e5e7eb;
+}
+.form-head strong{font-weight:900}
+.form-x{
+  border:1px solid #d1d5db;
+  background:#fff;
+  border-radius:10px;
+  padding:6px 10px;
+  cursor:pointer;
+  font-weight:800;
+  font-size:12px;
+}
+.form-body{padding:14px;max-height:calc(90vh - 140px);overflow:auto}
+.form-textarea{
+  width:100%;
+  min-height:420px;
+  resize:none;
+  overflow:auto;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  padding:12px;
+  font:13px/1.6 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Noto Sans KR", monospace;
+  white-space:pre-wrap;
+  outline:none;
+}
+.form-actions{display:flex;justify-content:flex-end;gap:8px;padding:0 14px 14px}
+.form-btn{border:none;border-radius:10px;padding:8px 14px;background:#111827;color:#fff;font-weight:900;cursor:pointer}
+.form-btn.ghost{background:#fff;color:#111827;border:1px solid #d1d5db}
+.form-toast{margin-top:8px;font-size:12px;font-weight:800;color:#16a34a;display:none}
+.form-toast.show{display:block}
+@media print{
+  .form-modal,.form-backdrop{display:none !important}
+  #printAll .field.checkmark .checkmark-symbol{color:#000 !important}
+  #printAll .field.checkmark .label{display:none !important}
+}
+
 </style>
 
 <script>
@@ -608,6 +709,7 @@
             <option value="select">드롭다운</option>
             <option value="radio">라디오(단일선택)</option>
             <option value="checkbox">체크박스</option>
+            <option value="checkmark">체크표시(✓)</option>
           </select>
         </div>
         <div class="row"><div>새 필드 ID</div><input id="newId" placeholder="예: deviceId / planId / subsidy 등"></div>
@@ -617,12 +719,30 @@
         <div class="row"><button class="btn" id="addField">필드 추가</button></div>
       </div>
 
+      <div class="group" id="conditionalTool">
+        <h4>조건부 필수 설정</h4>
+        <div class="row"><div>기준 필드 ID/그룹명</div><input id="cond_sourceId" type="text" placeholder="예: 신규/번이"></div>
+        <div class="row"><div>기준 값</div><input id="cond_whenValue" type="text" placeholder="예: 신규"></div>
+        <div class="row"><div>필수 대상 ID</div><input id="cond_requiredOn" type="text" placeholder="예: 희망번호, 통신사명"></div>
+        <div class="row">
+          <div></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn--ghost btn" id="cr_add" type="button">규칙 추가</button>
+            <button class="btn--ghost btn" id="cr_update" type="button">선택 수정</button>
+            <button class="btn--ghost btn" id="cr_delete" type="button">선택 삭제</button>
+          </div>
+        </div>
+        <div class="cond-rule-list" id="condRuleList"></div>
+      </div>
+
       <div id="propBox" class="group">
         <h4>선택한 필드 속성</h4>
         <div class="row"><div>선택된 항목</div><div id="selInfo" class="hint">없음</div></div>
 
         <div class="row"><div>라벨(선택)</div><input id="p_label" type="text" placeholder="라벨"></div>
         <div class="row"><div>필드 ID</div><input id="p_id" type="text" placeholder="예: deviceId / planId / msrp"></div>
+        <div class="row" id="row_checkGroup"><div>체크 그룹명</div><input id="p_groupId" type="text" placeholder="예: 신규/번이 / 전통신사 / 성별"></div>
+        <div class="row" id="row_checkValue"><div>체크 값</div><input id="p_checkValue" type="text" placeholder="예: 신규 / 번이 / MVNO / 남 / 여"></div>
 
         <div class="row" id="row_opts"><div>옵션(콤마)</div><input id="p_options" type="text" placeholder="예: 12, 24, 36"></div>
         <div class="row" id="row_req"><div>필수</div><label><input type="checkbox" id="p_required"> 반드시 작성</label></div>
@@ -718,6 +838,19 @@
           <button class="btn--ghost btn" id="delField" style="margin-left:8px">삭제</button>
         </div>
       </div>
+
+      <div class="group" id="formPopupTool">
+        <h4>양식 팝업 설정</h4>
+        <div class="row"><div>팝업 사용</div><label><input type="checkbox" id="formPopupEnabled"> 사용</label></div>
+        <div class="row"><div>양식 키</div><input id="formKey" type="text" placeholder="예: usim"></div>
+        <div class="row"><div>양식 제목</div><input id="formTitleInput" type="text" placeholder="예: 유심 개통 양식"></div>
+        <div class="row"><div>양식 내용</div><textarea id="formTextInput" rows="6" placeholder="팝업에 표시할 양식 내용을 입력"></textarea></div>
+        <div class="row">
+          <button class="btn--ghost btn" id="formSaveBtn" type="button">양식 저장</button>
+          <button class="btn--ghost btn" id="formDeleteBtn" type="button">양식 삭제</button>
+        </div>
+        <div class="hint">기본값은 비활성(false)입니다. 필드 ID를 form:양식키 형태로 만들면 팝업 버튼으로 사용할 수 있습니다.</div>
+      </div>
     </div>
   </section>
 </div>
@@ -732,6 +865,24 @@
 
 <div id="affPopup"><div class="card">⚠️ <b>제휴 요금제</b>입니다. <b> C-1 성함·동의 체크</b>가 모두 완료되어야 진행됩니다.</div></div>
 
+<div class="form-modal" id="formModal" aria-hidden="true">
+  <div class="form-backdrop" data-form-close="1"></div>
+  <div class="form-panel" role="dialog" aria-modal="true" aria-label="양식 복사 팝업">
+    <div class="form-head">
+      <strong id="formPopupTitle">양식</strong>
+      <button class="form-x" id="formCloseX" type="button">닫기</button>
+    </div>
+    <div class="form-body">
+      <div class="form-textarea" id="formPopupText"></div>
+      <div class="form-toast" id="formToast">복사되었습니다.</div>
+    </div>
+    <div class="form-actions">
+      <button class="form-btn ghost" id="formSelectAll" type="button">전체선택</button>
+      <button class="form-btn" id="formCopyBtn" type="button">복사</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =========================================================
    ✅ [핵심] BASE_URL: 현재 파일(index.html)이 있는 폴더 기준
@@ -740,11 +891,13 @@ const BASE_URL = new URL('./', location.href);
 const ABS = (p) => new URL(String(p || ''), BASE_URL).toString();
 
 /* ✅ 조건부 필수 규칙 */
-const CONDITIONAL_REQUIRED = [
+let CONDITIONAL_REQUIRED = [
   { sourceId: '신규/번이', whenValue: '신규', requiredOn: ['희망번호'] },
   { sourceId: '신규/번이', whenValue: '번이', requiredOn: ['번호이동', '전통신사'] },
   { sourceId: '전통신사', whenValue: 'MVNO', requiredOn: ['통신사명'] },
 ];
+let USE_FORM_POPUP = false;
+let FORM_POPUP_FORMS = Object.create(null);
 
 /* =========================
    ✅ 전역 값 저장/동기화
@@ -771,7 +924,7 @@ function setValueById(id, value) {
     pages.forEach(pg => {
       (pg.fields || []).forEach(f => {
         if (String(f.id || '').toLowerCase() === key) {
-          if (f.type === 'checkbox') f.value = !!value;
+          if (f.type === 'checkbox' || f.type === 'checkmark') f.value = !!value;
           else f.value = v;
         }
       });
@@ -796,6 +949,11 @@ function setValueById(id, value) {
   // checkbox
   if (el.type === 'checkbox') {
     el.checked = !!value;
+    __programmaticUpdate = false;
+    return;
+  }
+  if (el.dataset && el.dataset.type === 'checkmark') {
+    el.textContent = value ? '✓' : '';
     __programmaticUpdate = false;
     return;
   }
@@ -834,6 +992,72 @@ function applyMirror(sourceField, value) {
   const targets = sourceField.mirrorTo || [];
   targets.forEach(tid => setValueById(tid, value));
 }
+
+function getCheckmarkGroupId(f){
+  if (!f || f.type !== 'checkmark') return '';
+  if (f.groupId) return String(f.groupId).trim();
+  const text = [f.id, f.label, f.checkValue].map(v => String(v || '')).join(' ');
+  if (/신규|번이|번호\s*이동|mnp|new/i.test(text)) return '신규/번이';
+  return '';
+}
+function getCheckmarkValue(f){
+  if (!f || f.type !== 'checkmark') return '';
+  if (f.checkValue) return String(f.checkValue).trim();
+  const text = [f.id, f.label].map(v => String(v || '')).join(' ');
+  if (/번호\s*이동|번이|mnp/i.test(text)) return '번이';
+  if (/신규|new/i.test(text)) return '신규';
+  return f.id || 'Y';
+}
+function getCheckmarkGroupValue(groupId){
+  const key = String(groupId || '').toLowerCase();
+  if (!key) return '';
+  const direct = valuesById[groupId] ?? valuesById[key];
+  if (direct != null && String(direct).trim() !== '') return String(direct);
+  for (const pg of pages){
+    for (const f of (pg.fields || [])){
+      if (f.type !== 'checkmark') continue;
+      if (String(getCheckmarkGroupId(f)).toLowerCase() === key && !!f.value){
+        return getCheckmarkValue(f);
+      }
+    }
+  }
+  return '';
+}
+function isCheckmarkGroupChecked(groupId){
+  return !!getCheckmarkGroupValue(groupId);
+}
+function setCheckmarkGroupValue(groupId, checkValue){
+  const key = String(groupId || '').toLowerCase();
+  const wanted = String(checkValue || '');
+  if (!key) return;
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (f.type !== 'checkmark') return;
+      if (String(getCheckmarkGroupId(f)).toLowerCase() !== key) return;
+      f.value = (getCheckmarkValue(f) === wanted);
+      if (f.id) valuesById[f.id] = !!f.value;
+    });
+  });
+  valuesById[groupId] = wanted;
+  valuesById[key] = wanted;
+}
+function handleCheckmarkToggle(f){
+  const groupId = getCheckmarkGroupId(f);
+  const checkValue = getCheckmarkValue(f);
+  if (groupId) {
+    setCheckmarkGroupValue(groupId, checkValue);
+    f.value = true;
+    if (f.id) valuesById[f.id] = true;
+  } else {
+    f.value = !f.value;
+    if (f.id) valuesById[f.id] = !!f.value;
+  }
+  applyConditionalRequired();
+  render();
+  scheduleSave();
+  refreshConditionalInvalid();
+}
+
 
 /* ===== 모드/상태 ===== */
 const QS  = new URLSearchParams(location.search);
@@ -1217,11 +1441,16 @@ function normalizeVal(v){
 }
 
 function getFieldCurrentValueById(id){
-  const v = valuesById[id];
+  const v = valuesById[id] ?? valuesById[String(id || '').toLowerCase()];
   if (v != null) return v;
 
+  const groupValue = getCheckmarkGroupValue(id);
+  if (groupValue) return groupValue;
+
   const found = getFieldsByIdAll(id)[0]?.f;
-  return found ? found.value : '';
+  if (!found) return '';
+  if (found.type === 'checkmark') return found.value ? getCheckmarkValue(found) : '';
+  return found.value;
 }
 
 function getConditionalRequiredSet(){
@@ -1477,6 +1706,8 @@ async function loadDesign(){
         const j = JSON.parse(txt);
         if (Array.isArray(j.pages) && j.pages.length){
           pages = j.pages;
+          if (Array.isArray(j.conditionalRequired)) CONDITIONAL_REQUIRED = j.conditionalRequired;
+          if (j.formPopup && typeof j.formPopup === 'object') { USE_FORM_POPUP = !!j.formPopup.enabled; FORM_POPUP_FORMS = j.formPopup.forms || Object.create(null); }
           ok = true;
           console.log('[loadDesign] loaded OK from:', url, 'pages=', pages.length);
           break;
@@ -1528,6 +1759,7 @@ function render(){
     w.className = 'field '
       + (f.type === 'radio'    ? 'radio '    : '')
       + (f.type === 'checkbox' ? 'checkbox ' : '')
+      + (f.type === 'checkmark' ? 'checkmark ' : '')
       + (i === selected        ? ' sel'      : '');
 
     if (f.type === 'checkbox' || f.type === 'radio') {
@@ -1696,6 +1928,38 @@ ctrl.oninput = () => {
       requestAnimationFrame(() => setSelectDisplay(w, sel, f));
       ctrl = sel;
     }
+    else if (f.type === 'checkmark') {
+      ctrl = document.createElement('div');
+      ctrl.className = 'checkmark-symbol';
+      ctrl.dataset.type = 'checkmark';
+      const init = !!(f.id ? (valuesById[f.id] ?? f.value ?? false) : (f.value ?? false));
+      f.value = init;
+      ctrl.textContent = init ? '✓' : '';
+      ctrl.style.width = '100%';
+      ctrl.style.height = '100%';
+      if (f.id) elById[f.id] = ctrl;
+      lab.style.display = 'none';
+
+      if (FILL) {
+        w.addEventListener('click', e => {
+          e.stopPropagation();
+          handleCheckmarkToggle(f);
+        });
+      } else {
+        w.addEventListener('dblclick', e => {
+          e.stopPropagation();
+          handleCheckmarkToggle(f);
+        });
+      }
+    }
+    else if (f.type === 'checkmark') {
+      ctrl = document.createElement('div');
+      ctrl.className = 'checkmark-symbol';
+      ctrl.textContent = f.value ? '✓' : '';
+      ctrl.style.width = '100%';
+      ctrl.style.height = '100%';
+      lab.style.display = 'none';
+    }
     else if (f.type === 'checkbox') {
       ctrl = document.createElement('input');
       ctrl.type = 'checkbox';
@@ -1782,6 +2046,22 @@ cb.onchange = () => {
       });
     }
     else {
+      const formMatch = String(f.id || '').match(/^form:(.+)$/);
+      if (formMatch) {
+        ctrl = document.createElement('button');
+        ctrl.type = 'button';
+        ctrl.className = 'btn--ghost btn';
+        ctrl.textContent = f.label || formMatch[1] || '양식';
+        ctrl.style.width = '100%';
+        ctrl.style.height = '100%';
+        ctrl.style.justifyContent = 'center';
+        ctrl.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          openFormPopup(formMatch[1]);
+        });
+        if (f.id) elById[f.id] = ctrl;
+      } else {
       ctrl = document.createElement('input');
       ctrl.type = 'text';
 
@@ -1817,6 +2097,7 @@ ctrl.oninput = () => {
 
   refreshConditionalInvalid();
 };
+      }
 
     }
 
@@ -1871,7 +2152,7 @@ w.appendChild(ctrl);
 bindRequiredFieldVisual(f, w, ctrl);
 overlay.appendChild(w);
 
-    if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio')) {
+    if (!FILL && (f.type === 'text' || f.type === 'textarea' || f.type === 'select' || f.type === 'radio' || f.type === 'checkmark')) {
       const rh = document.createElement('div');
       rh.className = 'resize-handle';
       rh.addEventListener('mousedown', ev => startResize(ev, i, w));
@@ -1920,7 +2201,9 @@ const pLabel=document.getElementById('p_label'),
       pAutoDate=document.getElementById('p_autoDate'),
       pLocked=document.getElementById('p_locked'),
       pLockOnPh=document.getElementById('p_lockOnPh'),
-      pCheckStyle=document.getElementById('p_checkStyle');
+      pCheckStyle=document.getElementById('p_checkStyle'),
+      pGroupId=document.getElementById('p_groupId'),
+      pCheckValue=document.getElementById('p_checkValue');
 
 function updatePanel(){
   const info=document.getElementById('selInfo'),
@@ -1928,17 +2211,19 @@ function updatePanel(){
         py=document.getElementById('p_y'),
         pw=document.getElementById('p_w'),
         rowOpts=document.getElementById('row_opts'),
-        rowReq=document.getElementById('row_req');
+        rowReq=document.getElementById('row_req'),
+        rowCheckGroup=document.getElementById('row_checkGroup'),
+        rowCheckValue=document.getElementById('row_checkValue');
 
   if(selected<0){
     info.textContent='없음'; px.value=py.value=pw.value='';
     pLabel.value=''; pRadioSize.value=''; pRadioGap.value='';
-    pColor.value='#000000'; pHeight.value=''; pId.value='';
+    pColor.value='#000000'; pHeight.value=''; pId.value=''; if(pGroupId) pGroupId.value=''; if(pCheckValue) pCheckValue.value='';
     pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=false;
     pBgColor.value='#000000'; pBgTransparent.checked=false;
     pFontSize.value=''; pMask.value=''; pMaskRe.value=''; pMaxLen.value=''; pPlaceholder.value='';
     pAutoDate.value=''; pLocked.checked=false; pLockOnPh.checked=false;
-    if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none';
+    if(rowOpts) rowOpts.style.display='none'; if(rowReq) rowReq.style.display='none'; if(rowCheckGroup) rowCheckGroup.style.display='none'; if(rowCheckValue) rowCheckValue.style.display='none';
     if (pCheckStyle) pCheckStyle.value = 'tick';
     return;
   }
@@ -1954,6 +2239,8 @@ function updatePanel(){
   pColor.value=(f.color || '#000000');
   pHeight.value=(f.inputHeight ?? '');
   pId.value=f.id || '';
+  if(pGroupId) pGroupId.value = f.groupId || '';
+  if(pCheckValue) pCheckValue.value = f.checkValue || '';
 
   pBorderColor.value=f.borderTransparent?'#000000':(f.borderColor||'#ff3b3b');
   pBorderWidth.value=(f.borderWidth ?? 2);
@@ -1966,6 +2253,8 @@ function updatePanel(){
   if(pRequired) pRequired.checked=!!f.required;
 
   if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
+  if(rowCheckGroup) rowCheckGroup.style.display=(f.type==='checkmark')?'':'none';
+  if(rowCheckValue) rowCheckValue.style.display=(f.type==='checkmark')?'':'none';
   if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
 
   pFontSize.value = (f.fontSize ?? 14);
@@ -2071,6 +2360,7 @@ document.getElementById('addField').onclick=()=>{
   const base={id:(id||`${t}_${Date.now()}`),label,type:t,x:50,y:50,w:30,required:req};
   if(t==='select'||t==='radio') base.options=opts;
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
+  if(t==='checkmark'){ base.inputHeight=18; base.fontSize=18; base.value=false; base.w=2; base.groupId=''; base.checkValue=''; }
   cur().fields.push(base); selected=cur().fields.length-1; render(); scheduleSave();
 };
 
@@ -2102,6 +2392,10 @@ document.getElementById('applyProp').onclick = () => {
   f.wrap = !!document.getElementById('p_wrap')?.checked;
 
   f.id = (pId?.value || '').trim() || f.id;
+  if (f.type === 'checkmark') {
+    f.groupId = (pGroupId?.value || '').trim();
+    f.checkValue = (pCheckValue?.value || '').trim();
+  }
   f.required = !!pRequired?.checked;
 
   f.borderTransparent = !!pBorderTransparent?.checked;
@@ -2198,7 +2492,7 @@ document.getElementById('next').onclick=()=>changePage(1);
 /* ===== 저장/초기화 ===== */
 document.getElementById('saveJson').onclick=()=>{
   const age = getSafeAge();
-  const blob=new Blob([JSON.stringify({pages},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({pages, conditionalRequired: CONDITIONAL_REQUIRED, formPopup:{ enabled: USE_FORM_POPUP, forms: FORM_POPUP_FORMS }},null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=`overlay-design.device.${age}.json`; // ✅
@@ -2265,6 +2559,10 @@ function isRequiredFieldFilled(f, ctrl){
   if (!f.required && !isCondRequired) return true;
 
   if (f.type === 'checkbox') return !!ctrl.checked;
+  if (f.type === 'checkmark') {
+    const g = getCheckmarkGroupId(f);
+    return g ? isCheckmarkGroupChecked(g) : !!f.value;
+  }
   if (f.type === 'radio') return !!ctrl.querySelector('input[type="checkbox"]:checked');
 
   return String(ctrl.value ?? '').trim() !== '';
@@ -2296,7 +2594,7 @@ function bindRequiredFieldVisual(f, wrap, ctrl){
     ctrl.querySelectorAll('input[type="checkbox"]').forEach(r => {
       r.addEventListener('change', apply);
     });
-  } else if (f.type === 'checkbox' || f.type === 'select') {
+  } else if (f.type === 'checkbox' || f.type === 'checkmark' || f.type === 'select') {
     ctrl.addEventListener('change', apply);
     ctrl.addEventListener('input', apply);
   } else {
@@ -2321,7 +2619,12 @@ function findMissingAll(){
       if(!isRequired) return;
       if (f.locked && f.lockOnPh && !f.value) return;
 
-      const v=(f.type==='checkbox')?!!f.value:(f.value??'').toString().trim();
+      let v='';
+      if(f.type==='checkbox') v = !!f.value ? 'Y' : '';
+      else if(f.type==='checkmark') {
+        const g = getCheckmarkGroupId(f);
+        v = g ? getCheckmarkGroupValue(g) : (!!f.value ? 'Y' : '');
+      } else v = (f.value??'').toString().trim();
       if(!v) miss.push({page:pi,idx:fi,label:(f.label||f.id||`필드${fi+1}`), id: fid});
     });
   });
@@ -2381,7 +2684,8 @@ function createPrintDOM(page){
     w.className =
       'field ' +
       (f.type === 'radio' ? 'radio ' : '') +
-      (f.type === 'checkbox' ? 'checkbox ' : '');
+      (f.type === 'checkbox' ? 'checkbox ' : '') +
+      (f.type === 'checkmark' ? 'checkmark ' : '');
 
     w.style.left = `${f.x}%`;
     w.style.top  = `${f.y}%`;
@@ -2592,6 +2896,172 @@ function enableWrapAllTextFields(){
 const wrapBtn = document.getElementById('enableWrapAll');
 if (wrapBtn) wrapBtn.onclick = enableWrapAllTextFields;
 
+
+/* =========================
+   ✅ 조건부 필수 설정 도구 + 양식 팝업
+========================= */
+let SELECTED_COND_RULE_INDEX = -1;
+
+function renderConditionalRuleList(){
+  const box = document.getElementById('condRuleList');
+  if (!box) return;
+  box.innerHTML = (CONDITIONAL_REQUIRED || []).map((r, i) => `
+    <div class="cond-rule-item ${i === SELECTED_COND_RULE_INDEX ? 'active' : ''}" data-cond-index="${i}">
+      <b>${r.sourceId || ''}</b> = <b>${r.whenValue || ''}</b> → ${(r.requiredOn || []).join(', ')}
+    </div>
+  `).join('') || '<div class="hint">등록된 규칙 없음</div>';
+}
+
+function readCondInputs(){
+  const sourceId = (document.getElementById('cond_sourceId')?.value || '').trim();
+  const whenValue = (document.getElementById('cond_whenValue')?.value || '').trim();
+  const requiredOn = (document.getElementById('cond_requiredOn')?.value || '')
+    .split(',')
+    .map(v => v.trim())
+    .filter(Boolean);
+  return { sourceId, whenValue, requiredOn };
+}
+
+function fillCondInputs(rule){
+  document.getElementById('cond_sourceId').value = rule?.sourceId || '';
+  document.getElementById('cond_whenValue').value = rule?.whenValue || '';
+  document.getElementById('cond_requiredOn').value = Array.isArray(rule?.requiredOn) ? rule.requiredOn.join(', ') : '';
+}
+
+function initConditionalTool(){
+  renderConditionalRuleList();
+
+  document.getElementById('condRuleList')?.addEventListener('click', e => {
+    const item = e.target.closest('[data-cond-index]');
+    if (!item) return;
+    SELECTED_COND_RULE_INDEX = Number(item.dataset.condIndex);
+    fillCondInputs(CONDITIONAL_REQUIRED[SELECTED_COND_RULE_INDEX]);
+    renderConditionalRuleList();
+  });
+
+  document.getElementById('condAdd')?.addEventListener('click', () => {
+    const r = readCondInputs();
+    if (!r.sourceId || !r.whenValue || !r.requiredOn.length) {
+      alert('기준 필드 ID/그룹명, 기준 값, 필수 대상 ID를 모두 입력해주세요.');
+      return;
+    }
+    CONDITIONAL_REQUIRED.push(r);
+    SELECTED_COND_RULE_INDEX = CONDITIONAL_REQUIRED.length - 1;
+    renderConditionalRuleList();
+    applyConditionalRequired();
+    render();
+  });
+
+  document.getElementById('condUpdate')?.addEventListener('click', () => {
+    if (SELECTED_COND_RULE_INDEX < 0) {
+      alert('수정할 규칙을 먼저 선택해주세요.');
+      return;
+    }
+    const r = readCondInputs();
+    if (!r.sourceId || !r.whenValue || !r.requiredOn.length) {
+      alert('기준 필드 ID/그룹명, 기준 값, 필수 대상 ID를 모두 입력해주세요.');
+      return;
+    }
+    CONDITIONAL_REQUIRED[SELECTED_COND_RULE_INDEX] = r;
+    renderConditionalRuleList();
+    applyConditionalRequired();
+    render();
+  });
+
+  document.getElementById('condDelete')?.addEventListener('click', () => {
+    if (SELECTED_COND_RULE_INDEX < 0) {
+      alert('삭제할 규칙을 먼저 선택해주세요.');
+      return;
+    }
+    CONDITIONAL_REQUIRED.splice(SELECTED_COND_RULE_INDEX, 1);
+    SELECTED_COND_RULE_INDEX = -1;
+    fillCondInputs(null);
+    renderConditionalRuleList();
+    applyConditionalRequired();
+    render();
+  });
+}
+
+function openFormPopup(key){
+  if (!USE_FORM_POPUP) return;
+  const f = FORM_POPUP_FORMS[key];
+  if (!f) return;
+  const modal = document.getElementById('formModal');
+  const title = document.getElementById('formPopupTitle');
+  const text = document.getElementById('formPopupText');
+  if (!modal || !title || !text) return;
+  title.textContent = f.title || key;
+  text.textContent = f.text || '';
+  modal.setAttribute('aria-hidden','false');
+}
+function closeFormPopup(){
+  const modal = document.getElementById('formModal');
+  const text = document.getElementById('formPopupText');
+  const toast = document.getElementById('formToast');
+  if (modal) modal.setAttribute('aria-hidden','true');
+  if (text) text.textContent = '';
+  if (toast) toast.classList.remove('show');
+}
+function initFormPopupTool(){
+  const enabled = document.getElementById('formPopupEnabled');
+  if (enabled) {
+    enabled.checked = !!USE_FORM_POPUP;
+    enabled.addEventListener('change', () => { USE_FORM_POPUP = !!enabled.checked; });
+  }
+
+  document.getElementById('formSaveBtn')?.addEventListener('click', () => {
+    const key = (document.getElementById('formKey')?.value || '').trim();
+    const title = (document.getElementById('formTitleInput')?.value || '').trim();
+    const text = (document.getElementById('formTextInput')?.value || '');
+    if (!key) {
+      alert('양식 키를 입력해주세요.');
+      return;
+    }
+    FORM_POPUP_FORMS[key] = { title: title || key, text };
+    alert('양식이 저장되었습니다.');
+  });
+
+  document.getElementById('formDeleteBtn')?.addEventListener('click', () => {
+    const key = (document.getElementById('formKey')?.value || '').trim();
+    if (!key || !FORM_POPUP_FORMS[key]) {
+      alert('삭제할 양식 키를 확인해주세요.');
+      return;
+    }
+    delete FORM_POPUP_FORMS[key];
+    alert('양식이 삭제되었습니다.');
+  });
+
+  document.addEventListener('click', e => {
+    const closeTarget = e.target.closest('[data-form-close]');
+    if (closeTarget) closeFormPopup();
+  });
+  document.getElementById('formCloseX')?.addEventListener('click', closeFormPopup);
+  document.getElementById('formSelectAll')?.addEventListener('click', () => {
+    const text = document.getElementById('formPopupText');
+    const range = document.createRange();
+    range.selectNodeContents(text);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+  document.getElementById('formCopyBtn')?.addEventListener('click', async () => {
+    const text = document.getElementById('formPopupText');
+    const toast = document.getElementById('formToast');
+    try { await navigator.clipboard.writeText(text.innerText || text.textContent || ''); }
+    catch(_) {
+      const range = document.createRange();
+      range.selectNodeContents(text);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand('copy');
+      sel.removeAllRanges();
+    }
+    toast?.classList.add('show');
+    setTimeout(() => toast?.classList.remove('show'), 1200);
+  });
+}
+
 /* ===== 부트 ===== */
 async function boot(){
   await loadDesign();
@@ -2609,7 +3079,7 @@ refreshConditionalInvalid();
 }
 document.getElementById('reload').onclick=boot;
 
-window.addEventListener('DOMContentLoaded',()=>{ boot(); applyZoom(); });
+window.addEventListener('DOMContentLoaded',()=>{ initConditionalTool(); initFormPopupTool(); boot(); applyZoom(); });
 </script>
 </body>
 </html>
