@@ -735,13 +735,18 @@ if (DESIGN) {
     printing = true;
 
 try {
-  if (typeof forcePrintBlankForm === 'function') {
-    await forcePrintBlankForm();
-  } else if (typeof printAllNow === 'function') {
-    await printAllNow();
-  } else {
-    window.print();
+  applyConditionalRequired();
+  const all = findMissingAll();
+  if (all.length) {
+    const first = all[0].page;
+    pageIndex = first;
+    render();
+    const listForPage = all.filter(m => m.page === first);
+    markInvalidForPage(first, listForPage);
+    showToast(listForPage.map(m => `p${m.page + 1} - ${m.label}`));
+    return;
   }
+  await printAllNow();
 } catch (err) {
   console.error('[Ctrl+P print error]', err);
     } finally {
@@ -3215,7 +3220,7 @@ async function printAllNow(){
   setTimeout(()=>window.print(),0);
 }
 
-/* ✅ Ctrl+P 전용: 필수값 검증 없이 빈 서식지 출력 */
+/* ✅ 필수값 검증 없이 빈 서식지 출력 */
 async function forcePrintBlankForm(){
   try {
     const toast = document.getElementById('toast');
@@ -3249,20 +3254,15 @@ async function forcePrintBlankForm(){
   setTimeout(() => window.print(), 0);
 }
 
+
 /* ===== 인쇄 버튼 ===== */
+/* ✅ 하단 PDF 생성OR인쇄 버튼도 필수값 검증 없이 빈 서식지 출력 */
 document.getElementById('btnPdf').onclick = async () => {
-  applyConditionalRequired();
-  const all = findMissingAll();
-  if (all.length) {
-    const first = all[0].page;
-    pageIndex = first;
-    render();
-    const listForPage = all.filter(m => m.page === first);
-    markInvalidForPage(first, listForPage);
-    showToast(listForPage.map(m => `p${m.page + 1} - ${m.label}`));
-    return;
+  if (typeof forcePrintBlankForm === 'function') {
+    await forcePrintBlankForm();
+  } else {
+    await printAllNow();
   }
-  await printAllNow();
 };
 window.addEventListener('beforeprint', () => {
   try {
