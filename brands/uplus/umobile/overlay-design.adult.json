@@ -715,9 +715,9 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": ""
         },
         {
           "id": "text_1765783977667",
@@ -803,7 +803,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "08"
+          "value": "16"
         },
         {
           "id": "판매자 성함",
@@ -1333,6 +1333,86 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false
+        },
+        {
+          "id": "5G요금제",
+          "label": "",
+          "type": "checkmark",
+          "x": 90.9265281669647,
+          "y": 38.83680073028387,
+          "w": 2,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 10,
+          "fontSize": 10,
+          "value": false,
+          "radioSize": 10,
+          "checkSize": 10,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "",
+          "checkValue": "",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "5G요금제",
+          "label": "",
+          "type": "checkmark",
+          "x": 91.01972228502372,
+          "y": 37.82243447471495,
+          "w": 2,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 10,
+          "fontSize": 10,
+          "value": false,
+          "radioSize": 10,
+          "checkSize": 10,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "",
+          "checkValue": "",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -1374,7 +1454,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": true,
-          "value": "",
           "verticalAlign": "middle",
           "autoShrink": true
         }
@@ -1437,8 +1516,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -1465,8 +1543,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "baseFee",
@@ -1493,8 +1570,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "totalFee",
@@ -1521,8 +1597,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "년",
@@ -1606,7 +1681,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "08"
+          "value": "16"
         },
         {
           "id": "자필 성함싸인",
@@ -1635,7 +1710,6 @@
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
-          "value": "",
           "verticalAlign": "middle",
           "autoShrink": true
         },
@@ -1667,8 +1741,7 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "개통번호",
@@ -1696,8 +1769,7 @@
           "placeholder": "개통번호 입력",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     }

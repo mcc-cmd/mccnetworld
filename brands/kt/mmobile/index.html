@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MCCNETWORLD 엠모바일</title>
+<title>MCCNETWORLD 미디어로그</title>
 
 <link rel="icon" type="image/png" sizes="16x16"  href="/mccnetworld/favicon-16x16.png?v=2">
 <link rel="icon" type="image/png" sizes="32x32"  href="/mccnetworld/favicon-32x32.png?v=2">
@@ -920,7 +920,7 @@ try {
 <div class="wrap">
   <section class="panel">
     <div class="hd">
-      <strong id="topTitle">MCC 엠모바일</strong>
+      <strong id="topTitle">MCC 미디어로그</strong>
 
       <div style="display:flex; gap:8px; align-items:center">
         <a href="../../../index.html" class="btn btn--ghost btn-back" id="backToHub">서류 선택 화면</a>
@@ -1008,6 +1008,25 @@ try {
         <div class="row"><div>필드 ID</div><input id="p_id" type="text" placeholder="예: plan / baseFee / applyYear 등"></div>
         <div class="row" id="row_checkGroup"><div>체크 그룹명</div><input id="p_groupId" type="text" placeholder="예: 전통신사 / 성별 / 신규/번이"></div>
         <div class="row" id="row_checkValue"><div>체크 값</div><input id="p_checkValue" type="text" placeholder="예: SK / KT / LG / MVNO / 남 / 여"></div>
+
+        <div class="group" id="row_autoCheckBox" style="margin:8px 0 0;padding-top:8px">
+          <h4>요금제 자동체크 설정</h4>
+          <div class="row"><div>자동체크 사용</div><label><input type="checkbox" id="p_autoCheckEnabled"> 사용</label></div>
+          <div class="row"><div>자동체크 기준</div>
+            <select id="p_autoCheckSource">
+              <option value="plan">요금제</option>
+            </select>
+          </div>
+          <div class="row"><div>자동체크 방식</div>
+            <select id="p_autoCheckMode">
+              <option value="contains">포함</option>
+              <option value="equals">일치</option>
+              <option value="regex">정규식</option>
+            </select>
+          </div>
+          <div class="row"><div>자동체크 키워드</div><input id="p_autoCheckKeyword" type="text" placeholder="예: 5G / 밀리의 서재 / 지니뮤직 / CU"></div>
+          <p class="hint">체크표시(✓), 체크박스, 체크이미지에서 사용합니다. 요금제명이 키워드 조건에 맞으면 자동으로 체크됩니다.</p>
+        </div>
 
         <div class="row" id="row_opts"><div>옵션(콤마)</div><input id="p_options" type="text" placeholder="예: 남, 여 / 또는 옵션 목록"></div>
         <div class="row" id="row_req"><div>필수</div><label><input type="checkbox" id="p_required"> 반드시 작성</label></div>
@@ -1183,7 +1202,7 @@ const valuesById = Object.create(null);
 const elById = Object.create(null);
 const CHECK_IMAGE_SRC = new URL('images/check_on.png', window.location.href).href;
 
-const USE_PRINT_POLICY_NOTICE = true;
+const USE_PRINT_POLICY_NOTICE = false;
 const PRINT_NOTICE_HIDE_KEY = 'mmobile_print_notice_hide_until';
 
 const PRE_PRINT_NOTICE = `부가서비스(캐치콜플러스) 가입 여부를 반드시 확인 후 진행해 주세요.
@@ -1418,6 +1437,40 @@ function setValueById(id, value) {
     } else {
       el.value = valuesById[id];
     }
+  }
+}
+
+
+function setImageCheckById(id, checked){
+  if (!id) return;
+  const key = String(id).toLowerCase();
+
+  valuesById[id] = !!checked;
+  valuesById[key] = !!checked;
+
+  try {
+    pages.forEach(pg => {
+      (pg.fields || []).forEach(f => {
+        if (String(f.id || '').toLowerCase() === key && f.type === 'imagecheck') {
+          f.value = !!checked;
+        }
+      });
+    });
+  } catch (_) {}
+
+  const el = elById[id] || elById[key];
+  if (!el || !(el.dataset && el.dataset.type === 'imagecheck')) return;
+
+  el.innerHTML = '';
+  if (checked) {
+    const img = document.createElement('img');
+    img.src = CHECK_IMAGE_SRC;
+    img.alt = 'check';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    img.style.pointerEvents = 'none';
+    el.appendChild(img);
   }
 }
 
@@ -1815,6 +1868,8 @@ syncFeesFromExistingPlan();
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+sync5GPlanCheck(currentPlan);
+syncAutoCheckFields(currentPlan);
 
 return;
     }catch(_){}
@@ -1826,6 +1881,61 @@ function syncFeesFromExistingPlan(){
     if(f.value) updateFeesFromPlan(f.value,false);
   });
   render(); scheduleSave();
+}
+
+function is5GPlan(planName){
+  return /5\s*g/i.test(String(planName || ''));
+}
+
+/* ✅ 5G 요금제 자동 체크
+   체크마커/체크박스/체크이미지 필드 ID를 아래 중 하나로 설정하면 됩니다.
+   - 5G요금제
+   - 5G체크
+   - 5G동의
+*/
+function is5GCheckTargetField(f){
+  if (!f) return false;
+  const id = String(f.id || '').replace(/\s+/g, '').trim().toLowerCase();
+  return id === '5g요금제' || id === '5g체크' || id === '5g동의';
+}
+
+function sync5GPlanCheck(planName){
+  const checked = is5GPlan(planName);
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (!is5GCheckTargetField(f)) return;
+      if (!(f.type === 'checkbox' || f.type === 'checkmark' || f.type === 'imagecheck')) return;
+
+      f.value = checked;
+
+      if (f.id) {
+        valuesById[f.id] = checked;
+        valuesById[String(f.id).toLowerCase()] = checked;
+      }
+
+      const live = f.id ? elById[f.id] : null;
+      if (live) {
+        if (live.type === 'checkbox') {
+          live.checked = checked;
+        } else if (live.dataset && live.dataset.type === 'checkmark') {
+          live.textContent = checked ? '✓' : '';
+        } else if (live.dataset && live.dataset.type === 'imagecheck') {
+          live.innerHTML = '';
+          if (checked) {
+            const img = document.createElement('img');
+            img.src = CHECK_IMAGE_SRC;
+            img.alt = 'check';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'contain';
+            img.style.pointerEvents = 'none';
+            live.appendChild(img);
+          }
+        }
+      }
+    });
+  });
 }
 
 /* ===== 이름칸 자동 축소 ===== */
@@ -1978,6 +2088,120 @@ function syncAffiliateImageMarks(planName){
   if (type === 'megabox') setImageCheckById('affiliate_megabox', true);
   if (type === 'cu')      setImageCheckById('affiliate_cu', true);
 }
+
+/* ✅ 설정형 요금제 자동체크
+   - 체크표시(✓), 체크박스, 체크이미지 필드별로 autoCheck 조건을 저장합니다.
+   - 개발 도구에서 자동체크 사용/방식/키워드를 설정하면 요금제 선택 시 자동 ON/OFF 됩니다.
+*/
+function normalizeAutoCheckText(v){
+  return String(v || '').toLowerCase().replace(/\s+/g, '');
+}
+
+function isAutoCheckableField(f){
+  return !!f && (f.type === 'checkmark' || f.type === 'checkbox' || f.type === 'imagecheck');
+}
+
+function readAutoCheckConfig(f){
+  const ac = f && f.autoCheck && typeof f.autoCheck === 'object' ? f.autoCheck : null;
+  if (!ac || !ac.enabled) return null;
+
+  const keyword = String(ac.keyword || '').trim();
+  if (!keyword) return null;
+
+  return {
+    source: String(ac.source || 'plan'),
+    mode: String(ac.mode || 'contains'),
+    keyword
+  };
+}
+
+function autoCheckMatches(text, config){
+  const raw = String(text || '');
+  const kw = String(config?.keyword || '').trim();
+  const mode = String(config?.mode || 'contains');
+
+  if (!kw) return false;
+
+  if (mode === 'equals') {
+    return normalizeAutoCheckText(raw) === normalizeAutoCheckText(kw);
+  }
+
+  if (mode === 'regex') {
+    try {
+      return new RegExp(kw, 'i').test(raw);
+    } catch (_) {
+      return false;
+    }
+  }
+
+  return normalizeAutoCheckText(raw).includes(normalizeAutoCheckText(kw));
+}
+
+function setAutoCheckFieldValue(f, checked){
+  if (!isAutoCheckableField(f)) return;
+
+  f.value = !!checked;
+
+  if (f.id) {
+    valuesById[f.id] = !!checked;
+    valuesById[String(f.id).toLowerCase()] = !!checked;
+    try {
+      if (typeof __normKey === 'function') valuesById[__normKey(f.id)] = !!checked;
+    } catch (_) {}
+  }
+}
+
+function syncAutoCheckFields(planName){
+  const currentPlan = String(planName ?? getSelectedPlanName() ?? '');
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (!isAutoCheckableField(f)) return;
+
+      const config = readAutoCheckConfig(f);
+      if (!config) return;
+
+      let sourceText = currentPlan;
+      // 현재는 요금제 기준만 사용. 추후 source가 늘어나도 구조 유지.
+      if (config.source !== 'plan') sourceText = currentPlan;
+
+      setAutoCheckFieldValue(f, autoCheckMatches(sourceText, config));
+    });
+  });
+
+  // 현재 화면 DOM도 즉시 반영
+  try {
+    overlay.querySelectorAll('.field').forEach(w => {
+      const idx = Number(w.dataset.i);
+      const f = cur()?.fields?.[idx];
+      if (!isAutoCheckableField(f) || !readAutoCheckConfig(f)) return;
+
+      const checked = !!f.value;
+
+      const mark = w.querySelector('.checkmark-symbol');
+      if (mark) mark.textContent = checked ? '✓' : '';
+
+      const cb = w.querySelector('input[type="checkbox"]');
+      if (cb) cb.checked = checked;
+
+      const imgBox = w.querySelector('[data-type="imagecheck"]');
+      if (imgBox) {
+        imgBox.innerHTML = '';
+        if (checked) {
+          const img = document.createElement('img');
+          img.src = CHECK_IMAGE_SRC;
+          img.alt = 'check';
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'contain';
+          img.style.pointerEvents = 'none';
+          imgBox.appendChild(img);
+        }
+      }
+    });
+  } catch (_) {}
+}
+
 /* =========================
    ✅ render() 오류 수정 완성본
 ========================= */
@@ -2152,9 +2376,10 @@ sel.onchange = () => {
     PLAN_LABEL_RE.test(String(f.label || ''));
 
   if (isPlan) {
-    updateFeesFromPlan(f.value);
+    updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
     syncAffiliateImageMarks(f.value);
+    syncAutoCheckFields(f.value);
   }
 
   applyConditionalRequired();
@@ -2493,6 +2718,8 @@ requestAnimationFrame(() => {
   evaluateExtraDataAndBar();
   forceMirrorPlan();
   syncAffiliateImageMarks(currentPlan);
+  sync5GPlanCheck(currentPlan);
+syncAutoCheckFields(currentPlan);
 });
 }
 
@@ -2556,6 +2783,11 @@ const pLabel=document.getElementById('p_label'),
       pLockOnPh=document.getElementById('p_lockOnPh'),
 pGroupId=document.getElementById('p_groupId'),
 pCheckValue=document.getElementById('p_checkValue'),
+pAutoCheckBox=document.getElementById('row_autoCheckBox'),
+pAutoCheckEnabled=document.getElementById('p_autoCheckEnabled'),
+pAutoCheckSource=document.getElementById('p_autoCheckSource'),
+pAutoCheckMode=document.getElementById('p_autoCheckMode'),
+pAutoCheckKeyword=document.getElementById('p_autoCheckKeyword'),
 pCheckStyle=document.getElementById('p_checkStyle'),
 pAutoShrink=document.getElementById('p_autoShrink'),
 pVerticalAlign=document.getElementById('p_verticalAlign'),
@@ -2570,6 +2802,7 @@ const info=document.getElementById('selInfo'),
       rowReq=document.getElementById('row_req'),
       rowCheckGroup=document.getElementById('row_checkGroup'),
       rowCheckValue=document.getElementById('row_checkValue'),
+      rowAutoCheckBox=document.getElementById('row_autoCheckBox'),
       rowRadioShowText=document.getElementById('row_radioShowText'),
       rowCheckStyle=document.getElementById('row_checkStyle');
 
@@ -2579,6 +2812,10 @@ const info=document.getElementById('selInfo'),
 pColor.value='#000000'; pHeight.value=''; pId.value='';
 if (pGroupId) pGroupId.value='';
 if (pCheckValue) pCheckValue.value='';
+if (pAutoCheckEnabled) pAutoCheckEnabled.checked=false;
+if (pAutoCheckSource) pAutoCheckSource.value='plan';
+if (pAutoCheckMode) pAutoCheckMode.value='contains';
+if (pAutoCheckKeyword) pAutoCheckKeyword.value='';
 pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=true;
 pBgColor.value='#000000'; pBgTransparent.checked=true;
 
@@ -2596,6 +2833,7 @@ if(rowOpts) rowOpts.style.display='none';
 if(rowReq) rowReq.style.display='none';
 if(rowCheckGroup) rowCheckGroup.style.display='none';
 if(rowCheckValue) rowCheckValue.style.display='none';
+if(rowAutoCheckBox) rowAutoCheckBox.style.display='none';
 if(rowRadioShowText) rowRadioShowText.style.display='none';
 if(rowCheckStyle) rowCheckStyle.style.display='none';
 if (pCheckStyle) pCheckStyle.value = 'tick';
@@ -2620,6 +2858,10 @@ pHeight.value=(f.inputHeight ?? '');
 pId.value=f.id || '';
 if (pGroupId) pGroupId.value = f.groupId || '';
 if (pCheckValue) pCheckValue.value = f.checkValue || '';
+if (pAutoCheckEnabled) pAutoCheckEnabled.checked = !!(f.autoCheck && f.autoCheck.enabled);
+if (pAutoCheckSource) pAutoCheckSource.value = (f.autoCheck && f.autoCheck.source) || 'plan';
+if (pAutoCheckMode) pAutoCheckMode.value = (f.autoCheck && f.autoCheck.mode) || 'contains';
+if (pAutoCheckKeyword) pAutoCheckKeyword.value = (f.autoCheck && f.autoCheck.keyword) || '';
 pBorderColor.value = (f.borderColor || '#ff3b3b');
 pBorderWidth.value = (f.borderWidth ?? 2);
 pBorderTransparent.checked = (f.borderTransparent !== false);
@@ -2633,6 +2875,7 @@ pBgTransparent.checked = (f.bgTransparent !== false);
 if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
 if(rowCheckGroup) rowCheckGroup.style.display=(f.type==='checkmark') ? '' : 'none';
 if(rowCheckValue) rowCheckValue.style.display=(f.type==='checkmark') ? '' : 'none';
+if(rowAutoCheckBox) rowAutoCheckBox.style.display=(f.type==='checkmark' || f.type==='checkbox' || f.type==='imagecheck') ? '' : 'none';
 if(rowRadioShowText) rowRadioShowText.style.display=(f.type==='radio') ? '' : 'none';
 if(rowCheckStyle) rowCheckStyle.style.display=(f.type==='checkbox' || f.type==='radio') ? '' : 'none';
 if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
@@ -2759,6 +3002,13 @@ const base = {
   borderTransparent: true,
   bgTransparent: true,
 
+  autoCheck: {
+    enabled: false,
+    source: 'plan',
+    mode: 'contains',
+    keyword: ''
+  },
+
   radioOuterBorderTransparent: false,
   radioOuterBorderColor: 'rgba(0,0,0,.25)',
   radioOuterBorderWidth: 1
@@ -2828,6 +3078,18 @@ if (f.type === 'checkmark') {
   f.groupId = (pGroupId?.value || '').trim();
   f.checkValue = (pCheckValue?.value || '').trim();
 }
+
+if (f.type === 'checkmark' || f.type === 'checkbox' || f.type === 'imagecheck') {
+  f.autoCheck = {
+    enabled: !!pAutoCheckEnabled?.checked,
+    source: (pAutoCheckSource?.value || 'plan'),
+    mode: (pAutoCheckMode?.value || 'contains'),
+    keyword: (pAutoCheckKeyword?.value || '').trim()
+  };
+} else {
+  delete f.autoCheck;
+}
+
 f.required = !!pRequired?.checked;
 
 f.borderTransparent = !!pBorderTransparent?.checked;
@@ -2880,6 +3142,8 @@ f.mask = (pMask?.value || '');
   ) {
     updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
+    sync5GPlanCheck(f.value);
+    syncAutoCheckFields(f.value);
   }
 
   if (
@@ -3076,6 +3340,8 @@ document.getElementById('resetValues').onclick=()=>{
   updateExtraBarDom('');
   mirrorExtraDataIntoBoxes('');
   mirrorPlanNameIntoBoxes('');
+  sync5GPlanCheck('');
+  syncAutoCheckFields('');
   clearAutosave();
   render();
   evaluateAffBanner();
@@ -3674,6 +3940,26 @@ function autoShrinkText(el, minPx = 8, maxPx) {
     el.style.fontSize = size + 'px';
   }
 }
+
+function autoShrinkPrintText(el, text, minPx = 5, maxPx = 14) {
+  if (!el) return;
+  const value = String(text ?? el.textContent ?? '').trim();
+  const base = maxPx || parseFloat(getComputedStyle(el).fontSize) || 14;
+  if (!value) { el.style.fontSize = base + 'px'; return; }
+
+  let size = base;
+  el.style.fontSize = size + 'px';
+  const overflows = () => {
+    const wOverflow = el.scrollWidth > el.clientWidth + 1;
+    const hOverflow = el.scrollHeight > el.clientHeight + 1;
+    return wOverflow || hOverflow;
+  };
+  while (overflows() && size > minPx) {
+    size -= 0.5;
+    el.style.fontSize = size + 'px';
+  }
+}
+
 function buildPrintAll(){
   const container = document.getElementById('printAll');
   container.innerHTML = '';
@@ -3981,6 +4267,8 @@ syncFeesFromExistingPlan();
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+sync5GPlanCheck(currentPlan);
+syncAutoCheckFields(currentPlan);
 forceMirrorPlan();
       alert(`불러오기 완료: ${PLANS.length}개`);
     }catch(err){
@@ -4067,6 +4355,8 @@ async function boot(){
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+sync5GPlanCheck(currentPlan);
+syncAutoCheckFields(currentPlan);
 forceMirrorPlan();
 }
 document.getElementById('reload').onclick=boot;
@@ -4088,7 +4378,7 @@ function setTopTitle() {
   const params = new URLSearchParams(location.search);
   const doc = params.get('doc');
 
-  let text = 'MCC 엠모바일';
+  let text = 'MCC 미디어로그';
 
   if (doc === 'change') text += ' 변경';
   else if (doc === 'cancel') text += ' 해지';

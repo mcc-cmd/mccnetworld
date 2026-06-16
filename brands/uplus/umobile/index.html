@@ -1421,6 +1421,41 @@ function setValueById(id, value) {
   }
 }
 
+
+
+function setImageCheckById(id, checked){
+  if (!id) return;
+  const key = String(id).toLowerCase();
+
+  valuesById[id] = !!checked;
+  valuesById[key] = !!checked;
+
+  try {
+    pages.forEach(pg => {
+      (pg.fields || []).forEach(f => {
+        if (String(f.id || '').toLowerCase() === key && f.type === 'imagecheck') {
+          f.value = !!checked;
+        }
+      });
+    });
+  } catch (_) {}
+
+  const el = elById[id] || elById[key];
+  if (!el || !(el.dataset && el.dataset.type === 'imagecheck')) return;
+
+  el.innerHTML = '';
+  if (checked) {
+    const img = document.createElement('img');
+    img.src = CHECK_IMAGE_SRC;
+    img.alt = 'check';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'contain';
+    img.style.pointerEvents = 'none';
+    el.appendChild(img);
+  }
+}
+
 function applyMirror(sourceField, value) {
   const targets = sourceField.mirrorTo || [];
   targets.forEach(tid => setValueById(tid, value));
@@ -1815,6 +1850,7 @@ syncFeesFromExistingPlan();
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+sync5GPlanCheck(currentPlan);
 
 return;
     }catch(_){}
@@ -1826,6 +1862,71 @@ function syncFeesFromExistingPlan(){
     if(f.value) updateFeesFromPlan(f.value,false);
   });
   render(); scheduleSave();
+}
+
+
+function is5GPlan(planName){
+  return /5\s*g/i.test(String(planName || ''));
+}
+
+/* ✅ 5G 요금제 자동 체크
+   체크마커/체크박스/체크이미지 필드 ID를 아래 중 하나로 설정하면 됩니다.
+   - 5G요금제
+   - 5G체크
+   - 5G동의
+*/
+function is5GCheckTargetField(f){
+  if (!f) return false;
+  const id = String(f.id || '').replace(/\s+/g, '').trim().toLowerCase();
+  return id === '5g요금제' || id === '5g체크' || id === '5g동의';
+}
+
+function sync5GPlanCheck(planName){
+  const checked = is5GPlan(planName);
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (!is5GCheckTargetField(f)) return;
+      if (!(f.type === 'checkbox' || f.type === 'checkmark' || f.type === 'imagecheck')) return;
+
+      f.value = checked;
+
+      if (f.id) {
+        valuesById[f.id] = checked;
+        valuesById[String(f.id).toLowerCase()] = checked;
+      }
+    });
+  });
+
+  // ✅ 현재 화면 DOM도 즉시 반영: 동일 ID 체크마커가 여러 개여도 모두 반영
+  try {
+    overlay.querySelectorAll('.field').forEach(w => {
+      const idx = Number(w.dataset.i);
+      const f = cur()?.fields?.[idx];
+      if (!is5GCheckTargetField(f)) return;
+
+      const mark = w.querySelector('.checkmark-symbol');
+      if (mark) mark.textContent = checked ? '✓' : '';
+
+      const cb = w.querySelector('input[type="checkbox"]');
+      if (cb) cb.checked = checked;
+
+      const imgBox = w.querySelector('[data-type="imagecheck"]');
+      if (imgBox) {
+        imgBox.innerHTML = '';
+        if (checked) {
+          const img = document.createElement('img');
+          img.src = CHECK_IMAGE_SRC;
+          img.alt = 'check';
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'contain';
+          img.style.pointerEvents = 'none';
+          imgBox.appendChild(img);
+        }
+      }
+    });
+  } catch (_) {}
 }
 
 /* ===== 이름칸 자동 축소 ===== */
@@ -2152,9 +2253,11 @@ sel.onchange = () => {
     PLAN_LABEL_RE.test(String(f.label || ''));
 
   if (isPlan) {
-    updateFeesFromPlan(f.value);
+    // ✅ 중간 render 방지: 5G 체크값까지 적용한 뒤 아래 render() 한 번으로 화면 갱신
+    updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
     syncAffiliateImageMarks(f.value);
+    sync5GPlanCheck(f.value);
   }
 
   applyConditionalRequired();
@@ -2493,6 +2596,7 @@ requestAnimationFrame(() => {
   evaluateExtraDataAndBar();
   forceMirrorPlan();
   syncAffiliateImageMarks(currentPlan);
+  sync5GPlanCheck(currentPlan);
 });
 }
 
@@ -2880,6 +2984,7 @@ f.mask = (pMask?.value || '');
   ) {
     updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
+    sync5GPlanCheck(f.value);
   }
 
   if (
@@ -3076,6 +3181,7 @@ document.getElementById('resetValues').onclick=()=>{
   updateExtraBarDom('');
   mirrorExtraDataIntoBoxes('');
   mirrorPlanNameIntoBoxes('');
+  sync5GPlanCheck('');
   clearAutosave();
   render();
   evaluateAffBanner();
@@ -3674,6 +3780,26 @@ function autoShrinkText(el, minPx = 8, maxPx) {
     el.style.fontSize = size + 'px';
   }
 }
+
+function autoShrinkPrintText(el, text, minPx = 5, maxPx = 14) {
+  if (!el) return;
+  const value = String(text ?? el.textContent ?? '').trim();
+  const base = maxPx || parseFloat(getComputedStyle(el).fontSize) || 14;
+  if (!value) { el.style.fontSize = base + 'px'; return; }
+
+  let size = base;
+  el.style.fontSize = size + 'px';
+  const overflows = () => {
+    const wOverflow = el.scrollWidth > el.clientWidth + 1;
+    const hOverflow = el.scrollHeight > el.clientHeight + 1;
+    return wOverflow || hOverflow;
+  };
+  while (overflows() && size > minPx) {
+    size -= 0.5;
+    el.style.fontSize = size + 'px';
+  }
+}
+
 function buildPrintAll(){
   const container = document.getElementById('printAll');
   container.innerHTML = '';
@@ -3981,6 +4107,7 @@ syncFeesFromExistingPlan();
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+sync5GPlanCheck(currentPlan);
 forceMirrorPlan();
       alert(`불러오기 완료: ${PLANS.length}개`);
     }catch(err){
@@ -4067,6 +4194,7 @@ async function boot(){
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+sync5GPlanCheck(currentPlan);
 forceMirrorPlan();
 }
 document.getElementById('reload').onclick=boot;

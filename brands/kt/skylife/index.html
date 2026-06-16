@@ -863,6 +863,21 @@ try {
         <div class="row" id="row_checkGroup"><div>체크 그룹명</div><input id="p_groupId" type="text" placeholder="예: 신규/번이 / 전통신사 / 성별"></div>
         <div class="row" id="row_checkValue"><div>체크 값</div><input id="p_checkValue" type="text" placeholder="예: 신규 / 번이 / MVNO / 남 / 여"></div>
 
+        <div class="row" id="row_autoCheckEnabled"><div>자동체크 사용</div><label><input type="checkbox" id="p_autoCheckEnabled"> 요금제 조건으로 자동 체크</label></div>
+        <div class="row" id="row_autoCheckSource"><div>자동체크 기준</div>
+          <select id="p_autoCheckSource">
+            <option value="plan">요금제</option>
+          </select>
+        </div>
+        <div class="row" id="row_autoCheckMode"><div>자동체크 방식</div>
+          <select id="p_autoCheckMode">
+            <option value="contains">포함</option>
+            <option value="exact">정확히 일치</option>
+            <option value="regex">정규식</option>
+          </select>
+        </div>
+        <div class="row" id="row_autoCheckKeyword"><div>자동체크 키워드</div><input id="p_autoCheckKeyword" type="text" placeholder="예: 5G / 밀리의 서재 / 지니뮤직 / CU"></div>
+
         <div class="row" id="row_opts"><div>옵션(콤마)</div><input id="p_options" type="text" placeholder="예: 남, 여 / 또는 옵션 목록"></div>
         <div class="row" id="row_req"><div>필수</div><label><input type="checkbox" id="p_required"> 반드시 작성</label></div>
 
@@ -1562,6 +1577,7 @@ syncFeesFromExistingPlan();
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+applyAutoCheckRules(currentPlan, false);
 
 return;
     }catch(_){}
@@ -1573,6 +1589,98 @@ function syncFeesFromExistingPlan(){
     if(f.value) updateFeesFromPlan(f.value,false);
   });
   render(); scheduleSave();
+}
+
+/* ===== 개발도구 설정형 자동 체크 =====
+   체크박스 / 체크이미지 / 체크표시(✓) 필드에 autoCheck를 저장하면
+   요금제 선택값을 기준으로 자동 ON/OFF 처리합니다.
+   예: autoCheck = { source:'plan', mode:'contains', keyword:'밀리의 서재' }
+*/
+function isAutoCheckableField(f){
+  return !!f && (f.type === 'checkbox' || f.type === 'imagecheck' || f.type === 'checkmark');
+}
+function getAutoCheckRule(f){
+  if (!isAutoCheckableField(f)) return null;
+  const ac = f.autoCheck;
+  if (!ac || typeof ac !== 'object') return null;
+  const source = String(ac.source || 'plan').trim() || 'plan';
+  const mode = String(ac.mode || 'contains').trim() || 'contains';
+  const keyword = String(ac.keyword || '').trim();
+  if (!keyword) return null;
+  return { source, mode, keyword };
+}
+function getAutoCheckSourceValue(source, planName){
+  const s = String(source || 'plan').toLowerCase();
+  if (s === 'plan') return String(planName ?? getSelectedPlanName() ?? '');
+  return String(getValueById(source) || '');
+}
+function matchAutoCheckRule(value, rule){
+  const v = String(value || '');
+  const k = String(rule?.keyword || '');
+  const mode = String(rule?.mode || 'contains');
+  if (!k) return false;
+
+  if (mode === 'exact') {
+    return v.replace(/\s+/g,' ').trim().toLowerCase() === k.replace(/\s+/g,' ').trim().toLowerCase();
+  }
+  if (mode === 'regex') {
+    try { return new RegExp(k, 'i').test(v); } catch (_) { return false; }
+  }
+  return v.toLowerCase().includes(k.toLowerCase());
+}
+function setAutoCheckFieldValue(f, checked){
+  if (!isAutoCheckableField(f)) return;
+  f.value = !!checked;
+  if (f.id) {
+    valuesById[f.id] = !!checked;
+    valuesById[String(f.id).toLowerCase()] = !!checked;
+    valuesById[__normKey(f.id)] = !!checked;
+  }
+}
+function refreshAutoCheckDom(){
+  try {
+    overlay.querySelectorAll('.field').forEach(w => {
+      const idx = Number(w.dataset.i);
+      const f = cur()?.fields?.[idx];
+      if (!isAutoCheckableField(f) || !getAutoCheckRule(f)) return;
+
+      const mark = w.querySelector('.checkmark-symbol');
+      if (mark) mark.textContent = f.value ? '✓' : '';
+
+      const cb = w.querySelector('input[type="checkbox"]');
+      if (cb) cb.checked = !!f.value;
+
+      const imgBox = w.querySelector('[data-type="imagecheck"]');
+      if (imgBox) {
+        imgBox.innerHTML = '';
+        if (f.value) {
+          const img = document.createElement('img');
+          img.src = CHECK_IMAGE_SRC;
+          img.alt = 'check';
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'contain';
+          img.style.pointerEvents = 'none';
+          imgBox.appendChild(img);
+        }
+      }
+    });
+  } catch (_) {}
+}
+function applyAutoCheckRules(planName, doRender=false){
+  const plan = String(planName ?? getSelectedPlanName() ?? '');
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      const rule = getAutoCheckRule(f);
+      if (!rule) return;
+      const sourceValue = getAutoCheckSourceValue(rule.source, plan);
+      setAutoCheckFieldValue(f, matchAutoCheckRule(sourceValue, rule));
+    });
+  });
+
+  refreshAutoCheckDom();
+  if (doRender) { render(); scheduleSave(); }
 }
 
 /* ===== 이름칸 자동 축소 ===== */
@@ -1899,9 +2007,10 @@ sel.onchange = () => {
     PLAN_LABEL_RE.test(String(f.label || ''));
 
   if (isPlan) {
-    updateFeesFromPlan(f.value);
+    updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
     syncAffiliateImageMarks(f.value);
+    applyAutoCheckRules(f.value, false);
   }
 
   applyConditionalRequired();
@@ -2184,6 +2293,7 @@ requestAnimationFrame(() => {
   evaluateExtraDataAndBar();
   forceMirrorPlan();
   syncAffiliateImageMarks(currentPlan);
+  applyAutoCheckRules(currentPlan, false);
 });
 }
 
@@ -2231,6 +2341,10 @@ const pLabel=document.getElementById('p_label'),
       pId=document.getElementById('p_id'),
       pGroupId=document.getElementById('p_groupId'),
       pCheckValue=document.getElementById('p_checkValue'),
+      pAutoCheckEnabled=document.getElementById('p_autoCheckEnabled'),
+      pAutoCheckSource=document.getElementById('p_autoCheckSource'),
+      pAutoCheckMode=document.getElementById('p_autoCheckMode'),
+      pAutoCheckKeyword=document.getElementById('p_autoCheckKeyword'),
       pOptions=document.getElementById('p_options'),
       pRequired=document.getElementById('p_required'),
       pBorderColor=document.getElementById('p_borderColor'),
@@ -2261,6 +2375,10 @@ const info=document.getElementById('selInfo'),
       rowReq=document.getElementById('row_req'),
       rowCheckGroup=document.getElementById('row_checkGroup'),
       rowCheckValue=document.getElementById('row_checkValue'),
+      rowAutoCheckEnabled=document.getElementById('row_autoCheckEnabled'),
+      rowAutoCheckSource=document.getElementById('row_autoCheckSource'),
+      rowAutoCheckMode=document.getElementById('row_autoCheckMode'),
+      rowAutoCheckKeyword=document.getElementById('row_autoCheckKeyword'),
       rowRadioShowText=document.getElementById('row_radioShowText'),
       rowCheckStyle=document.getElementById('row_checkStyle');
 
@@ -2269,6 +2387,10 @@ const info=document.getElementById('selInfo'),
     pLabel.value=''; pRadioSize.value='18'; pRadioGap.value='12';pOptions.value='';
 pColor.value='#000000'; pHeight.value=''; pId.value='';
 if(pGroupId) pGroupId.value=''; if(pCheckValue) pCheckValue.value='';
+if(pAutoCheckEnabled) pAutoCheckEnabled.checked=false;
+if(pAutoCheckSource) pAutoCheckSource.value='plan';
+if(pAutoCheckMode) pAutoCheckMode.value='contains';
+if(pAutoCheckKeyword) pAutoCheckKeyword.value='';
 pBorderColor.value='#ff3b3b'; pBorderWidth.value=2; pBorderTransparent.checked=true;
 pBgColor.value='#000000'; pBgTransparent.checked=true;
 
@@ -2286,6 +2408,10 @@ if(rowOpts) rowOpts.style.display='none';
 if(rowReq) rowReq.style.display='none';
 if(rowCheckGroup) rowCheckGroup.style.display='none';
 if(rowCheckValue) rowCheckValue.style.display='none';
+if(rowAutoCheckEnabled) rowAutoCheckEnabled.style.display='none';
+if(rowAutoCheckSource) rowAutoCheckSource.style.display='none';
+if(rowAutoCheckMode) rowAutoCheckMode.style.display='none';
+if(rowAutoCheckKeyword) rowAutoCheckKeyword.style.display='none';
 if(rowRadioShowText) rowRadioShowText.style.display='none';
 if(rowCheckStyle) rowCheckStyle.style.display='none';
 if (pCheckStyle) pCheckStyle.value = 'tick';
@@ -2311,6 +2437,10 @@ pHeight.value=(f.inputHeight ?? '');
 pId.value=f.id || '';
 if(pGroupId) pGroupId.value = f.groupId || '';
 if(pCheckValue) pCheckValue.value = f.checkValue || '';
+if(pAutoCheckEnabled) pAutoCheckEnabled.checked = !!(f.autoCheck && f.autoCheck.keyword);
+if(pAutoCheckSource) pAutoCheckSource.value = (f.autoCheck && f.autoCheck.source) || 'plan';
+if(pAutoCheckMode) pAutoCheckMode.value = (f.autoCheck && f.autoCheck.mode) || 'contains';
+if(pAutoCheckKeyword) pAutoCheckKeyword.value = (f.autoCheck && f.autoCheck.keyword) || '';
 pBorderColor.value = (f.borderColor || '#ff3b3b');
 pBorderWidth.value = (f.borderWidth ?? 2);
 pBorderTransparent.checked = (f.borderTransparent !== false);
@@ -2324,6 +2454,11 @@ pBgTransparent.checked = (f.bgTransparent !== false);
 if(rowOpts) rowOpts.style.display=(f.type==='select'||f.type==='radio')?'':'none';
 if(rowCheckGroup) rowCheckGroup.style.display=(f.type==='checkmark') ? '' : 'none';
 if(rowCheckValue) rowCheckValue.style.display=(f.type==='checkmark') ? '' : 'none';
+const showAutoCheck = (f.type === 'checkmark' || f.type === 'checkbox' || f.type === 'imagecheck');
+if(rowAutoCheckEnabled) rowAutoCheckEnabled.style.display=showAutoCheck ? '' : 'none';
+if(rowAutoCheckSource) rowAutoCheckSource.style.display=showAutoCheck ? '' : 'none';
+if(rowAutoCheckMode) rowAutoCheckMode.style.display=showAutoCheck ? '' : 'none';
+if(rowAutoCheckKeyword) rowAutoCheckKeyword.style.display=showAutoCheck ? '' : 'none';
 if(rowRadioShowText) rowRadioShowText.style.display=(f.type==='radio') ? '' : 'none';
 if(rowCheckStyle) rowCheckStyle.style.display=(f.type==='checkbox' || f.type==='radio' || f.type==='checkmark') ? '' : 'none';
 if(pOptions) pOptions.value=Array.isArray(f.options)? f.options.join(', ') : '';
@@ -2463,7 +2598,8 @@ if (t === 'radio') {
 }
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
   if(t==='imagecheck'){ base.inputHeight = 24; base.value = false; }
-  if(t==='checkmark'){ base.inputHeight = 18; base.fontSize = 18; base.value = false; base.w = 2; base.groupId = ''; base.checkValue = ''; }
+  if(t==='checkmark'){ base.inputHeight = 18; base.fontSize = 18; base.value = false; base.w = 2; base.groupId = ''; base.checkValue = ''; base.autoCheck = { source:'plan', mode:'contains', keyword:'' }; }
+  if(t==='checkbox' || t==='imagecheck'){ base.autoCheck = { source:'plan', mode:'contains', keyword:'' }; }
 
   cur().fields.push(base);
   selected=cur().fields.length-1;
@@ -2517,6 +2653,20 @@ if (f.type === 'checkmark') {
   f.groupId = (pGroupId?.value || '').trim();
   f.checkValue = (pCheckValue?.value || '').trim();
 }
+
+if (f.type === 'checkmark' || f.type === 'checkbox' || f.type === 'imagecheck') {
+  const useAuto = !!pAutoCheckEnabled?.checked;
+  const keyword = (pAutoCheckKeyword?.value || '').trim();
+  if (useAuto && keyword) {
+    f.autoCheck = {
+      source: (pAutoCheckSource?.value || 'plan'),
+      mode: (pAutoCheckMode?.value || 'contains'),
+      keyword
+    };
+  } else {
+    delete f.autoCheck;
+  }
+}
 f.required = !!pRequired?.checked;
 
 f.borderTransparent = !!pBorderTransparent?.checked;
@@ -2569,6 +2719,7 @@ f.mask = (pMask?.value || '');
   ) {
     updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
+    applyAutoCheckRules(f.value, false);
   }
 
   if (
@@ -2646,6 +2797,7 @@ document.getElementById('resetValues').onclick=()=>{
   updateExtraBarDom('');
   mirrorExtraDataIntoBoxes('');
   mirrorPlanNameIntoBoxes('');
+  applyAutoCheckRules('', false);
   clearAutosave();
   render();
   evaluateAffBanner();
@@ -3446,6 +3598,7 @@ syncFeesFromExistingPlan();
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+applyAutoCheckRules(currentPlan, false);
 forceMirrorPlan();
       alert(`불러오기 완료: ${PLANS.length}개`);
     }catch(err){
@@ -3642,6 +3795,7 @@ async function boot(){
 const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
+applyAutoCheckRules(currentPlan, false);
 forceMirrorPlan();
 }
 document.getElementById('reload').onclick=boot;
