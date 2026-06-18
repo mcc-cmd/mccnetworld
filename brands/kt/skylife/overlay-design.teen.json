@@ -276,7 +276,7 @@
           "textAlign": "left",
           "mask": "",
           "maskRe": "",
-          "placeholder": "★주소상세기재★  00도/00시/00구(신주소)/ 전부 기재",
+          "placeholder": "★주소상세기재★  00도/00시/00구(신주소)/ 전부 기재 건물명 동/호수 까지 기재",
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
