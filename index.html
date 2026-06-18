@@ -1878,7 +1878,8 @@ const skLinkHTML = skLinkItems.length ? `
     </section>
   ` : '';
 
-  listEl.innerHTML = normalHTML + skLinkHTML + ktLinkHTML + deviceSectionHTML();
+  // ✅ 단말 개통을 SK 링크 바로 위로 이동
+  listEl.innerHTML = normalHTML + deviceSectionHTML() + skLinkHTML + ktLinkHTML;
   attachNavigateHandlers(listEl);
 }
 function wireKindTabs(containerId, listId, dataObj){
