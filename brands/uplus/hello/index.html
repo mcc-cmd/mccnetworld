@@ -394,9 +394,10 @@ html.is-prod.force-builder .wrap > .panel{
   #printAll{display:none}
   .print-value{
   display:none;
-  white-space:pre-wrap;
-  word-break:break-word;
-  overflow-wrap:anywhere;
+  white-space:nowrap;
+  word-break:keep-all;
+  overflow:hidden;
+  text-overflow:clip;
   padding:0 1px !important;
   margin:0 !important;
   box-sizing:border-box !important;
@@ -3371,54 +3372,53 @@ else if (f.type === 'select') {
   });
 
   ctrl.value = f.value ?? '';
-
   if (f.locked) ctrl.disabled = true;
 
-  // ===== 출력용 텍스트 =====
-const pv = document.createElement('div');
-pv.className = 'print-value';
-const selText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
-pv.textContent = selText;
-w.appendChild(pv);
+  // ✅ 화면 select는 인쇄에서 숨기고, PDF용 텍스트만 따로 출력
+  const pv = document.createElement('div');
+  pv.className = 'print-value';
 
-requestAnimationFrame(() => {
+  const selectedText = String(f.value ?? '').trim();
+  const optionText = (ctrl.options[ctrl.selectedIndex] || {}).text || ctrl.value || '';
+  const selText = selectedText || optionText;
+  pv.textContent = selText;
+
   const baseFs = f.fontSize || 14;
-  autoShrinkPrintText(pv, selText, 5, baseFs);
-});
+  pv.style.fontSize = baseFs + 'px';
+  pv.style.lineHeight = '1';
+  pv.style.whiteSpace = 'nowrap';
+  pv.style.wordBreak = 'keep-all';
+  pv.style.overflow = 'hidden';
+  pv.style.textOverflow = 'clip';
+  pv.style.boxSizing = 'border-box';
 
-  // ===== plan만 크게 표시 =====
-  const isPlan =
-    PLAN_ID_RE.test(String(f.id || '')) ||
-    PLAN_LABEL_RE.test(String(f.label || ''));
+  if (f.textAlign) pv.style.textAlign = f.textAlign;
+  if (f.inputHeight) {
+    pv.style.height = f.inputHeight + 'px';
+    pv.style.lineHeight = f.inputHeight + 'px';
+  }
 
   if (f.id) {
-    const liveSel = overlay.querySelector(
-      `.field[data-id="${f.id}"] select`
-    );
-
+    const liveSel = overlay.querySelector(`.field[data-id="${f.id}"] select`);
     if (liveSel) {
       const cs = getComputedStyle(liveSel);
-
-      // 🔥 핵심: 화면 fontSize 안 따라가고 기본값 사용
-      pv.style.fontSize = isPlan
-        ? ((f.fontSize || 14) + 2) + 'px'
-        : (f.fontSize || 14) + 'px';
-
-      pv.style.lineHeight = '1.1';
       pv.style.letterSpacing = cs.letterSpacing;
       pv.style.padding = cs.padding;
       pv.style.fontWeight = cs.fontWeight;
       pv.style.fontFamily = cs.fontFamily;
       pv.style.textAlign = cs.textAlign;
-      pv.style.height = cs.height;
       pv.style.boxSizing = 'border-box';
-      pv.style.display = 'flex';
-      pv.style.alignItems = 'center';
+      pv.style.height = cs.height;
+      pv.style.lineHeight = cs.height;
     }
   }
 
   w.appendChild(ctrl);
   w.appendChild(pv);
+
+  requestAnimationFrame(() => {
+    autoShrinkPrintText(pv, selText, 5, baseFs);
+  });
 }
 
 else if (f.type === 'label') {
@@ -3672,6 +3672,37 @@ function autoShrinkText(el, minPx = 8, maxPx) {
     el.style.fontSize = size + 'px';
   }
 }
+function autoShrinkPrintText(el, text, minPx = 5, maxPx = 14) {
+  if (!el) return;
+
+  const value = String(text || el.textContent || '').trim();
+  if (!value) return;
+
+  el.textContent = value;
+  el.style.whiteSpace = 'nowrap';
+  el.style.wordBreak = 'keep-all';
+  el.style.overflow = 'hidden';
+  el.style.textOverflow = 'clip';
+
+  const fit = () => {
+    const width = el.clientWidth || el.getBoundingClientRect().width;
+    if (!width) {
+      requestAnimationFrame(fit);
+      return;
+    }
+
+    let size = maxPx;
+    el.style.fontSize = size + 'px';
+
+    while (el.scrollWidth > el.clientWidth + 1 && size > minPx) {
+      size -= 0.5;
+      el.style.fontSize = size + 'px';
+    }
+  };
+
+  fit();
+}
+
 function buildPrintAll(){
   const container = document.getElementById('printAll');
   container.innerHTML = '';

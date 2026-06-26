@@ -723,8 +723,8 @@
           "id": "text_1765783977667",
           "label": "",
           "type": "text",
-          "x": 5.036236838443284,
-          "y": 91.67284165298395,
+          "x": 5.035326290130615,
+          "y": 90.82295328282459,
           "w": 7.60000156249989,
           "required": false,
           "inputHeight": 24,
@@ -752,8 +752,8 @@
           "id": "월",
           "label": "",
           "type": "text",
-          "x": 11.594722043669973,
-          "y": 91.68604219077456,
+          "x": 11.89306173324585,
+          "y": 91.04899849350664,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -780,8 +780,8 @@
           "id": "일",
           "label": "",
           "type": "text",
-          "x": 16.390375288214692,
-          "y": 91.83292005787578,
+          "x": 16.487777614593504,
+          "y": 90.77167951308864,
           "w": 5,
           "required": false,
           "radioSize": 18,
@@ -803,7 +803,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "16"
+          "value": "26"
         },
         {
           "id": "판매자 성함",
@@ -906,8 +906,8 @@
           "id": "판매자",
           "label": "",
           "type": "text",
-          "x": 28.872546520861953,
-          "y": 92.81950466469422,
+          "x": 30.271099758148196,
+          "y": 92.25337752633688,
           "w": 9.441187615629808,
           "required": false,
           "radioSize": 18,
@@ -1356,7 +1356,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 10,
           "fontSize": 10,
-          "value": false,
           "radioSize": 10,
           "checkSize": 10,
           "radioGap": 12,
@@ -1372,7 +1371,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "5G요금제",
@@ -1396,7 +1396,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 10,
           "fontSize": 10,
-          "value": false,
           "radioSize": 10,
           "checkSize": 10,
           "radioGap": 12,
@@ -1412,7 +1411,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         }
       ]
     },
@@ -1681,7 +1681,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "16"
+          "value": "26"
         },
         {
           "id": "자필 성함싸인",
