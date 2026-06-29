@@ -1292,21 +1292,47 @@ const SK_LINK_ONLY = [
   { carrier:'sk', theme:'theme-s7', name:'SK 외국인', cap:'', special:true, skLink:true,
     logoAdult:'./assets/logos/SK_MNP.png', logoTeen:'./assets/logos/SK_MNP.png' },
 ];
+
+/* ✅ LG 링크 전용 카드
+   - 외국인등록증 접수를 신규 / 번호이동 2개 카드로 분리합니다.
+   - 이미지는 아래 logoAdult/logoTeen 경로에 넣으면 됩니다.
+   - URL은 아래 LG_LINK_URLS에서 교체합니다. */
+const LG_LINK_ONLY = [
+  { carrier:'uplus', theme:'theme-um', name:'LG 외국인신규', cap:'', special:true, lgLink:true,
+    logoAdult:'./assets/logos/LG_외국인등록증신규.png', logoTeen:'./assets/logos/LG_외국인등록증신규.png' },
+
+  { carrier:'uplus', theme:'theme-um', name:'LG 외국인번호이동', cap:'', special:true, lgLink:true,
+    logoAdult:'./assets/logos/LG_외국인등록증번이.png', logoTeen:'./assets/logos/LG_외국인등록증번이.png' },
+];
 const JOIN_DATA = {
   adult: [
     ...BRANDS.map(b => ({...b, doc:'join', age:'adult'})),
     ...SK_LINK_ONLY.map(b => ({...b, doc:'join', age:'adult'})),
     ...JOIN_ONLY.map(b => ({...b, doc:'join', age:'adult'})),
+    ...LG_LINK_ONLY.map(b => ({...b, doc:'join', age:'adult'})),
   ],
   teen : [
     ...BRANDS.map(b => ({...b, doc:'join', age:'teen'})),
     ...SK_LINK_ONLY.map(b => ({...b, doc:'join', age:'teen'})),
     ...JOIN_ONLY.map(b => ({...b, doc:'join', age:'teen'})),
+    ...LG_LINK_ONLY.map(b => ({...b, doc:'join', age:'teen'})),
   ]
 };
 
 const CHANGE_CARDS = BRANDS.map(b => ({...b, doc:'change'}));
 const CANCEL_CARDS = BRANDS.map(b => ({...b, doc:'cancel'}));
+
+/* ✅ LG 링크 실제 이동 URL 관리
+   - 주소가 확정되면 '' 안에 URL만 넣으면 됩니다.
+   - 예: local: 'https://example.com'
+*/
+const LG_LINK_URLS = {
+  // LG 외국인등록증 신규 접수 URL
+  foreignNew: 'https://onsalemobile.uplus.co.kr/open-market?formId=3111619&agentId=339276&openmktCd=20082',
+
+  // LG 외국인등록증 번호이동 접수 URL
+  foreignMnp: 'https://onsalemobile.uplus.co.kr/open-market?formId=3111623&agentId=339276&openmktCd=20082'
+};
 
 const BRAND_ROUTE = {
   '미디어로그':     { carrier:'uplus', brand:'umobile'   },
@@ -1326,6 +1352,9 @@ const BRAND_ROUTE = {
 
   'SK 내국인': { external: 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1' },
   'SK 외국인': { external: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149' },
+
+  'LG 외국인신규': { external: LG_LINK_URLS.foreignNew },
+  'LG 외국인번호이동': { external: LG_LINK_URLS.foreignMnp },
 
   'SK텔링크': {
     carrier: 'sk',
@@ -1441,7 +1470,11 @@ const CARD_META = {
   'LG프리티': { esim: null, guideTitle: 'LG프리티 선불 안내', guideSteps: ['선불 신청서 작성', '마당 접수'] },
   '밸류컴': { esim: null, guideTitle: '밸류컴 안내', guideSteps: ['신청서 작성', '마당 접수'] },
   'SK프리티': { esim: null, guideTitle: 'SK프리티 선불 안내', guideSteps: ['선불 신청서 작성', '서류 카톡 스캔본 접수', '포털신분증 스캔 접수'] },
-  '코드모바일': { esim: null, guideTitle: '코드모바일 안내', guideSteps: ['신청서 작성', '케이노트 접수'] }
+  '코드모바일': { esim: null, guideTitle: '코드모바일 안내', guideSteps: ['신청서 작성', '케이노트 접수'] },
+
+  /* ✅ LG 링크 카드 공지/안내 */
+  'LG 외국인신규': { esim: true, guideTitle: 'LG 외국인신규 접수 안내 <span class="warn"><strong>외국인 E/D 비자만 개통 가능</strong></span>', guideSteps: ['LG 외국인 신규 URL 접수', '외국인등록증 앞/뒷면 확인', '접수 완료 확인'] },
+  'LG 외국인번호이동': { esim: true, guideTitle: 'LG 외국인번호이동 접수 안내 <span class="warn"><strong>외국인 E/D 비자만 개통 가능</strong></span>', guideSteps: ['LG 외국인 번호이동 URL 접수', '외국인등록증 앞/뒷면 확인', '접수 완료 확인'] }
 };
 
 function escHtml(v){
@@ -1544,6 +1577,21 @@ function formSKDualCard(){
         </div>
         <div class="form-half" data-form="skusim_foreign" role="button" tabindex="0" aria-label="여권접수양식 열기">
           <div class="form-text">여권접수양식</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ✅ LG 링크 전용 양식 버튼
+   - LG 링크 카드는 외국인신규 / 외국인번호이동 2개로 분리
+   - 양식 버튼은 1개만 유지합니다. */
+function formLGDualCard(){
+  return `
+    <div class="form-duo-wrap" aria-label="LG 외국인등록증 양식">
+      <div class="form-duo form-duo-single">
+        <div class="form-half" data-form="lgusim_foreign" role="button" tabindex="0" aria-label="LG 양식 열기">
+          <div class="form-text">LG 양식</div>
         </div>
       </div>
     </div>
@@ -1673,7 +1721,7 @@ function getJoinCardLogo(cardEl, age){
   const img = cardEl.querySelector('.logo-frame img, .sk-link-img-frame img');
   const curSrc = img ? (img.getAttribute('src') || '') : '';
   const nm = (cardEl.getAttribute('data-name') || '').replace(/\s+/g,' ').trim();
-  const source = [...BRANDS, ...JOIN_ONLY, ...SK_LINK_ONLY].find(x => x.name === nm);
+  const source = [...BRANDS, ...JOIN_ONLY, ...SK_LINK_ONLY, ...LG_LINK_ONLY].find(x => x.name === nm);
   if (source) return (age === 'teen' ? (source.logoTeen || source.logoAdult) : (source.logoAdult || source.logoTeen)) || curSrc;
   if (cardEl.classList.contains('device-link')) {
     const brand = cardEl.getAttribute('data-device-brand') || '';
@@ -1821,8 +1869,9 @@ function renderPrepaid(listEl){
 
 function renderJoinGrouped(listEl, items){
   const skLinkItems = items.filter(x => x.skLink === true);
-  const ktSpecialItems = items.filter(x => x.special === true && !x.skLink);
-  const normalItems = items.filter(x => !x.special && !x.skLink);
+  const ktSpecialItems = items.filter(x => x.special === true && !x.skLink && !x.lgLink);
+  const lgLinkItems = items.filter(x => x.lgLink === true);
+  const normalItems = items.filter(x => !x.special && !x.skLink && !x.lgLink);
 
 const groups = [
   { key:'uplus', title:'LG', sub:'' },
@@ -1878,8 +1927,21 @@ const skLinkHTML = skLinkItems.length ? `
     </section>
   ` : '';
 
-  // ✅ 단말 개통을 SK 링크 바로 위로 이동
-  listEl.innerHTML = normalHTML + deviceSectionHTML() + skLinkHTML + ktLinkHTML;
+  const lgLinkHTML = lgLinkItems.length ? `
+    <section class="group" data-carrier="uplus">
+      <div class="group-head">
+        <span class="group-dot"></span>
+        <span class="group-title">LG 링크</span>
+      </div>
+      <div class="brand-grid">
+        ${lgLinkItems.map(card).join('')}
+        ${formLGDualCard()}
+      </div>
+    </section>
+  ` : '';
+
+  // ✅ 순서: 일반 가입서류 → 단말 개통 → SK 링크 → KT 링크 → LG 링크
+  listEl.innerHTML = normalHTML + deviceSectionHTML() + skLinkHTML + ktLinkHTML + lgLinkHTML;
   attachNavigateHandlers(listEl);
 }
 function wireKindTabs(containerId, listId, dataObj){
@@ -3091,6 +3153,31 @@ images: [
 ✅사전안내
 접수 전 고객 본인확인차 인증번호 확인 필요하며, 원스톱 진행 시에는 접수 후 원스톱 URL 인증절차까지 진행되어야 최종 접수완료됩니다.`
     },
+
+  lgusim_foreign: {
+    title: 'LG 외국인등록증 전용 유심 개통 양식',
+    text:
+`■ LG 접수양식
+판매점명: MCC
+✔접수채널 : 온라인
+✔개통유형: mnp / 신규
+✔고객명:  
+✔희망번호:  
+✔이전통신사: 
+✔등록증번호 : 
+✔유심모델/번호 : 
+✔유심비 선납/후납 :
+✔요금제 : 
+✔프로모션할인금액: 
+✔비자: 
+✔발급일자: 
+✔은행명: 
+✔계좌번호:
+✔주소:
+✔약정 : 12개월 선택약정
+
+<span class="warn"><strong>외국인등록증 앞/뒷면 발송 필수</strong></span>`
+  },
 
   skusim_local: {
     title: 'SK 내국인, 외국인등록증 전용 개통 양식',
