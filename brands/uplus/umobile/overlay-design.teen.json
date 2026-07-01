@@ -744,9 +744,9 @@
           "autoDate": "year",
           "locked": false,
           "lockOnPh": false,
-          "value": "2026",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": "2026"
         },
         {
           "id": "월",
@@ -774,10 +774,10 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "06",
           "inputHeight": 18,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "value": "07"
         },
         {
           "id": "일",
@@ -806,7 +806,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "26"
+          "value": "01"
         },
         {
           "id": "판매자 성함",
@@ -951,14 +951,14 @@
           "inputHeight": 16,
           "wrap": true,
           "borderTransparent": true,
-          "borderColor": "transparent",
+          "borderColor": "#000000",
           "borderWidth": 2,
           "bgTransparent": true,
-          "bgColor": "transparent",
+          "bgColor": "#000000",
           "fontSize": 12,
           "textAlign": "center",
           "mask": "tel",
-          "maskRe": "",
+          "maskRe": "010-0000-0000",
           "placeholder": "판매점 연락처",
           "autoDate": "",
           "locked": false,
@@ -1686,7 +1686,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "06"
+          "value": "07"
         },
         {
           "id": "일",
@@ -1714,7 +1714,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "26"
+          "value": "01"
         },
         {
           "id": "자필 성함싸인",
