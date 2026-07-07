@@ -1029,9 +1029,15 @@ try {
 ========================= */
 const valuesById = Object.create(null);
 const elById = Object.create(null);
+const ASSET_VERSION = Date.now();
+function assetUrl(path){
+  const u = new URL(path || '', window.location.href);
+  u.searchParams.set('v', ASSET_VERSION);
+  return u.href;
+}
 let USE_FORM_POPUP = false;
 let FORM_POPUP_FORMS = Object.create(null);
-const CHECK_IMAGE_SRC = new URL('images/check_on.png', window.location.href).href;
+const CHECK_IMAGE_SRC = assetUrl('images/check_on.png');
 
 // ✅ 조건부 필수 규칙 (신규/번이에 따라)
 let CONDITIONAL_REQUIRED = [
@@ -1477,20 +1483,22 @@ function normalizePlans(json){
 
         const extra = parseMoney(item.extraDataGb);
         const bundleAnyone = !!item.bundleAnyone;
+        const affiliate = String(item.affiliate ?? item.aff ?? item.partner ?? '').trim();
+        const label = String(item.label ?? item.displayName ?? item.display ?? name).trim();
 
         names.push(name);
-        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone, affiliate, label});
       }else{
         const name = String(item).trim();
         if(!name) return;
         names.push(name);
-        map.set(name,{baseFee:null, discountFee:null, totalFee:null, extraDataGb:null, bundleAnyone:false});
+        map.set(name,{baseFee:null, discountFee:null, totalFee:null, extraDataGb:null, bundleAnyone:false, affiliate:'', label:name});
       }
     });
   }else if(json && typeof json==='object'){
     Object.entries(json).forEach(([k,v])=>{
       const name = String(k).trim();
-      let base=null, disc=null, total=null, extra=null, bundleAnyone=false;
+      let base=null, disc=null, total=null, extra=null, bundleAnyone=false, affiliate='', label=name;
       if(v && typeof v==='object'){
         base = parseMoney(v.baseFee ?? v.base);
         disc = parseMoney(v.discountFee ?? v.discount);
@@ -1498,9 +1506,11 @@ function normalizePlans(json){
         if(total==null && base!=null && disc!=null) total = base - disc;
         extra = parseMoney(v.extraDataGb);
         bundleAnyone = !!v.bundleAnyone;
+        affiliate = String(v.affiliate ?? v.aff ?? v.partner ?? '').trim();
+        label = String(v.label ?? v.displayName ?? v.display ?? name).trim();
       }
       names.push(name);
-      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone, affiliate, label});
     });
   }
 
@@ -1562,7 +1572,7 @@ function updateFeesFromPlan(planName, doRender=true){
 }
 
 async function loadPlansJson(){
-  const tryUrls = ['./plans.json?v=2','/public/plans.json?v=2','/plans.json?v=2'];
+  const tryUrls = [`./plans.json?v=${ASSET_VERSION}`, `/public/plans.json?v=${ASSET_VERSION}`, `/plans.json?v=${ASSET_VERSION}`];
   for (const url of tryUrls){
     try{
       const r = await fetch(url,{cache:'no-store'});
@@ -1801,37 +1811,98 @@ function getSelectedPlanName(){
   return sel ? sel.value : '';
 }
 function isAffiliatePlan(planName){
-  const name = String(planName || '');
-  const AFF_RE = /(밀리의\s*서재|밀리의서재|지니\s*뮤직|지니뮤직|cu\s*20%?\s*할인|메가박스\s*free|제휴)/i;
-  if (AFF_RE.test(name)) return true;
   const info = PLANS_MAP.get(planName);
-  return !!(info && info.bundleAnyone);
+  if (info && String(info.affiliate || '').trim()) return true;
+  if (info && info.bundleAnyone) return true;
+
+  const name = String(planName || '');
+  const AFF_RE = /(밀리의\s*서재|밀리의서재|모아진|pay[_\s-]*5000|pay[_\s-]*3000|다이소[_\s-]*5000|배달의\s*민족|배달의민족|\(\s*cu\s*\)|cu\s*20%?\s*할인|메가박스\s*free|제휴)/i;
+  return AFF_RE.test(name);
 }
 
-/* ✅ 여기부터 바로 추가 */
+function normalizeAffiliateType(v){
+  const x = String(v || '').toLowerCase().replace(/[\s_\-]/g, '');
+  if (!x) return '';
+  if (/millie|밀리의서재/.test(x)) return 'millie';
+  if (/moazine|moajin|모아진/.test(x)) return 'moazine';
+  if (/pay5000/.test(x)) return 'pay5000';
+  if (/pay3000/.test(x)) return 'pay3000';
+  if (/daiso5000|다이소5000/.test(x)) return 'daiso5000';
+  if (/baedal|배달의민족/.test(x)) return 'baedal';
+  if (x === 'cu' || /\(cu\)|cu할인|cu20/.test(x)) return 'cu';
+  if (/genie|지니뮤직/.test(x)) return 'genie';
+  if (/megabox|메가박스/.test(x)) return 'megabox';
+  return String(v || '').trim();
+}
+
 function getAffiliateType(planName){
+  const info = PLANS_MAP.get(planName);
+  const fromInfo = normalizeAffiliateType(info?.affiliate);
+  if (fromInfo) return fromInfo;
+
   const name = String(planName || '');
-
-  if (/밀리의\s*서재|밀리의서재/.test(name)) return 'millie';
-  if (/지니\s*뮤직|지니뮤직/.test(name)) return 'genie';
-  if (/메가박스\s*FREE|메가박스/.test(name)) return 'megabox';
-  if (/CU\s*20%\s*할인|CU20%할인|CU20할인/.test(name)) return 'cu';
-
+  if (/밀리의\s*서재|밀리의서재/i.test(name)) return 'millie';
+  if (/모아진/i.test(name)) return 'moazine';
+  if (/pay[_\s-]*5000|pay5000/i.test(name)) return 'pay5000';
+  if (/pay[_\s-]*3000|pay3000/i.test(name)) return 'pay3000';
+  if (/다이소[_\s-]*5000|다이소5000/i.test(name)) return 'daiso5000';
+  if (/배달의\s*민족|배달의민족/i.test(name)) return 'baedal';
+  if (/\(\s*CU\s*\)|CU/i.test(name)) return 'cu';
+  if (/지니\s*뮤직|지니뮤직/i.test(name)) return 'genie';
+  if (/메가박스\s*FREE|메가박스/i.test(name)) return 'megabox';
   return '';
+}
+
+const AFFILIATE_CHECK_IDS = {
+  millie: 'affiliate_millie',
+  moazine: 'affiliate_moazine',
+  pay5000: 'affiliate_pay5000',
+  pay3000: 'affiliate_pay3000',
+  cu: 'affiliate_cu',
+  daiso5000: 'affiliate_daiso5000',
+  baedal: 'affiliate_baedal',
+  genie: 'affiliate_genie',
+  megabox: 'affiliate_megabox'
+};
+
+function setAffiliateCheckById(id, checked){
+  if (!id) return;
+  const key = String(id).toLowerCase();
+  valuesById[id] = !!checked;
+  valuesById[key] = !!checked;
+  valuesById[__normKey(id)] = !!checked;
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (String(f.id || '').toLowerCase() !== key) return;
+      if (!(f.type === 'checkbox' || f.type === 'imagecheck' || f.type === 'checkmark')) return;
+      f.value = !!checked;
+    });
+  });
+
+  const el = elById[id] || elById[key] || elById[__normKey(id)];
+  if (!el) return;
+  if (el.type === 'checkbox') el.checked = !!checked;
+  else if (el.dataset && el.dataset.type === 'checkmark') el.textContent = checked ? '✓' : '';
+  else if (el.dataset && el.dataset.type === 'imagecheck') {
+    el.innerHTML = '';
+    if (checked) {
+      const img = document.createElement('img');
+      img.src = CHECK_IMAGE_SRC;
+      img.alt = 'check';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'contain';
+      img.style.pointerEvents = 'none';
+      el.appendChild(img);
+    }
+  }
 }
 
 function syncAffiliateImageMarks(planName){
   const type = getAffiliateType(planName);
-
-  setImageCheckById('affiliate_millie', false);
-  setImageCheckById('affiliate_genie', false);
-  setImageCheckById('affiliate_megabox', false);
-  setImageCheckById('affiliate_cu', false);
-
-  if (type === 'millie')  setImageCheckById('affiliate_millie', true);
-  if (type === 'genie')   setImageCheckById('affiliate_genie', true);
-  if (type === 'megabox') setImageCheckById('affiliate_megabox', true);
-  if (type === 'cu')      setImageCheckById('affiliate_cu', true);
+  Object.values(AFFILIATE_CHECK_IDS).forEach(id => setAffiliateCheckById(id, false));
+  if (AFFILIATE_CHECK_IDS[type]) setAffiliateCheckById(AFFILIATE_CHECK_IDS[type], true);
 }
 /* =========================
    ✅ render() 오류 수정 완성본
@@ -1840,7 +1911,7 @@ function render(){
   Object.keys(elById).forEach(k => delete elById[k]);
 
   const p = cur();
-  bg.src = p.bg ? new URL(p.bg, location.href).href : '';
+  bg.src = p.bg ? assetUrl(p.bg) : '';
   overlay.innerHTML = '';
 
   (p.fields || []).forEach((f, i) => {
@@ -1981,7 +2052,9 @@ requestAnimationFrame(() => autosizeTA(ctrl));
 
       (f.options || []).forEach(o => {
         const op = document.createElement('option');
-        op.value = op.textContent = o;
+        const info = PLANS_MAP.get(o);
+        op.value = o;
+        op.textContent = info?.label || o;
         sel.appendChild(op);
       });
 
@@ -2719,6 +2792,7 @@ f.mask = (pMask?.value || '');
   ) {
     updateFeesFromPlan(f.value, false);
     mirrorPlanNameIntoBoxes(f.value);
+    syncAffiliateImageMarks(f.value);
     applyAutoCheckRules(f.value, false);
   }
 
@@ -2989,7 +3063,7 @@ function createPrintDOM(page, pageIdx){
   st.style.transform = 'scale(1)';
 
 const img = document.createElement('img');
-img.src = page.bg ? new URL(page.bg, location.href).href : '';
+img.src = page.bg ? assetUrl(page.bg) : '';
 
   const ov = document.createElement('div');
   ov.className = 'overlay';
