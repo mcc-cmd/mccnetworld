@@ -1727,6 +1727,23 @@ function fillAutoDates(){
 let PLANS = [];
 let PLANS_MAP = new Map();
 
+function getPlanOptionDisplayLabel(planName){
+  const name = String(planName || '');
+  const info = PLANS_MAP.get(name);
+  const label = String(info?.label ?? '').trim();
+  return label || name;
+}
+
+function setPlanSelectDisplayLabels(sel, showDisplayLabel){
+  if (!sel) return;
+  Array.from(sel.options || []).forEach(op => {
+    if (!op || op.value === '') return;
+    const value = op.value;
+    const displayLabel = op.dataset.displayLabel || value;
+    op.textContent = showDisplayLabel ? displayLabel : value;
+  });
+}
+
 function parseMoney(v){
   if(v==null || v==='') return null;
   const n = Number(String(v).replace(/[^\d.-]/g,''));
@@ -1750,20 +1767,21 @@ function normalizePlans(json){
 
         const extra = parseMoney(item.extraDataGb);
         const bundleAnyone = !!item.bundleAnyone;
+        const label = String(item.label ?? item.displayName ?? item.display ?? name).trim();
 
         names.push(name);
-        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone, label});
       }else{
         const name = String(item).trim();
         if(!name) return;
         names.push(name);
-        map.set(name,{baseFee:null, discountFee:null, totalFee:null, extraDataGb:null, bundleAnyone:false});
+        map.set(name,{baseFee:null, discountFee:null, totalFee:null, extraDataGb:null, bundleAnyone:false, label:name});
       }
     });
   }else if(json && typeof json==='object'){
     Object.entries(json).forEach(([k,v])=>{
       const name = String(k).trim();
-      let base=null, disc=null, total=null, extra=null, bundleAnyone=false;
+      let base=null, disc=null, total=null, extra=null, bundleAnyone=false, label=name;
       if(v && typeof v==='object'){
         base = parseMoney(v.baseFee ?? v.base);
         disc = parseMoney(v.discountFee ?? v.discount);
@@ -1771,9 +1789,10 @@ function normalizePlans(json){
         if(total==null && base!=null && disc!=null) total = base - disc;
         extra = parseMoney(v.extraDataGb);
         bundleAnyone = !!v.bundleAnyone;
+        label = String(v.label ?? v.displayName ?? v.display ?? name).trim();
       }
       names.push(name);
-      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone, label});
     });
   }
 
@@ -2225,14 +2244,31 @@ requestAnimationFrame(() => autosizeTA(ctrl));
         sel.appendChild(op0);
       }
 
+      const isPlan =
+        PLAN_ID_RE.test(String(f.id || '')) ||
+        PLAN_LABEL_RE.test(String(f.label || ''));
+
       (f.options || []).forEach(o => {
         const op = document.createElement('option');
-        op.value = op.textContent = o;
+        op.value = o;
+        op.dataset.displayLabel = isPlan ? getPlanOptionDisplayLabel(o) : o;
+        op.textContent = o; // 선택 완료 후에는 실제 요금제명만 표시
         sel.appendChild(op);
       });
 
       sel.value = (init ?? '');
       if (f.id) elById[f.id] = sel;
+
+      if (isPlan) {
+        const showPlanLabels = () => setPlanSelectDisplayLabels(sel, true);
+        const showPlanValues = () => setPlanSelectDisplayLabels(sel, false);
+
+        sel.addEventListener('mousedown', showPlanLabels);
+        sel.addEventListener('touchstart', showPlanLabels, { passive:true });
+        sel.addEventListener('focus', showPlanLabels);
+        sel.addEventListener('keydown', showPlanLabels);
+        sel.addEventListener('blur', showPlanValues);
+      }
 
       if (f.inputHeight) sel.style.height = f.inputHeight + 'px';
 
@@ -2247,10 +2283,6 @@ sel.onchange = () => {
   f.value = sel.value;
   setValueById(f.id, sel.value);
   applyMirror(f, sel.value);
-
-  const isPlan =
-    PLAN_ID_RE.test(String(f.id || '')) ||
-    PLAN_LABEL_RE.test(String(f.label || ''));
 
   if (isPlan) {
     // ✅ 중간 render 방지: 5G 체크값까지 적용한 뒤 아래 render() 한 번으로 화면 갱신
@@ -4086,8 +4118,19 @@ function openBulkPlansPrompt(){
   alert(`요금제 ${PLANS.length}개가 적용되었습니다.`);
 }
 function savePlansToFile(){
-  const list=Array.isArray(PLANS)?PLANS:[];
-  const blob=new Blob([JSON.stringify(list,null,2)],{type:'application/json'});
+  const out = {};
+  (Array.isArray(PLANS) ? PLANS : []).forEach(name => {
+    const info = PLANS_MAP.get(name) || {};
+    out[name] = {
+      base: info.baseFee ?? null,
+      discount: info.discountFee ?? null,
+      total: info.totalFee ?? null,
+      extraDataGb: info.extraDataGb ?? null,
+      bundleAnyone: !!info.bundleAnyone
+    };
+    if (info.label && info.label !== name) out[name].label = info.label;
+  });
+  const blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='plans.json'; a.click();
   URL.revokeObjectURL(a.href);
 }
