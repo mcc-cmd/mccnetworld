@@ -4,6 +4,37 @@
       "bg": "images/teen-1.jpg",
       "fields": [
         {
+          "id": "kids_notice",
+          "label": "",
+          "type": "label",
+          "x": 20.183499961996976,
+          "y": 0.36100489699661786,
+          "w": 54,
+          "inputHeight": 24,
+          "fontSize": 20,
+          "color": "#0040ff",
+          "textAlign": "left",
+          "verticalAlign": "middle",
+          "autoShrink": false,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "wrap": true,
+          "required": false,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "키즈안심 안내",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
           "id": "비상연락처",
           "label": "",
           "type": "text",
@@ -38,11 +69,14 @@
           "id": "plan",
           "label": "",
           "type": "select",
-          "x": 7.567807709604231,
-          "y": 25.778653993056448,
+          "x": 7.566113348140976,
+          "y": 25.77756470908799,
           "w": 14.0180582786583,
           "required": true,
           "options": [
+            "키즈 안심 2GB+",
+            "키즈 안심 4GB+",
+            "키즈 안심 8GB+",
             "M 알뜰 1.5GB 100분",
             "M 알뜰 안심",
             "M 알뜰 2.5GB",
@@ -747,7 +781,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "06"
+          "value": "07"
         },
         {
           "id": "일",
@@ -773,7 +807,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "05"
+          "value": "22"
         },
         {
           "id": "성함싸인",
@@ -1528,7 +1562,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 18,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1568,7 +1601,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 18,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1585,6 +1617,34 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false
+        },
+        {
+          "id": "kids_notice",
+          "label": "키즈안심 안내",
+          "type": "label",
+          "x": 50,
+          "y": 50,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "autoCheck": {
+            "enabled": false,
+            "source": "plan",
+            "mode": "contains",
+            "keyword": ""
+          },
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "value": ""
         }
       ]
     },
@@ -1827,7 +1887,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "affiliate_genie",
@@ -1855,7 +1916,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "affiliate_megabox",
@@ -1883,7 +1945,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         },
         {
           "id": "affiliate_cu",
@@ -1911,7 +1974,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false
         }
       ]
     },

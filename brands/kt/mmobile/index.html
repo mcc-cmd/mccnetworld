@@ -1769,8 +1769,11 @@ function normalizePlans(json){
         const extra = parseMoney(item.extraDataGb);
         const bundleAnyone = !!item.bundleAnyone;
 
+        const kidsPlan = !!(item.kidsPlan || item.kidsNotice || item.kids === true);
+        const affiliate = String(item.affiliate || '').trim();
+        const label = String(item.label || item.displayName || item.display || name).trim();
         names.push(name);
-        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+        map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone, kidsPlan, kidsNotice:kidsPlan, affiliate, label});
       }else{
         const name = String(item).trim();
         if(!name) return;
@@ -1790,8 +1793,11 @@ function normalizePlans(json){
         extra = parseMoney(v.extraDataGb);
         bundleAnyone = !!v.bundleAnyone;
       }
+      const kidsPlan = !!(v && typeof v === 'object' && (v.kidsPlan || v.kidsNotice || v.kids === true));
+      const affiliate = v && typeof v === 'object' ? String(v.affiliate || '').trim() : '';
+      const label = v && typeof v === 'object' ? String(v.label || v.displayName || v.display || name).trim() : name;
       names.push(name);
-      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone});
+      map.set(name,{baseFee:base, discountFee:disc, totalFee:total, extraDataGb:extra, bundleAnyone, kidsPlan, kidsNotice:kidsPlan, affiliate, label});
     });
   }
 
@@ -1869,6 +1875,7 @@ const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
 sync5GPlanCheck(currentPlan);
+syncKidsNotice(currentPlan);
 syncAutoCheckFields(currentPlan);
 
 return;
@@ -1936,6 +1943,90 @@ function sync5GPlanCheck(planName){
       }
     });
   });
+}
+
+
+/* ✅ 키즈 안심 요금제 선택 시 상단 안내문 자동 출력
+   개발도구에서 텍스트박스/텍스트영역/고정텍스트 중 하나를 만들고
+   필드 ID를 kids_notice 로 설정하면 자동으로 아래 문구가 들어갑니다.
+*/
+const KIDS_NOTICE_TEXT = '※ 만 4세~ 만 12세 가입 가능';
+
+function isKidsPlan(planName){
+  const name = String(planName || '');
+  const info = PLANS_MAP.get(planName);
+  if (info && (info.kidsPlan || info.kidsNotice || info.kids === true)) return true;
+  return /^키즈\s*안심/i.test(name) || /키즈\s*안심/.test(name);
+}
+
+function isKidsNoticeTargetField(f){
+  if (!f) return false;
+  const key = String([f.id, f.label, f.placeholder].join(' ')).toLowerCase().replace(/\s+/g, '');
+  return key.includes('kids_notice') || key.includes('kidsnotice') || key.includes('키즈안내') || key.includes('키즈안심안내');
+}
+
+function syncKidsNotice(planName){
+  const txt = isKidsPlan(planName) ? KIDS_NOTICE_TEXT : '';
+
+  pages.forEach(pg => {
+    (pg.fields || []).forEach(f => {
+      if (!isKidsNoticeTargetField(f)) return;
+      if (!(f.type === 'text' || f.type === 'textarea' || f.type === 'label')) return;
+
+      f.value = txt;
+      if (f.id) {
+        valuesById[f.id] = txt;
+        valuesById[String(f.id).toLowerCase()] = txt;
+      }
+    });
+  });
+
+  try {
+    overlay.querySelectorAll('.field').forEach(w => {
+      const idx = Number(w.dataset.i);
+      const f = cur()?.fields?.[idx];
+      if (!isKidsNoticeTargetField(f)) return;
+
+      const input = w.querySelector('input[type="text"], textarea');
+      if (input) {
+        input.value = txt;
+        if (input.tagName === 'TEXTAREA') autosizeTA(input);
+      }
+
+      const label = w.querySelector('.fixed-label');
+      if (label) label.textContent = txt;
+    });
+  } catch (_) {}
+}
+
+
+function ensureKidsNoticeField(){
+  try {
+    if (!Array.isArray(pages) || !pages.length) return;
+    const exists = pages.some(pg => (pg.fields || []).some(f => isKidsNoticeTargetField(f)));
+    if (exists) return;
+
+    const targetPage = pages[0];
+    if (!Array.isArray(targetPage.fields)) targetPage.fields = [];
+
+    targetPage.fields.unshift({
+      id: 'kids_notice',
+      label: '키즈안심 안내',
+      type: 'label',
+      x: 4,
+      y: 2.4,
+      w: 54,
+      inputHeight: 16,
+      fontSize: 11,
+      color: '#000000',
+      textAlign: 'left',
+      verticalAlign: 'middle',
+      autoShrink: true,
+      borderTransparent: true,
+      bgTransparent: true,
+      value: ''
+    });
+  } catch (_) {}
 }
 
 /* ===== 이름칸 자동 축소 ===== */
@@ -2380,6 +2471,7 @@ sel.onchange = () => {
     mirrorPlanNameIntoBoxes(f.value);
     syncAffiliateImageMarks(f.value);
     syncAutoCheckFields(f.value);
+    syncKidsNotice(f.value);
   }
 
   applyConditionalRequired();
@@ -2719,6 +2811,7 @@ requestAnimationFrame(() => {
   forceMirrorPlan();
   syncAffiliateImageMarks(currentPlan);
   sync5GPlanCheck(currentPlan);
+syncKidsNotice(currentPlan);
 syncAutoCheckFields(currentPlan);
 });
 }
@@ -3144,6 +3237,7 @@ f.mask = (pMask?.value || '');
     mirrorPlanNameIntoBoxes(f.value);
     sync5GPlanCheck(f.value);
     syncAutoCheckFields(f.value);
+    syncKidsNotice(f.value);
   }
 
   if (
@@ -3341,6 +3435,7 @@ document.getElementById('resetValues').onclick=()=>{
   mirrorExtraDataIntoBoxes('');
   mirrorPlanNameIntoBoxes('');
   sync5GPlanCheck('');
+  syncKidsNotice('');
   syncAutoCheckFields('');
   clearAutosave();
   render();
@@ -4258,7 +4353,8 @@ function hookLoadPlansFile(){
     try{
       const text=await file.text();
       const json=JSON.parse(text);
-      const {names,map} = normalizePlans(json);
+      const root = (json && typeof json === 'object' && json.plans) ? json.plans : json;
+      const {names,map} = normalizePlans(root);
       PLANS=names; PLANS_MAP=map;
       localStorage.setItem('plans_json_v1', JSON.stringify(PLANS));
 applyPlansToDesign();
@@ -4268,6 +4364,7 @@ const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
 sync5GPlanCheck(currentPlan);
+syncKidsNotice(currentPlan);
 syncAutoCheckFields(currentPlan);
 forceMirrorPlan();
       alert(`불러오기 완료: ${PLANS.length}개`);
@@ -4338,6 +4435,7 @@ function forceMirrorPlan(){
 async function boot(){
   await loadDesign();
   forceWrapForHeaderBox();
+  ensureKidsNoticeField();
 
   pages.forEach(pg => (pg.fields || []).forEach(f => delete f.value));
   if(!FRESH) tryLoadAutosave();
@@ -4356,6 +4454,7 @@ const currentPlan = getSelectedPlanName();
 mirrorPlanNameIntoBoxes(currentPlan);
 syncAffiliateImageMarks(currentPlan);
 sync5GPlanCheck(currentPlan);
+syncKidsNotice(currentPlan);
 syncAutoCheckFields(currentPlan);
 forceMirrorPlan();
 }
