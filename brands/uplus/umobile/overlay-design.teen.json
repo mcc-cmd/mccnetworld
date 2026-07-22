@@ -44,6 +44,7 @@
             "LTE (1.5GB/150분)",
             "LTE (2.5GB/200분)",
             "LTE (2.5GB+/200분)",
+            "LTE (7GB+3M/500분)",
             "5G (5GB/통화기본)",
             "5G (5GB/200분)",
             "5G (31GB+/통화기본)"
@@ -284,8 +285,8 @@
           "id": "비상 연락처",
           "label": "",
           "type": "text",
-          "x": 63.35474035242101,
-          "y": 43.62968240698639,
+          "x": 63.35280248987664,
+          "y": 43.62868523549145,
           "w": 30,
           "required": true,
           "radioSize": 18,
@@ -293,13 +294,13 @@
           "color": "#000000",
           "wrap": true,
           "borderTransparent": true,
-          "borderColor": "transparent",
+          "borderColor": "#000000",
           "borderWidth": 2,
           "bgTransparent": true,
-          "bgColor": "transparent",
+          "bgColor": "#000000",
           "fontSize": 14,
-          "mask": "",
-          "maskRe": "",
+          "mask": "tel",
+          "maskRe": "010-0000-0000",
           "placeholder": "",
           "autoDate": "",
           "locked": false,
@@ -806,14 +807,14 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "01"
+          "value": "22"
         },
         {
           "id": "판매자 성함",
           "label": "",
           "type": "text",
-          "x": 52.81001835078983,
-          "y": 30.0219918123856,
+          "x": 52.809680959359284,
+          "y": 30.02149745024868,
           "w": 11.84584178498986,
           "required": true,
           "radioSize": 18,
@@ -1714,7 +1715,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "01"
+          "value": "22"
         },
         {
           "id": "자필 성함싸인",

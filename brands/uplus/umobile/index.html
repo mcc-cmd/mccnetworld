@@ -2005,7 +2005,7 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
   } catch (_) {}
 }
 
-const AUTO_SHRINK_NAME_RE = /(가입자명|고객명|법인명|성명|이름|예금주 성함|예금주|자동이체|계좌주|명의자|납부자)/;
+const AUTO_SHRINK_NAME_RE = /(가입자명|고객명|법인명|성명|이름|예금주 성함|예금주|자동이체|계좌주|명의자|납부자|주소|거주지|도로명|상세주소)/;
 
 function isNameField(f){
   const label = String(f.label || '');
@@ -2028,8 +2028,19 @@ function isLongAccountNameField(f){
   ].join(' ');
   return /(자동이체|예금주|계좌주|명의자|납부자)/i.test(text);
 }
+
+function isAddressField(f){
+  const text = [
+    String(f.label || ''),
+    String(f.id || ''),
+    String(f.placeholder || '')
+  ].join(' ');
+  return /(주소|거주지|도로명|상세주소|addr|address)/i.test(text);
+}
+
 function getNameFieldMinFont(f){
   if (isLongAccountNameField(f)) return 2.5;
+  if (isAddressField(f)) return 4;
 
   const text = [
     String(f.label || ''),
@@ -2057,6 +2068,8 @@ function setupNameAutoShrink(ctrl, f){
   requestAnimationFrame(run);
   window.addEventListener('resize', run);
   ctrl.addEventListener('input', run);
+  ctrl.addEventListener('change', run);
+  ctrl.addEventListener('blur', run);
 }
 
 /* ===== 제휴/추가데이터 ===== */
