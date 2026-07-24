@@ -1438,6 +1438,24 @@ function setValueById(id, value) {
       el.value = valuesById[id];
     }
   }
+
+  // ✅ 미러링으로 값이 들어간 필드도 즉시 자동 글자 축소 적용
+  try {
+    const key = String(id).toLowerCase();
+    let targetField = null;
+    for (const pg of pages) {
+      for (const f of (pg.fields || [])) {
+        if (String(f.id || '').toLowerCase() === key) { targetField = f; break; }
+      }
+      if (targetField) break;
+    }
+    if (targetField && targetField.autoShrink !== false && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA')) {
+      requestAnimationFrame(() => {
+        if (isNameField(targetField)) autoShrinkNameFont(el, getNameFieldMinFont(targetField), targetField.fontSize || 14);
+        else autoShrinkText(el, 8, targetField.fontSize || 14);
+      });
+    }
+  } catch (_) {}
 }
 
 
@@ -2086,7 +2104,7 @@ function autoShrinkNameFont(el, minPx = 8, maxPx) {
   } catch (_) {}
 }
 
-const AUTO_SHRINK_NAME_RE = /(가입자명|고객명|법인명|성명|이름|예금주 성함|예금주|자동이체|계좌주|명의자|납부자)/;
+const AUTO_SHRINK_NAME_RE = /(가입자명|가입자|신청\/?가입자|고객명|법인명|성명|성함|이름|예금주 성함|예금주|자동이체|계좌주|명의자|납부자)/;
 
 function isNameField(f){
   const label = String(f.label || '');
@@ -2118,7 +2136,10 @@ function getNameFieldMinFont(f){
     String(f.placeholder || '')
   ].join(' ');
 
-  if (/(가입자명|고객명|법인명|성명|이름|name|custname|customername|corpname|bizname)/i.test(text)) return 5;
+  // ✅ 하단의 좁은 '가입자' 칸은 이름이 길면 더 작게 줄어들어야 함
+  if (/(가입자|신청\/?가입자)/i.test(text)) return 3.5;
+
+  if (/(가입자명|고객명|법인명|성명|성함|이름|name|custname|customername|corpname|bizname)/i.test(text)) return 5;
 
   return 6;
 }
@@ -3997,9 +4018,14 @@ if ((f.type === 'text' || f.type === 'textarea') && f.id) {
   }
 }
 
-if ((f.type === 'text' || f.type === 'textarea') && f.autoShrink !== false && !isNameField(f)) {
+if ((f.type === 'text' || f.type === 'textarea') && f.autoShrink !== false) {
   requestAnimationFrame(() => {
-    autoShrinkText(ctrl, 8, f.fontSize || 14);
+    if (isNameField(f)) {
+      // ✅ 출력/PDF에서도 가입자명·고객명·성함 칸은 칸 너비에 맞춰 자동 축소
+      autoShrinkNameFont(ctrl, getNameFieldMinFont(f), f.fontSize || 14);
+    } else {
+      autoShrinkText(ctrl, 8, f.fontSize || 14);
+    }
   });
 }  
 

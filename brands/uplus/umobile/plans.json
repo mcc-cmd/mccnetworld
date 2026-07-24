@@ -70,25 +70,25 @@
      "다성비 (71GB+/통화기본)": {
     "base": 50390,
     "discount": 14790,
-    "extraDataGb": 10,
+    "extraDataGb": 0,
     "bundleAnyone": false
   },
     "다성비 (7GB+/통화기본)": {
     "base": 40800,
     "discount": 21500,
-    "extraDataGb": 10,
+    "extraDataGb": 0,
     "bundleAnyone": false
   }, 
     "LTE (15GB+/100분)": {
     "base": 47300,
     "discount": 20100,
-    "extraDataGb": 10,
+    "extraDataGb": 0,
     "bundleAnyone": false
   },
     "데이터플러스 (17GB+/통화기본)": {
     "base": 32600,
     "discount": 9700,
-    "extraDataGb": 10,
+    "extraDataGb": 5,
     "bundleAnyone": false
   },  
   "데이터플러스 (10GB+/통화기본)": {
