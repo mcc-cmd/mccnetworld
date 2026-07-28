@@ -5,10 +5,10 @@
       "fields": [
         {
           "id": "kids_notice",
-          "label": "키즈안심 안내",
+          "label": "",
           "type": "label",
-          "x": 4,
-          "y": 2.4,
+          "x": 3.9985124234160687,
+          "y": 2.3988119261751795,
           "w": 54,
           "inputHeight": 16,
           "fontSize": 11,
@@ -18,7 +18,21 @@
           "autoShrink": true,
           "borderTransparent": true,
           "bgTransparent": true,
-          "value": ""
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "wrap": true,
+          "required": false,
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         },
         {
           "id": "비상연락처",
@@ -754,7 +768,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "22"
+          "value": "28"
         },
         {
           "id": "성함싸인",
@@ -1709,8 +1723,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 33,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1739,8 +1752,7 @@
           "checkSize": 18,
           "textAlign": "",
           "inputHeight": 37,
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -1770,8 +1782,7 @@
           "maskRe": "",
           "placeholder": "제휴 요금제 진행시 동의 체크,성함,싸인 자필기재 필수 입니다.",
           "autoDate": "",
-          "locked": true,
-          "value": ""
+          "locked": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1801,8 +1812,7 @@
           "textAlign": "",
           "inputHeight": 24,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1832,8 +1842,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1863,8 +1872,7 @@
           "textAlign": "",
           "inputHeight": 22,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -1894,8 +1902,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "affiliate_millie",
@@ -2046,8 +2053,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2077,8 +2083,7 @@
           "locked": true,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
@@ -2108,8 +2113,7 @@
           "placeholder": "미결합 요금제 상관없이 필수 첨부 서류 입니다.",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2139,8 +2143,7 @@
           "locked": true,
           "lockOnPh": false,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         }
       ]
     },
@@ -2170,8 +2173,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "discountFee",
@@ -2201,8 +2203,7 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "totalFee",
@@ -2232,8 +2233,7 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "totalFee",
@@ -2263,8 +2263,7 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "planEcho",
@@ -2322,8 +2321,7 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "상담사",
@@ -2353,8 +2351,7 @@
           "inputHeight": 18,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "번호이동 번호",
@@ -2384,8 +2381,7 @@
           "inputHeight": 24,
           "textAlign": "center",
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "법대 성함,싸인 자필기재",
@@ -2415,8 +2411,7 @@
           "textAlign": "",
           "inputHeight": 23,
           "autoShrink": true,
-          "verticalAlign": "middle",
-          "value": ""
+          "verticalAlign": "middle"
         },
         {
           "id": "0",

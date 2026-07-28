@@ -1983,6 +1983,11 @@ function isKidsNoticeTargetField(f){
   return key.includes('kids_notice') || key.includes('kidsnotice') || key.includes('키즈안내') || key.includes('키즈안심안내');
 }
 
+function isKidsNoticeVisibleField(f){
+  if (!isKidsNoticeTargetField(f)) return false;
+  return String(f.value || '').trim() !== '';
+}
+
 function syncKidsNotice(planName){
   const txt = isKidsPlan(planName) ? KIDS_NOTICE_TEXT : '';
 
@@ -2029,7 +2034,7 @@ function ensureKidsNoticeField(){
 
     targetPage.fields.unshift({
       id: 'kids_notice',
-      label: '키즈안심 안내',
+      label: '',
       type: 'label',
       x: 4,
       y: 2.4,
@@ -2379,6 +2384,7 @@ if (f.inputHeight) {
     const lab = document.createElement('div');
     lab.className   = 'label';
     lab.textContent = f.label || '';
+    if (f.type === 'label' || isKidsNoticeTargetField(f)) lab.style.display = 'none';
     w.appendChild(lab);
 
     let ctrl;
@@ -2511,7 +2517,7 @@ else if (f.type === 'label') {
   ctrl = document.createElement('div');
   ctrl.className = 'fixed-label';
 
-  const labelText = String(f.value ?? f.id ?? '');
+  const labelText = isKidsNoticeTargetField(f) ? String(f.value || '') : String(f.value ?? f.id ?? '');
   ctrl.textContent = labelText;
 
   ctrl.style.pointerEvents = 'none';
@@ -3701,6 +3707,7 @@ if (f.inputHeight) {
     const lab = document.createElement('div');
     lab.className = 'label';
     lab.textContent = f.label || '';
+    if (f.type === 'label' || isKidsNoticeTargetField(f)) lab.style.display = 'none';
     w.appendChild(lab);
 
     let ctrl;
@@ -3809,7 +3816,7 @@ else if (f.type === 'label') {
   ctrl = document.createElement('div');
   ctrl.className = 'fixed-label';
 
-  const labelText = String(f.value ?? f.id ?? '');
+  const labelText = isKidsNoticeTargetField(f) ? String(f.value || '') : String(f.value ?? f.id ?? '');
   ctrl.textContent = labelText;
 
   ctrl.style.width = '100%';
@@ -4019,14 +4026,10 @@ if ((f.type === 'text' || f.type === 'textarea') && f.id) {
 }
 
 if ((f.type === 'text' || f.type === 'textarea') && f.autoShrink !== false) {
-  requestAnimationFrame(() => {
-    if (isNameField(f)) {
-      // ✅ 출력/PDF에서도 가입자명·고객명·성함 칸은 칸 너비에 맞춰 자동 축소
-      autoShrinkNameFont(ctrl, getNameFieldMinFont(f), f.fontSize || 14);
-    } else {
-      autoShrinkText(ctrl, 8, f.fontSize || 14);
-    }
-  });
+  // ✅ 인쇄 DOM은 #printAll이 화면에서 display:none 상태라 clientWidth/scrollWidth가 0으로 잡힐 수 있음.
+  // 그래서 화면용 autoShrink가 아니라 A4 폭 기준 계산 함수로 즉시 축소 적용합니다.
+  const minFs = isNameField(f) ? getNameFieldMinFont(f) : 8;
+  autoShrinkPrintControlByField(ctrl, f, minFs, f.fontSize || 14);
 }  
 
 w.appendChild(ctrl);
@@ -4062,6 +4065,67 @@ function autoShrinkText(el, minPx = 8, maxPx) {
   }
 }
 
+function autoShrinkPrintControlByField(el, f, minPx = 5, maxPx = 14) {
+  if (!el || !f) return;
+
+  const value = String(el.value ?? el.textContent ?? '').trim();
+  const base = maxPx || parseFloat(el.style.fontSize || getComputedStyle(el).fontSize) || 14;
+
+  if (!value) {
+    el.style.fontSize = base + 'px';
+    return;
+  }
+
+  // ✅ printAll은 인쇄 전 화면에서 display:none이라 실제 clientWidth 측정이 불안정합니다.
+  // A4 portrait stage 폭(210mm ≒ 793.7 CSS px)을 기준으로 필드 폭을 계산합니다.
+  const A4_STAGE_PX = 210 * 96 / 25.4;
+  const fieldW = Math.max(1, A4_STAGE_PX * ((Number(f.w) || 24) / 100));
+
+  const cs = getComputedStyle(el);
+  const padL = parseFloat(cs.paddingLeft || el.style.paddingLeft) || 0;
+  const padR = parseFloat(cs.paddingRight || el.style.paddingRight) || 0;
+  const safeGap = /가입자|신청\/?가입자|성함|이름|고객명|명의자/.test([
+    f.id || '', f.label || '', f.placeholder || ''
+  ].join(' ')) ? 18 : 12;
+  const innerW = Math.max(1, fieldW - padL - padR - safeGap);
+
+  let meas = document.getElementById('__print_measure_span__');
+  if (!meas) {
+    meas = document.createElement('span');
+    meas.id = '__print_measure_span__';
+    meas.style.position = 'fixed';
+    meas.style.visibility = 'hidden';
+    meas.style.whiteSpace = 'nowrap';
+    meas.style.left = '-9999px';
+    meas.style.top = '0';
+    meas.style.pointerEvents = 'none';
+    document.body.appendChild(meas);
+  }
+
+  meas.style.fontFamily = cs.fontFamily || el.style.fontFamily || 'system-ui, "Noto Sans KR", sans-serif';
+  meas.style.fontWeight = cs.fontWeight || el.style.fontWeight || '700';
+  meas.style.fontStyle = cs.fontStyle || el.style.fontStyle || 'normal';
+  meas.style.letterSpacing = cs.letterSpacing || el.style.letterSpacing || '0';
+  meas.style.textTransform = cs.textTransform || 'none';
+  meas.textContent = value;
+
+  for (let px = base; px >= minPx; px -= 0.1) {
+    meas.style.fontSize = px + 'px';
+    if (meas.getBoundingClientRect().width <= innerW) {
+      el.style.fontSize = px + 'px';
+      el.style.lineHeight = '1';
+      el.style.whiteSpace = 'nowrap';
+      el.style.overflow = 'hidden';
+      return;
+    }
+  }
+
+  el.style.fontSize = minPx + 'px';
+  el.style.lineHeight = '1';
+  el.style.whiteSpace = 'nowrap';
+  el.style.overflow = 'hidden';
+}
+
 function autoShrinkPrintText(el, text, minPx = 5, maxPx = 14) {
   if (!el) return;
   const value = String(text ?? el.textContent ?? '').trim();
@@ -4095,6 +4159,21 @@ function buildPrintAll(){
 
   requestAnimationFrame(()=>{
     autosizeAllTextareas(container);
+    // ✅ 출력용 DOM이 만들어진 뒤 한 번 더 강제 축소
+    try {
+      container.querySelectorAll('.field').forEach(w => {
+        const id = w.dataset.id;
+        const ctrl = w.querySelector('input[type="text"], textarea');
+        if (!ctrl || !id) return;
+        let target = null;
+        pages.forEach(pg => (pg.fields || []).forEach(f => {
+          if (!target && String(f.id || '').toLowerCase() === String(id).toLowerCase()) target = f;
+        }));
+        if (target && target.autoShrink !== false) {
+          autoShrinkPrintControlByField(ctrl, target, isNameField(target) ? getNameFieldMinFont(target) : 8, target.fontSize || 14);
+        }
+      });
+    } catch (_) {}
   });
   return container;
 }
@@ -4503,7 +4582,7 @@ function setTopTitle() {
   const params = new URLSearchParams(location.search);
   const doc = params.get('doc');
 
-  let text = 'MCC 미디어로그';
+  let text = 'MCC 엠모바일';
 
   if (doc === 'change') text += ' 변경';
   else if (doc === 'cancel') text += ' 해지';
