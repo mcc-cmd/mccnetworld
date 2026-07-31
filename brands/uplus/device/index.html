@@ -718,6 +718,133 @@ html:not(.fill) .field.checkmark{
   #printAll .field.hasBG .print-value{background:var(--bgc,transparent) !important;}
 }
 
+
+/* =========================
+   주소 검색 팝업
+========================= */
+#addressSearchModal{
+  position:fixed;
+  inset:0;
+  z-index:120000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(3,10,22,.58);
+}
+#addressSearchModal.open{display:flex;}
+#addressSearchModal .asm-card{
+  width:min(94vw,620px);
+  max-height:94vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  color:#111827;
+  border:1px solid #d1d5db;
+  border-radius:16px;
+  box-shadow:0 24px 70px rgba(0,0,0,.34);
+}
+#addressSearchModal .asm-hd{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 14px;
+  border-bottom:1px solid #e5e7eb;
+}
+#addressSearchModal .asm-title{font-size:17px;font-weight:900;}
+#addressSearchModal .asm-close,
+#addressSearchModal .asm-btn{
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:9px 14px;
+  background:#f1f5f9;
+  color:#0f172a;
+  font-weight:800;
+  cursor:pointer;
+}
+#addressSearchModal .asm-btn--primary{
+  border-color:#111827;
+  background:#111827;
+  color:#fff;
+}
+#addressSearchModal .asm-search{
+  min-height:430px;
+  height:min(58vh,520px);
+  background:#fff;
+}
+#addressSearchModal .asm-loading{
+  min-height:430px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  color:#475569;
+  font-weight:700;
+}
+#addressSearchModal .asm-detail{
+  padding:12px 14px;
+  border-top:1px solid #e5e7eb;
+  background:#fff;
+}
+#addressSearchModal .asm-label{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  font-weight:900;
+  color:#334155;
+}
+#addressSearchModal .asm-selected,
+#addressSearchModal .asm-detail-input{
+  width:100%;
+  min-height:42px;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:10px 12px;
+  background:#fff;
+  color:#111827;
+  font:700 14px/1.4 system-ui,"Noto Sans KR",sans-serif;
+}
+#addressSearchModal .asm-selected{
+  margin-bottom:10px;
+  background:#f8fafc;
+}
+#addressSearchModal .asm-selected:empty::before{
+  content:"주소 검색 결과를 선택해 주세요.";
+  color:#94a3b8;
+}
+#addressSearchModal .asm-error{
+  min-height:20px;
+  margin-top:7px;
+  color:#dc2626;
+  font-size:12px;
+  font-weight:800;
+}
+#addressSearchModal .asm-ft{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  padding:0 14px 14px;
+  background:#fff;
+}
+.field.address-search-enabled{cursor:pointer !important;}
+.field.address-search-enabled input,
+.field.address-search-enabled textarea{cursor:pointer;}
+html.fill .field.address-search-enabled::after{
+  display:none !important;
+  content:none !important;
+}
+@media (max-width:640px){
+  #addressSearchModal{padding:6px;}
+  #addressSearchModal .asm-card{width:100%;max-height:98vh;border-radius:12px;}
+  #addressSearchModal .asm-search,
+  #addressSearchModal .asm-loading{height:55vh;min-height:360px;}
+}
+@media print{
+  #addressSearchModal{display:none !important;visibility:hidden !important;}
+}
+
 </style>
 
 <script>
@@ -772,7 +899,7 @@ html:not(.fill) .field.checkmark{
 
 (function(){
   function forceCloseForPrint(){
-    const ids = ['msgModal','docsModal','comingSoonModal','formModal'];
+    const ids = ['msgModal','docsModal','comingSoonModal','formModal','addressSearchModal'];
     ids.forEach(id=>{
       const el = document.getElementById(id);
       if (!el) return;
@@ -1025,6 +1152,32 @@ html:not(.fill) .field.checkmark{
 </div></div>
 
 <div id="affPopup"><div class="card">⚠️ <b>제휴 요금제</b>입니다. <b> C-1 성함·동의 체크</b>가 모두 완료되어야 진행됩니다.</div></div>
+
+<div id="addressSearchModal" aria-hidden="true">
+  <div class="asm-card" role="dialog" aria-modal="true" aria-labelledby="addressSearchTitle">
+    <div class="asm-hd">
+      <div class="asm-title" id="addressSearchTitle">주소 검색</div>
+      <button type="button" class="asm-close" id="addressSearchClose">닫기</button>
+    </div>
+    <div id="addressSearchLayer" class="asm-search">
+      <div class="asm-loading">주소 검색 서비스를 불러오는 중입니다.</div>
+    </div>
+    <div class="asm-detail">
+      <label class="asm-label">선택한 주소</label>
+      <div id="addressSearchSelected" class="asm-selected"></div>
+      <label class="asm-label" for="addressSearchDetail">상세주소</label>
+      <input id="addressSearchDetail" class="asm-detail-input" type="text"
+             maxlength="100" autocomplete="off"
+             placeholder="동/호수 등 상세주소를 입력해 주세요">
+      <div id="addressSearchError" class="asm-error" aria-live="polite"></div>
+    </div>
+    <div class="asm-ft">
+      <button type="button" class="asm-btn" id="addressSearchReset">다시 검색</button>
+      <button type="button" class="asm-btn asm-btn--primary" id="addressSearchApply">주소 적용</button>
+    </div>
+  </div>
+</div>
+
 
 <div class="form-modal" id="formModal" aria-hidden="true">
   <div class="form-backdrop" data-form-close="1"></div>
@@ -1439,6 +1592,319 @@ function isNameField(f){
     label.includes('대표자') || label.includes('수취인') || label.includes('회사명') || label.includes('업체명')
   );
 }
+
+function isAddressField(f){
+  const text = [
+    String(f?.id || ''),
+    String(f?.label || ''),
+    String(f?.placeholder || '')
+  ].join(' ');
+  return /(주소|거주지|도로명|상세주소|배송지|수령지|addr|address)/i.test(text);
+}
+function isAddressDetailField(f){
+  return /(상세\s*주소|상세주소|address.?detail|detail.?address|addr.?detail)/i.test([
+    f?.id, f?.label, f?.placeholder
+  ].join(' '));
+}
+function isAddressZipField(f){
+  return /(우편\s*번호|우편번호|zonecode|zip.?code|postcode)/i.test([
+    f?.id, f?.label, f?.placeholder
+  ].join(' '));
+}
+function isAddressBaseField(f){
+  return isAddressField(f) && !isAddressDetailField(f) && !isAddressZipField(f);
+}
+
+const ADDRESS_POSTCODE_SCRIPT =
+  'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+
+let __addressScriptPromise = null;
+let __addressTargetField = null;
+let __addressTargetControl = null;
+let __addressResult = null;
+let __addressPostcodeInstance = null;
+
+function loadAddressPostcodeScript(){
+  if (window.daum?.Postcode) return Promise.resolve();
+  if (__addressScriptPromise) return __addressScriptPromise;
+
+  __addressScriptPromise = new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-address-postcode="1"]');
+    if (existing) {
+      existing.addEventListener('load', resolve, {once:true});
+      existing.addEventListener('error', () => reject(new Error('주소 검색 스크립트를 불러오지 못했습니다.')), {once:true});
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = ADDRESS_POSTCODE_SCRIPT;
+    script.async = true;
+    script.dataset.addressPostcode = '1';
+    script.onload = resolve;
+    script.onerror = () => {
+      __addressScriptPromise = null;
+      reject(new Error('주소 검색 서비스를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.'));
+    };
+    document.head.appendChild(script);
+  });
+
+  return __addressScriptPromise;
+}
+
+function findAddressFields(predicate){
+  const found = [];
+  pages.forEach((pg, pi) => {
+    (pg.fields || []).forEach((f, fi) => {
+      if (predicate(f)) found.push({f, pi, fi});
+    });
+  });
+  return found;
+}
+
+function setAddressFieldValue(f, value){
+  if (!f) return;
+  f.value = value ?? '';
+  if (f.id) setValueById(f.id, f.value);
+}
+
+function normalizeSelectedAddress(data){
+  const road = String(data?.roadAddress || '').trim();
+  const jibun = String(data?.jibunAddress || '').trim();
+  const base = road || jibun;
+  const extras = [];
+
+  if (data?.bname && /[동|로|가]$/.test(data.bname)) extras.push(data.bname);
+  if (data?.buildingName && data?.apartment === 'Y') extras.push(data.buildingName);
+
+  return {
+    zonecode: String(data?.zonecode || '').trim(),
+    base,
+    extra: extras.length ? ` (${extras.join(', ')})` : ''
+  };
+}
+
+function resetAddressSearchResult(){
+  __addressResult = null;
+  const selected = document.getElementById('addressSearchSelected');
+  const detail = document.getElementById('addressSearchDetail');
+  const error = document.getElementById('addressSearchError');
+  if (selected) selected.textContent = '';
+  if (detail) detail.value = '';
+  if (error) error.textContent = '';
+}
+
+function closeAddressSearch(){
+  const modal = document.getElementById('addressSearchModal');
+  if (!modal) return;
+
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-open','no-scroll');
+
+  const layer = document.getElementById('addressSearchLayer');
+  if (layer) {
+    layer.style.height = '';
+    layer.innerHTML = '<div class="asm-loading">주소 검색 서비스를 불러오는 중입니다.</div>';
+  }
+
+  __addressPostcodeInstance = null;
+  __addressResult = null;
+}
+
+function renderAddressPostcode(){
+  const layer = document.getElementById('addressSearchLayer');
+  const error = document.getElementById('addressSearchError');
+  if (!layer || !window.daum?.Postcode) return;
+
+  layer.innerHTML = '';
+  if (error) error.textContent = '';
+
+  __addressPostcodeInstance = new daum.Postcode({
+    width:'100%',
+    height:'100%',
+    animation:true,
+    autoClose:false,
+    oncomplete(data){
+      __addressResult = normalizeSelectedAddress(data);
+
+      const selected = document.getElementById('addressSearchSelected');
+      const detail = document.getElementById('addressSearchDetail');
+
+      if (selected) {
+        selected.textContent =
+          `${__addressResult.zonecode ? `[${__addressResult.zonecode}] ` : ''}` +
+          __addressResult.base +
+          __addressResult.extra;
+      }
+
+      if (error) error.textContent = '';
+      requestAnimationFrame(() => detail?.focus());
+    },
+    onresize(size){
+      if (size?.height && window.innerWidth > 640) {
+        layer.style.height = Math.min(Math.max(size.height,430),520) + 'px';
+      }
+    }
+  });
+
+  __addressPostcodeInstance.embed(layer, {autoClose:false});
+}
+
+async function openAddressSearch(f, ctrl){
+  if (!FILL || !f || !ctrl || f.locked) return;
+
+  __addressTargetField = f;
+  __addressTargetControl = ctrl;
+  resetAddressSearchResult();
+
+  const modal = document.getElementById('addressSearchModal');
+  const layer = document.getElementById('addressSearchLayer');
+  if (!modal || !layer) return;
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-open','no-scroll');
+  layer.innerHTML = '<div class="asm-loading">주소 검색 서비스를 불러오는 중입니다.</div>';
+
+  try {
+    await loadAddressPostcodeScript();
+    renderAddressPostcode();
+  } catch (err) {
+    layer.innerHTML = `<div class="asm-loading">${String(err?.message || err)}</div>`;
+  }
+}
+
+function applySelectedAddress(){
+  const error = document.getElementById('addressSearchError');
+  const detailEl = document.getElementById('addressSearchDetail');
+
+  if (!__addressResult?.base) {
+    if (error) error.textContent = '검색 결과에서 기본 주소를 먼저 선택해 주세요.';
+    return;
+  }
+
+  const detail = String(detailEl?.value || '').trim();
+  if (!detail) {
+    if (error) error.textContent = '동/호수 등 상세주소를 입력해 주세요.';
+    detailEl?.focus();
+    return;
+  }
+
+  const baseAddress = (__addressResult.base + __addressResult.extra).trim();
+  const fullAddress = `${baseAddress} ${detail}`.replace(/\s+/g,' ').trim();
+
+  setAddressFieldValue(__addressTargetField, fullAddress);
+
+  findAddressFields(isAddressZipField).forEach(({f}) => {
+    if (f !== __addressTargetField) setAddressFieldValue(f, __addressResult.zonecode);
+  });
+  findAddressFields(isAddressDetailField).forEach(({f}) => {
+    if (f !== __addressTargetField) setAddressFieldValue(f, detail);
+  });
+
+  if (__addressTargetControl) {
+    __addressTargetControl.value = fullAddress;
+    const maxPx = Number.isFinite(__addressTargetField?.inputHeight)
+      ? (__addressTargetField.inputHeight - 4)
+      : (__addressTargetField?.fontSize ?? 20);
+    fitTextToWidth(__addressTargetControl, maxPx, 6);
+  }
+
+  scheduleSave();
+  refreshConditionalInvalid();
+  closeAddressSearch();
+  render();
+
+  requestAnimationFrame(() => {
+    const id = String(__addressTargetField?.id || '');
+    if (!id) return;
+    const live = overlay.querySelector(
+      `.field[data-id="${CSS.escape(id)}"] input[type="text"],` +
+      `.field[data-id="${CSS.escape(id)}"] textarea`
+    );
+    if (!live) return;
+
+    const maxPx = Number.isFinite(__addressTargetField?.inputHeight)
+      ? (__addressTargetField.inputHeight - 4)
+      : (__addressTargetField?.fontSize ?? 20);
+    fitTextToWidth(live, maxPx, 6);
+  });
+}
+
+function wireAddressSearchModal(){
+  const modal = document.getElementById('addressSearchModal');
+  const close = document.getElementById('addressSearchClose');
+  const reset = document.getElementById('addressSearchReset');
+  const apply = document.getElementById('addressSearchApply');
+  const detail = document.getElementById('addressSearchDetail');
+
+  close?.addEventListener('click', closeAddressSearch);
+  reset?.addEventListener('click', () => {
+    resetAddressSearchResult();
+    renderAddressPostcode();
+  });
+  apply?.addEventListener('click', applySelectedAddress);
+
+  detail?.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    e.stopPropagation();
+    applySelectedAddress();
+  });
+
+  modal?.addEventListener('click', e => {
+    if (e.target === modal) closeAddressSearch();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal?.classList.contains('open')) {
+      e.preventDefault();
+      closeAddressSearch();
+    }
+  }, true);
+}
+
+function bindAddressSearchToControl(f, w, ctrl){
+  if (!FILL || !isAddressBaseField(f) || f.locked || !ctrl?.addEventListener) return;
+
+  w.classList.add('address-search-enabled');
+  w.setAttribute('role','button');
+  w.setAttribute('tabindex','0');
+  w.setAttribute('aria-haspopup','dialog');
+  w.title = '주소 입력칸을 클릭하면 주소 검색창이 열립니다.';
+
+  ctrl.readOnly = true;
+  ctrl.setAttribute('aria-haspopup','dialog');
+  ctrl.title = '클릭하면 주소 검색창이 열립니다.';
+
+  let opening = false;
+  const open = async e => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+
+    if (opening) return;
+    if (document.getElementById('addressSearchModal')?.classList.contains('open')) return;
+
+    opening = true;
+    try {
+      await openAddressSearch(f, ctrl);
+    } finally {
+      setTimeout(() => { opening = false; }, 250);
+    }
+  };
+
+  ctrl.addEventListener('click', open);
+  w.addEventListener('click', open);
+
+  const onKey = e => {
+    if (e.key === 'Enter' || e.key === ' ') open(e);
+  };
+  ctrl.addEventListener('keydown', onKey);
+  w.addEventListener('keydown', onKey);
+}
+
+window.addEventListener('DOMContentLoaded', wireAddressSearchModal);
+
 
 /* =========================
    ✅ select 표시 div: 2줄 허용 + 박스에 맞춰 자동 축소
@@ -2077,7 +2543,7 @@ function render(){
 
     const treatAsTextarea =
       (f.type === 'textarea') ||
-      (f.type === 'text' && (f.wrap) && !isNameBox);
+      (f.type === 'text' && (f.wrap) && !isNameBox && !isAddressField(f));
 
     if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
@@ -2359,7 +2825,7 @@ ctrl.oninput = () => {
   if (f.id === 'downPayment') recalcDevicePricing();
   const shouldShrink = (f.autoShrink !== false);
   const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
-  const minPx = isNameField(f) ? 8 : 12;
+  const minPx = isAddressField(f) ? 6 : (isNameField(f) ? 8 : 12);
   if (shouldShrink) {
     fitTextToWidth(ctrl, maxPx, minPx);
   } else {
@@ -2406,7 +2872,7 @@ ctrl.oninput = () => {
         requestAnimationFrame(() => {
           const shouldShrink = (f.autoShrink !== false);
           const maxPx = Number.isFinite(f.inputHeight) ? (f.inputHeight - 4) : (f.fontSize ?? 20);
-          const minPx = isNameField(f) ? 8 : 12;
+          const minPx = isAddressField(f) ? 6 : (isNameField(f) ? 8 : 12);
           if (shouldShrink) {
             fitTextToWidth(ctrl, maxPx, minPx);
           } else {
@@ -2418,6 +2884,8 @@ ctrl.oninput = () => {
     }
 
     if (FILL) ctrl.addEventListener('mousedown', e => e.stopPropagation());
+
+    bindAddressSearchToControl(f, w, ctrl);
 
     if (f.id) {
       w.setAttribute('data-fid', f.id);
@@ -3022,7 +3490,7 @@ if (f.type === 'radio') {
 
     const treatAsTextarea =
       f.type === 'textarea' ||
-      (f.type === 'text' && (f.wrap));
+      (f.type === 'text' && (f.wrap) && !isAddressField(f));
 
     if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
@@ -3567,7 +4035,7 @@ window.addEventListener('DOMContentLoaded',()=>{ initConditionalTool(); initForm
   function makePrintValue(f, text){
     var pv = document.createElement('div');
     pv.className = 'print-value';
-    if (f.type === 'textarea' || (f.type === 'text' && f.wrap && !(typeof isNameField === 'function' && isNameField(f)))) {
+    if (f.type === 'textarea' || (f.type === 'text' && f.wrap && !(typeof isNameField === 'function' && isNameField(f)) && !(typeof isAddressField === 'function' && isAddressField(f)))) {
       pv.classList.add('print-value-ta');
     }
     pv.textContent = text || '';
@@ -3643,7 +4111,7 @@ window.addEventListener('DOMContentLoaded',()=>{ initConditionalTool(); initForm
         w.appendChild(ctrl);
         var selectedText = ctrl.options[ctrl.selectedIndex] ? ctrl.options[ctrl.selectedIndex].text : (f.value || '');
         w.appendChild(makePrintValue(f, selectedText));
-      } else if (f.type === 'textarea' || (f.type === 'text' && f.wrap && !(typeof isNameField === 'function' && isNameField(f)))) {
+      } else if (f.type === 'textarea' || (f.type === 'text' && f.wrap && !(typeof isNameField === 'function' && isNameField(f)) && !(typeof isAddressField === 'function' && isAddressField(f)))) {
         ctrl = document.createElement('textarea');
         ctrl.value = f.value || '';
         w.appendChild(ctrl);
