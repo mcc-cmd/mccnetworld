@@ -939,12 +939,28 @@ if (DESIGN) {
     }
 
     // ✅ 혹시 다른 모달이 있으면 닫기(서식 레이어 .overlay는 절대 건드리지 않음)
-    document.querySelectorAll('.modal, .popup, .dim, .backdrop, .modal-backdrop, #addressSearchModal')
+    document.querySelectorAll('.modal, .popup, .dim, .backdrop, .modal-backdrop')
       .forEach(el=>{
         el.style.display = 'none';
         el.setAttribute?.('aria-hidden','true');
         el.classList?.remove('open');
       });
+
+    // 주소 검색 모달은 인쇄 직전에 정상 종료하되,
+    // display:none 인라인 스타일을 남기지 않아 인쇄 후 즉시 다시 열 수 있게 합니다.
+    try {
+      if (typeof closeAddressSearch === 'function') {
+        closeAddressSearch();
+      } else {
+        const addressModal = document.getElementById('addressSearchModal');
+        if (addressModal) {
+          addressModal.classList.remove('open');
+          addressModal.setAttribute('aria-hidden','true');
+          addressModal.style.removeProperty('display');
+          addressModal.style.removeProperty('visibility');
+        }
+      }
+    } catch (_) {}
 
     /* ✅✅✅ [A안 추가] 토스트 + invalid 인쇄 방지 */
     const toast = document.getElementById('toast');
@@ -2320,6 +2336,12 @@ function closeAddressSearch(){
   if (!modal) return;
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
+
+  // 인쇄 로직이나 이전 실행에서 남은 인라인 숨김값 제거
+  modal.style.removeProperty('display');
+  modal.style.removeProperty('visibility');
+  modal.style.removeProperty('pointer-events');
+
   document.body.classList.remove('modal-open', 'no-scroll');
 
   const layer = document.getElementById('addressSearchLayer');
@@ -2395,6 +2417,10 @@ async function openAddressSearch(f, ctrl){
   const current = String(f.value ?? ctrl.value ?? '').trim();
   if (detail && isAddressDetailField(f)) detail.value = current;
 
+  // PDF 출력 후에도 주소 검색창이 다시 열리도록 인라인 숨김 상태를 초기화
+  modal.style.removeProperty('display');
+  modal.style.removeProperty('visibility');
+  modal.style.removeProperty('pointer-events');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open', 'no-scroll');
@@ -4497,7 +4523,25 @@ window.addEventListener('beforeprint', () => {
 window.addEventListener('afterprint', () => {
   try {
     document.getElementById('printAll').innerHTML = '';
-  } catch (e) {}
+
+    const addressModal = document.getElementById('addressSearchModal');
+    if (addressModal) {
+      addressModal.classList.remove('open');
+      addressModal.setAttribute('aria-hidden', 'true');
+      addressModal.style.removeProperty('display');
+      addressModal.style.removeProperty('visibility');
+      addressModal.style.removeProperty('pointer-events');
+    }
+
+    document.body.classList.remove('modal-open', 'no-scroll', 'open', 'locked');
+
+    // 현재 페이지 필드를 다시 그려 클릭 이벤트를 확실히 재연결
+    if (typeof render === 'function') {
+      render();
+    }
+  } catch (e) {
+    console.warn('[afterprint restore]', e);
+  }
 });
 /* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
 function forceWrapForHeaderBox(){
