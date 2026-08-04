@@ -928,9 +928,11 @@ if (DESIGN) {
     // ✅ 혹시 다른 모달이 있으면 닫기(서식 레이어 .overlay는 절대 건드리지 않음)
     document.querySelectorAll('.modal, .popup, .dim, .backdrop, .modal-backdrop, #addressSearchModal')
       .forEach(el=>{
-        el.style.display = 'none';
-        el.setAttribute?.('aria-hidden','true');
+        // 주소 팝업에 inline display:none을 남기면 인쇄 후 다시 열리지 않으므로
+        // class/aria 상태만 닫고 inline display 값은 제거합니다.
         el.classList?.remove('open');
+        el.setAttribute?.('aria-hidden','true');
+        el.style.removeProperty('display');
       });
 
     /* ✅✅✅ [A안 추가] 토스트 + invalid 인쇄 방지 */
@@ -4764,7 +4766,22 @@ window.addEventListener('beforeprint', () => {
 window.addEventListener('afterprint', () => {
   try {
     document.getElementById('printAll').innerHTML = '';
-  } catch (e) {}
+
+    // 인쇄 과정에서 남을 수 있는 팝업 inline 상태를 완전히 복구합니다.
+    const addressModal = document.getElementById('addressSearchModal');
+    if (addressModal) {
+      addressModal.classList.remove('open');
+      addressModal.setAttribute('aria-hidden', 'true');
+      addressModal.style.removeProperty('display');
+      addressModal.style.removeProperty('visibility');
+    }
+    document.body.classList.remove('modal-open', 'no-scroll');
+
+    // 현재 입력 화면을 다시 결합해 주소 클릭 이벤트를 즉시 정상화합니다.
+    render();
+  } catch (e) {
+    console.error('[afterprint restore error]', e);
+  }
 });
 /* ===== 헤더 텍스트 박스 강제 줄바꿈 ===== */
 function forceWrapForHeaderBox(){
