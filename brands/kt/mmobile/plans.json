@@ -76,6 +76,11 @@
       "base": 30000,
       "discount": 16000
     },
+      "M 스페셜 7GB(밀리의서재)": {
+      "base": 31000,
+      "extraDataGb": 5,	
+      "discount": 12600
+    },
     "M 스페셜 7GB(모아진)": {
       "base": 35200,
       "extraDataGb": 10,	
