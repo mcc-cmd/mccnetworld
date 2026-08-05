@@ -62,7 +62,7 @@
     },
     "M 스페셜 10GB 플러스": {
       "base": 39600,
-      "discount": 20200,
+      "discount": 19200,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
