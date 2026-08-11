@@ -363,7 +363,7 @@
           "fontSize": 10,
           "mask": "",
           "maskRe": "",
-          "placeholder": "법대 자필 성함 싸인 입니다",
+          "placeholder": "자필 성함 싸인 입니다",
           "autoDate": "",
           "locked": true,
           "lockOnPh": false,
@@ -1429,7 +1429,7 @@
       "bg": "images/adult-4.jpg",
       "fields": [
         {
-          "id": "법대 자필 성함싸인 입니다",
+          "id": "자필 성함싸인 입니다",
           "label": "",
           "type": "text",
           "x": 62.09257199944728,
