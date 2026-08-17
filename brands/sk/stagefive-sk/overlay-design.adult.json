@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "bg": "images/adult-1.jpg",
+      "bg": "images/adult-1.jpg?v=2",
       "fields": [
         {
           "id": "plan",
@@ -12,10 +12,10 @@
           "w": 20.21864280438051,
           "required": true,
           "options": [
-            "Z mini + 밀리의서재",
-            "핀다이렉트Z Mini(10GB)",
-            "Z + 밀리의서재",
-            "핀다이렉트Z Max(100GB)"
+            "LTE 핀다이렉트 11GB+",
+            "LTE 핀다이렉트Z 100GB+",
+            "LTE 핀다이렉트 10GB+",
+            "LTE 핀다이렉트 7GB+"
           ],
           "radioSize": 24,
           "checkSize": 24,
@@ -158,8 +158,8 @@
           "id": "이름",
           "label": "",
           "type": "text",
-          "x": 17.778716248842773,
-          "y": 32.83040752593955,
+          "x": 17.776757931562422,
+          "y": 32.83016301397965,
           "w": 30,
           "required": true,
           "radioSize": 18,
@@ -512,7 +512,6 @@
           "y": 53.531003892626735,
           "w": 10,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -531,7 +530,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "예금주 생년월일",
@@ -541,7 +541,6 @@
           "y": 53.02403771579892,
           "w": 17.2375127420999,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -560,7 +559,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "계좌번호",
@@ -570,7 +570,6 @@
           "y": 55.044591045436384,
           "w": 20,
           "required": true,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -589,7 +588,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "예금주 자필 기재",
@@ -599,7 +599,6 @@
           "y": 55.26081778155205,
           "w": 15,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -618,7 +617,8 @@
           "placeholder": "예금주 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "예금주 성함,싸인 자필 기재",
@@ -628,7 +628,6 @@
           "y": 57.42308514270867,
           "w": 22.038735983690113,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -647,17 +646,17 @@
           "placeholder": "예금주 성함,싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "카드 유효기간",
           "label": "",
           "type": "text",
           "x": 85.06508301278988,
-          "y": 55.4745326063249, 
+          "y": 55.4745326063249,
           "w": 9.325178389398573,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -676,9 +675,10 @@
           "placeholder": "카드유효기간",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
-                {
+        {
           "id": "text_1767059765510",
           "label": "",
           "type": "text",
@@ -686,7 +686,6 @@
           "y": 57.48388642359552,
           "w": 18.95282010847681,
           "required": false,
-          "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -705,17 +704,222 @@
           "placeholder": "카드납부만 가능",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         }
       ]
     },
     {
       "bg": "images/adult-2.jpg",
-      "fields": []
+      "fields": [
+        {
+          "id": "text_1786953272875",
+          "label": "",
+          "type": "text",
+          "x": 66.01344976092265,
+          "y": 69.09034889537658,
+          "w": 15.42094455852156,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 42,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함 싸인",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": true
+        },
+        {
+          "id": "text_1786953299462",
+          "label": "",
+          "type": "text",
+          "x": 22.583487978706124,
+          "y": 89.92519904312198,
+          "w": 15.010266940451745,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 59,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함 싸인",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": true
+        }
+      ]
     },
     {
       "bg": "images/adult-3.jpg",
-      "fields": []
+      "fields": [
+        {
+          "id": "text_1786953328577",
+          "label": "",
+          "type": "text",
+          "x": 65.9126665557924,
+          "y": 44.04648607861234,
+          "w": 15.010266940451745,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 47,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함 싸인",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": true
+        },
+        {
+          "id": "text_1786953345992",
+          "label": "",
+          "type": "text",
+          "x": 25.255582366880695,
+          "y": 60.81579433591664,
+          "w": 15.215605749486652,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 56,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함 싸인",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": true
+        },
+        {
+          "id": "text_1786953364374",
+          "label": "",
+          "type": "text",
+          "x": 63.65393965640842,
+          "y": 60.81579433591664,
+          "w": 15.215605749486652,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 60,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함 싸인",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": true
+        },
+        {
+          "id": "text_1786953382772",
+          "label": "",
+          "type": "text",
+          "x": 22.688761090351083,
+          "y": 87.67506024795706,
+          "w": 15.42094455852156,
+          "required": false,
+          "value": "",
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "inputHeight": 56,
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "자필 성함 싸인",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": true
+        }
+      ]
     }
-  ]
+  ],
+  "conditionalRequired": [
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "신규",
+      "requiredOn": [
+        "희망번호"
+      ]
+    },
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "번이",
+      "requiredOn": [
+        "번호이동",
+        "전통신사"
+      ]
+    },
+    {
+      "sourceId": "전통신사",
+      "whenValue": "MVNO",
+      "requiredOn": [
+        "통신사명"
+      ]
+    }
+  ],
+  "formPopup": {
+    "enabled": false,
+    "forms": {}
+  }
 }
