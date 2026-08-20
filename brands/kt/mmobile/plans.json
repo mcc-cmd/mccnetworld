@@ -106,7 +106,7 @@
     },
     "M 스페셜 15GB(CU 20%할인)": {
       "base": 48400,
-      "discount": 26000,
+      "discount": 25500,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
