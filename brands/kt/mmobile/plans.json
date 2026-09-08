@@ -86,6 +86,11 @@
       "extraDataGb": 10,	
       "discount": 16800
     },
+      "M 스페셜 7GB(밀리의서재)": {
+      "base": 31000,
+      "extraDataGb": 10,	
+      "discount": 12600
+    },
     "M 스페셜 7GB(지니뮤직)": {
       "base": 31000,
       "discount": 10700,
@@ -98,6 +103,12 @@
       "extraDataGb": 10,
       "bundleAnyone": true
     },
+      "M 스페셜 10GB(밀리의서재)": {
+      "base": 40000,
+      "discount": 19100,
+      "extraDataGb": 10,
+      "bundleAnyone": true
+    },
     "M 스페셜 15GB 플러스": {
       "base": 48400,
       "discount": 26000,
@@ -107,6 +118,12 @@
     "M 스페셜 15GB(CU 20%할인)": {
       "base": 48400,
       "discount": 25500,
+      "extraDataGb": 10,
+      "bundleAnyone": true
+    },
+      "M 스페셜 15GB(밀리의서재)": {
+      "base": 43000,
+      "discount": 20100,
       "extraDataGb": 10,
       "bundleAnyone": true
     },
