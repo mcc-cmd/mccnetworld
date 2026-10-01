@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
+<script src="../../../app/typing-version-bridge.js" defer></script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>MCCNETWORLD 미디어로그</title>
@@ -2106,7 +2107,18 @@ function syncFeesFromExistingPlan(){
 
 
 function is5GPlan(planName){
-  return /5\s*g/i.test(String(planName || ''));
+  // 미디어로그: 아래 3개 요금제를 선택한 경우에만 5G 체크표시 자동 적용
+  const name = String(planName || '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const targetPlans = [
+    '5G (5GB/통화기본)',
+    '5G (5GB/200분)',
+    '5G (31GB+/통화기본)'
+  ];
+
+  return targetPlans.includes(name);
 }
 
 /* ✅ 5G 요금제 자동 체크
