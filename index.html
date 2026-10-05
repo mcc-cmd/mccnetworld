@@ -311,6 +311,47 @@ body{
   margin:6px 0 20px;
 }
 
+
+/* =========================================================
+  [서류 메뉴] 후불 / 선불 / 변경 / 해지 화면 전환
+========================================================= */
+.doc-menu{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:0 0 18px;
+  padding:6px;
+  background:#f3f5f9;
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+.doc-menu-btn{
+  min-height:46px;
+  padding:10px 14px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:#475569;
+  font:inherit;
+  font-weight:900;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.doc-menu-btn:hover{background:#fff;color:#111827}
+.doc-menu-btn.active{
+  background:#111827;
+  color:#fff;
+  border-color:#111827;
+  box-shadow:0 6px 16px rgba(17,24,39,.14);
+}
+.doc-page{display:none}
+.doc-page.active{display:block}
+.doc-page > .section-title{margin-top:0!important}
+@media (max-width:600px){
+  .doc-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .doc-menu-btn{min-height:44px;padding:9px 8px}
+}
+
 /* =========================================================
   [3-1] 가입서류: 통신사별 섹션
 ========================================================= */
@@ -1134,34 +1175,49 @@ body{
 </div>
 
     <div class="stack">
-      <div class="section-title">가입 서류</div>
-      <div id="joinTabs">
-        <div class="group-wrap" id="joinTabsList"></div>
-      </div>
+      <nav class="doc-menu" id="docMenu" aria-label="서류 종류 선택">
+        <button type="button" class="doc-menu-btn active" data-doc-page="postpaid" aria-selected="true">후불 서류</button>
+        <button type="button" class="doc-menu-btn" data-doc-page="prepaid" aria-selected="false">선불 서류</button>
+        <button type="button" class="doc-menu-btn" data-doc-page="change" aria-selected="false">변경 서류</button>
+        <button type="button" class="doc-menu-btn" data-doc-page="cancel" aria-selected="false">해지 서류</button>
+      </nav>
 
-      <div class="section-title" style="margin-top:16px">선불 서류</div>
-      <div id="prepaidSection">
-        <div class="group-wrap" id="prepaidList"></div>
-      </div>
-
-      <div class="section-title" style="margin-top:8px">변경 서류</div>
-      <div id="changeTabs">
-        <div class="tabs">
-          <button class="tab-btn active" data-target="uplus">LG U+</button>
-          <button class="tab-btn" data-target="kt">KT</button>
-          <button class="tab-btn" data-target="sk">SKT</button>
+      <div class="doc-page active" data-doc-panel="postpaid">
+        <div class="section-title">후불 서류</div>
+        <div id="joinTabs">
+          <div class="group-wrap" id="joinTabsList"></div>
         </div>
-        <div class="brand-grid" id="changeTabsList"></div>
       </div>
 
-      <div class="section-title" style="margin-top:16px">해지 서류</div>
-      <div id="cancelTabs">
-        <div class="tabs">
-          <button class="tab-btn active" data-target="uplus">LG U+</button>
-          <button class="tab-btn" data-target="kt">KT</button>
-          <button class="tab-btn" data-target="sk">SKT</button>
+      <div class="doc-page" data-doc-panel="prepaid">
+        <div class="section-title">선불 서류</div>
+        <div id="prepaidSection">
+          <div class="group-wrap" id="prepaidList"></div>
         </div>
-        <div class="brand-grid" id="cancelTabsList"></div>
+      </div>
+
+      <div class="doc-page" data-doc-panel="change">
+        <div class="section-title">변경 서류</div>
+        <div id="changeTabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-target="uplus">LG U+</button>
+            <button class="tab-btn" data-target="kt">KT</button>
+            <button class="tab-btn" data-target="sk">SKT</button>
+          </div>
+          <div class="brand-grid" id="changeTabsList"></div>
+        </div>
+      </div>
+
+      <div class="doc-page" data-doc-panel="cancel">
+        <div class="section-title">해지 서류</div>
+        <div id="cancelTabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-target="uplus">LG U+</button>
+            <button class="tab-btn" data-target="kt">KT</button>
+            <button class="tab-btn" data-target="sk">SKT</button>
+          </div>
+          <div class="brand-grid" id="cancelTabsList"></div>
+        </div>
       </div>
 
     </div>
@@ -3543,7 +3599,43 @@ function initCustomerCenter(){
   });
 })();
 
+
+function initDocumentMenu(){
+  const menu = document.getElementById('docMenu');
+  if (!menu) return;
+
+  const buttons = [...menu.querySelectorAll('.doc-menu-btn')];
+  const panels = [...document.querySelectorAll('.doc-page[data-doc-panel]')];
+
+  function showDocumentPage(page, updateHash = true){
+    const exists = panels.some(panel => panel.dataset.docPanel === page);
+    if (!exists) page = 'postpaid';
+
+    buttons.forEach(btn => {
+      const active = btn.dataset.docPage === page;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+
+    panels.forEach(panel => {
+      panel.classList.toggle('active', panel.dataset.docPanel === page);
+    });
+
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + page);
+    }
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => showDocumentPage(btn.dataset.docPage));
+  });
+
+  const firstPage = (location.hash || '').replace('#','');
+  showDocumentPage(firstPage || 'postpaid', false);
+}
+
 window.addEventListener('DOMContentLoaded', ()=>{
+  initDocumentMenu();
   wireKindTabs('joinTabs','joinTabsList',JOIN_DATA);
 
   // ✅ 선불 섹션 렌더
