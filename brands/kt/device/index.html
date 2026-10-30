@@ -2334,11 +2334,6 @@ async function loadDevicePricingSeparated(){
       subsidyMap
     };
 
-    console.log('[pricing] loaded OK', {
-      deviceCount: devices.length,
-      planCount: plans.length,
-      subsidyKeys: Object.keys(subsidyMap||{}).length
-    });
   }catch(err){
     console.warn('[pricing separated] load fail:', err);
     DEVICE_DB = null;
@@ -2845,14 +2840,12 @@ function normalizeBgUrls(){
 
 async function loadDesign(){
   const urls = buildDesignUrls();
-  console.log('[loadDesign] try urls:', urls);
 
   let ok = false;
 
   for (const url of urls){
     try{
       const r = await fetch(url, { cache: 'no-store' });
-      console.log('[loadDesign] fetch', r.status, url, 'ct=', r.headers.get('content-type'));
 
       if (!r.ok) continue;
 
@@ -2868,7 +2861,6 @@ async function loadDesign(){
             FORM_POPUP_DATA = { title: j.formPopup.title || '양식', text: j.formPopup.text || '' };
           }
           ok = true;
-          console.log('[loadDesign] loaded OK from:', url, 'pages=', pages.length);
           break;
         } else {
           console.warn('[loadDesign] JSON ok but no pages:', url, j);
