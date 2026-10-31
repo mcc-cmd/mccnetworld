@@ -2591,7 +2591,8 @@ if (f.inputHeight) {
 
 const isName = isNameField(f);
 const treatAsTextarea =
-  f.type === 'textarea';
+  f.type === 'textarea' ||
+  (f.type === 'text' && (isAddressField(f) || isNameField(f)));
 
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
 
@@ -3869,7 +3870,8 @@ if (f.inputHeight) {
     const isNameBox = isNameField(f);
 
 const treatAsTextarea =
-  f.type === 'textarea';
+  f.type === 'textarea' ||
+  (f.type === 'text' && (isAddressField(f) || isNameField(f)));
 
     if (treatAsTextarea) {
       ctrl = document.createElement('textarea');
@@ -4898,5 +4900,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
+<script>window.MCC_TAB_ORDER=['plan','이름','생년월일','주소','통장주','예금주 생년월일','은행명','계좌/카드번호','카드유효기간/년','카드유효기간/월','희망번호','유심','유심번호','번호이동','통신사명'];</script>
+<script src="../../../app/mcc-enhance.js"></script>
 </body>
 </html>
