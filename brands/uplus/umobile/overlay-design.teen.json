@@ -9,7 +9,7 @@
           "type": "select",
           "x": 22.087323534619678,
           "y": 15.654904819599134,
-          "w": 27.912087912087912,
+          "w": 25.159794334106262,
           "required": true,
           "options": [
             "LTE 스페셜 [약정형1]",
@@ -67,7 +67,7 @@
           "lockOnPh": false,
           "checkSize": 18,
           "textAlign": "center",
-          "inputHeight": 17,
+          "inputHeight": 20,
           "verticalAlign": "middle",
           "autoShrink": true,
           "value": ""
@@ -76,8 +76,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 23.365701843910305,
-          "y": 20.756297290528366,
+          "x": 22.99851435040115,
+          "y": 21.144893508553974,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -104,8 +104,8 @@
           "id": "discountFee",
           "label": "",
           "type": "text",
-          "x": 23.9842756707397,
-          "y": 23.458235189267658,
+          "x": 23.24838332079966,
+          "y": 23.717106140970955,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -133,8 +133,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 24.214503751778476,
-          "y": 18.174351701706883,
+          "x": 23.386311574813423,
+          "y": 18.821507485445903,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -778,7 +778,7 @@
           "inputHeight": 18,
           "verticalAlign": "middle",
           "autoShrink": true,
-          "value": "07"
+          "value": "11"
         },
         {
           "id": "일",
@@ -807,7 +807,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "22"
+          "value": "02"
         },
         {
           "id": "판매자 성함",
@@ -1687,7 +1687,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "11"
         },
         {
           "id": "일",
@@ -1715,7 +1715,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "22"
+          "value": "02"
         },
         {
           "id": "자필 성함싸인",
