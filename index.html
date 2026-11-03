@@ -566,7 +566,17 @@ body{
   .form-duo{grid-template-columns:1fr;}
   .form-duo .form-text{font-size:22px}
 }
-
+/* =========================================================
+  ✅ 양식 버튼 강조 — 테두리 색만 (깜빡임 없음)
+========================================================= */
+.form-duo .form-half,
+.sk-link-card[data-form]{
+  border:2px solid #f87171;
+}
+.form-duo .form-half:hover,
+.sk-link-card[data-form]:hover{
+  border-color:#ef4444;
+}
 /* =========================================================
   ✅ 양식 팝업(복사 버튼 포함)
 ========================================================= */
