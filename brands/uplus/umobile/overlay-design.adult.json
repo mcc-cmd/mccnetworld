@@ -133,9 +133,9 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 24.214503751778476,
-          "y": 18.174351701706883,
-          "w": 10,
+          "x": 23.50463857928526,
+          "y": 18.808834753448362,
+          "w": 9.390986601705238,
           "required": false,
           "radioSize": 18,
           "radioGap": 12,
@@ -154,7 +154,7 @@
           "locked": false,
           "lockOnPh": false,
           "checkSize": 18,
-          "inputHeight": 22,
+          "inputHeight": 23,
           "textAlign": "",
           "value": ""
         },
@@ -775,7 +775,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "11"
         },
         {
           "id": "일",
@@ -804,7 +804,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "22"
+          "value": "04"
         },
         {
           "id": "판매자 성함",
@@ -1654,7 +1654,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "11"
         },
         {
           "id": "일",
@@ -1682,7 +1682,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "22"
+          "value": "04"
         },
         {
           "id": "자필 성함싸인",
