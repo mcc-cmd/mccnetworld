@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-1.jpg",
+      "bg": "images/adult-1.jpg",
       "fields": [
         {
           "id": "연락처",
@@ -84,8 +84,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 26.774174326734002,
-          "y": 25.817006747060915,
+          "x": 24.646101156253273,
+          "y": 25.816734629989053,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -109,7 +109,10 @@
           "lockOnPh": false,
           "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "코드",
@@ -722,7 +725,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "06",
+          "value": "11",
           "checkSize": 18,
           "inputHeight": 22,
           "verticalAlign": "middle",
@@ -753,7 +756,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "02",
+          "value": "05",
           "checkSize": 18,
           "inputHeight": 20,
           "verticalAlign": "middle",
@@ -1112,8 +1115,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 75.02033544919786,
-          "y": 26.662234505174286,
+          "x": 73.01718448894367,
+          "y": 26.573162141161706,
           "w": 13.544304953251917,
           "required": false,
           "value": "",
@@ -1137,7 +1140,10 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "discountFee",
@@ -1505,7 +1511,7 @@
           "type": "radio",
           "x": 20.263904944351825,
           "y": 8.772368184296656,
-          "w": 9.817559863169894,
+          "w": 8.691151939203042,
           "required": true,
           "options": [
             "일시불",
@@ -1703,7 +1709,7 @@
       ]
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-2.jpg",
+      "bg": "images/adult-2.jpg",
       "fields": [
         {
           "id": "성함,싸인 자필기재",
@@ -1742,7 +1748,7 @@
           "type": "text",
           "x": 71.23134578464384,
           "y": 50.80384870091878,
-          "w": 23.194130801104393,
+          "w": 21.942566441141217,
           "required": false,
           "radioSize": 18,
           "radioGap": 12,
@@ -1763,53 +1769,22 @@
           "checkSize": 18,
           "textAlign": "",
           "value": "",
-          "inputHeight": 25,
+          "inputHeight": 24,
           "verticalAlign": "middle",
           "autoShrink": true
         }
       ]
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-3.jpg",
+      "bg": "images/adult-3.jpg",
       "fields": [
         {
           "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 72.30132964268286,
-          "y": 48.90452334215695,
-          "w": 20.613208648436892,
-          "required": false,
-          "radioSize": 18,
-          "radioGap": 12,
-          "color": "#000000",
-          "wrap": true,
-          "borderTransparent": true,
-          "borderColor": "transparent",
-          "borderWidth": 2,
-          "bgTransparent": true,
-          "bgColor": "transparent",
-          "fontSize": 14,
-          "mask": "",
-          "maskRe": "",
-          "placeholder": "성함,싸인 자필기재",
-          "autoDate": "",
-          "locked": true,
-          "lockOnPh": false,
-          "checkSize": 18,
-          "textAlign": "",
-          "value": "",
-          "inputHeight": 21,
-          "verticalAlign": "middle",
-          "autoShrink": false
-        },
-        {
-          "id": "성함,싸인 자필기재",
-          "label": "",
-          "type": "text",
-          "x": 71.47283049520915,
-          "y": 58.2553776565053,
-          "w": 20.455957689350715,
+          "x": 73.30221635517478,
+          "y": 50.23123085071413,
+          "w": 19.486800724470037,
           "required": false,
           "radioSize": 18,
           "radioGap": 12,
@@ -1832,14 +1807,51 @@
           "value": "",
           "inputHeight": 22,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": false,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "성함,싸인 자필기재",
           "label": "",
           "type": "text",
-          "x": 71.45116239201131,
-          "y": 67.50924767349768,
+          "x": 73.09919617698422,
+          "y": 59.139967715936535,
+          "w": 17.702516097431737,
+          "required": false,
+          "radioSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "성함,싸인 자필기재",
+          "autoDate": "",
+          "locked": true,
+          "lockOnPh": false,
+          "checkSize": 18,
+          "textAlign": "",
+          "value": "",
+          "inputHeight": 22,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
+        },
+        {
+          "id": "성함,싸인 자필기재",
+          "label": "",
+          "type": "text",
+          "x": 72.45175759465585,
+          "y": 67.77428572076715,
           "w": 20.27279609949237,
           "required": false,
           "radioSize": 18,
@@ -1863,12 +1875,15 @@
           "value": "",
           "inputHeight": 22,
           "verticalAlign": "middle",
-          "autoShrink": false
+          "autoShrink": false,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         }
       ]
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-4.jpg",
+      "bg": "images/adult-4.jpg",
       "fields": [
         {
           "id": "성함,싸인 자필기재",
@@ -1935,7 +1950,7 @@
       ]
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-5.jpg",
+      "bg": "images/adult-5.jpg",
       "fields": [
         {
           "id": "아무나 미결합시에도 필수 첨부 서류 입니다",
@@ -1971,19 +1986,19 @@
       ]
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-6.jpg",
+      "bg": "images/adult-6.jpg",
       "fields": []
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-7.jpg",
+      "bg": "images/adult-7.jpg",
       "fields": [
         {
           "id": "planEcho",
           "label": "",
           "type": "text",
-          "x": 31.096966290809537,
-          "y": 12.666841585680574,
-          "w": 20.42189281641961,
+          "x": 36.85413217524926,
+          "y": 13.196429611159921,
+          "w": 7.906249216787899,
           "required": false,
           "value": "",
           "radioSize": 18,
@@ -2006,7 +2021,10 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "totalSubsidy",
@@ -2014,14 +2032,14 @@
           "type": "text",
           "x": 56.952977289347885,
           "y": 16.379074300453063,
-          "w": 9.813785060110481,
+          "w": 8.937690008136261,
           "required": false,
           "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 20,
+          "inputHeight": 21,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -2191,11 +2209,45 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false
+        },
+        {
+          "id": "ㅇㅇ",
+          "label": "",
+          "type": "checkmark",
+          "x": 34.875630757041364,
+          "y": 42.737522440643225,
+          "w": 30,
+          "required": false,
+          "checkSize": 18,
+          "checkStyle": "tick",
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": "ㅇㅇ",
+          "value": false,
+          "radioSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "wrap": true,
+          "borderTransparent": true,
+          "borderColor": "transparent",
+          "borderWidth": 2,
+          "bgTransparent": true,
+          "bgColor": "transparent",
+          "fontSize": 14,
+          "textAlign": "",
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
     {
-      "bg": "http://127.0.0.1:8080/brands/kt/device/images/adult-8.jpg",
+      "bg": "images/adult-8.jpg",
       "fields": [
         {
           "id": "baseFee",
@@ -2232,8 +2284,8 @@
           "id": "discountFee",
           "label": "",
           "type": "text",
-          "x": 39.482828028215714,
-          "y": 28.72073129209375,
+          "x": 36.60285679648566,
+          "y": 28.366396250096816,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -2257,14 +2309,17 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 78.21129230826647,
-          "y": 28.57613628079815,
+          "x": 76.08321925209098,
+          "y": 28.66409699089325,
           "w": 10,
           "required": false,
           "radioSize": 18,
@@ -2288,7 +2343,10 @@
           "inputHeight": 19,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "monthlyBasePay",
@@ -2322,9 +2380,9 @@
           "id": "planEcho",
           "label": "",
           "type": "text",
-          "x": 5.002524319304723,
-          "y": 27.981256673477304,
-          "w": 18.253724038466544,
+          "x": 8.506741787009933,
+          "y": 28.069729839447117,
+          "w": 10.744337878687517,
           "required": false,
           "radioSize": 18,
           "radioGap": 12,
@@ -2344,10 +2402,13 @@
           "lockOnPh": false,
           "value": "",
           "checkSize": 18,
-          "inputHeight": 25,
+          "inputHeight": 22,
           "textAlign": "center",
           "verticalAlign": "middle",
-          "autoShrink": false
+          "autoShrink": false,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "가입자",
@@ -2383,8 +2444,8 @@
           "id": "개통상담사",
           "label": "",
           "type": "text",
-          "x": 25.1988348051401,
-          "y": 84.73156213291773,
+          "x": 28.32774493753904,
+          "y": 85.08553181151231,
           "w": 10.907247671202127,
           "required": false,
           "radioSize": 18,
@@ -2408,7 +2469,10 @@
           "textAlign": "",
           "value": "",
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "번호이동 번호",
@@ -2476,8 +2540,8 @@
           "id": "msrp",
           "label": "",
           "type": "text",
-          "x": 10.047744248731851,
-          "y": 15.942559755318127,
+          "x": 8.419032402637667,
+          "y": 15.853656165326036,
           "w": 13.01026225769669,
           "required": false,
           "value": "",
@@ -2501,14 +2565,17 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "commonSubsidy",
           "label": "",
           "type": "text",
-          "x": 28.358179206571727,
-          "y": 16.079028798800596,
+          "x": 25.978590564668348,
+          "y": 15.901575627789788,
           "w": 10.729760547320407,
           "required": false,
           "value": "",
@@ -2532,14 +2599,17 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "supportTotal",
           "label": "",
           "type": "text",
-          "x": 44.867332950438644,
-          "y": 15.900378855874322,
+          "x": 42.61292095061752,
+          "y": 15.898999254526125,
           "w": 10.159635119726335,
           "required": false,
           "value": "",
@@ -2563,7 +2633,10 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true
+          "autoShrink": true,
+          "groupId": "",
+          "checkGroup": "",
+          "checkValue": ""
         },
         {
           "id": "principal",
@@ -2720,14 +2793,14 @@
           "type": "text",
           "x": 69.30838047772988,
           "y": 42.35926535468997,
-          "w": 20.344827586206897,
+          "w": 15.964352326335796,
           "required": false,
           "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 36,
+          "inputHeight": 41,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -2749,14 +2822,14 @@
           "type": "text",
           "x": 69.30829629130747,
           "y": 47.23433086936322,
-          "w": 21.839080459770116,
+          "w": 16.45735371192848,
           "required": false,
           "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 36,
+          "inputHeight": 40,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -2778,14 +2851,14 @@
           "type": "text",
           "x": 68.96409308773347,
           "y": 51.867442250607475,
-          "w": 21.49425287356322,
+          "w": 17.23893404968844,
           "required": false,
           "value": "",
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 40,
+          "inputHeight": 38,
           "wrap": true,
           "borderTransparent": true,
           "borderColor": "transparent",
@@ -2865,5 +2938,34 @@
         }
       ]
     }
-  ]
+  ],
+  "conditionalRequired": [
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "신규",
+      "requiredOn": [
+        "희망번호"
+      ]
+    },
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "번이",
+      "requiredOn": [
+        "번호이동",
+        "전통신사"
+      ]
+    },
+    {
+      "sourceId": "전통신사",
+      "whenValue": "MVNO",
+      "requiredOn": [
+        "통신사명"
+      ]
+    }
+  ],
+  "formPopup": {
+    "enabled": false,
+    "title": "양식",
+    "text": ""
+  }
 }
