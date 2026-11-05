@@ -1,15 +1,15 @@
 {
   "pages": [
     {
-      "bg": "images/teen-1.jpg",
+      "bg": "images/teen-1-mw35hixx.jpg?v=1793859256991",
       "fields": [
         {
           "id": "plan",
           "label": "",
           "type": "select",
-          "x": 15.888891202196506,
-          "y": 22.502472576292632,
-          "w": 13.999999254014806,
+          "x": 17.466664827454046,
+          "y": 23.361597195756133,
+          "w": 9.261238270745041,
           "required": true,
           "wrap": true,
           "verticalAlign": "middle",
@@ -74,7 +74,7 @@
             "5G 모두 충분 110GB+(밀리의 서재)",
             "5G 모두 충분 200GB+(밀리의 서재)"
           ],
-          "inputHeight": 20,
+          "inputHeight": 18,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -96,8 +96,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 60.221275484125734,
-          "y": 22.73771376768265,
+          "x": 60.706438601335165,
+          "y": 23.85384114248775,
           "w": 10.111110628858059,
           "required": false,
           "wrap": true,
@@ -134,8 +134,8 @@
           "id": "baseFee",
           "label": "",
           "type": "text",
-          "x": 76.77746061350771,
-          "y": 25.408889747312436,
+          "x": 75.80368214816474,
+          "y": 26.18070955994707,
           "w": 12.333332700376198,
           "required": false,
           "wrap": true,
@@ -172,8 +172,8 @@
           "id": "이름",
           "label": "",
           "type": "text",
-          "x": 23.99982579675804,
-          "y": 31.693398916575376,
+          "x": 23.63343350367557,
+          "y": 32.20768343858826,
           "w": 25.888887336636873,
           "required": true,
           "wrap": true,
@@ -210,8 +210,8 @@
           "id": "생년월일",
           "label": "",
           "type": "text",
-          "x": 64.77675613221868,
-          "y": 31.692988068051207,
+          "x": 65.7488105745233,
+          "y": 32.03585806032388,
           "w": 25.999998440212778,
           "required": true,
           "wrap": true,
@@ -248,8 +248,8 @@
           "id": "주소",
           "label": "",
           "type": "text",
-          "x": 23.9984250218082,
-          "y": 36.17182518374936,
+          "x": 23.268913428039433,
+          "y": 36.34336948476088,
           "w": 66.66666234899482,
           "required": true,
           "wrap": true,
@@ -438,8 +438,8 @@
           "id": "납부자생년월일",
           "label": "",
           "type": "text",
-          "x": 68.55555429717649,
-          "y": 41.357443185888535,
+          "x": 69.76967792494693,
+          "y": 41.35660614254753,
           "w": 22.555554229359657,
           "required": true,
           "wrap": true,
@@ -514,8 +514,8 @@
           "id": "유심번호",
           "label": "",
           "type": "text",
-          "x": 68.77706781839547,
-          "y": 56.2842949184853,
+          "x": 70.23515445789171,
+          "y": 57.40087687155319,
           "w": 21.99999871148012,
           "required": true,
           "wrap": true,
@@ -628,8 +628,8 @@
           "id": "년",
           "label": "",
           "type": "text",
-          "x": 29.55153879451912,
-          "y": 84.9556691261844,
+          "x": 27.242914229431836,
+          "y": 90.71181263818445,
           "w": 5.999999593098986,
           "required": false,
           "wrap": true,
@@ -666,8 +666,8 @@
           "id": "월",
           "label": "",
           "type": "text",
-          "x": 37.77659520286762,
-          "y": 84.95828723276013,
+          "x": 37.16906316812828,
+          "y": 90.6272895280696,
           "w": 4.444444143036286,
           "required": false,
           "wrap": true,
@@ -698,14 +698,14 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "11"
         },
         {
           "id": "일",
           "label": "",
           "type": "text",
-          "x": 43.88746854061764,
-          "y": 84.95894895200455,
+          "x": 44.1303271996334,
+          "y": 90.71459703991354,
           "w": 3,
           "required": false,
           "wrap": true,
@@ -736,7 +736,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "05"
         },
         {
           "id": "IMEI 1",
@@ -857,8 +857,8 @@
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 80.77226557262739,
-          "y": 47.40468437766216,
+          "x": 81.98717431011544,
+          "y": 47.318773202036816,
           "w": 9.99999952528215,
           "required": false,
           "wrap": true,
@@ -895,8 +895,8 @@
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 67.55382164484173,
-          "y": 85.11591067480691,
+          "x": 68.16009989891005,
+          "y": 91.04371227555153,
           "w": 14.555554771894341,
           "required": false,
           "wrap": true,
@@ -933,8 +933,8 @@
           "id": "자필기재",
           "label": "",
           "type": "text",
-          "x": 44.88888923550827,
-          "y": 82.44556663929961,
+          "x": 36.50343135520824,
+          "y": 82.61638746790597,
           "w": 17.77777677559565,
           "required": false,
           "wrap": true,
@@ -971,8 +971,8 @@
           "id": "totalFee",
           "label": "",
           "type": "text",
-          "x": 31.887469354419668,
-          "y": 22.738157311379087,
+          "x": 30.427043663723406,
+          "y": 23.85289989934204,
           "w": 8.777777385947171,
           "required": false,
           "wrap": true,
@@ -1009,9 +1009,9 @@
           "id": "비상연락처",
           "label": "",
           "type": "text",
-          "x": 23.853270054811514,
-          "y": 33.33951843366169,
-          "w": 25.96222664015905,
+          "x": 23.364363371754337,
+          "y": 33.853414305763174,
+          "w": 24.625653029493215,
           "required": true,
           "wrap": true,
           "verticalAlign": "middle",
@@ -1029,7 +1029,7 @@
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 18,
+          "inputHeight": 15,
           "borderColor": "#ff3b3b",
           "borderWidth": 2,
           "bgColor": "#000000",
@@ -1047,8 +1047,8 @@
           "id": "신규",
           "label": "",
           "type": "checkmark",
-          "x": 26.38497818038758,
-          "y": 18.32410531242228,
+          "x": 25.14186039768078,
+          "y": 19.498019561497102,
           "w": 2,
           "required": true,
           "wrap": true,
@@ -1087,8 +1087,8 @@
           "id": "번이",
           "label": "",
           "type": "checkmark",
-          "x": 38.64070989221216,
-          "y": 18.42223817460325,
+          "x": 38.12580229161443,
+          "y": 19.251804512555605,
           "w": 2,
           "required": true,
           "wrap": true,
@@ -1127,8 +1127,8 @@
           "id": "계좌",
           "label": "",
           "type": "checkmark",
-          "x": 25.89170590814841,
-          "y": 38.704713865550154,
+          "x": 25.133752658978608,
+          "y": 39.018618471102315,
           "w": 2,
           "required": true,
           "wrap": true,
@@ -1167,8 +1167,8 @@
           "id": "카드",
           "label": "",
           "type": "checkmark",
-          "x": 35.453458896196224,
-          "y": 38.775141549024006,
+          "x": 34.331009770001266,
+          "y": 39.17552029508995,
           "w": 2,
           "required": true,
           "wrap": true,
@@ -1366,14 +1366,14 @@
       ]
     },
     {
-      "bg": "images/teen-2.jpg",
+      "bg": "images/teen-2-mw36lx4w.jpg?v=1793861141625",
       "fields": [
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 70.22033215194145,
-          "y": 16.6888542408004,
+          "x": 69.12653938573709,
+          "y": 18.320582066858783,
           "w": 15.333332496925692,
           "required": false,
           "wrap": true,
@@ -1403,15 +1403,14 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 69.99874064136145,
-          "y": 52.19782854432411,
+          "x": 71.33421007412397,
+          "y": 55.97737115141671,
           "w": 14.666665672019743,
           "required": false,
           "wrap": true,
@@ -1441,20 +1440,19 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
     {
-      "bg": "images/teen-3.jpg",
+      "bg": "images/teen-3-mw36m9u9.jpg?v=1793861158079",
       "fields": [
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 70.22072548958839,
-          "y": 13.467686475120363,
+          "x": 70.82763307203906,
+          "y": 14.841843097756517,
           "w": 14.555554771894341,
           "required": false,
           "wrap": true,
@@ -1484,15 +1482,14 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 70.66666526511874,
-          "y": 31.30145886077072,
+          "x": 72.12309879738484,
+          "y": 33.96436039198503,
           "w": 14.22222146116662,
           "required": false,
           "wrap": true,
@@ -1522,15 +1519,14 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 70.44444305796691,
-          "y": 22.502472576292632,
+          "x": 70.80707542128908,
+          "y": 24.39254946534243,
           "w": 14.333332564742527,
           "required": false,
           "wrap": true,
@@ -1560,15 +1556,14 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 14.053992504827809,
-          "y": 62.2988741184819,
+          "x": 7.244612163825491,
+          "y": 65.2184806248638,
           "w": 72.6666619420938,
           "required": false,
           "wrap": true,
@@ -1587,7 +1582,7 @@
           "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
-          "inputHeight": 39,
+          "inputHeight": 33,
           "borderColor": "#ff3b3b",
           "borderWidth": 2,
           "bgColor": "#ff94eb",
@@ -1598,15 +1593,14 @@
           "placeholder": "제휴 요금제 선택시 성함/싸인 필수 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 71.11040099348952,
-          "y": 57.540012676239094,
+          "x": 71.96047680400616,
+          "y": 61.49154580125853,
           "w": 14.555554771894341,
           "required": false,
           "wrap": true,
@@ -1636,15 +1630,14 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "affiliate_millie",
           "label": "밀리의서재",
           "type": "checkmark",
-          "x": 88.9122084949851,
-          "y": 42.49747652492121,
+          "x": 90.67798049411189,
+          "y": 45.624467371740806,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1683,8 +1676,8 @@
           "id": "affiliate_moazine",
           "label": "모아진",
           "type": "checkmark",
-          "x": 88.91308129171126,
-          "y": 53.61073573917838,
+          "x": 90.31486207648143,
+          "y": 57.42411168146192,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1723,8 +1716,8 @@
           "id": "affiliate_pay5000",
           "label": "Pay_5000",
           "type": "checkmark",
-          "x": 88.82053453329347,
-          "y": 50.88324949106223,
+          "x": 90.46522512444535,
+          "y": 54.44023457352299,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1763,8 +1756,8 @@
           "id": "affiliate_pay3000",
           "label": "Pay_3000",
           "type": "checkmark",
-          "x": 88.8072001388656,
-          "y": 51.0018794976955,
+          "x": 90.4531515835287,
+          "y": 54.559046201352416,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1803,8 +1796,8 @@
           "id": "affiliate_daiso5000",
           "label": "다이소_5000",
           "type": "checkmark",
-          "x": 88.81395522186098,
-          "y": 51.06511422825526,
+          "x": 90.45749004878438,
+          "y": 54.449652248674454,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1843,8 +1836,8 @@
           "id": "affiliate_cu",
           "label": "CU",
           "type": "checkmark",
-          "x": 88.91176603553362,
-          "y": 54.80471937088598,
+          "x": 90.50028140694722,
+          "y": 58.73880025530499,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1883,8 +1876,8 @@
           "id": "affiliate_baedal",
           "label": "배달의민족",
           "type": "checkmark",
-          "x": 88.91983940525085,
-          "y": 45.96816759345868,
+          "x": 90.68515935627855,
+          "y": 49.352020951285866,
           "w": 2,
           "required": false,
           "wrap": true,
@@ -1922,7 +1915,7 @@
       ]
     },
     {
-      "bg": "images/teen-4.jpg",
+      "bg": "images/teen-4-mw36pq3r.jpg?v=1793861319125",
       "fields": [
         {
           "id": "성함/싸인자필기재",
@@ -1959,15 +1952,14 @@
           "placeholder": "5G 요금제 선택시 성함/싸인 필수 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "성함/싸인자필기재",
           "label": "",
           "type": "text",
-          "x": 69.88888754008738,
-          "y": 30.280147952750948,
+          "x": 71.22396855955017,
+          "y": 32.94265799932923,
           "w": 14.66666587547025,
           "required": false,
           "wrap": true,
@@ -1997,20 +1989,19 @@
           "placeholder": "법대 성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },
     {
-      "bg": "images/teen-5.jpg",
+      "bg": "images/teen-5-mw36qer1.jpg?v=1793861351068",
       "fields": [
         {
           "id": "판매점명",
           "label": "",
           "type": "text",
-          "x": 64.77675613221868,
-          "y": 61.70292680339832,
+          "x": 65.87031726640201,
+          "y": 65.91264613389752,
           "w": 23.77777636869464,
           "required": true,
           "wrap": true,
@@ -2040,15 +2031,14 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "판매자명",
           "label": "",
           "type": "text",
-          "x": 64.66666567201975,
-          "y": 63.983407917403625,
+          "x": 65.63856164376958,
+          "y": 68.3645084948898,
           "w": 23.77777636869464,
           "required": true,
           "wrap": true,
@@ -2078,15 +2068,14 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "판매자 싸인",
           "label": "",
           "type": "text",
-          "x": 61.66666587547025,
-          "y": 66.65452875376306,
+          "x": 78.5554334605134,
+          "y": 71.20616087948082,
           "w": 10.111110628858055,
           "required": false,
           "wrap": true,
@@ -2116,15 +2105,14 @@
           "placeholder": "판매자 싸인",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "고객 성함",
           "label": "",
           "type": "text",
-          "x": 58.99874138734664,
-          "y": 75.6086354553199,
+          "x": 59.72778095808293,
+          "y": 80.93521709209458,
           "w": 29.555553754641807,
           "required": false,
           "wrap": true,
@@ -2154,15 +2142,14 @@
           "placeholder": "고객 성함",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "고객 싸인",
           "label": "",
           "type": "text",
-          "x": 67.55453372161637,
-          "y": 79.38085711438815,
+          "x": 76.18150685058495,
+          "y": 84.44969839318522,
           "w": 11.666666078920757,
           "required": false,
           "wrap": true,
@@ -2192,8 +2179,7 @@
           "placeholder": "고객 싸인",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "년",
@@ -2214,8 +2200,7 @@
           "bgTransparent": true,
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
-          "radioOuterBorderWidth": 1,
-          "value": ""
+          "radioOuterBorderWidth": 1
         },
         {
           "id": "년",
@@ -2274,8 +2259,7 @@
           "bgTransparent": true,
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
-          "radioOuterBorderWidth": 1,
-          "value": ""
+          "radioOuterBorderWidth": 1
         },
         {
           "id": "월",
@@ -2313,7 +2297,7 @@
           "autoDate": "month",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "11"
         },
         {
           "id": "월",
@@ -2351,7 +2335,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "07"
+          "value": "05"
         }
       ]
     }
