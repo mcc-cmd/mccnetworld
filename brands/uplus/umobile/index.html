@@ -3160,7 +3160,7 @@ else if (f.type === 'checkmark') {
 
   // [MCC_TYPING_IMAGECHECK_STATIC_1] 체크이미지 = 항상 찍혀 있는 손글씨 체크 그림(도장처럼).
   // 요금제 자동 체크를 켠 칸만 조건이 맞을 때 표시(예전 방식 유지).
-  const __icAuto = !!(f.autoCheck && f.autoCheck.enabled);
+  const __icAuto = !!(f.autoCheck && f.autoCheck.enabled) || /^(affiliate_|5g요금제$|5g체크$|5g동의$)/i.test(String(f.id || '').replace(/\s+/g, ''));
   if (!__icAuto) { f.value = true; if (f.id) valuesById[f.id] = true; }
   ctrl.innerHTML = '';
   if (f.value || !FILL) {
@@ -5450,5 +5450,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
+<script src="../../../assets/js/mcc-imagecheck.js?v=1"></script>
 </body>
 </html>
