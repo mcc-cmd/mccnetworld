@@ -2772,6 +2772,28 @@ else if (f.type === 'checkmark') {
     ctrl.appendChild(img);
   }
 
+  // [MCC_TYPING_IMAGECHECK_CLICK_1] 체크이미지: 입력 화면에서 눌러서 체크/해제, 설계 화면에서는 흐린 그림으로 위치 미리보기
+  const __drawIc = (on) => {
+    ctrl.innerHTML = '';
+    if (!on && FILL) return;
+    const img = document.createElement('img');
+    img.src = CHECK_IMAGE_SRC;
+    img.alt = 'check';
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;pointer-events:none;' + (on ? '' : 'opacity:.3;');
+    ctrl.appendChild(img);
+  };
+  __drawIc(!!f.value);
+  if (FILL && !f.locked) {
+    w.style.cursor = 'pointer';
+    w.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      f.value = !f.value;
+      if (f.id) valuesById[f.id] = !!f.value;
+      __drawIc(f.value);
+      try { scheduleSave(); } catch (_) {}
+      try { refreshConditionalInvalid(); } catch (_) {}
+    });
+  }
   lab.style.display = 'none';
 }
 
