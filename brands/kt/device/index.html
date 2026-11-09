@@ -924,6 +924,9 @@ body > [style*="position: fixed"]:not(#printAll){
 .field.checkmark.ck-image .checkmark-box.checked::after{content:none !important}
 .field.checkmark .checkmark-box .ck-img{display:none;width:100%;height:100%;object-fit:contain;pointer-events:none}
 .field.checkmark .checkmark-box.checked .ck-img{display:block}
+/* [MCC_TYPING_IMAGECHECK_STATIC_1] 체크이미지는 체크 여부와 상관없이 항상 보이는 그림 */
+.field.checkmark.ck-image .checkmark-box .ck-img{display:block}
+.field.checkmark.ck-image{cursor:default}
 html:not(.fill) .field.checkmark .checkmark-box{
   outline:1px dashed #ff3b3b;
   background:rgba(255,59,59,.08) !important;
@@ -3709,7 +3712,7 @@ document.getElementById('addField').onclick=()=>{
   if(t==='radio'){ base.radioSize=18; base.radioGap=12; }
   if(t==='checkmark'){ base.checkSize=18; base.checkStyle='tick'; base.groupId=''; base.checkGroup=''; base.checkValue=label || id || ''; }
   // [MCC_TYPING_IMAGECHECK_1] 체크이미지 = 체크표시와 같은 동작(그룹·조건부필수·값) + 손글씨 체크 이미지(images/check_on.png)
-  if(t==='imagecheck'){ base.type='checkmark'; base.checkSize=30; base.checkStyle='image'; base.groupId=''; base.checkGroup=''; base.checkValue=label || id || ''; }
+  if(t==='imagecheck'){ base.type='checkmark'; base.checkSize=30; base.checkStyle='image'; base.value=true; base.groupId=''; base.checkGroup=''; base.checkValue=label || id || ''; }
 
   // ✅ 고정텍스트는 입력한 ID를 표시문구로도 같이 저장
   if (t === 'label') {
