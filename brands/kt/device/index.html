@@ -897,8 +897,35 @@ body > [style*="position: fixed"]:not(#printAll){
 .form-btn{border:none;border-radius:10px;padding:8px 14px;background:#111827;color:#fff;font-weight:900;cursor:pointer}
 .form-btn.ghost{background:#fff;color:#111827;border:1px solid #d1d5db}
 .form-toast{margin-top:8px;font-size:12px;font-weight:800;color:#16a34a;display:none}.form-toast.show{display:block}
+/* [MCC_TYPING_CHECKMARK_SYMBOL_1] 체크표시를 엠모바일과 같게 — 네모 칸 없이 서류 위에 ✓ 글자만(2026-11-09) */
+.field.checkmark .checkmark-box{
+  border-color:transparent !important;
+  background:transparent !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.field.checkmark .checkmark-box.checked::after{
+  content:"\2713" !important;
+  position:static !important;
+  inset:auto !important;
+  width:auto !important;
+  height:auto !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:none !important;
+  transform:none !important;
+  font-size:var(--cksize,18px);
+  font-weight:900;
+  line-height:1;
+  color:#000;
+}
+html:not(.fill) .field.checkmark .checkmark-box{
+  outline:1px dashed #ff3b3b;
+  background:rgba(255,59,59,.08) !important;
+}
 @media print{
-  #printAll .field.checkmark .checkmark-box{display:block !important}
+  #printAll .field.checkmark .checkmark-box{display:flex !important;outline:none !important;background:transparent !important}
   #formModal,.form-modal,.form-backdrop{display:none !important;visibility:hidden !important}
 }
 
@@ -1257,7 +1284,7 @@ const fields = Array.from(document.querySelectorAll(
             <option value="select">드롭다운</option>
             <option value="radio">라디오(단일선택)</option>
             <option value="checkbox">체크박스</option>
-            <option value="checkmark">체크표시(checkmark)</option>
+            <option value="checkmark">체크표시(✓)</option>
             <option value="label">고정텍스트</option>
           </select>
         </div>
