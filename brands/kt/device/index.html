@@ -4235,7 +4235,11 @@ if (f.type === 'radio') {
 
     let ctrl;
     const lockByPlaceholder = !!f.lockOnPh && !!f.placeholder && !f.value;
-    if (f.locked || lockByPlaceholder) {
+    // [MCC_TYPING_PRINT_LOCKED_MIRROR_1] 잠긴 칸은 인쇄에서 빼지만, 다른 칸 값을 받아 쓰는 칸(예: 마지막 장 판매직원 ← 첫 장 상담사)은
+    // 값이 있으면 인쇄한다(웹에는 보이는데 인쇄에 안 나오던 문제, 2026-11-10)
+    const isMirrorTarget = !!f.id && (pages || []).some(pg => (pg.fields || []).some(sf => Array.isArray(sf.mirrorTo) && sf.mirrorTo.includes(f.id)));
+    const printLockedValue = isMirrorTarget && String(f.value ?? '').trim() !== '';
+    if ((f.locked && !printLockedValue) || lockByPlaceholder) {
   return;
 }
 
