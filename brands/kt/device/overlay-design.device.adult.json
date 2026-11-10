@@ -1685,7 +1685,7 @@
           "groupId": "신규/번이",
           "checkGroup": "신규/번이",
           "checkValue": "번이",
-          "value": true,
+          "value": false,
           "inputHeight": 21,
           "radioSize": 15,
           "radioGap": 12,
