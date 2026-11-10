@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "updatedAt": null,
+  "updatedBy": null,
+  "links": [
+    {
+      "group": "KT",
+      "key": "kt_regular_new",
+      "label": "정규KT 신규",
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=7BA3C27E-6D19-4935-B75E-BE1E04FA2BCB"
+    },
+    {
+      "group": "KT",
+      "key": "kt_regular_mnp",
+      "label": "정규KT 번호이동",
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=F7D71C67-08E1-4213-B81B-042609F9F083"
+    },
+    {
+      "group": "KT",
+      "key": "kt_welcome_new",
+      "label": "웰컴 요금제 신규",
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0"
+    },
+    {
+      "group": "KT",
+      "key": "kt_welcome_mnp",
+      "label": "웰컴 요금제 번호이동",
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF"
+    },
+    {
+      "group": "KT",
+      "key": "kt_wired",
+      "label": "KT 유선 동판",
+      "url": "https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=F28B3598-BE12-46EC-AE2D-AE3EBCD8933D"
+    },
+    {
+      "group": "SK",
+      "key": "sk_local",
+      "label": "SK 내국인 T-GATE (내국인 카드·내국인/여권 안내의 T-GATE 링크)",
+      "url": "https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1"
+    },
+    {
+      "group": "SK",
+      "key": "sk_foreign_id",
+      "label": "SK 외국인등록증 접수 페이지(T-GATE)",
+      "url": "https://tgateplus.sktelecom.com/main/main.do?p=ddd6d3e00013df63dcb2543d917fb82ef5415f2e0c93820d11d3fec6437f9136"
+    },
+    {
+      "group": "SK",
+      "key": "sk_foreign_apply",
+      "label": "SK 외국인 접수신청",
+      "url": "https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149"
+    },
+    {
+      "group": "SK",
+      "key": "sk_foreign_passport",
+      "label": "SK 외국인 여권",
+      "url": "https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149"
+    },
+    {
+      "group": "SK",
+      "key": "sk_foreign",
+      "label": "SK 외국인 카드",
+      "url": "https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149"
+    },
+    {
+      "group": "SK",
+      "key": "sk_telink",
+      "label": "SK텔링크 가입",
+      "url": "https://smvno.sk7mobile.com/main.do"
+    },
+    {
+      "group": "LG",
+      "key": "lg_foreign_new",
+      "label": "LG 외국인등록증 신규",
+      "url": "https://onsalemobile.uplus.co.kr/open-market?formId=3130424&agentId=339276&openmktCd=20082"
+    },
+    {
+      "group": "LG",
+      "key": "lg_foreign_mnp",
+      "label": "LG 외국인등록증 번호이동",
+      "url": "https://onsalemobile.uplus.co.kr/open-market?formId=3130423&agentId=339276&openmktCd=20082"
+    }
+  ]
+}

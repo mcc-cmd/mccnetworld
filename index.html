@@ -1370,6 +1370,23 @@ const SK_LINK_ONLY = [
     logoAdult:'./assets/logos/SK_MNP.png', logoTeen:'./assets/logos/SK_MNP.png' },
 ];
 
+/* ✅ [MCC_TYPING_LINKS_1] 접수 URL은 assets/links.json 에서 읽는다(포털 신청서 양식 관리 → 접수 URL 관리에서 바꿈).
+   파일을 못 읽으면 아래 기본값(마지막으로 코드에 적힌 주소)을 쓴다. */
+const MCC_LINKS = (function(){
+  const map = {};
+  try {
+    const x = new XMLHttpRequest();
+    x.open('GET', './assets/links.json?ts=' + Date.now(), false);
+    x.send(null);
+    if (x.status >= 200 && x.status < 300) {
+      const j = JSON.parse(x.responseText);
+      (j.links || []).forEach(l => { if (l && l.key && /^https?:\/\//.test(String(l.url || ''))) map[l.key] = String(l.url); });
+    }
+  } catch (e) { console.warn('[links] 기본 주소 사용', e); }
+  return map;
+})();
+function mccLink(key, fallback){ return MCC_LINKS[key] || fallback; }
+
 /* ✅ LG 링크 전용 카드
    - 외국인등록증 접수를 신규 / 번호이동 2개 카드로 분리합니다.
    - 이미지는 아래 logoAdult/logoTeen 경로에 넣으면 됩니다.
@@ -1405,10 +1422,10 @@ const CANCEL_CARDS = BRANDS.map(b => ({...b, doc:'cancel'}));
 */
 const LG_LINK_URLS = {
   // LG 외국인등록증 신규 접수 URL
-  foreignNew: 'https://onsalemobile.uplus.co.kr/open-market?formId=3130424&agentId=339276&openmktCd=20082',
+  foreignNew: mccLink('lg_foreign_new', 'https://onsalemobile.uplus.co.kr/open-market?formId=3130424&agentId=339276&openmktCd=20082'),
 
   // LG 외국인등록증 번호이동 접수 URL
-  foreignMnp: 'https://onsalemobile.uplus.co.kr/open-market?formId=3130423&agentId=339276&openmktCd=20082'
+  foreignMnp: mccLink('lg_foreign_mnp', 'https://onsalemobile.uplus.co.kr/open-market?formId=3130423&agentId=339276&openmktCd=20082')
 };
 
 const BRAND_ROUTE = {
@@ -1421,14 +1438,14 @@ const BRAND_ROUTE = {
   '스테이지파이브(SK)':{ carrier:'sk', brand:'stagefive-sk'},
   '프리티SK':       { carrier:'sk',    brand:'freeT-sk'  },
 
-  '정규KT신규':     { external: 'https://online.kt.com/itg/online/index.do?prdcId=7BA3C27E-6D19-4935-B75E-BE1E04FA2BCB' },
-  '정규KT번이':     { external: 'https://online.kt.com/itg/online/index.do?prdcId=F7D71C67-08E1-4213-B81B-042609F9F083' },
-  '웰컴 요금제 신규': { external: 'https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0' },
-  '웰컴 요금제 번이': { external: 'https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF' },
-  'KT 유선 동판':  { external: 'https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=F28B3598-BE12-46EC-AE2D-AE3EBCD8933D' },
+  '정규KT신규':     { external: mccLink('kt_regular_new', 'https://online.kt.com/itg/online/index.do?prdcId=7BA3C27E-6D19-4935-B75E-BE1E04FA2BCB') },
+  '정규KT번이':     { external: mccLink('kt_regular_mnp', 'https://online.kt.com/itg/online/index.do?prdcId=F7D71C67-08E1-4213-B81B-042609F9F083') },
+  '웰컴 요금제 신규': { external: mccLink('kt_welcome_new', 'https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0') },
+  '웰컴 요금제 번이': { external: mccLink('kt_welcome_mnp', 'https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF') },
+  'KT 유선 동판':  { external: mccLink('kt_wired', 'https://online.kt.com/itg/simple/simpleCustomerInfoPop.do?prdcId=F28B3598-BE12-46EC-AE2D-AE3EBCD8933D') },
 
-  'SK 내국인': { external: 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1' },
-  'SK 외국인': { external: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149' },
+  'SK 내국인': { external: mccLink('sk_local', 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1') },
+  'SK 외국인': { external: mccLink('sk_foreign', 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149') },
 
   'LG 외국인신규': { external: LG_LINK_URLS.foreignNew },
   'LG 외국인번호이동': { external: LG_LINK_URLS.foreignMnp },
@@ -1436,7 +1453,7 @@ const BRAND_ROUTE = {
   'SK텔링크': {
     carrier: 'sk',
     brand: '7mobile',
-    externalJoin: 'https://smvno.sk7mobile.com/main.do'
+    externalJoin: mccLink('sk_telink', 'https://smvno.sk7mobile.com/main.do')
   }
 };
 
@@ -1444,10 +1461,10 @@ const BRAND_ROUTE = {
    - 아래 4개 주소만 교체하면 화면의 4개 이미지 카드 링크가 각각 변경됩니다.
    - T-GATE 접수양식 / 여권접수양식은 팝업 양식 버튼이므로 URL을 사용하지 않습니다. */
 const SK_LINK_URLS = {
-  foreignId: 'https://tgateplus.sktelecom.com/main/main.do?p=ddd6d3e00013df63dcb2543d917fb82ef5415f2e0c93820d11d3fec6437f9136',
-  foreignApply: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149',
-  foreignPassport: 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149',
-  local: 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1'
+  foreignId: mccLink('sk_foreign_id', 'https://tgateplus.sktelecom.com/main/main.do?p=ddd6d3e00013df63dcb2543d917fb82ef5415f2e0c93820d11d3fec6437f9136'),
+  foreignApply: mccLink('sk_foreign_apply', 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149'),
+  foreignPassport: mccLink('sk_foreign_passport', 'https://korea-mvno.com/register/mno/foreigners?phoneplan=2&event=149'),
+  local: mccLink('sk_local', 'https://tgateplus.sktelecom.com/main/main.do?p=5ea5fabb48dafa78b8013f1891ea49ed801e90e8769b20206557d2f3294dcec1')
 };
 
 /* ✅ SK 링크 공지/안내 내용 관리
