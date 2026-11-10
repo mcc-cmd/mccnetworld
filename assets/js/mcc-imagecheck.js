@@ -211,5 +211,39 @@
     };
   }
 
+  // [MCC_TYPING_DRAG_INPUTS_1] 설계 화면: 텍스트박스·텍스트영역·드롭다운 칸 위를 눌러 끌어도 칸이 움직이게(2026-11-10)
+  // - 4px 넘게 끌면 이동, 그냥 누르면 지금처럼 입력칸에 글자 입력 / 드롭다운은 목록 열기
+  if (!IS_FILL && typeof startDrag === 'function') {
+    var host = stageEl() || document;
+    host.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      var ctl = e.target && e.target.closest ? e.target.closest('input, textarea, select') : null;
+      if (!ctl) return;
+      var w = ctl.closest('.field[data-i]');
+      if (!w || w.closest('#printAll')) return;
+      var i = Number(w.dataset.i);
+      var isSel = ctl.tagName === 'SELECT';
+      e.stopPropagation();          // 채널 원래 처리(입력칸에서는 이동 안 함 등)보다 먼저
+      if (isSel) e.preventDefault(); // 드롭다운은 바로 열지 않고, 안 끌었으면 놓을 때 연다
+      var sx = e.clientX, sy = e.clientY, dragging = false;
+      function mv(ev) {
+        if (dragging) return;
+        if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 4) return;
+        dragging = true;
+        try { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); window.getSelection().removeAllRanges(); } catch (_) {}
+        try { if (typeof select === 'function') select(i); } catch (_) {}
+        var el = document.querySelector('.field[data-i="' + i + '"]') || w;
+        startDrag({ clientX: sx, clientY: sy, stopPropagation: function () {}, preventDefault: function () {} }, i, el);
+      }
+      function up() {
+        window.removeEventListener('mousemove', mv, true);
+        window.removeEventListener('mouseup', up, true);
+        if (!dragging && isSel) { try { ctl.focus(); if (ctl.showPicker) ctl.showPicker(); } catch (_) {} }
+      }
+      window.addEventListener('mousemove', mv, true);
+      window.addEventListener('mouseup', up, true);
+    }, true);
+  }
+
   try { decorate(); } catch (_) {}
 })();
