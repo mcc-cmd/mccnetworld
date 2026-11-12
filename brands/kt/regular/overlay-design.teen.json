@@ -1,0 +1,29 @@
+{
+  "pages": [
+    {
+      "bg": "images/adult-1.jpg",
+      "fields": []
+    },
+    {
+      "bg": "images/adult-2.jpg",
+      "fields": []
+    },
+    {
+      "bg": "images/adult-3.jpg",
+      "fields": []
+    },
+    {
+      "bg": "images/adult-4.jpg",
+      "fields": []
+    },
+    {
+      "bg": "images/adult-5.jpg",
+      "fields": []
+    },
+    {
+      "bg": "images/adult-6.jpg",
+      "fields": []
+    }
+  ],
+  "conditionalRequired": []
+}
