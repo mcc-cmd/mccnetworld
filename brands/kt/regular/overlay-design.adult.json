@@ -1,27 +1,45 @@
 {
   "pages": [
     {
-      "bg": "images/adult-1.jpg",
+      "bg": "images/adult-1-mwdbglet.jpg?v=1794473953573",
+      "fields": [
+        {
+          "id": "kids_notice",
+          "label": "",
+          "type": "label",
+          "x": 4,
+          "y": 2.4,
+          "w": 54,
+          "inputHeight": 16,
+          "fontSize": 11,
+          "color": "#000000",
+          "textAlign": "left",
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "value": ""
+        }
+      ]
+    },
+    {
+      "bg": "images/adult-2-mwdbjhju.jpg?v=1794474088533",
       "fields": []
     },
     {
-      "bg": "images/adult-2.jpg",
+      "bg": "images/adult-3-mwdbgwru.jpg?v=1794473968297",
       "fields": []
     },
     {
-      "bg": "images/adult-3.jpg",
+      "bg": "images/adult-4-mwdbh3im.jpg?v=1794473977035",
       "fields": []
     },
     {
-      "bg": "images/adult-4.jpg",
+      "bg": "images/adult-5-mwdbh8cw.jpg?v=1794473983310",
       "fields": []
     },
     {
-      "bg": "images/adult-5.jpg",
-      "fields": []
-    },
-    {
-      "bg": "images/adult-6.jpg",
+      "bg": "images/adult-6-mwdbhdwr.jpg?v=1794473990505",
       "fields": []
     }
   ],

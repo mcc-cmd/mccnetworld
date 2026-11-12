@@ -1,27 +1,45 @@
 {
   "pages": [
     {
-      "bg": "images/adult-1.jpg",
+      "bg": "images/teen-1-mwddgc5l.jpg?v=1794477300619",
+      "fields": [
+        {
+          "id": "kids_notice",
+          "label": "",
+          "type": "label",
+          "x": 4,
+          "y": 2.4,
+          "w": 54,
+          "inputHeight": 16,
+          "fontSize": 11,
+          "color": "#000000",
+          "textAlign": "left",
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "value": ""
+        }
+      ]
+    },
+    {
+      "bg": "images/teen-2-mwddgxrn.jpg?v=1794477328612",
       "fields": []
     },
     {
-      "bg": "images/adult-2.jpg",
+      "bg": "images/teen-3-mwddh7ht.jpg?v=1794477341217",
       "fields": []
     },
     {
-      "bg": "images/adult-3.jpg",
+      "bg": "images/teen-4-mwddhbno.jpg?v=1794477346621",
       "fields": []
     },
     {
-      "bg": "images/adult-4.jpg",
+      "bg": "images/teen-5-mwddhhm9.jpg?v=1794477354348",
       "fields": []
     },
     {
-      "bg": "images/adult-5.jpg",
-      "fields": []
-    },
-    {
-      "bg": "images/adult-6.jpg",
+      "bg": "images/teen-6-mwddhvg5.jpg?v=1794477372259",
       "fields": []
     }
   ],
