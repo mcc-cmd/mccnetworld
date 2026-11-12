@@ -1200,7 +1200,7 @@ body{
         </div>
       </div>
 
-      <!-- [MCC_TYPING_MNO_TAB_1] 정규 통신사(MNO) 후불 — SK·KT·LG 링크와 정규KT 양식 작성 -->
+      <!-- [MCC_TYPING_MNO_TAB_1] 정규 통신사(MNO) 후불 — SK·KT·LG 링크와 정규KT 서류 작성(외국인만 가능) -->
       <div class="doc-page" data-doc-panel="mno">
         <div class="section-title">MNO 후불 <span style="font-weight:400;font-size:.85em;color:#64748b">(정규 통신사)</span></div>
         <div id="mnoSection">
@@ -1360,8 +1360,8 @@ const PREPAID_BRANDS = [
 ].map(b => ({ ...b, carrier:'prepaid', doc:'prepaid' }));
 
 const JOIN_ONLY = [
-  // [MCC_TYPING_MNO_TAB_1] 정규KT(MNO) 신청서 양식 작성 — brands/kt/regular
-  { carrier:'kt', theme:'theme-mm', name:'정규KT 양식 작성', cap:'', special:true,
+  // [MCC_TYPING_MNO_TAB_1] 정규KT(MNO) 서류 작성(외국인만 가능) — brands/kt/regular
+  { carrier:'kt', theme:'theme-mm', name:'정규KT 서류 작성', cap:'', special:true,
     logoAdult:'./assets/logos/KTFORM.png', logoTeen:'./assets/logos/KTFORM.png' },
   { carrier:'kt', theme:'theme-mm', name:'정규KT신규', cap:'', special:true,
     logoAdult:'./assets/logos/KT010.png', logoTeen:'./assets/logos/KT010TEEN.png' },
@@ -1450,7 +1450,7 @@ const BRAND_ROUTE = {
   '스테이지파이브(SK)':{ carrier:'sk', brand:'stagefive-sk'},
   '프리티SK':       { carrier:'sk',    brand:'freeT-sk'  },
 
-  '정규KT 양식 작성': { carrier:'kt', brand:'regular' },
+  '정규KT 서류 작성': { carrier:'kt', brand:'regular' },
   '정규KT신규':     { external: mccLink('kt_regular_new', 'https://online.kt.com/itg/online/index.do?prdcId=7BA3C27E-6D19-4935-B75E-BE1E04FA2BCB') },
   '정규KT번이':     { external: mccLink('kt_regular_mnp', 'https://online.kt.com/itg/online/index.do?prdcId=F7D71C67-08E1-4213-B81B-042609F9F083') },
   '웰컴 요금제 신규': { external: mccLink('kt_welcome_new', 'https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0') },
@@ -1571,6 +1571,7 @@ const CARD_META = {
   '프리티SK': { esim: true, guideTitle: '프리티SK 안내 <span class="warn"><strong>프리텔레콤 FRD3204</strong></span>', guideSteps: ['프리티SK 신청서 작성', '본인확인 및 구비서류 확인', '서류 카톡 스캔본 접수 ,포털신분증 [SK알뜰폰] 프리텔레콤 FRD3204 스캔 접수'] },
   'SK 내국인': { esim: true, guideTitle: 'SK 내국인 접수 순서', guideSteps: ['티게이트 작성', 'T-GATE 접수양식 작성' ,'양식 카톡방 접수 '] },
   'SK 외국인': { esim: true, guideTitle: 'SK 외국인 접수 순서', guideSteps: ['티게이트 작성', '어드민 등록', '개통방에 요청서 접수(카톡접수) + 외국인등록증 앞/뒷면 발송'] },
+  '정규KT 서류 작성': { esim: true, guideTitle: '정규KT 서류 작성 안내 <span class="warn"><strong>외국인만 가능</strong></span>', guideSteps: ['정규KT 서류 작성 (외국인만 가능)', '본인확인 및 구비서류 확인', '서류 출력 후 자필 서명 · 카톡 접수'] },
   '정규KT신규': { esim: true, guideTitle: '정규KT 신규 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
   '정규KT번이': { esim: true, guideTitle: '정규KT 번호이동 안내', guideSteps: ['KT URL 접수', '양식 작성 후 카톡 전달', '개통 진행'] },
   'KT 유선 동판': { esim: null, guideTitle: 'KT 유선 동판 안내', guideSteps: ['KT 유선 접수 URL 작성', '양식 작성 후 카톡 전달', '접수 완료 확인'] },
