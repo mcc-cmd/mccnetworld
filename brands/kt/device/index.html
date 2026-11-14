@@ -2524,6 +2524,28 @@ function clampSplitByLastEdited(msrp, commonSubsidy, otherDiscount, extraSub, do
 }
 let EXTRA_SUBSIDY_LIMIT_POPUP_LOCK = false;
 
+// [MCC_KT_DEVICE_PAYTYPE_CHECKMARK_1] 일시불/할부 값 읽기
+//  - 체크표시 칸(체크 값 또는 ID가 "일시불"/"할부")이 서류에 있으면 그 체크를 기준으로 한다
+//  - 없으면 예전처럼 payType 선택 칸 값을 쓴다
+let LAST_PAY_TYPE = null;
+function isPayTypeCheckmark(f){
+  if (!f || f.type !== 'checkmark') return false;
+  const v = String(f.checkValue || f.id || '').trim();
+  return v === '일시불' || v === '할부';
+}
+function getPayTypeValue(){
+  let hasCheck = false;
+  for (const pg of pages) {
+    for (const f of (pg.fields || [])) {
+      if (!isPayTypeCheckmark(f)) continue;
+      hasCheck = true;
+      if (f.value) return String(f.checkValue || f.id).trim();
+    }
+  }
+  if (hasCheck) return '';
+  return String(valuesById.payType ?? '').trim();
+}
+
 function getExtraSubsidyMax(commonSubsidy){
   return Math.max(0, Math.floor((Number(commonSubsidy) || 0) * 0.15));
 }
@@ -2551,8 +2573,14 @@ const EXTRA_SUBSIDY_OVERRIDES = {};
   const dv = parsePackedId(rawDevice);
   const pl = parsePackedId(rawPlan);
 
-  // ✅ payType는 1번만
-  const payType = (valuesById.payType ?? '').toString().trim();
+  // ✅ payType는 1번만 — [MCC_KT_DEVICE_PAYTYPE_CHECKMARK_1] 일시불/할부를 체크표시(✓) 칸으로 바꿔도 계산되게
+  const payType = getPayTypeValue();
+  // 일시불에서 할부로 돌아오면, 일시불 때 자동으로 채운 고객수납금을 비운다(안 비우면 할부 원금이 0으로 굳음)
+  if (LAST_PAY_TYPE === '일시불' && payType !== '일시불') {
+    valuesById.downPayment = '0';
+    setValueById('downPayment', '0');
+  }
+  LAST_PAY_TYPE = payType;
 {
   const apr = Number(DEVICE_DB?.aprPercent ?? 0);
   if (payType === '일시불') setValueById('aprEcho', '0');
@@ -3226,6 +3254,8 @@ else if (f.type === 'label') {
         }
         scheduleSave();
         refreshConditionalInvalid();
+        // [MCC_KT_DEVICE_PAYTYPE_CHECKMARK_1] 일시불/할부 체크를 바꾸면 금액 즉시 재계산
+        if (isPayTypeCheckmark(f)) recalcDevicePricing();
       };
 
       ctrl.addEventListener('click', (ev)=>{ ev.stopPropagation(); setChecked(!f.value); });
