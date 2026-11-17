@@ -1,8 +1,44 @@
 {
   "pages": [
-    { "bg": "images/change-1.jpg", "fields": [] },
-    { "bg": "images/change-2.jpg", "fields": [] },
-    { "bg": "images/change-3.jpg", "fields": [] },
-    { "bg": "images/change-4.jpg", "fields": [] }
+    {
+      "bg": "images/change-1-mwk5cqk9.jpg?v=1794886958963",
+      "fields": []
+    },
+    {
+      "bg": "images/change-2-mwk5cxh5.jpg?v=1794886967921",
+      "fields": []
+    },
+    {
+      "bg": "images/change-3-mwk5d5ws.jpg?v=1794886978853",
+      "fields": []
+    },
+    {
+      "bg": "images/change-4-mwk5dh6m.jpg?v=1794886993464",
+      "fields": []
+    }
+  ],
+  "conditionalRequired": [
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "신규",
+      "requiredOn": [
+        "희망번호"
+      ]
+    },
+    {
+      "sourceId": "신규/번이",
+      "whenValue": "번이",
+      "requiredOn": [
+        "번호이동",
+        "전통신사"
+      ]
+    },
+    {
+      "sourceId": "전통신사",
+      "whenValue": "MVNO",
+      "requiredOn": [
+        "통신사명"
+      ]
+    }
   ]
 }
