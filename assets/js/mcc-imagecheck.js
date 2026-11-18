@@ -246,4 +246,33 @@
   }
 
   try { decorate(); } catch (_) {}
+
+  // [MCC_SELECT_LIST_FIXED_FONT_1] 드롭다운 목록 글씨 크기 고정
+  //  서류 위 선택칸은 칸 너비에 맞춰 글씨가 자동으로 작아진다(fitSelectText). 브라우저는 펼친 목록에도
+  //  그 작은 글씨를 그대로 써서 목록이 읽기 힘들었다 → 목록을 여는 순간만 고정 크기로 바꾸고, 고른 뒤 원래대로 맞춘다.
+  //  (서류 위에 보이는 글씨·인쇄 크기는 그대로)
+  var LIST_FONT_PX = 14;
+  function isFieldSelect(t) { return t && t.tagName === 'SELECT' && t.closest && t.closest('.field'); }
+  function enlarge(sel) {
+    if (sel.__mccListFont) return;
+    sel.__mccListFont = { fs: sel.style.fontSize };
+    sel.style.fontSize = LIST_FONT_PX + 'px';
+  }
+  function restore(sel) {
+    if (!sel.__mccListFont) return;
+    sel.style.fontSize = sel.__mccListFont.fs;
+    sel.__mccListFont = null;
+    try { if (typeof fitSelectText === 'function') fitSelectText(sel); } catch (_) {}
+  }
+  document.addEventListener('mousedown', function (e) { if (isFieldSelect(e.target)) enlarge(e.target); }, true);
+  document.addEventListener('touchstart', function (e) { if (isFieldSelect(e.target)) enlarge(e.target); }, { capture: true, passive: true });
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (!isFieldSelect(t)) return;
+    if (e.key === 'Escape' || e.key === 'Tab') { setTimeout(function () { restore(t); }, 0); return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === ' ' || e.key === 'Enter' || (e.altKey && e.key === 'ArrowDown')) enlarge(t);
+  }, true);
+  ['change', 'blur'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { if (isFieldSelect(e.target)) setTimeout(function () { restore(e.target); }, 0); }, true);
+  });
 })();
