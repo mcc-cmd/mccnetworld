@@ -1,11 +1,29 @@
 {
   "pages": [
     {
-      "bg": "images/adult-1.jpg",
-      "fields": []
+      "bg": "images/adult-1-mwn6ud00.jpg?v=1795070858330",
+      "fields": [
+        {
+          "id": "kids_notice",
+          "label": "",
+          "type": "label",
+          "x": 4,
+          "y": 2.4,
+          "w": 54,
+          "inputHeight": 16,
+          "fontSize": 11,
+          "color": "#000000",
+          "textAlign": "left",
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "value": ""
+        }
+      ]
     },
     {
-      "bg": "images/adult-2.jpg",
+      "bg": "images/adult-2-mwn6ujqs.jpg?v=1795070867071",
       "fields": []
     }
   ],
