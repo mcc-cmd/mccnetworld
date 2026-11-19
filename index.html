@@ -2027,7 +2027,9 @@ const skLinkHTML = skLinkItems.length ? `
       </div>
       <div class="brand-grid">
         ${ktSpecialItems.map(card).join('')}
-        ${formDuoCard()}
+        ${/* [MCC_KT_FORM_CARDS_1] 유심양식/동판양식을 SK 링크처럼 각각 한 칸짜리 카드로 */''}
+        ${skLinkCard({ title:'유심양식', form:'usim', guideKey:'', esim:null })}
+        ${skLinkCard({ title:'동판양식', form:'dongpan', guideKey:'', esim:null })}
       </div>
     </section>
   ` : '';
