@@ -1,8 +1,26 @@
 {
   "pages": [
     {
-      "bg": "images/adult-1.jpg",
-      "fields": []
+      "bg": "images/adult-1-mwn6vvqn.jpg?v=1795070929271",
+      "fields": [
+        {
+          "id": "kids_notice",
+          "label": "",
+          "type": "label",
+          "x": 4,
+          "y": 2.4,
+          "w": 54,
+          "inputHeight": 16,
+          "fontSize": 11,
+          "color": "#000000",
+          "textAlign": "left",
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "value": ""
+        }
+      ]
     }
   ],
   "conditionalRequired": []
