@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "updatedAt": null,
-  "updatedBy": null,
+  "updatedAt": "2026-11-19T04:52:21.327Z",
+  "updatedBy": "Super Admin",
   "links": [
     {
       "group": "KT",
       "key": "kt_regular_new",
       "label": "정규KT 신규/번호이동",
-      "url": "https://online.kt.com/itg/online/index.do?prdcId=7BA3C27E-6D19-4935-B75E-BE1E04FA2BCB"
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=7A477FA2-A9E7-4CB1-9FE1-0F3C9BA65C36"
     },
     {
       "group": "KT",
       "key": "kt_welcome_new",
       "label": "웰컴 요금제 신규/번호이동",
-      "url": "https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0"
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=65688AA8-02AE-4774-B411-3CADB88B01E3"
     },
     {
       "group": "KT",
@@ -68,6 +68,16 @@
       "key": "lg_foreign_mnp",
       "label": "LG 외국인등록증 번호이동",
       "url": "https://onsalemobile.uplus.co.kr/open-market?formId=3130423&agentId=339276&openmktCd=20082"
+    }
+  ],
+  "history": [
+    {
+      "at": "2026-11-19T04:52:21.327Z",
+      "by": "Super Admin",
+      "changed": [
+        "kt_regular_new",
+        "kt_welcome_new"
+      ]
     }
   ]
 }
