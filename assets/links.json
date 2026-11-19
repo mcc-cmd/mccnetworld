@@ -6,26 +6,14 @@
     {
       "group": "KT",
       "key": "kt_regular_new",
-      "label": "정규KT 신규",
+      "label": "정규KT 신규/번호이동",
       "url": "https://online.kt.com/itg/online/index.do?prdcId=7BA3C27E-6D19-4935-B75E-BE1E04FA2BCB"
     },
     {
       "group": "KT",
-      "key": "kt_regular_mnp",
-      "label": "정규KT 번호이동",
-      "url": "https://online.kt.com/itg/online/index.do?prdcId=F7D71C67-08E1-4213-B81B-042609F9F083"
-    },
-    {
-      "group": "KT",
       "key": "kt_welcome_new",
-      "label": "웰컴 요금제 신규",
+      "label": "웰컴 요금제 신규/번호이동",
       "url": "https://online.kt.com/itg/online/index.do?prdcId=C689EEAE-14F5-4991-B26B-ADCB5BB7F2E0"
-    },
-    {
-      "group": "KT",
-      "key": "kt_welcome_mnp",
-      "label": "웰컴 요금제 번호이동",
-      "url": "https://online.kt.com/itg/online/index.do?prdcId=DC0AECBA-F1F2-4593-9F0C-4EBC96D139FF"
     },
     {
       "group": "KT",

@@ -1,0 +1,9 @@
+{
+  "pages": [
+    {
+      "bg": "images/adult-1.jpg",
+      "fields": []
+    }
+  ],
+  "conditionalRequired": []
+}
