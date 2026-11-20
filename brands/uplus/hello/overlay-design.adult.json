@@ -564,7 +564,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "20"
         },
         {
           "id": "판매점명",
@@ -1593,6 +1593,44 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 60,
           "value": true
+        },
+        {
+          "id": "가입제한",
+          "label": "",
+          "type": "imagecheck",
+          "x": 80.94386511709844,
+          "y": 69.89703079750235,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 30,
+          "value": true,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "fontSize": 14,
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     }
