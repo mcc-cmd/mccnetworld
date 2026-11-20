@@ -756,7 +756,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "17"
+          "value": "20"
         },
         {
           "id": "판매자 성함",
@@ -1668,8 +1668,8 @@
           "id": "은행명/카드사명",
           "label": "",
           "type": "text",
-          "x": 43.10467156406798,
-          "y": 49.278818486191234,
+          "x": 43.41544780296585,
+          "y": 49.35176443921134,
           "w": 13.61022817677465,
           "required": false,
           "wrap": true,
@@ -1701,6 +1701,86 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "가입제한/여",
+          "label": "",
+          "type": "checkmark",
+          "x": 23.917552881920813,
+          "y": 67.11320907423575,
+          "w": 3.1391070506502396,
+          "required": true,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 21,
+          "fontSize": 18,
+          "value": true,
+          "radioSize": 18,
+          "checkSize": 21,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "가입제한/여/부",
+          "checkValue": "여",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
+        },
+        {
+          "id": "가입제한/부",
+          "label": "",
+          "type": "checkmark",
+          "x": 30.420148016741,
+          "y": 66.9376325324762,
+          "w": 3.1391070506502396,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 21,
+          "fontSize": 18,
+          "value": false,
+          "radioSize": 18,
+          "checkSize": 18,
+          "radioGap": 12,
+          "color": "#000000",
+          "groupId": "가입제한/여/부",
+          "checkValue": "부",
+          "borderColor": "#ff3b3b",
+          "borderWidth": 2,
+          "bgColor": "#000000",
+          "textAlign": "",
+          "mask": "",
+          "maskRe": "",
+          "placeholder": "",
+          "autoDate": "",
+          "locked": false,
+          "lockOnPh": false
         }
       ]
     },
@@ -2289,7 +2369,7 @@
           "textAlign": "",
           "verticalAlign": "middle",
           "autoShrink": true,
-          "value": "17"
+          "value": "20"
         },
         {
           "id": "자필 성함싸인",
@@ -2511,6 +2591,20 @@
       "whenValue": "카드",
       "requiredOn": [
         "은행명/카드사명"
+      ]
+    },
+    {
+      "sourceId": "가입제한/여/부",
+      "whenValue": "부",
+      "requiredOn": [
+        "부"
+      ]
+    },
+    {
+      "sourceId": "가입제한/여/부",
+      "whenValue": "여",
+      "requiredOn": [
+        "여"
       ]
     }
   ]
