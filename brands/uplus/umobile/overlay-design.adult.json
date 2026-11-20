@@ -1673,8 +1673,30 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "defaultChecked": false,
-          "value": false
+          "defaultChecked": false
+        },
+        {
+          "id": "imagecheck_1795146125471",
+          "label": "",
+          "type": "imagecheck",
+          "x": 66.71697356135297,
+          "y": 54.18300593403112,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 30,
+          "value": true
         }
       ]
     },

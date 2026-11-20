@@ -1740,8 +1740,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": true,
-          "defaultChecked": true
+          "defaultChecked": true,
+          "value": true
         },
         {
           "id": "가입제한/부",
@@ -1781,8 +1781,30 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": false,
           "defaultChecked": false
+        },
+        {
+          "id": "imagecheck_1795146143546",
+          "label": "",
+          "type": "imagecheck",
+          "x": 67.02901657015656,
+          "y": 54.33122002880479,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 30,
+          "value": true
         }
       ]
     },
