@@ -147,8 +147,23 @@
   }
 
   // 화면 그리기 뒤에 항상 꾸미기
+  // [MCC_CHECK_DEFAULT_1] 체크표시 칸의 "처음부터 체크(기본값)" — 양식 수정에서 켠 칸은 서류를 열 때 ✓ 상태로 시작.
+  //  화면을 열 때 사이트가 입력값을 모두 비우므로, 값이 한 번도 정해지지 않은 칸(undefined)에만 기본값을 넣는다.
+  //  판매점이 다른 칸(같은 그룹)을 고르면 그 선택이 그대로 유지되고, [값 초기화]하면 다시 기본값으로 돌아온다.
+  function applyCheckDefaults() {
+    var list = [];
+    (Array.isArray(window.pages) ? window.pages : (typeof pages !== 'undefined' ? pages : [])).forEach(function (pg) { (pg.fields || []).forEach(function (f) { list.push(f); }); });
+    var groupTouched = {};
+    list.forEach(function (f) { if (f && f.type === 'checkmark' && f.groupId && f.value !== undefined) groupTouched[String(f.groupId).trim()] = groupTouched[String(f.groupId).trim()] || !!f.value; });
+    list.forEach(function (f) {
+      if (!f || f.type !== 'checkmark' || !f.defaultChecked || f.value !== undefined) return;
+      var g = f.groupId ? String(f.groupId).trim() : '';
+      if (g && groupTouched[g]) return;
+      f.value = true;
+    });
+  }
   var origRender = render;
-  render = function () { var out = origRender.apply(this, arguments); try { decorate(); } catch (e) { console.warn('[imagecheck]', e); } return out; };
+  render = function () { try { applyCheckDefaults(); } catch (e) {} var out = origRender.apply(this, arguments); try { decorate(); } catch (e) { console.warn('[imagecheck]', e); } return out; };
   try { window.render = render; } catch (_) {}
 
   // 인쇄본에도 같은 그림
