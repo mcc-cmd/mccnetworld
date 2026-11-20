@@ -1706,8 +1706,8 @@
           "id": "가입제한/여",
           "label": "",
           "type": "checkmark",
-          "x": 23.917552881920813,
-          "y": 67.11320907423575,
+          "x": 23.68431525483317,
+          "y": 67.2244088577651,
           "w": 3.1391070506502396,
           "required": true,
           "wrap": true,
@@ -1724,9 +1724,8 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 21,
           "fontSize": 18,
-          "value": true,
           "radioSize": 18,
-          "checkSize": 21,
+          "checkSize": 18,
           "radioGap": 12,
           "color": "#000000",
           "groupId": "가입제한/여/부",
@@ -1740,7 +1739,9 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": true,
+          "defaultChecked": true
         },
         {
           "id": "가입제한/부",
@@ -1764,7 +1765,6 @@
           "radioOuterBorderWidth": 1,
           "inputHeight": 21,
           "fontSize": 18,
-          "value": false,
           "radioSize": 18,
           "checkSize": 18,
           "radioGap": 12,
@@ -1780,7 +1780,9 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": false,
+          "defaultChecked": false
         }
       ]
     },
