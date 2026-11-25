@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-25T06:39:07.940Z",
-  "updatedBy": "이다엘",
+  "updatedAt": "2026-11-25T09:54:40.896Z",
+  "updatedBy": "Super Admin",
   "links": [
     {
       "group": "KT",
@@ -13,7 +13,7 @@
       "group": "KT",
       "key": "kt_welcome_new",
       "label": "웰컴 요금제 신규/번호이동",
-      "url": "https://mcc-cmd.github.io/mccnetworld/#mno"
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=CF7883FB-DA2D-41D0-A140-076C620C4EC8"
     },
     {
       "group": "KT",
@@ -71,6 +71,13 @@
     }
   ],
   "history": [
+    {
+      "at": "2026-11-25T09:54:40.896Z",
+      "by": "Super Admin",
+      "changed": [
+        "kt_welcome_new"
+      ]
+    },
     {
       "at": "2026-11-25T06:39:07.940Z",
       "by": "이다엘",
