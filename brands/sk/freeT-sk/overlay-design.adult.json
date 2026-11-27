@@ -699,7 +699,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "27"
         },
         {
           "id": "고객명",
@@ -1093,6 +1093,17 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "imagecheck_1795761217154",
+          "label": "",
+          "type": "imagecheck",
+          "x": 86.24624402792469,
+          "y": 79.62378435971247,
+          "w": 3,
+          "required": false,
+          "value": true,
+          "inputHeight": 30
         }
       ]
     },
@@ -1125,8 +1136,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "이름4",
@@ -1154,8 +1164,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1183,8 +1192,7 @@
           "placeholder": "싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "plan",
@@ -1228,8 +1236,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "baseFee",
@@ -1257,7 +1264,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "inputHeight": 33
         },
         {
@@ -1286,7 +1292,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "inputHeight": 34
         },
         {
@@ -1315,7 +1320,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "inputHeight": 38
         },
         {
@@ -1344,7 +1348,6 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "value": "",
           "inputHeight": 36
         }
       ]
@@ -1378,8 +1381,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1407,8 +1409,7 @@
           "placeholder": "싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "imagecheck_1795066500335",
@@ -1418,8 +1419,7 @@
           "y": 72.51096231121802,
           "w": 3,
           "required": false,
-          "inputHeight": 30,
-          "value": true
+          "inputHeight": 30
         },
         {
           "id": "판매자 성함",
@@ -1447,8 +1447,7 @@
           "placeholder": "판매자 성함",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "이동번호 기재",
@@ -1476,8 +1475,7 @@
           "placeholder": "이동번호 기재",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "text_1795069531627",
@@ -1564,7 +1562,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "27"
         }
       ]
     }

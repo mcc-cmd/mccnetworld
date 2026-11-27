@@ -582,7 +582,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "27"
         },
         {
           "id": "SK",
@@ -1037,6 +1037,17 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "imagecheck_1795761234508",
+          "label": "",
+          "type": "imagecheck",
+          "x": 86.45946364412939,
+          "y": 79.69916606579382,
+          "w": 3,
+          "required": false,
+          "value": true,
+          "inputHeight": 30
         }
       ]
     },
@@ -1069,8 +1080,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "이름4",
@@ -1098,8 +1108,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1127,8 +1136,7 @@
           "placeholder": "법대 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "싸인",
@@ -1156,8 +1164,7 @@
           "placeholder": "법대 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법정대리인 성함",
@@ -1185,8 +1192,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법정대리인 생년월일",
@@ -1214,8 +1220,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법정대리인 관계",
@@ -1247,8 +1252,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법정대리인 연락처",
@@ -1276,8 +1280,7 @@
           "placeholder": "법정대리인 연락처",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 성함1",
@@ -1305,8 +1308,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "plan",
@@ -1350,8 +1352,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "baseFee",
@@ -1361,7 +1362,6 @@
           "y": 7.791959115010918,
           "w": 13.149559716745806,
           "required": false,
-          "value": "",
           "inputHeight": 33,
           "radioSize": 18,
           "checkSize": 18,
@@ -1390,7 +1390,6 @@
           "y": 10.440893886571418,
           "w": 12.598902321775842,
           "required": false,
-          "value": "",
           "inputHeight": 33,
           "radioSize": 18,
           "checkSize": 18,
@@ -1419,7 +1418,6 @@
           "y": 12.933056604381266,
           "w": 12.158373717026649,
           "required": false,
-          "value": "",
           "inputHeight": 39,
           "radioSize": 18,
           "checkSize": 18,
@@ -1448,7 +1446,6 @@
           "y": 10.714400801752937,
           "w": 12.158373717026649,
           "required": false,
-          "value": "",
           "inputHeight": 39,
           "radioSize": 18,
           "checkSize": 18,
@@ -1699,7 +1696,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "27"
         }
       ]
     }
