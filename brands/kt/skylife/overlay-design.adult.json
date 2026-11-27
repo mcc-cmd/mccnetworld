@@ -736,7 +736,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "16"
+          "value": "27"
         },
         {
           "id": "IMEI 1",
@@ -1362,6 +1362,34 @@
           "locked": false,
           "lockOnPh": false,
           "value": false
+        },
+        {
+          "id": "imagecheck_1795760610313",
+          "label": "",
+          "type": "imagecheck",
+          "x": 18.603883919102664,
+          "y": 63.5219472553482,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 30,
+          "value": true,
+          "autoCheck": {
+            "source": "plan",
+            "mode": "contains",
+            "keyword": ""
+          }
         }
       ]
     },
@@ -1403,7 +1431,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1440,7 +1469,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         }
       ]
     },
@@ -1482,7 +1512,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1519,7 +1550,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1556,7 +1588,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1593,7 +1626,8 @@
           "placeholder": "제휴 요금제 선택시 성함/싸인 필수 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1630,7 +1664,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "affiliate_millie",
@@ -1952,7 +1987,8 @@
           "placeholder": "5G 요금제 선택시 성함/싸인 필수 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "성함/싸인자필기재",
@@ -1989,7 +2025,8 @@
           "placeholder": "성함/싸인자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         }
       ]
     },
@@ -2031,7 +2068,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "판매자명",
@@ -2068,7 +2106,8 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
         },
         {
           "id": "판매자 싸인",
@@ -2105,7 +2144,8 @@
           "placeholder": "판매자 싸인",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "고객 성함",
@@ -2142,7 +2182,8 @@
           "placeholder": "고객 성함",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "고객 싸인",
@@ -2179,7 +2220,8 @@
           "placeholder": "고객 싸인",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true
+          "lockOnPh": true,
+          "value": ""
         },
         {
           "id": "년",
@@ -2200,7 +2242,8 @@
           "bgTransparent": true,
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
-          "radioOuterBorderWidth": 1
+          "radioOuterBorderWidth": 1,
+          "value": ""
         },
         {
           "id": "년",
@@ -2259,7 +2302,8 @@
           "bgTransparent": true,
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
-          "radioOuterBorderWidth": 1
+          "radioOuterBorderWidth": 1,
+          "value": ""
         },
         {
           "id": "월",
@@ -2335,7 +2379,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "16"
+          "value": "27"
         }
       ]
     }
