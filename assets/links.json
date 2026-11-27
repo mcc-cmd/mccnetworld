@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-25T09:54:40.896Z",
+  "updatedAt": "2026-11-27T04:07:44.618Z",
   "updatedBy": "Super Admin",
   "links": [
     {
       "group": "KT",
       "key": "kt_regular_new",
       "label": "정규KT 신규/번호이동",
-      "url": "https://online.kt.com/itg/online/index.do?prdcId=7A477FA2-A9E7-4CB1-9FE1-0F3C9BA65C36"
+      "url": "https://online.kt.com/itg/online/index.do?prdcId=BA97C52F-6395-4729-B854-E4A7F6E388BB"
     },
     {
       "group": "KT",
@@ -71,6 +71,13 @@
     }
   ],
   "history": [
+    {
+      "at": "2026-11-27T04:07:44.618Z",
+      "by": "Super Admin",
+      "changed": [
+        "kt_regular_new"
+      ]
+    },
     {
       "at": "2026-11-25T09:54:40.896Z",
       "by": "Super Admin",
