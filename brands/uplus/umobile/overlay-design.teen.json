@@ -756,7 +756,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "20"
+          "value": "27"
         },
         {
           "id": "판매자 성함",
@@ -1709,7 +1709,7 @@
           "x": 23.68431525483317,
           "y": 67.2244088577651,
           "w": 3.1391070506502396,
-          "required": true,
+          "required": false,
           "wrap": true,
           "verticalAlign": "middle",
           "autoShrink": true,
@@ -1741,7 +1741,7 @@
           "locked": false,
           "lockOnPh": false,
           "defaultChecked": true,
-          "value": true
+          "value": false
         },
         {
           "id": "가입제한/부",
@@ -1750,7 +1750,7 @@
           "x": 30.420148016741,
           "y": 66.9376325324762,
           "w": 3.1391070506502396,
-          "required": false,
+          "required": true,
           "wrap": true,
           "verticalAlign": "middle",
           "autoShrink": true,
@@ -1781,7 +1781,8 @@
           "autoDate": "",
           "locked": false,
           "lockOnPh": false,
-          "defaultChecked": false
+          "defaultChecked": false,
+          "value": true
         },
         {
           "id": "imagecheck_1795146143546",
@@ -2393,7 +2394,7 @@
           "textAlign": "",
           "verticalAlign": "middle",
           "autoShrink": true,
-          "value": "20"
+          "value": "27"
         },
         {
           "id": "자필 성함싸인",
