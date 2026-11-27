@@ -767,8 +767,8 @@
           "id": "imagecheck_1795145012570",
           "label": "",
           "type": "imagecheck",
-          "x": 73.77562238505094,
-          "y": 87.43231595177666,
+          "x": 82.7153269379343,
+          "y": 87.79963994711807,
           "w": 3,
           "required": false,
           "wrap": true,
@@ -826,8 +826,7 @@
           "placeholder": "성함싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "text_1786952627417",
@@ -864,8 +863,7 @@
           "placeholder": "성함싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     },

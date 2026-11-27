@@ -862,8 +862,8 @@
           "id": "imagecheck_1795146080412",
           "label": "",
           "type": "imagecheck",
-          "x": 73.46723007695056,
-          "y": 87.6655493583454,
+          "x": 82.61480927482435,
+          "y": 87.2231336443982,
           "w": 3,
           "required": false,
           "wrap": true,
@@ -912,8 +912,7 @@
           "placeholder": "법대 성함 ,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 성함 ,싸인 자필기재",
@@ -941,8 +940,7 @@
           "placeholder": "법대 성함 ,싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         }
       ]
     },
@@ -984,8 +982,7 @@
           "placeholder": "법대 성함싸인 자필기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "법대 자필",
@@ -1022,8 +1019,7 @@
           "placeholder": "법대 성함 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "text_1786952342562",
@@ -1060,8 +1056,7 @@
           "placeholder": "법대 성함 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "text_1786952353505",
@@ -1098,8 +1093,7 @@
           "placeholder": "법대 성함 싸인 자필 기재",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         }
       ]
     }
