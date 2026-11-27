@@ -366,7 +366,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "27"
         },
         {
           "id": "이름",
@@ -1121,7 +1121,6 @@
           "radioOuterBorderTransparent": false,
           "radioOuterBorderColor": "rgba(0,0,0,.25)",
           "radioOuterBorderWidth": 1,
-          "value": "",
           "inputHeight": 21,
           "radioSize": 18,
           "checkSize": 18,
@@ -1137,7 +1136,31 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false
+          "lockOnPh": false,
+          "value": ""
+        },
+        {
+          "id": "imagecheck_1795760427270",
+          "label": "",
+          "type": "imagecheck",
+          "x": 86.27729909410384,
+          "y": 79.76618095864865,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 30,
+          "value": true
         }
       ]
     },

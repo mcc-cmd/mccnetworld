@@ -366,7 +366,7 @@
           "autoDate": "day",
           "locked": false,
           "lockOnPh": false,
-          "value": "19"
+          "value": "27"
         },
         {
           "id": "이름",
@@ -1140,6 +1140,29 @@
           "locked": false,
           "lockOnPh": false,
           "value": ""
+        },
+        {
+          "id": "imagecheck_1795760448794",
+          "label": "",
+          "type": "imagecheck",
+          "x": 86.27748943241687,
+          "y": 79.76671031623732,
+          "w": 3,
+          "required": false,
+          "wrap": true,
+          "verticalAlign": "middle",
+          "autoShrink": true,
+          "checkStyle": "tick",
+          "radioStyle": "tick",
+          "radioShowText": true,
+          "radioCount": 2,
+          "borderTransparent": true,
+          "bgTransparent": true,
+          "radioOuterBorderTransparent": false,
+          "radioOuterBorderColor": "rgba(0,0,0,.25)",
+          "radioOuterBorderWidth": 1,
+          "inputHeight": 30,
+          "value": true
         }
       ]
     },
@@ -1172,8 +1195,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 생년월일",
@@ -1201,8 +1223,7 @@
           "placeholder": "",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 성함",
@@ -1233,8 +1254,7 @@
           "placeholder": "법대 선택",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 연락처",
@@ -1262,8 +1282,7 @@
           "placeholder": "법대 연락처",
           "autoDate": "",
           "locked": false,
-          "lockOnPh": false,
-          "value": ""
+          "lockOnPh": false
         },
         {
           "id": "법대 자필 성함 싸인 입니다",
@@ -1291,8 +1310,7 @@
           "placeholder": "법대 자필 성함 싸인 입니다",
           "autoDate": "",
           "locked": true,
-          "lockOnPh": true,
-          "value": ""
+          "lockOnPh": true
         },
         {
           "id": "planecho",
@@ -1353,8 +1371,7 @@
           "checkSize": 18,
           "textAlign": "",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "totalFee",
@@ -1384,8 +1401,7 @@
           "inputHeight": 22,
           "textAlign": "",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "discountFee",
@@ -1415,8 +1431,7 @@
           "locked": false,
           "lockOnPh": false,
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         },
         {
           "id": "totalFee",
@@ -1446,8 +1461,7 @@
           "inputHeight": 22,
           "textAlign": "",
           "verticalAlign": "middle",
-          "autoShrink": true,
-          "value": ""
+          "autoShrink": true
         }
       ]
     },
